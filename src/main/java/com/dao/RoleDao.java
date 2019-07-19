@@ -14,6 +14,7 @@ import util.DbCon;
 public class RoleDao {
 
 	public List<Role> getlist() throws SQLException {
+		System.out.println("ARan ");
 		Connection con = DbCon.getConnection();
 		List<Role> list = new ArrayList<Role>();
 		Role m = null;
