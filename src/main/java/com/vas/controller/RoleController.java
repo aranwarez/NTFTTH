@@ -71,7 +71,7 @@ public class RoleController {
     @RequestMapping(value = "/role/delete", method = RequestMethod.POST)
     @ResponseBody
     public String roleDelete(String ROLE_CODE, Model model, Locale locale) {
-        //logger.info("Welcome home! The client locale is {}.", locale);
+        logger.info("delete role", locale);
         RoleDao dao = new RoleDao();
         System.out.println("delete role code==" + ROLE_CODE);
 
