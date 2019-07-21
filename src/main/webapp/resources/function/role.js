@@ -16,12 +16,32 @@ function del() {
 var CODE;
 function editRole(code) {
 	CODE = code;
+	var row = $("#example1").dataTable().fnGetData();
+	var l = row.length;
+	for (var i = 0; i < l; i++) {
+		if (row[i][0] == code) {
 
-	$.post('../role/editrole', {
-		ROLE_CODE : CODE
+			$("#EDITROLE_CODE").val(row[i][0]);
+			$("#EDITDESCRIPTION").val(row[i][1]);
+
+		}
+
+	}
+
+}
+function updateRole() {
+
+	var DESCRIPTION = $("#EDITDESCRIPTION").val();
+
+	$.post('../role/update', {
+		ROLE_CODE : CODE,
+		DESCRIPTION : DESCRIPTION
 	}, function(data) {
 		// location.reload();
-		alert(JSON.stringify(data));
-	});
+		alert(data);
+		temp = $('#example1').DataTable();
+		temp.clear().draw();
 	
+		location.reload();
+	});
 }
