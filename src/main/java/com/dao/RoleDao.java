@@ -49,7 +49,7 @@ public class RoleDao {
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "Failed";
+			return "Failed to Save : " + e.getMessage();
 		} finally {
 			con.close();
 		}
@@ -68,7 +68,7 @@ public class RoleDao {
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "Failed";
+			return "Failed to update : " + e.getMessage();
 			
 		} finally {
 			con.close();
@@ -77,7 +77,6 @@ public class RoleDao {
 	}
 
 	public String deleteRole(String code) throws SQLException {
-		System.out.println(code);
 		Connection con = DbCon.getConnection();
 		try {
 			PreparedStatement pst = con.prepareStatement("delete from m_role where ROLE_CODE=?");
@@ -86,7 +85,7 @@ public class RoleDao {
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "Failed";
+			return "Failed to delete : " + e.getMessage();
 		} finally {
 			con.close();
 		}

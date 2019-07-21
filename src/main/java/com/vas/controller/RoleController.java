@@ -1,19 +1,14 @@
 package com.vas.controller;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,104 +19,104 @@ import com.model.Role;
 @Controller
 public class RoleController {
 
-	private static final Logger logger = LoggerFactory.getLogger(RoleController.class);
-	RoleDao dao = new RoleDao();
-	
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
-	@RequestMapping(value = "/role/list", method = RequestMethod.GET)
-	public String rolelist(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
+    private static final Logger logger = LoggerFactory.getLogger(RoleController.class);
+    RoleDao dao = new RoleDao();
 
-		Role u1 = new Role();
+    /**
+     * Simply selects the home view to render by returning its name.
+     */
+    @RequestMapping(value = "/role/list", method = RequestMethod.GET)
+    public String rolelist(Locale locale, Model model) {
+        logger.info("Welcome home! The client locale is {}.", locale);
 
-		List<Role> list = null;
-		try {
-			list = dao.getlist();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        Role u1 = new Role();
 
-		System.out.println("role list" + list.size());
+        List<Role> list = null;
+        try {
+            list = dao.getlist();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-		model.addAttribute("fx", "Role List");
-		model.addAttribute("data_list", list);
+        System.out.println("role list" + list.size());
 
-		return "role/list";
-	}
+        model.addAttribute("fx", "Role List");
+        model.addAttribute("data_list", list);
 
-	@RequestMapping(value = "/role/save", method = RequestMethod.POST)
-	public String saveRole(@Validated Role role, Model model, Locale locale) {
+        return "role/list";
+    }
 
-		logger.info("Welcome home! The client locale is {}.", locale);
+    @RequestMapping(value = "/role/save", method = RequestMethod.POST)
+    public String saveRole(@Validated Role role, Model model, Locale locale) {
+        logger.info("Trying to save new role by user id:", locale);
+        RoleDao dao = new RoleDao();
+        role.setUSER("NEpal");
+        model.addAttribute("userName", role.getROLE_CODE());
+        String msg = null;
+        try {
+            msg = dao.saveRole(role);
+       } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if (msg.toUpperCase().substring(0, 3).equals("SUC")) {
+            model.addAttribute("sucess", msg);
+        } else {
+            model.addAttribute("error", msg);
+        }
+        return "redirect:/role/list";
+    }
 
-		RoleDao dao = new RoleDao();
-		System.out.println("role code==" + role.getROLE_CODE());
+    @RequestMapping(value = "/role/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public String roleDelete(String ROLE_CODE, Model model, Locale locale) {
+        //logger.info("Welcome home! The client locale is {}.", locale);
+        RoleDao dao = new RoleDao();
+        System.out.println("delete role code==" + ROLE_CODE);
 
-		role.setUSER("NEpal");
+        String msg = null;
+        try {
+            msg = dao.deleteRole(ROLE_CODE);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return msg;
 
-		model.addAttribute("fx", "Role controller list ");
-		model.addAttribute("userName", role.getROLE_CODE());
+    }
 
-		String msg = null;
-		try {
+    @RequestMapping(method = RequestMethod.GET, value = "dialogrole")
+    public String dialogrole(Model model, Locale locale) {
+        return "role/roledialog";
 
-			msg = dao.saveRole(role);
+    }
 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		model.addAttribute("sucess", msg);
+    @RequestMapping(value = "/role/update", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateRole(String ROLE_CODE, String DESCRIPTION, Model model, Locale locale) {
 
-		return "redirect:/role/list";
+        logger.info("Welcome home! The client locale is {}.", locale);
 
-	}
+        RoleDao dao = new RoleDao();
+        System.out.println("uddate role code==" + ROLE_CODE);
 
-	@RequestMapping(value = "/role/delete", method = RequestMethod.POST)
-	@ResponseBody
-	public String roleDelete(String ROLE_CODE, Model model, Locale locale) {
-		logger.info("Welcome home! The client locale is {}.", locale);
+        String USER = "NEpal";
 
-		return "Sucess";
+        model.addAttribute("fx", "Role controller list ");
+        model.addAttribute("userName", "NEPal");
 
-	}
+        String msg = null;
+        try {
 
+            msg = dao.updateRole(ROLE_CODE, DESCRIPTION, USER);
 
-	@RequestMapping(method = RequestMethod.GET, value = "dialogrole")
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return msg;
 
-	public String dialogrole(Model model, Locale locale) {
-
-		return "role/roledialog";
-	}
-	
-	@RequestMapping(value = "/role/update", method = RequestMethod.POST)
-	@ResponseBody
-	public String updateRole(String ROLE_CODE,String DESCRIPTION, Model model, Locale locale) {
-
-		logger.info("Welcome home! The client locale is {}.", locale);
-
-		RoleDao dao = new RoleDao();
-		System.out.println("uddate role code==" + ROLE_CODE);
-
-		String USER="NEpal";
-
-		model.addAttribute("fx", "Role controller list ");
-		model.addAttribute("userName", "NEPal");
-
-		String msg = null;
-		try {
-
-			msg = dao.updateRole(ROLE_CODE,DESCRIPTION,USER);
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return msg;
-
-	}
+    }
 
 }

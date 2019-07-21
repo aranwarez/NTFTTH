@@ -13,11 +13,9 @@
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h4 class="modal-title" id="myModalLabel">Role define</h4>
+					<h4 class="modal-title" id="myModalLabel">New Role Define</h4>
 				</div>
 				
-
-
 				<form action="<c:url value="/role/save" />" method="post"
 					acceptCharset="UTF-8">
 					
@@ -39,8 +37,7 @@
 
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary">Save
-							changes</button>
+						<button type="submit" class="btn btn-primary">Save changes</button>
 					</div>
 				</form>
 			</div>
@@ -69,10 +66,13 @@
 					<p>Are you sure you want to delete this data. This cannot be
 						undone</p>
 				</div>
+                            
 				<div class="modal-footer">
+                                    <form action="<c:url value="/role/delete" />" method="post"
+					acceptCharset="UTF-8">
 					<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-					<button type="button" class="btn btn-primary"
-						onclick="return del()">Yes</button>
+					<button type="button" class="btn btn-primary" onclick="return del()">Yes</button>
+                                    </form>
 				</div>
 			</div>
 		</div>

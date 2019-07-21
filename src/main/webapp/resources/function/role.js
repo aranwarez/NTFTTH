@@ -8,7 +8,7 @@ function del() {
 	$.post('../role/delete', {
 		ROLE_CODE : CODE
 	}, function(data) {
-		// location.reload();
+		 location.reload();
 		alert(data);
 	});
 }
