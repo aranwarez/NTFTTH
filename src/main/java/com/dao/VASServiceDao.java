@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.model.Service;
+
 /**
  *
  * @author Aran
@@ -55,18 +57,18 @@ public class VASServiceDao {
 
     }
 
-    public String saveVasService(String SERVICE_CODE, String DESCRIPTION, String SLDG_CODE, String DATA_IMPORT, String ACTIVE_FLAG, String user) throws SQLException {
+    public String saveVasService( Service m, String user) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
 
             String qry = "insert into M_VAS_SERVICE(SERVICE_CODE,DESCRIPTION, SLDG_CODE, DATA_IMPORT, ACTIVE_FLAG, CREATE_BY, CREATE_DT ) values(?,?,?,?,?,?,sysdate)";
 
             PreparedStatement pst = con.prepareStatement(qry);
-            pst.setString(1, SERVICE_CODE);
-            pst.setString(2, DESCRIPTION);
-            pst.setString(3, SLDG_CODE);
-            pst.setString(4, DATA_IMPORT);
-            pst.setString(5, ACTIVE_FLAG);
+            pst.setString(1, m.getSERVICE_CODE());
+            pst.setString(2, m.getDESCRIPTION());
+            pst.setString(3, m.getSLDG_CODE());
+            pst.setString(4, m.getDATA_IMPORT());
+            pst.setString(5, m.getACTIVE_FLAG());
             pst.setString(6, user);
 
             pst.executeUpdate();
