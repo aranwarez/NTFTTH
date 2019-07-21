@@ -14,7 +14,7 @@ import util.DbCon;
 public class RoleDao {
 
 	public List<Role> getlist() throws SQLException {
-		System.out.println("ARan ");
+	
 		Connection con = DbCon.getConnection();
 		List<Role> list = new ArrayList<Role>();
 		Role m = null;
@@ -56,17 +56,20 @@ public class RoleDao {
 		return "Sucessfully saved!";
 	}
 
-	public String updateRole(Role m) throws SQLException {
+	public String updateRole(String ROLE_CODE,String DESCRIPTION,String USER) throws SQLException {
+		System.out.println("Role update code="+ROLE_CODE);
 		Connection con = DbCon.getConnection();
 		try {
 			PreparedStatement pst = con.prepareStatement(
 					"update m_role set DESCRIPTION=?,UPDATE_BY=?,UPDATE_DT=sysdate where ROLE_CODE=?");
-			pst.setString(1, m.getDESCRIPTION());
-			pst.setString(2, m.getUSER());
-			pst.setString(3, m.getROLE_CODE());
+			pst.setString(1, DESCRIPTION);
+			pst.setString(2,USER);
+			pst.setString(3,ROLE_CODE);
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return "Failed";
+			
 		} finally {
 			con.close();
 		}
