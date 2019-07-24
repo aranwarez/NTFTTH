@@ -2,12 +2,31 @@ package com.model;
 
 public class Service {
 
+    /**
+     * @param USER the USER to set
+     */
+    public void setUSER(String USER) {
+        this.USER = USER;
+    }
+
+    /**
+     * @return the USER
+     */
+    public String getUSER() {
+        return USER;
+    }
+
 	private String SERVICE_CODE;
 	private String DESCRIPTION;
 	private String SLDG_CODE;
 	private String DATA_IMPORT;
 	private String ACTIVE_FLAG;
-
+        private String CREATED_BY;
+        private String CREATED_DATE;
+        private String UPDATED_BY;
+        private String UPDATED_DATE;
+        private String USER;
+       
 	public String getSERVICE_CODE() {
 		return SERVICE_CODE;
 	}
@@ -80,9 +99,6 @@ public class Service {
 		UPDATED_DATE = uPDATED_DATE;
 	}
 
-	private String CREATED_BY;
-	private String CREATED_DATE;
-	private String UPDATED_BY;
-	private String UPDATED_DATE;
+	
 
 }
