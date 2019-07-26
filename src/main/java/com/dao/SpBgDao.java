@@ -59,28 +59,35 @@ public class SpBgDao {
         }
         return null;
     }
-    
-    public String saveSpBg(String SP_CODE, String EFFECTIVE_DT, String REVENUE_TARGET, String MINIMUM_GUARENTEE, String USER) throws SQLException {
-        Connection con = DbCon.getConnection();
-        try {
 
-            String qry = "INSERT INTO VASNTW.M_SP_TARGET (\n"
-                    + "   TRANS_ID, SP_CODE, EFFECTIVE_DT, \n"
-                    + "   REVENUE_TARGET, MINIMUM_GUARENTEE, CREATE_BY,   CREATE_DT) \n"
-                    + "VALUES (SEQ_SPTARGET_TRANSID.NEXTVAL , ?, COMMON.TO_AD(?),\n"
-                    + "    NVL(?,0), NVL(?,0), ?, SYSDATE )";
+    public String saveSpBg(String TRANS_CD, String SP_CODE, String TRANS_DT, String BANK_CD, String BANK_GUARENTEE_DATE,
+            String AMT, String BANK_VALIDITY_DATE, String USER) throws SQLException {
+        Connection con = DbCon.getConnection();
+        String transid = null;
+        try {
+            String qry1 = "SELECT COMMON.GET_FISCAL_YEAR(?) || lpad(SEQ_SPBG_TRANSID.nextval,6,'0') FROM dual";
+            PreparedStatement prs1 = con.prepareStatement(qry1);
+            prs1.setString(1, TRANS_DT);
+            ResultSet rs1 = prs1.executeQuery();
+            transid = rs1.getString(1);
+            String qry = "INSERT INTO M_SP_BG (\n"
+                    + "   TRANS_ID, TRANS_CD, SP_CODE, TRANS_DT, BANK_CD, BANK_GUARENTEE_DATE, \n"
+                    + "   AMT, BANK_VALIDITY_DATE, CREATE_BY,   CREATE_DT, POST_FLAG) \n"
+                    + "VALUES (?,? ,? , COMMON.TO_AD(?),? ,COMMON.TO_AD(?), \n"
+                    + "NVL(?,0), COMMON.TO_AD(?), ?,   SYSDATE,'N')";
 
             PreparedStatement pst = con.prepareStatement(qry);
-            pst.setString(1, SP_CODE);
-            pst.setString(2, EFFECTIVE_DT);
-            pst.setString(3, REVENUE_TARGET);
-            pst.setString(4, MINIMUM_GUARENTEE);
-            pst.setString(5, USER);
-
+            pst.setString(1, transid);
+            pst.setString(2, TRANS_CD);
+            pst.setString(3, SP_CODE);
+            pst.setString(4, TRANS_DT);
+            pst.setString(5, BANK_CD);
+            pst.setString(6, BANK_GUARENTEE_DATE);
+            pst.setString(7, AMT);
+            pst.setString(8, BANK_VALIDITY_DATE);
+            pst.setString(9, USER);
             pst.executeUpdate();
-
-            return "Succesfully Saved Service Provider Target";
-
+            return "Succesfully Saved Service Provider Bank Transaction";
         } catch (Exception e) {
             con.rollback();
             e.printStackTrace();
@@ -90,4 +97,90 @@ public class SpBgDao {
         }
     }
 
+    public String updateSpBg(String TRANS_ID, String TRANS_CD, String SP_CODE, String TRANS_DT, String BANK_CD, String BANK_GUARENTEE_DATE,
+            String AMT, String BANK_VALIDITY_DATE, String USER) throws SQLException {
+        Connection con = DbCon.getConnection();
+        try {
+            String qry = "UPDATE M_SP_BG\n"
+                    + "SET    TRANS_CD = ?,  SP_CODE  = ?, TRANS_DT= common.to_ad(?),\n"
+                    + "       BANK_CD  = ?,  BANK_GUARENTEE_DATE = common.to_ad(?),    AMT   = nvl(?,0),\n"
+                    + "       BANK_VALIDITY_DATE  = common.to_ad(?), UPDATE_BY = ?, UPDATE_DT = sysdate\n"
+                    + "WHERE  TRANS_ID            = ?";
+            PreparedStatement pst = con.prepareStatement(qry);
+            pst.setString(1, TRANS_CD);
+            pst.setString(2, SP_CODE);
+            pst.setString(3, TRANS_DT);
+            pst.setString(4, BANK_CD);
+            pst.setString(5, BANK_GUARENTEE_DATE);
+            pst.setString(6, AMT);
+            pst.setString(7, BANK_VALIDITY_DATE);
+            pst.setString(8, USER);
+            pst.setString(9, TRANS_ID);
+            pst.executeUpdate();
+            return "Succesfully Updated";
+        } catch (Exception e) {
+            con.rollback();
+            e.printStackTrace();
+            return "Failed to update : " + e.getMessage();
+        } finally {
+            con.close();
+        }
+    }
+
+    public String DeleteSpBg(String TRANS_ID) throws SQLException {
+        Connection con = DbCon.getConnection();
+        try {
+            PreparedStatement pst = con.prepareStatement("delete from M_SP_BG where TRANS_ID=?");
+            pst.setString(1, TRANS_ID);
+
+            pst.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Failed Reason :" + e.getLocalizedMessage();
+        } finally {
+            con.close();
+        }
+        return "Record deleted successfully.";
+    }
+
+    public String postSpBg(String TRANS_ID, String USER) throws SQLException {
+        Connection con = DbCon.getConnection();
+        try {
+            String qry = "UPDATE M_SP_BG\n"
+                    + "SET    POST_BY = ?,  POST_DT  = SYSDATE, POST_FLAG= 'Y'\n"
+                    + "WHERE  TRANS_ID            = ?";
+            PreparedStatement pst = con.prepareStatement(qry);
+            pst.setString(1, USER);
+            pst.setString(2, TRANS_ID);
+            pst.executeUpdate();
+            return "Succesfully Updated";
+        } catch (Exception e) {
+            con.rollback();
+            e.printStackTrace();
+            return "Failed to update : " + e.getMessage();
+        } finally {
+            con.close();
+        }
+    }
+
+    public String unpostSpBg(String TRANS_ID, String USER) throws SQLException {
+        Connection con = DbCon.getConnection();
+        try {
+            String qry = "UPDATE M_SP_BG\n"
+                    + "SET    POST_BY = ?,  POST_DT  = SYSDATE, POST_FLAG= 'N'\n"
+                    + "WHERE  TRANS_ID            = ?";
+            PreparedStatement pst = con.prepareStatement(qry);
+            pst.setString(1, USER);
+            pst.setString(2, TRANS_ID);
+            pst.executeUpdate();
+            return "Succesfully Updated";
+        } catch (Exception e) {
+            con.rollback();
+            e.printStackTrace();
+            return "Failed to update : " + e.getMessage();
+        } finally {
+            con.close();
+        }
+    }
 }
