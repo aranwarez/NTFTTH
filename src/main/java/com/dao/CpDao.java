@@ -55,8 +55,8 @@ public class CpDao {
     }
 
     public String saveCp(String SP_CODE, String SERVICE_CODE, String CP_NAME, String ESME_CODE,
-            String SRV_FOR, String PACKAGE_TYPE, String STREAM_TYPE, String START_DT, String END_DT, String SHARING_TYPE,
-            String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, String USER) throws SQLException {
+            String SRV_FOR, String PACKAGE_TYPE, String STREAM_TYPE, String START_DT, String END_DT, 
+            String SHARING_TYPE,  String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, String USER) throws SQLException {
         Connection con = DbCon.getConnection();
         String transid = null;
         try {
