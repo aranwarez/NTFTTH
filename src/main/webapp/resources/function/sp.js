@@ -16,26 +16,25 @@ function saveSp() {
     var PAN_NO = $("#PAN_NO").val();
     var CONTRACT_DT = $("#CONTRACT_DT").val();
     var CONTRACT_TER_DT = $("#CONTRACT_TER_DT").val();
-    alert("nabin"+SHORT_CODE);
-    $.post('../sp/saveJS', {
-        SP_CODE: CODE,
-        SP_NAME: SP_NAME,
-        SHORT_CODE: SHORT_CODE,
-        ADDRESS: ADDRESS,
-        CONTACT_PERSON: CONTACT_PERSON,
-        TEL_NO: TEL_NO,
-        MOBILE_NO: MOBILE_NO,
-        EMAIL: EMAIL,
-        SLDG_CODE: SLDG_CODE,
-        PAN_NO: PAN_NO,
-        CONTRACT_DT: CONTRACT_DT,
-        CONTRACT_TER_DT: CONTRACT_TER_DT
-    }, function (data) {
-        alert(data);
-        if (data.substring(0, 6) === "Succes") {
-            location.reload();
-        }
-    });
+	    $.post('../sp/saveJS', {
+		SP_CODE : CODE,
+		SP_NAME : SP_NAME,
+		SHORT_CODE : SHORT_CODE,
+		ADDRESS : ADDRESS,
+		CONTACT_PERSON : CONTACT_PERSON,
+		TEL_NO : TEL_NO,
+		MOBILE_NO : MOBILE_NO,
+		EMAIL : EMAIL,
+		SLDG_CODE : SLDG_CODE,
+		PAN_NO : PAN_NO,
+		CONTRACT_DT : CONTRACT_DT,
+		CONTRACT_TER_DT : CONTRACT_TER_DT
+	}, function(data) {
+		alert(data);
+		if (data.substring(0, 6) === "Succes") {
+			location.reload();
+		}
+	});
 }
 
 var CODE;
