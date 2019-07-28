@@ -28,7 +28,6 @@ public class SpController {
     private static final Logger logger = LoggerFactory.getLogger(SpController.class);
     @RequestMapping(value = "/sp/list", method = RequestMethod.GET)
     public String splist(Locale locale, Model model) throws SQLException {
-//System.out.println("nabin code==");
         logger.info("Getting Service Provider List", locale);
         SpDao dao = new SpDao();
         List<Map<String, Object>> list = null;

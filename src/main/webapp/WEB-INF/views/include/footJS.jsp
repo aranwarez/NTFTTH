@@ -27,6 +27,9 @@
 	<!-- AdminLTE App -->
 	<script src="<c:url value="/resources/adminltd/js/adminlte.min.js" />"></script>
 
+	<!-- Nepali DatePicker -->
+	<script src="<c:url value="/resources/adminltd/js/nepali.datepicker.js" />"></script>
+
 
 	
 
