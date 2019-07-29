@@ -61,8 +61,8 @@ public class SPTargetController {
 	// getting list of all SP target
 	@ResponseBody
 	@RequestMapping(value = "/sp/getSPTargetList", method = RequestMethod.GET)
-	public List<Map<String, Object>> getSPtargetist(String SP_CODE, Locale locale, Model model,
-			HttpSession session) throws SQLException {
+	public List<Map<String, Object>> getSPtargetist(String SP_CODE, Locale locale, Model model, HttpSession session)
+			throws SQLException {
 		SpTargetDao dao = new SpTargetDao();
 		return dao.getSpTargetList(SP_CODE);
 	}
@@ -78,6 +78,40 @@ public class SPTargetController {
 		String msg = null;
 		try {
 			msg = dao.saveSpTarget(SP_CODE, EFFECTIVE_DT, REVENUE_TARGET, MINIMUM_GUARENTEE, USER);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return msg;
+	}
+
+	@RequestMapping(value = "/sp/updatesptargetJS", method = RequestMethod.POST)
+	@ResponseBody
+	public String UpdateSPTarget(String TRANS_ID, String SP_CODE, String EFFECTIVE_DT, String REVENUE_TARGET,
+			String MINIMUM_GUARENTEE, Model model, Locale locale) {
+
+		logger.info("Update service provider Target.", locale);
+		SpTargetDao dao = new SpTargetDao();
+		String USER = "NEpal";
+		String msg = null;
+		try {
+			msg = dao.updateSpTarget(TRANS_ID, SP_CODE, EFFECTIVE_DT, REVENUE_TARGET, MINIMUM_GUARENTEE, USER);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return msg;
+	}
+
+	@RequestMapping(value = "/sp/deletesptargetJS", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteSPTarget(String TRANS_ID, Model model, Locale locale) {
+
+		logger.info("Delete service provider Target.", locale);
+		SpTargetDao dao = new SpTargetDao();
+		String msg = null;
+		try {
+			msg = dao.DeleteSpTarget(TRANS_ID);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
