@@ -70,44 +70,6 @@
 	</div>
 </div>
 
-<!-- Edit modal -->
-<div class="modal fade" id="editSPTargetModal" tabindex="-1"
-	role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title" id="myModalLabel">New Service Provider
-					Define</h4>
-			</div>
-
-			<div class="modal-body">
-				<div class="form-group">
-					<label for="spcode">SP_CODE</label> <input type="text"
-						class="form-control" name="SP_CODE" id="eSP_CODE"
-						placeholder="Enter Service Provider"> <label for="spname">Revenue
-						Target</label> <input type="number" class="form-control" name="REV_TARGET"
-						id="eREV_TARGET" placeholder="Enter Revinue Target number">
-					<label for="accoutno">Minimum Guarentee</label> <input
-						type="number" class="form-control" name="MINIMUM_GUARENTEE" min=0
-						id="MINIMUM_GUARENTEE" placeholder="Enter MINIMUM GUARENTEE amount"> <label
-						for="TerminateDt">Effective Date </label> <input type="text"
-						class="nepali-calendar" name="EFFECTIVE_DT" id="eEFFECTIVE_DT">
-
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary"
-					onclick="editSptarget()">Update Target</button>
-			</div>
-		</div>
-	</div>
-</div>
-
 
 <!-- edit SPTarget modal -->
 <!-- Edit modal -->
@@ -147,10 +109,48 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Edit modal -->
+<div class="modal fade" id="editSPTargetModal" tabindex="-1"
+	role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="editSPTargetModalLabel">New Service Provider
+					Define</h4>
+			</div>
+
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="spcode">SP_CODE</label> <input type="text"
+						class="form-control" name="SP_CODE" id="eSP_CODE" readonly="readonly"
+						placeholder="Enter Service Provider"> <label for="spname">Revenue
+						Target</label> <input type="number" class="form-control" name="REV_TARGET"
+						id="eREV_TARGET" placeholder="Enter Revinue Target number">
+					<label for="accoutno">Minimum Guarentee</label> <input
+						type="number" class="form-control" name="MINIMUM_GUARENTEE" min=0
+						id="eMINIMUM_GUARENTEE" placeholder="Enter MINIMUM GUARENTEE amount"> <label
+						for="TerminateDt">Effective Date </label> <input type="text"
+						class="nepali-calendar" name="EFFECTIVE_DT" id="eEFFECTIVE_DT">
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				<button type="submit" class="btn btn-primary"
-					onclick="editSptarget()">Update Target</button>
+					onclick="updateSPTarget()">Update Target</button>
 			</div>
 		</div>
 	</div>
 </div>
+
 
