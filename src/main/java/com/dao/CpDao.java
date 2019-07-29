@@ -26,7 +26,7 @@ public class CpDao {
         Connection con = DbCon.getConnection();
         try {
             PreparedStatement pst = con.prepareStatement("SELECT M.CP_CODE, M.SP_CODE, A.SP_NAME, M.SERVICE_CODE, \n"
-                    + "M.CP_NAME, M.ESME_CODE, M.SRV_FOR, M.PACKAGE_TYPE, M.STREAM_TYPE, M.START_DT,  M.END_DT, M.SHARING_TYPE, M.SHARE_NT_PER, M.AFS_FLAG, M.MIN_QTY\n"
+                    + "M.CP_NAME, M.ESME_CODE, M.SRV_FOR, M.PACKAGE_TYPE, M.STREAM_TYPE, common.to_bs(M.START_DT) START_DT, common.to_bs(M.END_DT) END_DT, M.SHARING_TYPE, M.SHARE_NT_PER, M.AFS_FLAG, M.MIN_QTY\n"
                     + "FROM M_CP M, M_SP A\n"
                     + "WHERE A.SP_CODE=M.SP_CODE\n"
                     + "AND A.SP_CODE=NVL(?,A.SP_CODE)\n"

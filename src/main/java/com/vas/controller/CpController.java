@@ -10,11 +10,14 @@ import com.dao.CpDao;
 import com.dao.PackageDao;
 import com.dao.SpDao;
 import com.dao.SpServiceDao;
+import com.dao.SpTargetDao;
 import com.dao.StreamDao;
+import com.dao.VASServiceDao;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -37,12 +40,12 @@ public class CpController {
         logger.info("Getting Content Provider List", locale);
         CpDao dao = new CpDao();
         List<Map<String, Object>> list = null;
-        try {
-            list = dao.getCpList(SP_CODE, SERVICE_CODE);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+//        try {
+//            list = dao.getCpList(SP_CODE, SERVICE_CODE);
+//        } catch (SQLException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
         model.addAttribute("fx", "Content Provider List");
         model.addAttribute("data_list", list);
         SpDao sp = new SpDao();
@@ -53,7 +56,8 @@ public class CpController {
         model.addAttribute("Stream_list", str.getStreamList());
         SpServiceDao ser = new SpServiceDao();
         model.addAttribute("Service_list", ser.getSpServiceList(SP_CODE));
-        
+        VASServiceDao VASSER = new VASServiceDao();
+        model.addAttribute("VASSer_list", VASSER.getVasServiceList());
         
         //COADao COA = new COADao();
         //model.addAttribute("COA_list", COA.getCOAlist());
@@ -61,6 +65,16 @@ public class CpController {
         return "cp/list";
     }
 
+	// getting list of all SP target
+	
+	@ResponseBody
+	@RequestMapping(value = "/cp/getCplist", method = RequestMethod.GET)
+	public List<Map<String, Object>> getCplist(String SP_CODE, String SERVICE_CODE, Locale locale, Model model,
+			HttpSession session) throws SQLException {
+		CpDao dao = new CpDao();
+		return dao.getCpList(SP_CODE, SERVICE_CODE);
+	}
+        
     @RequestMapping(value = "/cp/saveJS", method = RequestMethod.POST)
     @ResponseBody
     public String saveJSCp(String CP_CODE, String SP_CODE, String SERVICE_CODE, String CP_NAME, String ESME_CODE,
