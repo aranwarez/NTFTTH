@@ -54,8 +54,8 @@
 						class="form-control" name="REV_TARGET" id="REV_TARGET"
 						placeholder="Enter Revinue Target number"> <label
 						for="accoutno">Minimum Guarentee</label> <input type="number"
-						class="form-control" name="MINIMUM_GUARENTEE"
-						id="MINIMUM_GUARENTEE" placeholder="Enter Account No."> <label
+						class="form-control" name="MINIMUM_GUARENTEE" min=0
+						id="MINIMUM_GUARENTEE" placeholder="Enter MINIMUM GUARENTEE amount"> <label
 						for="TerminateDt">Effective Date </label> <input type="text"
 						class="nepali-calendar" name="EFFECTIVE_DT" id="EFFECTIVE_DT">
 
@@ -92,8 +92,8 @@
 						Target</label> <input type="number" class="form-control" name="REV_TARGET"
 						id="eREV_TARGET" placeholder="Enter Revinue Target number">
 					<label for="accoutno">Minimum Guarentee</label> <input
-						type="number" class="form-control" name="MINIMUM_GUARENTEE"
-						id="MINIMUM_GUARENTEE" placeholder="Enter Account No."> <label
+						type="number" class="form-control" name="MINIMUM_GUARENTEE" min=0
+						id="MINIMUM_GUARENTEE" placeholder="Enter MINIMUM GUARENTEE amount"> <label
 						for="TerminateDt">Effective Date </label> <input type="text"
 						class="nepali-calendar" name="EFFECTIVE_DT" id="eEFFECTIVE_DT">
 

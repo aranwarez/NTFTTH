@@ -3,9 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     
-    <script type="text/javascript"
-		src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-
+   
 	<!-- jQuery 3 -->
 	<script src="<c:url value="/resources/adminltd/js/jquery.min.js" />"></script>
 	<!-- Bootstrap 3.3.7 -->
@@ -29,7 +27,7 @@
 
 	<!-- Nepali DatePicker -->
 	<script src="<c:url value="/resources/adminltd/js/nepali.datepicker.js" />"></script>
-
-
 	
-
+	<!-- Select 2-->
+	<script src="<c:url value="/resources/adminltd/js/select2.js" />"></script>
+	
