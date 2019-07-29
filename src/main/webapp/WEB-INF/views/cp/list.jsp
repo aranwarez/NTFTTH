@@ -114,8 +114,8 @@
 										<tr>
 											<th>Cp Code</th>
 											<th>Sp Code</th>
-                                                                                        <th>Service Provider</th>
-											<th>Service Code</th>                                                                                        
+											<th>Service Provider</th>
+											<th>Service Code</th>
 											<th>CP Name</th>
 											<th>ESME CODE</th>
 											<th>Srv. For</th>
@@ -125,8 +125,8 @@
 											<th>End Dt.</th>
 											<th>Sharing Type</th>
 											<th>Share(%)</th>
-                                                                                        <th>AFS</th>
-                                                                                        <th>Min Qty</th>
+											<th>AFS</th>
+											<th>Min Qty</th>
 											<th>Edit</th>
 											<th>Delete</th>
 
@@ -137,7 +137,7 @@
 											<tr>
 												<td>${user.CP_CODE}</td>
 												<td>${user.SP_CODE}</td>
-                                                                                                <td>${user.SP_NAME}</td>
+												<td>${user.SP_NAME}</td>
 												<td>${user.SERVICE_CODE}</td>
 												<td>${user.CP_NAME}</td>
 												<td>${user.ESME_CODE}</td>
@@ -148,7 +148,7 @@
 												<td>${user.END_DT}</td>
 												<td>${user.SHARING_TYPE}</td>
 												<td>${user.SHARE_NT_PER}</td>
-                                                                                                <td>${user.AFS_FLAG}</td>
+												<td>${user.AFS_FLAG}</td>
 												<td>${user.MIN_QTY}</td>
 
 												<td>
@@ -208,16 +208,18 @@
 	<!-- ./wrapper -->
 
 	<jsp:include page="${request.contextPath}/dialogcp"></jsp:include>
+
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
 	<script>
 		$(function() {
 
-			$('#example1').DataTable()
+			$('#example1').DataTable();
 
 		})
 	</script>
 	<script src="<c:url value="/resources/function/cp.js" />"></script>
+
 
 
 </body>

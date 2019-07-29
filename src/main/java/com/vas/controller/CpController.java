@@ -34,7 +34,6 @@ public class CpController {
 
     @RequestMapping(value = "/cp/list", method = RequestMethod.GET)
     public String cplist(String SP_CODE, String SERVICE_CODE, Locale locale, Model model) throws SQLException {
-//System.out.println("nabin code==");
         logger.info("Getting Content Provider List", locale);
         CpDao dao = new CpDao();
         List<Map<String, Object>> list = null;
