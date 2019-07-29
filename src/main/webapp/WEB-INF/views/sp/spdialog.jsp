@@ -50,10 +50,10 @@
                     </select> 
                     <Br>    
                     <label for="ContractDt">Contract Dt.</label> 
-                    <input type="text" class="nepali-calendar" name="CONTRACT_DT" id="CONTRACT_DT"> 
+                    <input type="text" class="nepali-calendar" name="CONTRACT_DT" id="CONTRACT_DT" placeholder="Enter contract dt."> 
                     
                     <label for="TerminateDt">Terminate Dt.</label> 
-                    <input type="text" class="nepali-calendar" name="CONTRACT_TER_DT" id="CONTRACT_TER_DT">
+                    <input type="text" class="nepali-calendar" name="CONTRACT_TER_DT" id="CONTRACT_TER_DT" placeholder="Enter termination dt.">
 
                 </div>
             </div>
@@ -115,9 +115,9 @@
                     </select> 
                     <Br>
                     <label for="ContractDt">Contract Dt.</label> 
-                    <input type="text" class="nepali-calendar" name="CONTRACT_DT" id="EDITCONTRACT_DT"> 
+                    <input type="text" class="nepali-calendar" name="CONTRACT_DT" id="EDITCONTRACT_DT" placeholder="Enter contract dt."> 
                     <label for="TerminateDt">Terminate Dt.</label> 
-                    <input type="text" class="nepali-calendar" name="CONTRACT_TER_DT" id="EDITCONTRACT_TER_DT">
+                    <input type="text" class="nepali-calendar" name="CONTRACT_TER_DT" id="EDITCONTRACT_TER_DT" placeholder="Enter contract terminate dt.">
                 </div>
             </div>
             <div class="modal-footer">
