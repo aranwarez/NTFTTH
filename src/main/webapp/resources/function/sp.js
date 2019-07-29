@@ -1,3 +1,10 @@
+$(document).ready(function() {
+
+	$('.nepali-calendar').nepaliDatePicker();
+	
+    
+
+});
 function saveSp() {
     //debugger;
     if ($('#SP_CODE') == null || $('#SP_CODE') == "" || $('#SP_CODE').val().length > 8) {
@@ -74,7 +81,6 @@ function updateSp() {
     var PAN_NO = $("#EDITPAN_NO").val();
     var CONTRACT_DT = $("#EDITCONTRACT_DT").val();
     var CONTRACT_TER_DT = $("#EDITCONTRACT_TER_DT").val();
-    
     $.post('../sp/update', {
         SP_CODE: CODE,
         SP_NAME: SP_NAME,
