@@ -1,6 +1,7 @@
 /**
- * 
+ * This function contents code for Service And Target
  */
+
 var currentSP;
 var currentTrans_id;
 $(document).ready(function() {
@@ -9,6 +10,11 @@ $(document).ready(function() {
 	$("#sptarget").dataTable();
 
 });
+
+/*-----------------------------------------------------------------------
+ * Start of Target functional Script
+ * --------------------------------
+ * */
 
 function editSp(SP_CODE) {
 	currentSP = SP_CODE;
@@ -126,5 +132,119 @@ function delSPTarget(TRANS_ID) {
 	} else {
 		// action
 	}
+
+}
+
+/*---------------------------------------------------------
+ *  End of Target functional Scripts
+ * **----------------------------------*/
+
+/*---------------------------------------------------------
+ *  Start of SP Service functional Scripts
+ * **----------------------------------*/
+
+// Pops dialog for SP Service
+function ServiceSpAction(SP_CODE) {
+	currentSP = SP_CODE;
+	$('#sSP_CODE').val(SP_CODE);
+	$('#esSP_CODE').val(SP_CODE);
+	$('.modal-title')
+			.html('SP Service Entry for Service Provider : ' + SP_CODE);
+}
+
+// Saves Service for SP_CODE
+function savespservice() {
+	debugger;
+	$.post('../sp/savespserviceJS', {
+		SP_CODE : currentSP,
+		SERVICE_CODE : $('#sSERVICE_CODE').val(),
+		ACTIVE_FLAG : $('#sACTIVE_FLAG').val(),
+		ACTIVE_DT : $('#sACTIVE_DT').val(),
+		DEACTIVATE_DT : $('#sDEACTIVATE_DT').val()
+
+	}, function(data) {
+		alert(data);
+		if (data.substring(0, 6) === "Succes") {
+			// location.reload();
+			$('#addServiceModal').modal('hide');
+		}
+	});
+
+}
+
+function getSPServiceList() {
+	$
+			.get(
+					'../sp/getSPserviceList',
+					{
+						SP_CODE : currentSP
+					},
+					function(response) {
+						debugger;
+						if (response !== null) {
+							temp = $('#spservice').DataTable();
+							temp.clear().draw();
+
+							$
+									.each(
+											response,
+											function(key, value) {
+												$("#spservice")
+														.dataTable()
+														.fnAddData(
+																[
+																		value.SERVICE_CODE,
+																		value.ACTIVE_FLAG,
+																		value.NEP_ACTIVE_DT,
+																		value.NEP_DEACTIVE_DT,
+																		value.UPDATE_DT,
+																		"<a href = \"#\" data-toggle=\"modal\" data-target=\"#editSPServiceModal\" title=\"Edit\" onclick=\"return editSPService('"
+																				+ value.TRANS_ID
+																				+ "')\"<span class=\"fa fa-pencil-square-o\"></span></a>",
+																		"<a href=\"#\" data-toggle=\"modal\" data-target=\"#deleteModal\"  title=\"Delete\" onclick=\"return delSPService('"
+																				+ value.TRANS_ID
+																				+ "')\"<span class=\"fa fa-trash\"></span></a>" ]); // closing
+												// fnAddData()
+											}// closing function(key,value)
+									); // closing each()
+						}// closing if()
+					}); // closing function(responseJson)
+
+}
+
+function editSPService(Trans_id) {
+	currentTrans_id = Trans_id;
+	$.get('../sp/getSPserviceList', {
+		SP_CODE : currentSP
+	}, function(response) {
+		$.each(response, function(key, value) {
+			if (value.TRANS_ID == Trans_id) {
+				$('#esSP_CODE').val(currentSP);
+				$('#esSERVICE_CODE').val(value.SERVICE_CODE);
+				$('#esACTIVE_FLAG').val(value.ACTIVE_FLAG);
+				$('#esACTIVE_DT').val(value.NEP_ACTIVE_DT);
+				$('#esDEACTIVATE_DT').val(value.NEP_DEACTIVE_DT);
+			}
+		});
+
+	});
+}
+
+function updateSPService() {
+	$.post('../sp/updatespserviceJS', {
+		TRANS_ID : currentTrans_id,
+		SP_CODE : currentSP,
+		SERVICE_CODE : $('#esSERVICE_CODE').val(),
+		ACTIVE_FLAG : $('#esACTIVE_FLAG').val(),
+		ACTIVE_DT : $('#esACTIVE_DT').val(),
+		DEACTIVATE_DT : $('#esDEACTIVATE_DT').val()
+	}, function(data) {
+		alert(data);
+		if (data.substring(0, 6) === "Succes") {
+			// location.reload();
+			$('#editSPServiceModal').modal('hide');
+			getSPServiceList();
+		}
+	});
 
 }

@@ -116,14 +116,14 @@
 											<th>Service Provider</th>
 											<th>Account Code</th>
 											<th>Address</th>
-											<th>Contact Person</th>
-											<th>Tel No.</th>
-											<th>Mobile No.</th>
-											<th>Email</th>
-											<th>Pan No.</th>
-											<th>Contract Dt</th>
+											<!-- 											<th>Contact Person</th> -->
+											<!-- 											<th>Tel No.</th> -->
+											<!-- 											<th>Mobile No.</th> -->
+											<!-- 											<th>Email</th> -->
+											<!-- 											<th>Pan No.</th> -->
+											<!-- 											<th>Contract Dt</th> -->
 											<th>Terminate Dt</th>
-											<th>Sldg Code</th>
+											<!-- 											<th>Sldg Code</th> -->
 											<th>Action</th>
 
 										</tr>
@@ -135,22 +135,28 @@
 												<td>${user.SP_NAME}</td>
 												<td>${user.SHORT_CODE}</td>
 												<td>${user.ADDRESS}</td>
-												<td>${user.CONTACT_PERSON}</td>
-												<td>${user.TEL_NO}</td>
-												<td>${user.MOBILE_NO}</td>
-												<td>${user.EMAIL}</td>
-												<td>${user.PAN_NO}</td>
-												<td>${user.CONTRACT_DT}</td>
+												<%-- 												<td>${user.CONTACT_PERSON}</td> --%>
+												<%-- 												<td>${user.TEL_NO}</td> --%>
+												<%-- 												<td>${user.MOBILE_NO}</td> --%>
+												<%-- 												<td>${user.EMAIL}</td> --%>
+												<%-- 												<td>${user.PAN_NO}</td> --%>
+												<%-- 												<td>${user.CONTRACT_DT}</td> --%>
 												<td>${user.CONTRACT_TER_DT}</td>
-												<td>${user.SLDG_CODE}</td>
+												<%-- 												<td>${user.SLDG_CODE}</td> --%>
 
 												<td>
 													<div class="btn-group">
 														<a href="#" class="btn btn-info" data-toggle="modal"
 															data-target="#editModal"
 															onclick="return editSp('${user.SP_CODE}')"> <i
-															class="fa fa-edit"></i> Edit
+															class="fa fa-edit"></i> Target
+														</a>  <a href="#" class="btn btn-default bg-purple" data-toggle="modal"
+															data-target="#ServiceSpActionModal"
+															onclick="return ServiceSpAction('${user.SP_CODE}')">
+															<i class="fa fa-edit"></i>SP Service
 														</a>
+
+
 													</div>
 												</td>
 											</tr>
