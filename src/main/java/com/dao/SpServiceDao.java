@@ -99,11 +99,11 @@ public class SpServiceDao {
 
             String qry = "UPDATE M_SP_SERVICE\n"
                     + "SET    SP_CODE       = ?, SERVICE_CODE  = ?,   ACTIVE_FLAG   = ?,\n"
-                    + "       ACTIVE_DT     = common.to_ad(?), DEACTIVATE_DT = , common.to_ad(?),  UPDATE_BY     = ?, UPDATE_DT     = SYSDATE\n"
+                    + "       ACTIVE_DT     = common.to_ad(?), DEACTIVATE_DT = common.to_ad(?),  UPDATE_BY     = ?, UPDATE_DT     = SYSDATE\n"
                     + "WHERE  TRANS_ID      = ?";
 
             PreparedStatement pst = con.prepareStatement(qry);
-
+            System.out.println(qry);
             pst.setString(1, SP_CODE);
             pst.setString(2, SERVICE_CODE);
             pst.setString(3, ACTIVE_FLAG);
