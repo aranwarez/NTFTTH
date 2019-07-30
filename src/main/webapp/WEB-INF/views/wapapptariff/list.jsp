@@ -63,7 +63,7 @@
                 <div class="content-wrapper">
                     <!-- Content Header (Page header) -->
                     <section class="content-header">
-                        <h1>Content Provider Entry</h1>
+                        <h1>WAP APP Tariff Entry</h1>
                         <ol class="breadcrumb">
                             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                             <li><a href="#">Tables</a></li>
@@ -72,32 +72,31 @@
                         <br/>
                         <br/>
                         <table>
-                            <tr>
-                                <td>Service Provider </td>      
-                                <td>  
-                                    <select style="width: 400px;" name="QSP_CODE" id="QSP_CODE"> 
-                                        <option value=''>Select :</option>
-                                    <c:forEach var="SP" items="${Sp_list}">
-                                        <option value="${SP.SP_CODE}">${SP.SP_NAME} ${SP.SP_CODE}</option>
-                                    </c:forEach>
-                                </select>
-                            </td> 
                             <td>Service Provider Services</td>      
-                                <td>  
-                                    <select  style="width: 200px;" name="QSERVICE_CODE" id="QSERVICE_CODE" > 
-                                        <option value=''>Select :</option>
-                                    <c:forEach var="VASSER" items="${VASSer_list}">
-                                        <option value="${VASSER.SERVICE_CODE}"> ${VASSER.SERVICE_CODE}</option>
-                                    </c:forEach>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="button" value="QUERY" onclick="getCpFilterList();">    
-                            </td>
-                            
+                            <td>  
+                                <select  style="width: 200px;" name="QSERVICE_CODE" id="QSERVICE_CODE" > 
+                                    <option value=''>Select :</option>
+                                <c:forEach var="VASSER" items="${VASSer_list}">
+                                    <option value="${VASSER.SERVICE_CODE}"> ${VASSER.SERVICE_CODE}</option>
+                                </c:forEach>
+                            </select>
+                        </td>
+                        <td>Package Type</td>      
+                        <td>  
+                            <select  style="width: 200px;" name="QPACKAGE_TYPE" id="QPACKAGE_TYPE" > 
+                                <option value=''>Select :</option>
+                                <c:forEach var="PACKAGE" items="${Package_list}">
+                                    <option value="${PACKAGE.PACKAGE_TYPE}"> ${PACKAGE.PACKAGE_TYPE}</option>
+                                </c:forEach>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="button" value="QUERY" onclick="getWapapptariffFilterList();">    
+                        </td>
+
                         </tr>
                     </table> 
-                    
+
                     <a href="#" class="btn btn-primary pull-right" data-toggle="modal"
                        data-target="#myModal"> <i class="fa fa-plus"></i> Add
                     </a>
@@ -141,66 +140,17 @@
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Cp Code</th>
-                                                <th>Sp Code</th>
-                                                <th>Service Provider</th>
-                                                <th>Service Code</th>
-                                                <th>CP Name</th>
-                                                <th>ESME CODE</th>
-                                                <th>Srv. For</th>
-                                                <th>Package Type</th>
-                                                <th>Stream Type</th>
-                                                <th>Start Dt.</th>
-                                                <th>End Dt.</th>
-                                                <th>Sharing Type</th>
-                                                <th>Share(%)</th>
-                                                <th>AFS</th>
-                                                <th>Min Qty</th>
+                                                <th>Trans ID</th>
+                                                <th>Service</th>
+                                                <th>Package</th>
+                                                <th>Rate</th>
+                                                <th>Effective Dt</th>
+                                                <th>Range From</th>
+                                                <th>Range To</th>
                                                 <th>Edit</th>
                                                 <th>Delete</th>
-
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <c:forEach var="user" items="${data_list}">
-                                                <tr>
-                                                    <td>${user.CP_CODE}</td>
-                                                    <td>${user.SP_CODE}</td>
-                                                    <td>${user.SP_NAME}</td>
-                                                    <td>${user.SERVICE_CODE}</td>
-                                                    <td>${user.CP_NAME}</td>
-                                                    <td>${user.ESME_CODE}</td>
-                                                    <td>${user.SRV_FOR}</td>
-                                                    <td>${user.PACKAGE_TYPE}</td>
-                                                    <td>${user.STREAM_TYPE}</td>
-                                                    <td>${user.START_DT}</td>
-                                                    <td>${user.END_DT}</td>
-                                                    <td>${user.SHARING_TYPE}</td>
-                                                    <td>${user.SHARE_NT_PER}</td>
-                                                    <td>${user.AFS_FLAG}</td>
-                                                    <td>${user.MIN_QTY}</td>
-
-                                                    <td>
-                                                        <div class="btn-group">
-                                                            <a href="#" class="btn btn-info" data-toggle="modal"
-                                                               data-target="#editModal"
-                                                               onclick="return editCp('${user.CP_CODE}')"> <i
-                                                                    class="fa fa-edit"></i> Edit
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div>
-                                                            <a href="" class="btn btn-default" data-toggle="modal"
-                                                               data-target="#deleteModal"
-                                                               onclick="return deleteCp('${user.CP_CODE}')"> <i
-                                                                    class="fa fa-trash"></i> Delete
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
-                                        </tbody>
                                     </table>
                                 </div>
                                 <!-- /.box-body -->
@@ -236,7 +186,7 @@
             </div>
             <!-- ./wrapper -->
 
-        <jsp:include page="${request.contextPath}/dialogcp"></jsp:include>
+        <jsp:include page="${request.contextPath}/dialogwapapptariff"></jsp:include>
 
         <jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
@@ -247,7 +197,7 @@
 
                 })
             </script>
-            <script src="<c:url value="/resources/function/cp.js" />"></script>
+            <script src="<c:url value="/resources/function/wapapptariff.js" />"></script>
 
 
 
