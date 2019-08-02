@@ -40,6 +40,7 @@ function saveWapapptariff() {
     var EFFECTIVE_DT = $("#EFFECTIVE_DT").val();
     var RANGE_FROM = $("#RANGE_FROM").val();
     var RANGE_TO = $("#RANGE_TO").val();
+    var MO_MT_RATIO = $("#MO_MT_RATIO").val();
     
     // alert("nabin"+SHORT_CODE);
     $.post('../wapapptariff/saveJS', {
@@ -48,7 +49,8 @@ function saveWapapptariff() {
         RATE: RATE,
         EFFECTIVE_DT: EFFECTIVE_DT,
         RANGE_FROM: RANGE_FROM,
-        RANGE_TO: RANGE_TO
+        RANGE_TO: RANGE_TO,
+        MO_MT_RATIO :MO_MT_RATIO
     }, function (data) {
         alert(data);
         if (data.substring(0, 6) === "Succes") {
@@ -75,6 +77,7 @@ function editWapapptariff(code) {
             $("#EDITEFFECTIVE_DT").val(row[i][4]);
             $("#EDITRANGE_FROM").val(row[i][5]);
             $("#EDITRANGE_TO").val(row[i][6]);
+            $("#EDITMO_MT_RATIO").val(row[i][7]);
             jQuery.ajaxSetup({async: true});
 
         }
@@ -89,6 +92,7 @@ function updateWapapptariff() {
     var EFFECTIVE_DT = $("#EDITEFFECTIVE_DT").val();
     var RANGE_FROM = $("#EDITRANGE_FROM").val();
     var RANGE_TO = $("#EDITRANGE_TO").val();
+    var MO_MT_RATIO = $("#EDITMO_MT_RATIO").val();
     $.post('../wapapptariff/update', {
         TRANS_ID: TRANS_ID,
         SERVICE_CODE: SERVICE_CODE,
@@ -96,7 +100,8 @@ function updateWapapptariff() {
         RATE: RATE,
         EFFECTIVE_DT: EFFECTIVE_DT,
         RANGE_FROM: RANGE_FROM,
-        RANGE_TO: RANGE_TO
+        RANGE_TO: RANGE_TO,
+        MO_MT_RATIO: MO_MT_RATIO
     }, function (data) {
         // location.reload();
         alert(data);
@@ -146,6 +151,7 @@ function getWapapptariffFilterList() {
                     value.NEP_EFFECTIVE_DT,
                     value.RANGE_FROM,
                     value.RANGE_TO,
+                    value.MO_MT_RATIO,
                     '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#editModal" onclick="return editWapapptariff(\''+value.TRANS_ID+'\')"> <i class="fa fa-edit"></i> Edit </a>',
                     '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#deleteModal" onclick="return deleteWapapptariff(\''+value.TRANS_ID+'\')"> <i class="fa fa-trash"></i> Delete </a>'
                 ]);

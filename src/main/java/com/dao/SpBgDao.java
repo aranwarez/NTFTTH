@@ -22,20 +22,24 @@ import util.DbCon;
  */
 public class SpBgDao {
 
-    public List<Map<String, Object>> getSpBgList(String SP_CODE) throws SQLException {
+    public List<Map<String, Object>> getSpBgList(String SP_CODE, String FROM_DT, String TO_DT, String TRANS_CD, String POST_FLAG) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
             PreparedStatement pst = con.prepareStatement("SELECT M.TRANS_ID, M.TRANS_CD, M.SP_CODE, A.SP_NAME, M.TRANS_DT, COMMON.TO_BS(M.TRANS_DT) NEP_TRANS_DT, \n"
                     + "M.BANK_CD, B.BANK_ADDRESS, B.ACCT_NO,  M.BANK_GUARENTEE_DATE, COMMON.TO_BS(M.BANK_GUARENTEE_DATE) NEP_BANK_GUARENTEE_DATE, \n"
-                    + "   M.BANK_VALIDITY_DATE, COMMON.TO_BS(M.BANK_VALIDITY_DATE) NEP_BANK_VALIDITY_DATE, M.AMT,   \n"
+                    + "   M.BANK_VALIDITY_DATE, COMMON.TO_BS(M.BANK_VALIDITY_DATE) NEP_BANK_VALIDITY_DATE, M.AMT, M.REMARKS,  \n"
                     + "   M.POST_DT, M.POST_BY, M.POST_FLAG, M.CREATE_BY, \n"
                     + "   M.CREATE_DT, M.UPDATE_BY, M.UPDATE_DT\n"
                     + "FROM M_SP_BG M, M_SP A, M_BANK B\n"
                     + "WHERE A.SP_CODE=M.SP_CODE\n"
-                    + "AND B.BANK_CD=M.BANK_CD\n"
-                    + "AND A.SP_CODE=?\n"
+                    + "AND B.BANK_CD=M.BANK_CD AND A.SP_CODE=NVL(?,A.SP_CODE)\n"
+                    + "AND TRANS_DT BETWEEN nvl(COMMON.TO_AD(?),(sysdate-30)) AND nvl(COMMON.TO_AD(?),sysdate) AND M.TRANS_CD=NVL(?,M.TRANS_CD) and M.POST_FLAG=NVL(?,M.POST_FLAG)\n"
                     + "ORDER BY 1 desc");
             pst.setString(1, SP_CODE);
+            pst.setString(2, FROM_DT);
+            pst.setString(3, TO_DT);
+            pst.setString(4, TRANS_CD);
+            pst.setString(5, POST_FLAG);
             ResultSet rs = pst.executeQuery();
 
             List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
@@ -61,7 +65,7 @@ public class SpBgDao {
     }
 
     public String saveSpBg(String TRANS_CD, String SP_CODE, String TRANS_DT, String BANK_CD, String BANK_GUARENTEE_DATE,
-            String AMT, String BANK_VALIDITY_DATE, String USER) throws SQLException {
+            String AMT, String BANK_VALIDITY_DATE, String USER, String REMARKS) throws SQLException {
         Connection con = DbCon.getConnection();
         String transid = null;
         try {
@@ -69,12 +73,15 @@ public class SpBgDao {
             PreparedStatement prs1 = con.prepareStatement(qry1);
             prs1.setString(1, TRANS_DT);
             ResultSet rs1 = prs1.executeQuery();
-            transid = rs1.getString(1);
+            if (rs1.next()){
+                transid = rs1.getString(1);
+            }
+            
             String qry = "INSERT INTO M_SP_BG (\n"
                     + "   TRANS_ID, TRANS_CD, SP_CODE, TRANS_DT, BANK_CD, BANK_GUARENTEE_DATE, \n"
-                    + "   AMT, BANK_VALIDITY_DATE, CREATE_BY,   CREATE_DT, POST_FLAG) \n"
+                    + "   AMT, BANK_VALIDITY_DATE, CREATE_BY,   CREATE_DT, POST_FLAG, REMARKS) \n"
                     + "VALUES (?,? ,? , COMMON.TO_AD(?),? ,COMMON.TO_AD(?), \n"
-                    + "NVL(?,0), COMMON.TO_AD(?), ?,   SYSDATE,'N')";
+                    + "NVL(?,0), COMMON.TO_AD(?), ?,   SYSDATE,'N', ?)";
 
             PreparedStatement pst = con.prepareStatement(qry);
             pst.setString(1, transid);
@@ -86,6 +93,7 @@ public class SpBgDao {
             pst.setString(7, AMT);
             pst.setString(8, BANK_VALIDITY_DATE);
             pst.setString(9, USER);
+            pst.setString(10, REMARKS);
             pst.executeUpdate();
             return "Succesfully Saved Service Provider Bank Transaction";
         } catch (Exception e) {
@@ -98,13 +106,13 @@ public class SpBgDao {
     }
 
     public String updateSpBg(String TRANS_ID, String TRANS_CD, String SP_CODE, String TRANS_DT, String BANK_CD, String BANK_GUARENTEE_DATE,
-            String AMT, String BANK_VALIDITY_DATE, String USER) throws SQLException {
+            String AMT, String BANK_VALIDITY_DATE, String USER, String REMARKS) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
             String qry = "UPDATE M_SP_BG\n"
                     + "SET    TRANS_CD = ?,  SP_CODE  = ?, TRANS_DT= common.to_ad(?),\n"
                     + "       BANK_CD  = ?,  BANK_GUARENTEE_DATE = common.to_ad(?),    AMT   = nvl(?,0),\n"
-                    + "       BANK_VALIDITY_DATE  = common.to_ad(?), UPDATE_BY = ?, UPDATE_DT = sysdate\n"
+                    + "       BANK_VALIDITY_DATE  = common.to_ad(?), UPDATE_BY = ?, UPDATE_DT = sysdate, REMARKS=?\n"
                     + "WHERE  TRANS_ID            = ?";
             PreparedStatement pst = con.prepareStatement(qry);
             pst.setString(1, TRANS_CD);
@@ -115,7 +123,8 @@ public class SpBgDao {
             pst.setString(6, AMT);
             pst.setString(7, BANK_VALIDITY_DATE);
             pst.setString(8, USER);
-            pst.setString(9, TRANS_ID);
+            pst.setString(9, REMARKS);
+            pst.setString(10, TRANS_ID);
             pst.executeUpdate();
             return "Succesfully Updated";
         } catch (Exception e) {

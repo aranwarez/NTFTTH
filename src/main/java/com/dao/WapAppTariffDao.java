@@ -25,7 +25,7 @@ public class WapAppTariffDao {
     public List<Map<String, Object>> getWapAppTariffList(String SERVICE_CODE, String PACKAGE_TYPE) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
-            PreparedStatement pst = con.prepareStatement("SELECT TRANS_ID, SERVICE_CODE, PACKAGE_TYPE, RATE, EFFECTIVE_DT, common.to_bs(EFFECTIVE_DT) NEP_EFFECTIVE_DT, RANGE_FROM, RANGE_TO,\n"
+            PreparedStatement pst = con.prepareStatement("SELECT TRANS_ID, SERVICE_CODE, PACKAGE_TYPE, RATE, EFFECTIVE_DT, common.to_bs(EFFECTIVE_DT) NEP_EFFECTIVE_DT, RANGE_FROM, RANGE_TO, MO_MT_RATIO,\n"
                     + "CREATE_BY, CREATE_DT, UPDATE_BY, UPDATE_DT\n"
                     + "FROM m_wap_app_tariff\n"
                     + "WHERE SERVICE_CODE=NVL(?,SERVICE_CODE)\n"
@@ -55,14 +55,14 @@ public class WapAppTariffDao {
     }
 
     public String saveWapAppTariff(String SERVICE_CODE, String PACKAGE_TYPE, String RATE,
-            String EFFECTIVE_DT, String RANGE_FROM, String RANGE_TO, String USER) throws SQLException {
+            String EFFECTIVE_DT, String RANGE_FROM, String RANGE_TO, String USER, String MO_MT_RATIO) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
             String qry = "INSERT INTO M_WAP_APP_TARIFF (\n"
                     + "   TRANS_ID, SERVICE_CODE, PACKAGE_TYPE,   RATE, EFFECTIVE_DT, RANGE_FROM,  RANGE_TO, \n"
-                    + "   CREATE_BY, CREATE_DT) \n"
+                    + "   CREATE_BY, CREATE_DT, MO_MT_RATIO) \n"
                     + "VALUES (SEQ_WAP_APP_TARIFF.NEXTVAL , ? , ? ,nvl(?,0), common.to_ad(?), nvl(?,0), nvl(?,0), \n"
-                    + "?, SYSDATE)";
+                    + "?, SYSDATE, ?)";
             PreparedStatement pst = con.prepareStatement(qry);
             pst.setString(1, SERVICE_CODE);
             pst.setString(2, PACKAGE_TYPE);
@@ -71,6 +71,7 @@ public class WapAppTariffDao {
             pst.setString(5, RANGE_FROM);
             pst.setString(6, RANGE_TO);
             pst.setString(7, USER);
+            pst.setString(8, MO_MT_RATIO);
             pst.executeUpdate();
             return "Succesfully Saved Wap App Tariff";
         } catch (Exception e) {
@@ -83,7 +84,7 @@ public class WapAppTariffDao {
     }
 
     public String updateWapAppTariff(String TRANS_ID, String SERVICE_CODE, String PACKAGE_TYPE, String RATE,
-            String EFFECTIVE_DT, String RANGE_FROM, String RANGE_TO, String USER) throws SQLException {
+            String EFFECTIVE_DT, String RANGE_FROM, String RANGE_TO, String MO_MT_RATIO, String USER) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
             String qry = "UPDATE M_WAP_APP_TARIFF\n"
@@ -92,7 +93,7 @@ public class WapAppTariffDao {
                     + "       RATE         = nvl(?,0),\n"
                     + "       EFFECTIVE_DT = common.to_ad(?),\n"
                     + "       RANGE_FROM   = nvl(?,0),\n"
-                    + "       RANGE_TO     = nvl(?,0),\n"
+                    + "       RANGE_TO     = nvl(?,0), MO_MT_RATIO=?, \n"
                     + "       UPDATE_BY    = ?,\n"
                     + "       UPDATE_DT    = sysdate\n"
                     + "WHERE  TRANS_ID     = ?";
@@ -103,8 +104,9 @@ public class WapAppTariffDao {
             pst.setString(4, EFFECTIVE_DT);
             pst.setString(5, RANGE_FROM);
             pst.setString(6, RANGE_TO);
-            pst.setString(7, USER);
-            pst.setString(8, TRANS_ID);
+            pst.setString(7, MO_MT_RATIO);
+            pst.setString(8, USER);
+            pst.setString(9, TRANS_ID);
             
             pst.executeUpdate();
             return "Succesfully Updated";
