@@ -36,10 +36,10 @@ public class WapAppTariffController {
 
     @RequestMapping(value = "/wapapptariff/list", method = RequestMethod.GET)
     public String wapapptarifflist(String SERVICE_CODE, String PACKAGE_TYPE, Locale locale, Model model) throws SQLException {
-        logger.info("Getting Wap App Tariff List", locale);
+        logger.info("Getting VAS Service Tariff List", locale);
         WapAppTariffDao dao = new WapAppTariffDao();
         List<Map<String, Object>> list = null;
-        model.addAttribute("fx", "WAP APP Tariff List");
+        model.addAttribute("fx", "VAS Service Tariff List");
         model.addAttribute("data_list", list);
         PackageDao PAC = new PackageDao();
         model.addAttribute("Package_list", PAC.getPackageList());
@@ -66,7 +66,7 @@ public class WapAppTariffController {
     @RequestMapping(value = "/wapapptariff/saveJS", method = RequestMethod.POST)
     @ResponseBody
     public String saveJSWapapptariff(String SERVICE_CODE, String PACKAGE_TYPE, String RATE,
-            String EFFECTIVE_DT, String RANGE_FROM, String RANGE_TO, Model model, Locale locale) {
+            String EFFECTIVE_DT, String RANGE_FROM, String RANGE_TO, String MO_MT_RATIO, Model model, Locale locale) {
 
         logger.info("Save WAP APP Tariff {}.", locale);
         WapAppTariffDao dao = new WapAppTariffDao();
@@ -77,7 +77,7 @@ public class WapAppTariffController {
         String msg = null;
         try {
             msg = dao.saveWapAppTariff(SERVICE_CODE, PACKAGE_TYPE, RATE,
-            EFFECTIVE_DT, RANGE_FROM, RANGE_TO, USER);
+            EFFECTIVE_DT, RANGE_FROM, RANGE_TO, USER, MO_MT_RATIO);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -88,7 +88,7 @@ public class WapAppTariffController {
     @RequestMapping(value = "/wapapptariff/update", method = RequestMethod.POST)
     @ResponseBody
     public String updateWapapptariff(String TRANS_ID, String SERVICE_CODE, String PACKAGE_TYPE, String RATE,
-            String EFFECTIVE_DT, String RANGE_FROM, String RANGE_TO, Model model, Locale locale) {
+            String EFFECTIVE_DT, String RANGE_FROM, String RANGE_TO, String MO_MT_RATIO, Model model, Locale locale) {
 
         logger.info("Updata Wap App Tariff {}.", locale);
         WapAppTariffDao dao = new WapAppTariffDao();
@@ -99,7 +99,7 @@ public class WapAppTariffController {
         String msg = null;
         try {
             msg = dao.updateWapAppTariff(TRANS_ID, SERVICE_CODE, PACKAGE_TYPE, RATE, 
-                    EFFECTIVE_DT, RANGE_FROM, RANGE_TO, USER);
+                    EFFECTIVE_DT, RANGE_FROM, RANGE_TO, MO_MT_RATIO, USER);
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block

@@ -63,12 +63,63 @@
                 <div class="content-wrapper">
                     <!-- Content Header (Page header) -->
                     <section class="content-header">
-                        <h1>${fx}</h1>
-                    <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                        <li><a href="#">Tables</a></li>
-                        <li class="active">Data tables</li>
-                    </ol>
+                        <h1>Content Provider Entry</h1>
+                        <ol class="breadcrumb">
+                            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                            <li><a href="#">Tables</a></li>
+                            <li class="active">Data tables</li>
+                        </ol>
+                        <br/>
+                        <br/>
+                        <table>
+                            <tr>
+                                <td>Service Provider </td>      
+                                <td>  
+                                    <select style="width: 400px;" name="QSP_CODE" id="QSP_CODE"> 
+                                        <option value=''>Select :</option>
+                                    <c:forEach var="SP" items="${Sp_list}">
+                                        <option value="${SP.SP_CODE}">${SP.SP_NAME} ${SP.SP_CODE}</option>
+                                    </c:forEach>
+                                </select>
+                            </td> 
+
+                            <td>Trans Code </td>      
+                            <td>  
+                                <select style="width: 150px;" name="QTRANS_CD" id="QTRANS_CD"> 
+                                    <option value=''>Select :</option>
+                                    <c:forEach var="TRA" items="${Trans_list}">
+                                        <option value="${TRA.TRANS_CD}">${TRA.TRANS_CD}</option>
+                                    </c:forEach>
+                                </select>
+                            </td> 
+                            <td>Post Flag</td>      
+                            <td>  
+                                <select  style="width: 100px;" name="QPOST_FLAG" id="QPOST_FLAG" > 
+                                    <option value='N'>N</option>
+                                    <option value='Y'>Y</option>
+                                    <option value=''>All</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>  <c:forEach var="DAT" items="${Date_list}">
+                                <td>FromDt</td>      
+                                <td>  
+                                    <input type="text" style="width: 150px;" value="${DAT.NEP_FROM_DATE}" class="nepali-calendar form-control"  name="QFROM_DT"
+                                           id="QFROM_DT" placeholder="Enter Transaction from dt."> 
+                                </td>
+                                <td>To Dt</td>      
+                                <td>  
+                                    <input type="text" style="width: 150px;" value="${DAT.NEP_TODAY_DATE}" class="nepali-calendar form-control" name="QTO_DT"
+                                           id="QTO_DT" placeholder="Enter Transaction to dt."> 
+                                </td>
+
+                                <td>
+                                    <input type="button" style="width: 150px;" value="QUERY" onclick="getSpbgFilterList();">    
+                                </td>
+                            </c:forEach>
+                        </tr>
+                    </table> 
+
                     <a href="#" class="btn btn-primary pull-right" data-toggle="modal"
                        data-target="#myModal"> <i class="fa fa-plus"></i> Add
                     </a>
@@ -108,56 +159,59 @@
                                 %>
 
                                 <!-- /.box-header -->
-                                <div class="box-body">
+                                <div class="box-body table-responsive">
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
+                                                <th>TransID</th>
+                                                <th>Trans Cd</th>
                                                 <th>SP Code</th>
-                                                <th>Service Provider</th>
-                                                <th>Account Code</th>
-                                                <th>Address</th>
-                                                <!-- 											<th>Contact Person</th> -->
-                                                <!-- 											<th>Tel No.</th> -->
-                                                <!-- 											<th>Mobile No.</th> -->
-                                                <!-- 											<th>Email</th> -->
-                                                <!-- 											<th>Pan No.</th> -->
-                                                <!-- 											<th>Contract Dt</th> -->
-                                                <th>Terminate Dt</th>
-                                                <!-- 											<th>Sldg Code</th> -->
-                                                <th>Action</th>
-
+                                                <th>SP NAME</th>
+                                                <th>Trans Dt</th>
+                                                <th>Bank</th>
+                                                <th>Bank GuarenteeDt</th>
+                                                <th>ValidtyDt</th>
+                                                <th>AMT</th>
+                                                <th>REMARKS</th>
+                                                <th>POST_FLAG</th>
+                                                <th>POST_DT</th>
+                                                <th>POST_BY</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <c:forEach var="user" items="${data_list}">
                                                 <tr>
+                                                    <td>${user.TRANS_ID}</td>
+                                                    <td>${user.TRANS_CD}</td>
                                                     <td>${user.SP_CODE}</td>
                                                     <td>${user.SP_NAME}</td>
-                                                    <td>${user.SHORT_CODE}</td>
-                                                    <td>${user.ADDRESS}</td>
-                                                    <%-- 												<td>${user.CONTACT_PERSON}</td> --%>
-                                                    <%-- 												<td>${user.TEL_NO}</td> --%>
-                                                    <%-- 												<td>${user.MOBILE_NO}</td> --%>
-                                                    <%-- 												<td>${user.EMAIL}</td> --%>
-                                                    <%-- 												<td>${user.PAN_NO}</td> --%>
-                                                    <%-- 												<td>${user.CONTRACT_DT}</td> --%>
-                                                    <td>${user.CONTRACT_TER_DT}</td>
-                                                    <%-- 												<td>${user.SLDG_CODE}</td> --%>
-
+                                                    <td>${user.NEP_TRANS_DT}</td>
+                                                    <td>${user.BANK_CD}</td>
+                                                    <td>${user.NEP_BANK_GUARENTEE_DATE}</td>
+                                                    <td>${user.NEP_BANK_VALIDITY_DATE}</td>
+                                                    <td>${user.AMT}</td>
+                                                    <td>${user.REMARKS}</td>
+                                                    <td>${user.POST_FLAG}</td>
+                                                    <td>${user.POST_DT}</td>
+                                                    <td>${user.POST_BY}</td>
                                                     <td>
                                                         <div class="btn-group">
                                                             <a href="#" class="btn btn-info" data-toggle="modal"
                                                                data-target="#editModal"
-                                                               onclick="return editSp('${user.SP_CODE}')"> <i
-                                                                    class="fa fa-edit"></i> Target
-                                                            </a>  
-                                                            <a href="#" class="btn btn-default bg-purple" data-toggle="modal"
-                                                               data-target="#ServiceSpActionModal"
-                                                               onclick="return ServiceSpAction('${user.SP_CODE}')">
-                                                                <i class="fa fa-edit"></i>SP Service
+                                                               onclick="return editSpbg('${user.TRANS_ID}')"> <i
+                                                                    class="fa fa-edit"></i> Edit
                                                             </a>
-
-
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <a href="" class="btn btn-default" data-toggle="modal"
+                                                               data-target="#deleteModal"
+                                                               onclick="return deleteSpbg('${user.TRANS_ID}')"> <i
+                                                                    class="fa fa-trash"></i> Delete
+                                                            </a>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -198,17 +252,19 @@
             </div>
             <!-- ./wrapper -->
 
-        <jsp:include page="${request.contextPath}/sptargetdialog"></jsp:include>
+        <jsp:include page="${request.contextPath}/dialogspbg"></jsp:include>
+
         <jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
             <script>
                 $(function () {
 
-                    $('#example1').DataTable()
+                    $('#example1').DataTable();
 
                 })
             </script>
-            <script src="<c:url value="/resources/function/sptarget.js" />"></script>
+            <script src="<c:url value="/resources/function/spbg.js" />"></script>
+
 
 
     </body>

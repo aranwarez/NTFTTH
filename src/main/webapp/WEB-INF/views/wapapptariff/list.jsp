@@ -147,6 +147,7 @@
                                                 <th>Effective Dt</th>
                                                 <th>Range From</th>
                                                 <th>Range To</th>
+                                                <th>1MO:?MT</th>
                                                 <th>Edit</th>
                                                 <th>Delete</th>
                                             </tr>
