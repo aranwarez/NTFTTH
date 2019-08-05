@@ -51,8 +51,7 @@ public class MenuAccessDao {
 		}
 		return modelist;
 	}
-	
-	
+		
 	
 	
 

@@ -108,7 +108,6 @@ alert($("#ROLE_CODE").val());
 //
 //});
 
-
  
     $.post("../saveModeList", {ROLE_CODE: $("#ROLE_CODE").val(), menu_mode: JSON.stringify(inserteditdeletepost)}, function (data) {
         alert(data);

@@ -16,6 +16,8 @@ public class MenuAccess {
 	public String getLIST_FLAG() {
 		return LIST_FLAG;
 	}
+	
+	
 
 	public void setLIST_FLAG(String lIST_FLAG) {
 		LIST_FLAG = lIST_FLAG;
