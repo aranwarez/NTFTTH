@@ -1,7 +1,7 @@
 package com.model;
 
 public class MenuAccess {
-
+	
 	private int SN;
 	private String USER;
 	private String ROLE_CODE;

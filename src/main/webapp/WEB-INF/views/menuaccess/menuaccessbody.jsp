@@ -49,6 +49,7 @@
 							<option value="Y">Y</option>
 							<option value="N">N</option>
 					</select></td>
+					
 					<td><select class="posting${pmanu.getSN()}">
 							<option value="Y">Y</option>
 							<option value="N">N</option>

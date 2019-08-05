@@ -98,7 +98,6 @@ function saveMenuAccess() {
 alert(JSON.stringify(inserteditdeletepost));
 
 alert($("#ROLE_CODE").val());
-
 //alert('save menu code '+JSON.stringify(val));
 
 //$.post("../saveModeList", {ROLE_CODE: $("#ROLE_CODE").val(), list: JSON.stringify(inserteditdeletepost)}, function (data) {
@@ -107,7 +106,6 @@ alert($("#ROLE_CODE").val());
 //
 //
 //});
-
  
     $.post("../saveModeList", {ROLE_CODE: $("#ROLE_CODE").val(), menu_mode: JSON.stringify(inserteditdeletepost)}, function (data) {
         alert(data);

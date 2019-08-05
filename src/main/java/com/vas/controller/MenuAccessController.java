@@ -100,11 +100,11 @@ public class MenuAccessController {
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "saveModeList")
 
 	public String saveModeList(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-		String ROLE_CODE=request.getParameter("ROLE_CODE");
-		if(ROLE_CODE==null){
+		String ROLE_CODE = request.getParameter("ROLE_CODE");
+		if (ROLE_CODE == null) {
 			return "Please Enter role code ";
 		}
-		
+
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		if (user == null) {
 			return "redirect:/login";
@@ -117,19 +117,16 @@ public class MenuAccessController {
 
 		List<MenuAccess> editmodelist = gsonv.fromJson(menu_mode, type2);
 		System.out.println(" editmodelist == " + editmodelist.size());
-		
+
 //		SaveMenuAccess
-		
-		
-		
 		MenuAccessDao menuaccessdao = new MenuAccessDao();
-		String msg=null;
+		String msg = null;
 		try {
 			msg = menuaccessdao.SaveMenuAccess(ROLE_CODE, editmodelist, user.getUSER_ID());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			 return "Failed "+e;
+			return "Failed " + e;
 		}
 		return msg;
 	}
