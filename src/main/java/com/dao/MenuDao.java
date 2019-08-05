@@ -122,7 +122,7 @@ public class MenuDao {
 				m = new Menu();
 				m.setSN(i);
 				m.setLEVEL(rs.getString("LEVEL"));
-				m.setMENU_CODE(rs.getString("MENU_CODE"));
+				m.setMENU_CODE(rs.getString("MENU_CODE").trim());
 				m.setMENU_DESC(rs.getString("MENU_DESC"));
 				m.setMENU_URL(rs.getString("MENU_URL"));
 				m.setPARENT_MENU(rs.getString("PARENT_MENU"));

@@ -29,6 +29,7 @@
 	background: transparent !important;
 }
 </style>
+	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -94,7 +95,7 @@
 					<div class="col-xs-12">
 
 
-						<select id="ROLE_CODE" onchange="return getAllMenu()" class="form-control">
+						<select id="ROLE_CODE" onchange="return getEditMode()" class="form-control">
 							<option value="">Select</option>
 
 
@@ -178,7 +179,7 @@
 	<!-- ./wrapper -->
 
 	<jsp:include page="${request.contextPath}/dialogmenuaccess"></jsp:include>
-	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
+
 
 	<script>
 		$(function() {
@@ -187,7 +188,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/menu.js" />"></script>
+	<script src="<c:url value="/resources/function/menuaccess.js" />"></script>
 
 
 </body>

@@ -4,18 +4,26 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.google.gson.reflect.TypeToken;
+import com.dao.MenuAccessDao;
 import com.dao.MenuDao;
 import com.dao.RoleDao;
+import com.fasterxml.jackson.databind.AnnotationIntrospector.ReferenceProperty.Type;
+import com.google.gson.Gson;
 import com.model.Menu;
+import com.model.MenuAccess;
 import com.model.Role;
 import com.model.UserInformationModel;
 
@@ -67,6 +75,62 @@ public class MenuAccessController {
 		model.addAttribute("parementmenu", parementmenu);
 		return "menuaccess/menuaccessbody";
 
+	}
+
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET, value = "getEditMode")
+
+	public List<MenuAccess> getEditMode(HttpServletRequest request, HttpServletResponse response) {
+		MenuAccessDao menuaccessdao = new MenuAccessDao();
+		String ROLE_CODE = request.getParameter("ROLE_CODE");
+		List<MenuAccess> list = null;
+
+		try {
+			list = menuaccessdao.getModeList(ROLE_CODE);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "saveModeList")
+
+	public String saveModeList(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		String ROLE_CODE=request.getParameter("ROLE_CODE");
+		if(ROLE_CODE==null){
+			return "Please Enter role code ";
+		}
+		
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		if (user == null) {
+			return "redirect:/login";
+		}
+
+		String menu_mode = request.getParameter("menu_mode");
+		Gson gsonv = new Gson();
+		java.lang.reflect.Type type2 = new TypeToken<List<MenuAccess>>() {
+		}.getType();
+
+		List<MenuAccess> editmodelist = gsonv.fromJson(menu_mode, type2);
+		System.out.println(" editmodelist == " + editmodelist.size());
+		
+//		SaveMenuAccess
+		
+		
+		MenuAccessDao menuaccessdao = new MenuAccessDao();
+		String msg=null;
+		try {
+			msg = menuaccessdao.SaveMenuAccess(ROLE_CODE, editmodelist, user.getUSER_ID());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			 return "Failed "+e;
+		}
+		return msg;
 	}
 
 }
