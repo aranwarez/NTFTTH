@@ -37,6 +37,8 @@ CREATE SEQUENCE VASNTW.SEQ_CP_MO_MT_RATIO
   NOCYCLE
   NOCACHE
   ORDER;   
+  
+  alter table TMP_IMP_SMS_NT_SP  add (post_by varchar2(15), post_dt date);
 
 
 alter table tmp_imp_sms_nt_sp add IMP_PERIOD  VARCHAR2(2 BYTE);
