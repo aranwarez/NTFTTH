@@ -13,7 +13,7 @@
                         aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">New WAP APP Tariff Define</h4>
+                <h4 class="modal-title" id="myModalLabel">New VAS Service Tariff Define</h4>
             </div>
 
             <div class="modal-body">
@@ -64,6 +64,12 @@
                                 <input style="width: 280px;" class="form-control" type="number" name="RANGE_TO" id="RANGE_TO" placeholder="Enter Range To">
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <label for="MoMtRatio">1MO:?MT</label> 
+                                <input style="width: 280px;" class="form-control" type="number" name="MO_MT_RATIO" id="MO_MT_RATIO" placeholder="Enter Range To">
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -88,7 +94,7 @@
                         aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Edit WAP APP Tariff</h4>
+                <h4 class="modal-title" id="myModalLabel">Edit VAS Service Tariff</h4>
             </div>
 
             <form action="<c:url value="/wapapptariff/update" />" method="post"
@@ -140,6 +146,12 @@
                             <td>
                                 <label for="RangeTo">To</label> 
                                 <input style="width: 280px;" class="form-control" type="number" name="EDITRANGE_TO" id="EDITRANGE_TO" placeholder="Enter Range To">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="MoMtRatio">1MO:?MT</label> 
+                                <input style="width: 280px;" class="form-control" type="number" name="EDITMO_MT_RATIO" id="EDITMO_MT_RATIO" placeholder="Enter Range To">
                             </td>
                         </tr>
                     </table>
