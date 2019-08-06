@@ -26,7 +26,7 @@ public class CommonDateDao {
         Connection con = DbCon.getConnection();
 
         try {
-            PreparedStatement pst = con.prepareStatement("select trunc(sysdate) today_date, common.to_bs(sysdate) nep_today_date, common.to_bs(sysdate-30) nep_from_date from sys.dual");
+            PreparedStatement pst = con.prepareStatement("select trunc(sysdate) today_date, common.to_bs(sysdate) nep_today_date, common.to_bs(sysdate-30) nep_from_date, substr(common.to_bs(sysdate),1,4) cur_year, substr(common.to_bs(sysdate),6,2) cur_month, decode(substr(common.to_bs(sysdate+200),6,2),'04','01','05','01','06','01','07','02','08','02','09','02','10','03','11','03','12','03','04') cur_period from sys.dual");
             ResultSet rs = pst.executeQuery();
 
             List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
@@ -51,4 +51,32 @@ public class CommonDateDao {
         return null;
     }
     
+    public List<Map<String, Object>> getNepMonthList() throws SQLException {
+        Connection con = DbCon.getConnection();
+
+        try {
+            PreparedStatement pst = con.prepareStatement("select MONTH_CD, NEP_MONTH, FISCAL_Cd FROM NEPALI_MONTHS");
+            ResultSet rs = pst.executeQuery();
+
+            List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+            Map<String, Object> row = null;
+
+            ResultSetMetaData metaData = rs.getMetaData();
+            Integer columnCount = metaData.getColumnCount();
+
+            while (rs.next()) {
+                row = new HashMap<String, Object>();
+                for (int i = 1; i <= columnCount; i++) {
+                    row.put(metaData.getColumnName(i), rs.getObject(i));
+                }
+                resultList.add(row);
+            }
+            return resultList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            con.close();
+        }
+        return null;
+    }
 }
