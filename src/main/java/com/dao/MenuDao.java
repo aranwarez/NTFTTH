@@ -169,5 +169,36 @@ public class MenuDao {
         return list;
     }
 	
+	   public List<Menu> getChildCode(String parent_menu, String role_code) throws SQLException {
+	        Connection con = DbCon.getConnection();
+	        List<Menu> list = new ArrayList<Menu>();
+	        Menu abc = null;
+
+	        try {
+	            PreparedStatement pst = con.prepareStatement("select a.menu_code,a.menu_desc,a.parent_menu,a.MENU_URL from web_menu_entry a left join web_user_access b on b.menu_code=a.menu_code\n"
+	                    + "where  a.status_type='Y' and a.parent_menu=? and b.role_code=? order by a.menu_code");
+	            pst.setString(1, parent_menu);
+	            pst.setString(2, role_code);
+	            ResultSet rs = pst.executeQuery();
+	            int i = 1;
+	            while (rs.next()) {
+	                abc = new Menu();
+	                
+	                abc.setSN(i);
+
+	                abc.setMENU_CODE(rs.getString("MENU_CODE"));
+	                abc.setMENU_DESC(rs.getString("MENU_DESC"));
+	                abc.setMENU_URL(rs.getString("MENU_URL"));
+	                list.add(abc);
+	                i = i + 1;
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            con.close();
+	        }
+	        return list;
+	    }
+	
 
 }
