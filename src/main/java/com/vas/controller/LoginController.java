@@ -27,7 +27,6 @@ public class LoginController {
 
 	public String postLogIn(@ModelAttribute UserInformationModel user, Model model, Locale locale,
 			HttpServletRequest request) throws SQLException {
-		System.out.println("post login");
 		logger.info(" user id:", locale);
 
 		UserInformationModel level = dao.getUserByUsername(user.getUSER_ID(), user.getPASSWORD());
