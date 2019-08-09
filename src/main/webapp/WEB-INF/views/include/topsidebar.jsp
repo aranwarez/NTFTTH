@@ -23,7 +23,7 @@
 			<li class="dropdown user user-menu"><a href="#"
 				class="dropdown-toggle" data-toggle="dropdown"> <img
 					src="<c:url value="/resources/adminltd/dist/img/user2-160x160.jpg" />"
-					class="user-image" alt="User Image"> <span class="hidden-xs">${User_ID}</span>
+					class="user-image" alt="User Image"> <span class="hidden-xs">${UserList.getFULL_NAME()}</span>
 			</a>
 				<ul class="dropdown-menu">
 					<!-- User image -->
@@ -31,7 +31,7 @@
 						src="<c:url value="/resources/adminltd/dist/img/user2-160x160.jpg" />"
 						class="img-circle" alt="User Image">
 
-						<p>${User_ID}</p></li>
+						<p>${UserList.getUSER_ID()}</p></li>
 					<!-- Menu Body -->
 					<li class="user-body">
 						<div class="row">

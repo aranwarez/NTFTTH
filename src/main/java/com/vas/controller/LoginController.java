@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -36,17 +35,20 @@ public class LoginController {
 			session.setMaxInactiveInterval(15 * 60);
 			session.setAttribute("UserList", level);
 			model.addAttribute("fx", "Thank you for signing up!");
+			return "redirect:/role/list";
 
 		} else if (level != null && level.getLOCK_FLAG().equalsIgnoreCase("Y")) {
 
-			model.addAttribute("fx", "Thank you for login!");
+			model.addAttribute("error", "You Account is locked !");
+			model.addAttribute("fx", "Nepal Telecom - Login ");
 
 		} else {
 
-			model.addAttribute("fx", "Role List");
+			model.addAttribute("error", "Wrong Credentials!!");
+			model.addAttribute("fx", "Nepal Telecom - Login ");
 
 		}
-		return "redirect:role/list";
+		return "NTC/common/login";
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "Logout")
