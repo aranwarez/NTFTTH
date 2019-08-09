@@ -27,7 +27,7 @@ public class SpTargetDao {
 
         try {
             PreparedStatement pst = con.prepareStatement("SELECT M.TRANS_ID, M.SP_CODE, A.SP_NAME, M.EFFECTIVE_DT, COMMON.TO_BS(M.EFFECTIVE_DT) NEP_EFFECTIVE_DT,   \n"
-                    + "   M.REVENUE_TARGET, M.MINIMUM_GUARENTEE, M.CREATE_BY, M.CREATE_DT, M.UPDATE_BY, M.UPDATE_DT\n"
+                    + "   M.REVENUE_TARGET, M.MINIMUM_GUARENTEE, M.CREATE_BY, M.CREATE_DT, M.UPDATE_BY, M.UPDATE_DT, M.SERVICE_CODE\n"
                     + "FROM M_SP_TARGET M, M_SP A\n"
                     + "WHERE A.SP_CODE=M.SP_CODE\n"
                     + "AND M.SP_CODE=?\n"

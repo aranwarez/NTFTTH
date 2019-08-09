@@ -91,18 +91,28 @@
                         <tr>
                             <td>
                                 <label for="category">Category</label> 
-                                <input type="text" style="width: 190px;"  class="form-control" name="CATEGORY" id="CATEGORY"
+                                <input type="text" style="width: 135px;"  class="form-control" name="CATEGORY" id="CATEGORY"
                                        placeholder="Enter Category"> 
                             <td/>
                             <td>
                                 <label  for="ESMEImp">ESME Imp.</label> 
-                                <input type="text" style="width: 185px;" class="form-control" name="CP_DESC" id="CP_DESC"
+                                <input type="text" style="width: 135px;" class="form-control" name="CP_DESC" id="CP_DESC"
                                        placeholder="Enter Esme Imp Code"> 
                             </td>
                             <td>
                                 <label  for="esmecode">ESME Code</label> 
-                                <input type="text" style="width: 185px;" class="form-control" name="ESME_CODE" id="ESME_CODE"
+                                <input type="text" style="width: 135px;" class="form-control" name="ESME_CODE" id="ESME_CODE"
                                        placeholder="Enter ESME Code"> 
+                            </td>
+                            <td>
+                                <label  for="MO">MO</label> 
+                                <input type="number" style="width: 80px;" class="form-control" name="MO_1ST" id="MO_1ST"
+                                       placeholder="Enter MO"> 
+                            </td>
+                            <td>
+                                <label  for="MT">MT</label> 
+                                <input type="number" style="width: 80px;" class="form-control" name="MT_1ST" id="MT_1ST"
+                                       placeholder="Enter MT"> 
                             </td>
                         </tr>
                     </table>
@@ -112,7 +122,7 @@
                         <tr>
                             <td>
                                 <label  for="Spcode">SP Code</label> 
-                                <select style="width: 500px;" class="form-control" name="SP_CODE" id="SP_CODE">
+                                <select style="width: 500px;" class="form-control" name="S_NO" id="S_NO">
                                     <option value=''>Select :</option>
                                     <c:forEach var="SP" items="${Sp_list}">
                                         <option value="${SP.SP_CODE}">${SP.SP_NAME} ${SP.SP_CODE}</option>
@@ -147,7 +157,7 @@
                 <h4 class="modal-title" id="myModalLabel">Edit Content Provider</h4>
             </div>
 
-            <form action="<c:url value="/cp/update" />" method="post"
+            <form action="<c:url value="/impntsp/update" />" method="post"
                   acceptCharset="UTF-8">
 
                 <div class="modal-body">
@@ -155,6 +165,9 @@
                         <label for="transno">Trans No.</label> 
                         <input type="text"  class="form-control" name="EDITTRANS_NO" id="EDITTRANS_NO"
                                placeholder="Auto genereate trans no" readonly="true"> 
+                        <label for="seqno">Seq No.</label> 
+                        <input type="text"  class="form-control" name="EDITSEQ_NO" id="EDITSEQ_NO"
+                               placeholder="Auto genereate seq no" readonly="true"> 
                         <Br/> 
                         <table>
                             <tr>
@@ -214,7 +227,7 @@
                                 <td>
                                     <label for="NTSP">NT/SP</label> 
                                     <select style="width: 80px;" class="form-control"
-                                            name="EDITNT_SP" id=EDITNT_SP">
+                                            name="EDITNT_SP" id="EDITNT_SP">
                                         <option value='NT'>NT</option>
                                         <option value='SP'>SP</option>
                                     </select>
@@ -225,19 +238,29 @@
                             <tr>
                                 <td>
                                     <label for="category">Category</label> 
-                                    <input type="text" style="width: 190px;"  class="form-control" name="EDITCATEGORY" id="EDITCATEGORY"
+                                    <input type="text" style="width: 135px;"  class="form-control" name="EDITCATEGORY" id="EDITCATEGORY"
                                            placeholder="Enter Category"> 
                                 <td/>
                                 <td>
                                     <label  for="ESMEImp">ESME Imp.</label> 
-                                    <input type="text" style="width: 185px;" class="form-control" name="EDITCP_DESC" id="EDITCP_DESC"
+                                    <input type="text" style="width: 135px;" class="form-control" name="EDITCP_DESC" id="EDITCP_DESC"
                                            placeholder="Enter Esme Imp Code"> 
                                 </td>
                                 <td>
                                     <label  for="esmecode">ESME Code</label> 
-                                    <input type="text" style="width: 185px;" class="form-control" name="EDITESME_CODE" id="EDITESME_CODE"
+                                    <input type="text" style="width: 135px;" class="form-control" name="EDITESME_CODE" id="EDITESME_CODE"
                                            placeholder="Enter ESME Code"> 
                                 </td>
+                                <td>
+                                <label  for="MO">MO</label> 
+                                <input type="number" style="width: 80px;" class="form-control" name="EDITMO_1ST" id="EDITMO_1ST"
+                                       placeholder="Enter MO"> 
+                            </td>
+                            <td>
+                                <label  for="MT">MT</label> 
+                                <input type="number" style="width: 80px;" class="form-control" name="EDITMT_1ST" id="EDITMT_1ST"
+                                       placeholder="Enter MT"> 
+                            </td>
                             </tr>
                         </table>
                         <br/>
@@ -246,8 +269,7 @@
                             <tr>
                                 <td>
                                     <label  for="Spcode">SP Code</label> 
-                                    <select style="width: 500px;" class="form-control" name="EDITSP_CODE" id="EDITSP_CODE">
-                                        <option value=''>Select :</option>
+                                    <select style="width: 500px;" class="form-control" name="EDITS_NO" id="EDITS_NO">
                                         <c:forEach var="SP" items="${Sp_list}">
                                             <option value="${SP.SP_CODE}">${SP.SP_NAME} ${SP.SP_CODE}</option>
                                         </c:forEach>
@@ -259,7 +281,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" onclick="return updateCp();"
+                    <button type="button" onclick="return updateImpntsp();"
                             class="btn btn-primary">Update</button>
                 </div>
 
@@ -292,7 +314,7 @@
             </div>
 
             <div class="modal-footer">
-                <form action="<c:url value="/cp/delete" />" method="post"
+                <form action="<c:url value="/impntsp/delete" />" method="post"
                       acceptCharset="UTF-8">
                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                     <button type="button" class="btn btn-primary"
