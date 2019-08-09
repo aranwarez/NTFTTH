@@ -49,7 +49,7 @@ public class LoginController {
 		return "redirect:role/list";
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "Logout")
+	@RequestMapping(method = RequestMethod.GET, value = "Logout")
 
 	public String Logout(HttpSession session, Locale locale) throws SQLException {
 		logger.info(" Log out:", locale);

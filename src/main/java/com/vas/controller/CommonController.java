@@ -51,9 +51,11 @@ public class CommonController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "topmenu")
 
-	public String newTopMenu(Model model) {
+	public String newTopMenu(Model model, HttpSession session) {
 
 		model.addAttribute("menu_name", "<b>Nepal </b>Telecom ");
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		model.addAttribute("User_ID", user.getUSER_ID());
 
 		return "include/topsidebar";
 	}
@@ -70,12 +72,7 @@ public class CommonController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "headCss")
 
-	public String newHeadCss(Model model, HttpSession session) {
-
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-
-		model.addAttribute("UserList", user);
-
+	public String newHeadCss(Model model) {
 		return "include/headcss";
 	}
 
