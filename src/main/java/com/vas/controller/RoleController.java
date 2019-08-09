@@ -57,8 +57,6 @@ public class RoleController {
 			e.printStackTrace();
 		}
 
-		System.out.println("role list" + list.size());
-
 		model.addAttribute("fx", "Role List");
 		model.addAttribute("data_list", list);
 
