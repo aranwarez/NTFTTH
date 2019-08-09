@@ -136,13 +136,13 @@ public class ImpNtSpDao {
             con.close();
         }
     }
-    
-    public String saveImpNtSp(String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH, String SERVICE_CODE, String NT_SP, 
-           String CATEGORY, String CP_DESC, String S_NO, String ESME_CODE, String MO_1ST, String MT_1ST,  String USER) throws SQLException {
+
+    public String saveImpNtSp(String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH, String SERVICE_CODE, String NT_SP,
+            String CATEGORY, String CP_DESC, String S_NO, String ESME_CODE, String MO_1ST, String MT_1ST, String USER) throws SQLException {
         Connection con = DbCon.getConnection();
         String transid = null;
         try {
-            
+
             String qry = "INSERT INTO TMP_IMP_SMS_NT_SP (TRANS_NO, SEQ_NO, IMP_YEAR, IMP_PERIOD, IMP_MONTH, SERVICE_CODE, \n"
                     + " NT_SP, S_NO, CP_DESC, ESME_CODE, MO_1ST, MT_1ST, CATEGORY, \n"
                     + "   CREATE_BY, POST_FLAG,  CREATE_DT) \n"
@@ -171,5 +171,59 @@ public class ImpNtSpDao {
         } finally {
             con.close();
         }
+    }
+
+    public String updateImpNtSp(String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH, String SERVICE_CODE, String NT_SP,
+            String CATEGORY, String CP_DESC, String S_NO, String ESME_CODE, String MO_1ST, String MT_1ST, String USER, String TRANS_NO, String SEQ_NO) throws SQLException {
+        Connection con = DbCon.getConnection();
+        try {
+            String qry = "UPDATE TMP_IMP_SMS_NT_SP\n"
+                    + "SET    IMP_YEAR     = ?, IMP_PERIOD   = ?,IMP_MONTH    = ?,\n"
+                    + "       SERVICE_CODE = ?, NT_SP        = ?,CATEGORY         = ?,\n"
+                    + "       CP_DESC     = ?, S_NO      = ?, ESME_CODE    = ?, MO_1ST       = ?,\n"
+                    + "       MT_1ST       = ?,  \n"
+                    + "       UPDATE_DT    = sysdate, UPDATE_BY    = ?       \n"
+                    + "WHERE  TRANS_NO     = ? AND    SEQ_NO       = ?";
+            PreparedStatement pst = con.prepareStatement(qry);
+            pst.setString(1, IMP_YEAR);
+            pst.setString(2, IMP_PERIOD);
+            pst.setString(3, IMP_MONTH);
+            pst.setString(4, SERVICE_CODE);
+            pst.setString(5, NT_SP);
+            pst.setString(6, CATEGORY);
+            pst.setString(7, CP_DESC);
+            pst.setString(8, S_NO);            
+            pst.setString(9, ESME_CODE);
+            pst.setString(10, MO_1ST);
+            pst.setString(11, MT_1ST);
+            pst.setString(12, USER);
+            pst.setString(13, TRANS_NO);
+            pst.setString(14, SEQ_NO);
+            pst.executeUpdate();
+            return "Succesfully Updated";
+        } catch (Exception e) {
+            con.rollback();
+            e.printStackTrace();
+            return "Failed to update : " + e.getMessage();
+        } finally {
+            con.close();
+        }
+    }
+
+    public String DeleteImpNtSp(String TRANS_NO, String SEQ_NO) throws SQLException {
+        Connection con = DbCon.getConnection();
+        try {
+            PreparedStatement pst = con.prepareStatement("delete from TMP_IMP_SMS_NT_SP where trans_no=? AND seq_no=?");
+            pst.setString(1, TRANS_NO);
+            pst.setString(2, SEQ_NO);
+            
+            pst.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Failed Reason :" + e.getLocalizedMessage();
+        } finally {
+            con.close();
+        }
+        return "Record deleted successfully.";
     }
 }

@@ -139,4 +139,45 @@ public class ImpNtSpController {
         }
         return msg;
     }
+    
+    @RequestMapping(value = "/impntsp/update", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateImpntsp(String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH, String SERVICE_CODE, String NT_SP,
+            String CATEGORY, String CP_DESC, String S_NO, String ESME_CODE, String MO_1ST, String MT_1ST, 
+            String TRANS_NO, String SEQ_NO, Model model, Locale locale) {
+
+        logger.info("Updata Imp Nt sp {}.", locale);
+        ImpNtSpDao dao = new ImpNtSpDao();
+//        System.out.println("uddate Servce code==" + SERVICE_CODE);
+        String USER = "NEpal";
+        model.addAttribute("fx", "Imp Nt sp list ");
+        model.addAttribute("userName", "NEPal");
+        String msg = null;
+        try {
+            msg = dao.updateImpNtSp(IMP_YEAR, IMP_PERIOD, IMP_MONTH, SERVICE_CODE, NT_SP, CATEGORY, CP_DESC,
+                    S_NO, ESME_CODE, MO_1ST, MT_1ST, USER, TRANS_NO, SEQ_NO);
+            
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return msg;
+    }
+    
+    @RequestMapping(value = "/impntsp/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public String impntspDelete(String TRANS_NO, String SEQ_NO, Model model, Locale locale) {
+        logger.info("delete impntsp", locale);
+        ImpNtSpDao dao = new ImpNtSpDao();
+//        System.out.println("delete service code==" + SERVICE_CODE);
+        String msg = null;
+        try {
+            msg = dao.DeleteImpNtSp(TRANS_NO,SEQ_NO);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return msg;
+
+    }
 }
