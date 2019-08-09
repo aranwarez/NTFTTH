@@ -50,8 +50,10 @@ public class RoleController {
 	public String saveRole(@Validated Role role, Model model, Locale locale, HttpSession session) {
 		logger.info("Trying to save new role by user id:", locale);
 		RoleDao dao = new RoleDao();
+		if(session.getAttribute("UserList")!=null) {
 		UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
 		role.setUSER(userinfo.getUSER_ID());
+		}
 		model.addAttribute("userName", role.getROLE_CODE());
 		String msg = null;
 		try {

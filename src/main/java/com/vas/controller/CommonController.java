@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +16,6 @@ import com.model.UserInformationModel;
 
 @Controller
 public class CommonController {
-	private static final Logger logger = LoggerFactory.getLogger(CommonController.class);
-
 	@RequestMapping(method = RequestMethod.GET, value = "leftmenu")
 
 	public String newItem(Model model, HttpSession leftsession) {
@@ -55,8 +51,7 @@ public class CommonController {
 
 		model.addAttribute("menu_name", "<b>Nepal </b>Telecom ");
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		model.addAttribute("User_ID", user.getUSER_ID());
-
+		model.addAttribute("UserList", user);
 		return "include/topsidebar";
 	}
 

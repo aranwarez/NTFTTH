@@ -58,23 +58,29 @@
 		<div class="login-logo">${fx}</div>
 		<!-- /.login-logo -->
 		<div class="login-box-body">
-		
-			<p class="login-box-msg">Sign in to start your session</p>
 
+			<p class="login-box-msg"></p>
+			<c:choose>
+				<c:when test="${not empty error}">
+        ${error}
+    </c:when>
+				<c:otherwise>Sign in to start your session</c:otherwise>
+			</c:choose>
+			</p>
 			<form action="<c:url value="/postLogIn" />" method="post"
 				acceptCharset="UTF-8">
-				
-				<div class="form-group has-feedback">	
-							
-					<input type="text" name="USER_ID" class="form-control" placeholder="USER"
-						required="required"> <span
-						class="glyphicon glyphicon-envelope form-control-feedback"></span>
-						
-				</div>
-				
+
 				<div class="form-group has-feedback">
-					<input type="password"  name="PASSWORD" class="form-control" placeholder="Password" required="required">
-					<span class="glyphicon glyphicon-lock form-control-feedback"></span>
+					<input type="text" name="USER_ID" class="form-control"
+						placeholder="USER" required="required"> <span
+						class="glyphicon glyphicon-envelope form-control-feedback"></span>
+
+				</div>
+
+				<div class="form-group has-feedback">
+					<input type="password" name="PASSWORD" class="form-control"
+						placeholder="Password" required="required"> <span
+						class="glyphicon glyphicon-lock form-control-feedback"></span>
 				</div>
 				<div class="row">
 

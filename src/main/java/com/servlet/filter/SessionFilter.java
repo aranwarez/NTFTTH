@@ -33,21 +33,34 @@ public class SessionFilter implements Filter {
 		HttpSession session = ((HttpServletRequest) request).getSession();
 
 		String url = ((HttpServletRequest) request).getServletPath();
-		if (url.equals("/postLogIn")) {
+		System.out.println("URL:" + url);
+		if (url.equals("/error")) {
 			// action to record attemp of the user login
+			System.out.println("error page");
+		}
+		if (url != null && url.length() > 19 && url.substring(0, 19).equals("/resources/adminltd")) {
+			// action to record attemp of the user login
+			System.out.println("Getting resource :" + url);
 		}
 
 		// forward the site to home page if Session already exist
 		else if (url.equals("/login") && session.getAttribute("UserList") != null) {
 			System.out.println("Session already exist");
 			request.getRequestDispatcher("/").forward(request, response);
+			return;
 
+		}
+
+		else if (url.equals("/postLogIn") || url.equals("/login")) {
+			// action to record attemp of the user login
+			System.out.println("login page");
 		}
 
 		else if (session == null || session.getAttribute("UserList") == null) {
 			ServletContext servletContext = request.getServletContext();
 			RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/login");
 			dispatcher.forward(request, response);
+			return;
 		}
 
 		try {
@@ -56,8 +69,8 @@ public class SessionFilter implements Filter {
 		} catch (Exception ex) {
 
 			logger.info(ex.getMessage());
-//			ServletContext servletContext = null;
-//			RequestDispatcher dis1patcher = servletContext.getRequestDispatcher("/login");
+//			ServletContext servletContext = request.getServletContext();
+//			RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/login");
 //			dispatcher.forward(request, response);
 			request.setAttribute("errorMessage", ex);
 			request.getRequestDispatcher("/error").forward(request, response);
