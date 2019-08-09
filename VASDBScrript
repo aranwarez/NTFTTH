@@ -38,6 +38,9 @@ CREATE SEQUENCE VASNTW.SEQ_CP_MO_MT_RATIO
   NOCACHE
   ORDER;   
   
+  alter table m_sp_target
+add service_code  constraint fk_mst_ser_code references m_vas_service(service_code);
+  
   alter table TMP_IMP_SMS_NT_SP  add (post_by varchar2(15), post_dt date);
 
 
