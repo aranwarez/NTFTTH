@@ -157,5 +157,24 @@ public class MenuController {
 
 		return msg;
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET, value = "getChildMenulist")
+
+	public List<Menu> getMenuList(HttpServletRequest request, HttpServletResponse response) {
+		String PARENT_MENU=request.getParameter("PARENT_MENU");
+		String ROLE_CODE=request.getParameter("ROLE_CODE");
+		
+		List<Menu> list = null;
+		try {
+			list = dao.getChildCode(PARENT_MENU,ROLE_CODE);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+
+	}
 
 }
