@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,15 +26,16 @@ public class LoginController {
 	@RequestMapping(method = RequestMethod.POST, value = "postLogIn")
 
 	public String postLogIn(@ModelAttribute UserInformationModel user, Model model, Locale locale,
-			HttpServletRequest request, HttpServletResponse response,HttpSession session) throws SQLException {
+			HttpServletRequest request) throws SQLException {
+		System.out.println("post login");
 		logger.info(" user id:", locale);
-//		HttpSession session = request.getSession(true);
 
 		UserInformationModel level = dao.getUserByUsername(user.getUSER_ID(), user.getPASSWORD());
 
 		if (level != null && level.getLOCK_FLAG().equals("N")) {
+			HttpSession session = request.getSession();
+			session.setMaxInactiveInterval(15 * 60);
 			session.setAttribute("UserList", level);
-
 			model.addAttribute("fx", "Thank you for signing up!");
 
 		} else if (level != null && level.getLOCK_FLAG().equalsIgnoreCase("Y")) {
@@ -47,9 +47,15 @@ public class LoginController {
 			model.addAttribute("fx", "Role List");
 
 		}
-		System.out.println("level=" + level.getACC_CEN_CODE());
-
 		return "redirect:role/list";
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "Logout")
+
+	public String Logout(HttpSession session, Locale locale) throws SQLException {
+		logger.info(" Log out:", locale);
+		session.invalidate();
+		return "redirect:/login";
 	}
 
 }
