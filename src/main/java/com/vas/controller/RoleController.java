@@ -3,23 +3,15 @@ package com.vas.controller;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
-
 import com.dao.RoleDao;
 import com.model.Role;
 import com.model.UserInformationModel;
@@ -40,15 +32,6 @@ public class RoleController {
 		Role u1 = new Role();
 
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-//		session.invalidate();
-//		System.out.println(user.getFULL_NAME());
-		
-		if (user==null) {
-			
-			
-			return "redirect:/login";
-
-		}
 		List<Role> list = null;
 		try {
 			list = dao.getlist();
@@ -64,10 +47,11 @@ public class RoleController {
 	}
 
 	@RequestMapping(value = "/role/save", method = RequestMethod.POST)
-	public String saveRole(@Validated Role role, Model model, Locale locale) {
+	public String saveRole(@Validated Role role, Model model, Locale locale, HttpSession session) {
 		logger.info("Trying to save new role by user id:", locale);
 		RoleDao dao = new RoleDao();
-		role.setUSER("NEpal");
+		UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+		role.setUSER(userinfo.getUSER_ID());
 		model.addAttribute("userName", role.getROLE_CODE());
 		String msg = null;
 		try {
@@ -110,22 +94,19 @@ public class RoleController {
 
 	@RequestMapping(value = "/role/update", method = RequestMethod.POST)
 	@ResponseBody
-	public String updateRole(String ROLE_CODE, String DESCRIPTION, Model model, Locale locale) {
+	public String updateRole(String ROLE_CODE, String DESCRIPTION, Model model, Locale locale, HttpSession session) {
 
 		logger.info("Welcome home! The client locale is {}.", locale);
 
 		RoleDao dao = new RoleDao();
-		System.out.println("uddate role code==" + ROLE_CODE);
-
-		String USER = "NEpal";
+		UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
 
 		model.addAttribute("fx", "Role controller list ");
-		model.addAttribute("userName", "NEPal");
 
 		String msg = null;
 		try {
 
-			msg = dao.updateRole(ROLE_CODE, DESCRIPTION, USER);
+			msg = dao.updateRole(ROLE_CODE, DESCRIPTION, userinfo.getUSER_ID());
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
