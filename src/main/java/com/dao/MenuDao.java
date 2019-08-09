@@ -122,7 +122,7 @@ public class MenuDao {
 				m = new Menu();
 				m.setSN(i);
 				m.setLEVEL(rs.getString("LEVEL"));
-				m.setMENU_CODE(rs.getString("MENU_CODE"));
+				m.setMENU_CODE(rs.getString("MENU_CODE").trim());
 				m.setMENU_DESC(rs.getString("MENU_DESC"));
 				m.setMENU_URL(rs.getString("MENU_URL"));
 				m.setPARENT_MENU(rs.getString("PARENT_MENU"));
@@ -136,5 +136,39 @@ public class MenuDao {
 		}
 		return list;
 	}
+	
+	
+	public List<Menu> getMenuDisplay(String ROLE_CODE) throws SQLException {
+        Connection con = DbCon.getConnection();
+        List<Menu> list = new ArrayList<Menu>();
+        Menu abc = null;
+
+        try {
+            PreparedStatement pst = con.prepareStatement("select a.menu_code,a.menu_desc,a.parent_menu,a.module_type from web_menu_entry a left join web_user_access b on b.menu_code=a.menu_code\n"
+                    + "                   where a.PARENT_MENU IS NULL and  a.status_type='Y' and b.role_code=? order by a.menu_code");
+            pst.setString(1, ROLE_CODE);
+            ResultSet rs = pst.executeQuery();
+            int i = 1;
+            while (rs.next()) {
+                abc = new Menu();
+                abc.setSN(i);
+                abc.setPARENT_MENU(rs.getString("PARENT_MENU"));
+                abc.setMENU_CODE(rs.getString("MENU_CODE"));
+                abc.setMENU_DESC(rs.getString("MENU_DESC"));
+                System.out.println(rs.getString("MENU_DESC"));
+                
+                abc.setMODULE_TYPE(rs.getString("MODULE_TYPE"));
+
+                list.add(abc);
+                i = i + 1;
+            }
+        } catch (SQLException ex) {
+           
+        } finally {
+            con.close();
+        }
+        return list;
+    }
+	
 
 }

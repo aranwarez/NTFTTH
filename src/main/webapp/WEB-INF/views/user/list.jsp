@@ -29,7 +29,6 @@
 	background: transparent !important;
 }
 </style>
-	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -79,33 +78,22 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<h1>Menu Access List</h1>
+				<h1>User Management</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li><a href="#">Tables</a></li>
 					<li class="active">Data tables</li>
 
 				</ol>
-
+				<a href="#" class="btn btn-primary pull-right" data-toggle="modal"
+					data-target="#myModal"> <i class="fa fa-plus"></i> Add
+				</a>
 			</section>
 
 			<!-- Main content -->
 			<section class="content">
 				<div class="row">
 					<div class="col-xs-12">
-						<select id="ROLE_CODE" onchange="return getEditMode()" class="form-control">
-							<option value="">Select</option>
-
-
-							<c:forEach var="role" items="${rolelist}">
-
-								<option value="${role.getROLE_CODE()}">${role.getDESCRIPTION()}${role.getDESCRIPTION()}
-									(${role.getROLE_CODE()})</option>
-
-							</c:forEach>
-
-						</select>
-
 
 						<!-- /.box -->
 
@@ -137,11 +125,80 @@
 
 							<!-- /.box-header -->
 							<div class="box-body">
-							
-							<jsp:include page="${request.contextPath}/menuaccessbody"></jsp:include>
-							
-							
-							
+								<table id="example1" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>Id</th>
+											<th>USER_ID</th>
+											<th>FULL_NAME</th>
+											<th>EMPLOYEE_CODE</th>
+											<th>LOCK_FLAG</th>
+											<th>SUPER_FLAG</th>
+											<th>DISABLE FLAG</th>
+											<th>CC CODE</th>
+											<th>USER LEVEL</th>
+											<th>ROLE CODE</th>
+											<th>Module</th>
+											<th>Edit</th>
+											<th>Delete</th>
+
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach var="user" items="${data_list}">
+
+											<tr>
+												<td>${user.getSN()}</td>
+												<td>${user.getUSER_ID()}</td>
+
+												<td>${user.getFULL_NAME()}</td>
+												<td>${user.getEMPLOYEE_CODE()}</td>
+
+												<td>${user.getLOCK_FLAG()}</td>
+												<td>${user.getSUPER_FLAG()}</td>
+
+												<td>${user.getDISABLE_FLAG()}</td>
+												<td>${user.getCC_CODE()}</td>
+
+												<td>${user.getUSER_LEVEL()}</td>
+												<td>${user.getROLE_CODE()}</td>
+												<td>${user.getMODULE_ACCESS()}</td>
+
+												<td>
+
+													<div class="btn-group">
+
+														<a href="#" class="btn btn-info" data-toggle="modal"
+															data-target="#changePassModal"
+															onclick="return getHold('${user.getUSER_ID()}')">
+															Pass Change </a> <a href="#" class="btn btn-info"
+															data-toggle="modal" data-target="#editModal"
+															onclick="return editUser('${user.getUSER_ID()}')"> <i
+															class="fa fa-edit"></i> Edit
+														</a>
+													</div>
+												</td>
+
+
+												<td>
+
+													<div>
+														<a href="#" class="btn btn-default" data-toggle="modal"
+															data-target="#deleteModal"
+															onclick="return deleteUser('${user.getUSER_ID()}')">
+															<i class="fa fa-trash"></i> Delete
+														</a>
+													</div>
+
+
+												</td>
+
+											</tr>
+										</c:forEach>
+
+									</tbody>
+
+								</table>
 							</div>
 							<!-- /.box-body -->
 						</div>
@@ -176,8 +233,8 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialogmenuaccess"></jsp:include>
-
+	<jsp:include page="${request.contextPath}/dialoguser"></jsp:include>
+	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
 	<script>
 		$(function() {
@@ -186,7 +243,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/menuaccess.js" />"></script>
+	<script src="<c:url value="/resources/function/user.js" />"></script>
 
 
 </body>
