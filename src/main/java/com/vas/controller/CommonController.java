@@ -34,16 +34,12 @@ public class CommonController {
 		String leftmenurole_code = leftmenuuser.getROLE_CODE();
 		String leftmenuMODULE_ACCESS = leftmenuuser.getMODULE_ACCESS();
 		String leftmenuRoleCode = leftmenuuser.getROLE_CODE();
-		System.out.println(leftmenurole_code);
-		System.out.println(leftmenuMODULE_ACCESS);
-		
-		model.addAttribute("leftmenurole_code", leftmenurole_code);		
-		model.addAttribute("leftmenuMODULE_ACCESS", leftmenuMODULE_ACCESS);		
-		model.addAttribute("leftmenuRoleCode", leftmenuRoleCode);		
+		model.addAttribute("leftmenurole_code", leftmenurole_code);
+		model.addAttribute("leftmenuMODULE_ACCESS", leftmenuMODULE_ACCESS);
+		model.addAttribute("leftmenuRoleCode", leftmenuRoleCode);
 		try {
 			List<Menu> menulist = leftmenudao.getMenuDisplay(leftmenurole_code);
-			
-			
+
 			model.addAttribute("leftmenuheadlist", menulist);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

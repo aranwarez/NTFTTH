@@ -155,7 +155,6 @@ public class MenuDao {
                 abc.setPARENT_MENU(rs.getString("PARENT_MENU"));
                 abc.setMENU_CODE(rs.getString("MENU_CODE"));
                 abc.setMENU_DESC(rs.getString("MENU_DESC"));
-                System.out.println(rs.getString("MENU_DESC"));
                 
                 abc.setMODULE_TYPE(rs.getString("MODULE_TYPE"));
 
