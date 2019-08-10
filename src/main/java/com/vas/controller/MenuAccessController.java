@@ -31,6 +31,7 @@ import com.model.UserInformationModel;
 
 @Controller
 public class MenuAccessController {
+	
 	RoleDao roledao = new RoleDao();
 	MenuDao menudao = new MenuDao();
 

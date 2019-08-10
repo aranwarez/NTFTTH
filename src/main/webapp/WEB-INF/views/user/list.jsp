@@ -4,6 +4,8 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <c:url var="home" value="/" scope="request" />
 
+
+
 <html>
 <head>
 <meta charset="utf-8">

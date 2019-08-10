@@ -44,6 +44,7 @@ public class MenuController {
 			return "redirect:/login";
 
 		}
+		
 		List<Menu> list = null;
 		try {
 			list = dao.getlist();

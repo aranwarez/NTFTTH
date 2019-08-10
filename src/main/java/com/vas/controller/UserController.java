@@ -142,6 +142,7 @@ public class UserController {
 
 	}
 
+	
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET, value = "user/edit")
 	public UserInformationModel editUser(String getEdit, String code, Model model, HttpServletRequest request,

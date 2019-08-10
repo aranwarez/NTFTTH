@@ -14,6 +14,7 @@ public class CommonMenuDao {
 	public static MenuAccess checkAccess(String ROLE_CODE, String MENU_CODE) {
 		Connection con=DbCon.getConnection();
 		
+		
 		try {
 			System.out.println(" menu code = "+MENU_CODE);
 			MenuAccess m=new MenuAccess();

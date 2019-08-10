@@ -38,6 +38,8 @@ public class LoginController {
 			session.setMaxInactiveInterval(15 * 60);
 			session.setAttribute("UserList", level);		
 			
+			
+			
 			model.addAttribute("fx", "Thank you for signing up!");
 			return "redirect:/role/list";
 

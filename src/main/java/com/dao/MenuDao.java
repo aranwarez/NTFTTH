@@ -16,6 +16,8 @@ public class MenuDao {
 
 	public List<Menu> getlist() throws SQLException {
 
+		
+		
 		Connection con = DbCon.getConnection();
 		Menu m = null;
 		List<Menu> list = new ArrayList<Menu>();

@@ -92,6 +92,8 @@ function deleteMenu(code) {
 	MENU_CODE = code;
 }
 
+
+
 function del() {
 
     $.post('../menu/delete', {delete: "deletemenu", MENU_CODE: MENU_CODE}, function (data) {

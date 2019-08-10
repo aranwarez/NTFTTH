@@ -1,4 +1,5 @@
 var CODE;
+
 function saveUser() {
 
 	var pass = $("#PASSWORD").val();

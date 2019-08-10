@@ -12,6 +12,9 @@ import com.model.UserInformationModel;
 import util.DbCon;
 
 public class UserDao {
+	
+	
+	
 	// check user name and password
 	public UserInformationModel getUserByUsername(String username, String password) throws SQLException {
 

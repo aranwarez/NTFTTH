@@ -165,6 +165,7 @@ public class AccCenterController {
 			return "Session has been expired";
 		}		
 
+		
 		String msg = null;
         try {
 			msg = accdao.deleteAccenter(request.getParameter("ACC_CEN_CODE"));
