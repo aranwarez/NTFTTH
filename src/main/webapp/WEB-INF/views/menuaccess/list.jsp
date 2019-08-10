@@ -99,7 +99,7 @@
 
 							<c:forEach var="role" items="${rolelist}">
 
-								<option value="${role.getROLE_CODE()}">${role.getDESCRIPTION()}${role.getDESCRIPTION()}
+								<option value="${role.getROLE_CODE()}">${role.getDESCRIPTION()}
 									(${role.getROLE_CODE()})</option>
 
 							</c:forEach>

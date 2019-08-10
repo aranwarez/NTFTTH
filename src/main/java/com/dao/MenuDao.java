@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.model.Menu;
+import com.model.MenuAccess;
 
 import util.DbCon;
 
@@ -198,6 +199,46 @@ public class MenuDao {
 	            con.close();
 	        }
 	        return list;
+	    }
+	   
+	   /*
+	     ---------------------------------------------------------------------------------------------
+	     get MENU_CODE,   EDIT_FLAG, DELETE_FLAG, POST_FLAG  by ROLE_CODE
+	    
+	    
+	     select * from EDIT_MODE where ROLE_CODE=?
+	     -----------------------------------------------------------------------------------------------
+	     */
+	    public List<MenuAccess> getModeList(String ROLE_CODE) throws Exception {
+	        Connection con = DbCon.getConnection();
+	        List<MenuAccess> modelist = new ArrayList<MenuAccess>();
+	        MenuAccess m = null;
+	        try {
+
+	            PreparedStatement pst = con.prepareStatement("select * from EDIT_MODE where ROLE_CODE=?");
+	            pst.setString(1, ROLE_CODE);
+	            ResultSet rs = pst.executeQuery();
+	            while (rs.next()) {
+	            	
+	                m = new MenuAccess();
+	                
+	                m.setLIST_FLAG(rs.getString("LIST_FLAG"));
+	                m.setMENU_CODE(rs.getString("MENU_CODE"));
+	                m.setEDIT_FLAG(rs.getString("EDIT_FLAG"));
+	                m.setDELETE_FLAG(rs.getString("DELETE_FLAG"));
+	                m.setPOST_FLAG(rs.getString("POST_FLAG"));
+
+	                m.setADD_FLAG(rs.getString("ADD_FLAG"));
+	                m.setCANCEL_FLAG(rs.getString("CANCEL_FLAG"));
+	                modelist.add(m);
+
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            con.close();
+	        }
+	        return modelist;
 	    }
 	
 

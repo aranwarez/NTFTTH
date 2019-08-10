@@ -28,7 +28,7 @@
 						<div class="checkbox">
 							<label> <input type="checkbox"
 								class="mastersetup${pmanu.getSN()}"
-								value="${pmanu.getMENU_CODE()}">${pmanu.getMENU_DESC()}
+								value="${pmanu.getMENU_CODE()}"  style="display:none">${pmanu.getMENU_DESC()} (${pmanu.getMENU_CODE()})
 							</label>
 						</div>
 					</td>

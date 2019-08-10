@@ -1,6 +1,7 @@
 package com.vas.controller;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dao.MenuAccessDao;
 import com.dao.UserDao;
+import com.model.MenuAccess;
 import com.model.UserInformationModel;
 
 @Controller
@@ -25,15 +28,16 @@ public class LoginController {
 	@RequestMapping(method = RequestMethod.POST, value = "postLogIn")
 
 	public String postLogIn(@ModelAttribute UserInformationModel user, Model model, Locale locale,
-			HttpServletRequest request) throws SQLException {
+			HttpServletRequest request) throws Exception {
 		logger.info(" user id:", locale);
-
-		UserInformationModel level = dao.getUserByUsername(user.getUSER_ID(), user.getPASSWORD());
-
+		
+		UserInformationModel level = dao.getUserByUsername(user.getUSER_ID(), user.getPASSWORD());		
+		
 		if (level != null && level.getLOCK_FLAG().equals("N")) {
 			HttpSession session = request.getSession();
 			session.setMaxInactiveInterval(15 * 60);
-			session.setAttribute("UserList", level);
+			session.setAttribute("UserList", level);		
+			
 			model.addAttribute("fx", "Thank you for signing up!");
 			return "redirect:/role/list";
 

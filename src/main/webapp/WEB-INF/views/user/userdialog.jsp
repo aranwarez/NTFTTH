@@ -42,14 +42,20 @@
 					<label>EMPLOYEE_CODE</label> <select
 						class="form-control modal-combobox" name="EMPLOYEE_CODE"
 						id="EMPLOYEE_CODE">
-
+						<c:forEach var="COA" items="${empList}">
+							<option value="${COA.EMPLOYEE_CODE}">${COA.EMPLOYEE_NAME}(${COA.EMPLOYEE_CODE})</option>
+						</c:forEach>
 					</select>
 				</div>
 				<div class="form-group">
 					<label>REGION_CODE</label> <select class="form-control"
 						name="REGION_CODE" id="REGION_CODE"
 						onchange="return getAccountCenter()">
+						<option value="">Select Region</option>
 
+						<c:forEach var="region" items="${regionlist}">
+							<option value="${region.REGION_CODE}">${region.DESCRIPTION}(${region.REGION_CODE})</option>
+						</c:forEach>
 					</select>
 				</div>
 				<div class="form-group">
@@ -91,6 +97,10 @@
 					<label>ROLE_CODE</label> <select class="form-control"
 						name="ROLE_CODE" id="ROLE_CODE">
 
+						<c:forEach var="role" items="${rolelist}">
+							<option value="${role.ROLE_CODE}">${role.DESCRIPTION}
+								(${role.ROLE_CODE})</option>
+						</c:forEach>
 					</select>
 				</div>
 
@@ -108,7 +118,7 @@
 				<div class="form-group">
 					<label>Module</label> <select class="form-control" name="MODULE"
 						id="MODULE">
-
+						<option value="B">Both</option>
 					</select>
 				</div>
 
@@ -154,6 +164,10 @@
 					<label>EMPLOYEE_CODE</label> <select
 						class="form-control modal-combobox" name="EDITEMPLOYEE_CODE"
 						id="EDITEMPLOYEE_CODE">
+						<c:forEach var="COA" items="${empList}">
+							<option value="${COA.EMPLOYEE_CODE}">${COA.EMPLOYEE_NAME}
+								(${COA.EMPLOYEE_CODE})</option>
+						</c:forEach>
 
 					</select>
 				</div>
@@ -161,6 +175,10 @@
 					<label>REGION_CODE</label> <select class="form-control"
 						name="EDITREGION_CODE" id="EDITREGION_CODE"
 						onchange="return getEditAccountCenter()">
+
+						<c:forEach var="region" items="${regionlist}">
+							<option value="${region.REGION_CODE}">${region.DESCRIPTION}(${region.REGION_CODE})</option>
+						</c:forEach>
 
 					</select>
 				</div>
@@ -204,6 +222,10 @@
 				<div class="form-group">
 					<label>ROLE_CODE</label> <select class="form-control"
 						name="EDITROLE_CODE" id="EDITROLE_CODE">
+						<c:forEach var="role" items="${rolelist}">
+							<option value="${role.ROLE_CODE}">${role.DESCRIPTION}
+								(${role.ROLE_CODE})</option>
+						</c:forEach>
 
 					</select>
 				</div>
@@ -224,7 +246,7 @@
 				<div class="form-group">
 					<label>Module</label> <select class="form-control"
 						name="EDITMODULE" id="EDITMODULE">
-
+						<option value="B">Both</option>
 					</select>
 				</div>
 
