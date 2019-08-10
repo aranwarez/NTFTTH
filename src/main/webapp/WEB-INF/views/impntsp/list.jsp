@@ -137,8 +137,8 @@
                         <tr>
                             <td><input type="button" value="Query"
                                        onclick="getImpNtspFilterList();"></td>
-                            <td><input type="button" value="Import Data"
-                                       onclick="importdata();"></td>
+                            <td><input data-toggle="modal" data-target="#importdialog" type="button" value="Import Data"
+                                      ></td>
                             <td><input type="button" value="Post"
                                        onclick="postExcelTransaction();"></td>
                             
@@ -213,7 +213,7 @@
                                                 <th>ESME</th>
                                                 <th>Rate</th>
                                                 <th>StartDt</th>
-                                                <th>MO</th>
+                                                <th id="thmo">MO</th>
                                                 <th>MT</th>
                                                 <th>Edit</th>
                                                 <th>Delete</th>
