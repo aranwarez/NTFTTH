@@ -176,9 +176,12 @@ function filePicked(oEvent) {
 
 	// Tell JS To Start Reading The File.. You could delay this if desired
 	reader.readAsBinaryString(oFile);
+	$('#my_file_output').show();
+
 }
 
 function getImpNtspFilterList() {
+	$('#my_file_output').hide();
 	// jQuery.ajaxSetup({async: false});
 	var year = $("#QIMP_YEAR").val();
 	var period = $("#QIMP_PERIOD").val();
@@ -392,7 +395,8 @@ function updateImpntsp() {
 		// temp = $('#example1').DataTable();
 		// temp.clear().draw();
 		if (data.substring(0, 6) === "Succes") {
-			location.reload();
+			getImpNtspFilterList();
+			$('.modal').modal('hide');
 		}
 
 	});
