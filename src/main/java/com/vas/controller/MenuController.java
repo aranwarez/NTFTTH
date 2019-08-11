@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.dao.CommonMenuDao;
 import com.dao.MenuDao;
 import com.model.Menu;
+import com.model.MenuAccess;
 import com.model.UserInformationModel;
 
 @Controller
@@ -42,6 +44,7 @@ public class MenuController {
 			return "redirect:/login";
 
 		}
+		
 		List<Menu> list = null;
 		try {
 			list = dao.getlist();
@@ -49,9 +52,16 @@ public class MenuController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+//menu code should know before validate
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), "M0043");
 
-		Menu menu = new Menu();
-
+		model.addAttribute("LIST_FLAG", menuaccess.getLIST_FLAG());
+		model.addAttribute("ADD_FLAG", menuaccess.getADD_FLAG());
+		model.addAttribute("EDIT_FLAG", menuaccess.getEDIT_FLAG());
+		model.addAttribute("DELETE_FLAG", menuaccess.getDELETE_FLAG());
+		model.addAttribute("POST_FLAG", menuaccess.getPOST_FLAG());
+		model.addAttribute("CANCEL_FLAG", menuaccess.getCANCEL_FLAG());
+		
 		model.addAttribute("fx", "Menu List");
 		model.addAttribute("data_list", list);
 
@@ -157,18 +167,17 @@ public class MenuController {
 
 		return msg;
 	}
-	
-	
+
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET, value = "getChildMenulist")
 
 	public List<Menu> getMenuList(HttpServletRequest request, HttpServletResponse response) {
-		String PARENT_MENU=request.getParameter("PARENT_MENU");
-		String ROLE_CODE=request.getParameter("ROLE_CODE");
-		
+		String PARENT_MENU = request.getParameter("PARENT_MENU");
+		String ROLE_CODE = request.getParameter("ROLE_CODE");
+
 		List<Menu> list = null;
 		try {
-			list = dao.getChildCode(PARENT_MENU,ROLE_CODE);
+			list = dao.getChildCode(PARENT_MENU, ROLE_CODE);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

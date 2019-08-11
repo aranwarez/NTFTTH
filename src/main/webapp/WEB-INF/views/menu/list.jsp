@@ -4,6 +4,7 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <c:url var="home" value="/" scope="request" />
 
+
 <html>
 <head>
 <meta charset="utf-8">
@@ -81,13 +82,17 @@
 				<h1>Menu Entry</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-					<li><a href="#">Tables</a></li>
-					<li class="active">Data tables</li>
+					<li><a href="#">Menu</a></li>
+					<li class="active">List</li>
 
 				</ol>
-				<a href="#" class="btn btn-primary pull-right" data-toggle="modal"
-					data-target="#myModal"> <i class="fa fa-plus"></i> Add
-				</a>
+
+				<c:if test="${ADD_FLAG == 'Y'}">
+					<a href="#" class="btn btn-primary pull-right" data-toggle="modal"
+						data-target="#myModal"> <i class="fa fa-plus"></i> Add
+					</a>
+				</c:if>
+
 			</section>
 
 			<!-- Main content -->
@@ -135,9 +140,12 @@
 											<th>Parent Menu</th>
 											<th>STATUS_TYPE</th>
 											<th>MODULE</th>
-											<th>Edit</th>
-											<th>Delete</th>
-
+											<c:if test="${EDIT_FLAG == 'Y'}">
+												<th>Edit</th>
+											</c:if>
+											<c:if test="${DELETE_FLAG == 'Y'}">
+												<th>Delete</th>
+											</c:if>
 										</tr>
 									</thead>
 									<tbody>
@@ -152,31 +160,31 @@
 												<td>${user.getSTATUS_TYPE()}</td>
 												<td>${user.getMODULE_TYPE()}</td>
 
+												<c:if test="${EDIT_FLAG == 'Y'}">
+													<td>
 
-												<td>
-													<div class="btn-group">
-														<a href="#" class="btn btn-info" data-toggle="modal"
-															data-target="#editModal"
-															onclick="return editMenu('${user.getMENU_CODE()}')"> <i
-															class="fa fa-edit"></i> Edit
-														</a>
-													</div>
-												</td>
+														<div class="btn-group">
+															<a href="#" class="btn btn-info" data-toggle="modal"
+																data-target="#editModal"
+																onclick="return editMenu('${user.getMENU_CODE()}')">
+																<i class="fa fa-edit"></i> Edit
+															</a>
+														</div>
+													</td>
+												</c:if>
+												<c:if test="${DELETE_FLAG == 'Y'}">
+													<td>
+														<div>
+															<a href="" class="btn btn-default" data-toggle="modal"
+																data-target="#deleteModal"
+																onclick="return deleteRole('${user.getMENU_CODE()}')">
+																<i class="fa fa-trash"></i> Delete
+															</a>
+														</div>
 
 
-												<td>
-
-													<div>
-														<a href="" class="btn btn-default" data-toggle="modal"
-															data-target="#deleteModal"
-															onclick="return deleteRole('${user.getMENU_CODE()}')">
-															<i class="fa fa-trash"></i> Delete
-														</a>
-													</div>
-
-
-												</td>
-
+													</td>
+												</c:if>
 											</tr>
 										</c:forEach>
 

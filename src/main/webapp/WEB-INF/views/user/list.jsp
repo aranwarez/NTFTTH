@@ -4,6 +4,8 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <c:url var="home" value="/" scope="request" />
 
+
+
 <html>
 <head>
 <meta charset="utf-8">
@@ -125,19 +127,18 @@
 
 							<!-- /.box-header -->
 							<div class="box-body">
-								<table id="example1" class="table table-bordered table-striped">
+								<table id="userlist" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-											<th>Id</th>
 											<th>USER_ID</th>
 											<th>FULL_NAME</th>
-											<th>EMPLOYEE_CODE</th>
-											<th>LOCK_FLAG</th>
-											<th>SUPER_FLAG</th>
-											<th>DISABLE FLAG</th>
-											<th>CC CODE</th>
-											<th>USER LEVEL</th>
-											<th>ROLE CODE</th>
+											<th>EMP_CODE</th>
+											<th>Delete</th>
+											<th>SUPER</th>
+											<th>DISABLE</th>
+											<th>CC</th>
+											<th>USER</th>
+											<th>ROLE</th>
 											<th>Module</th>
 											<th>Edit</th>
 											<th>Delete</th>
@@ -148,7 +149,7 @@
 										<c:forEach var="user" items="${data_list}">
 
 											<tr>
-												<td>${user.getSN()}</td>
+												
 												<td>${user.getUSER_ID()}</td>
 
 												<td>${user.getFULL_NAME()}</td>
@@ -239,7 +240,9 @@
 	<script>
 		$(function() {
 
-			$('#example1').DataTable()
+			$('#userlist').dataTable({
+				"autoWidth" : true
+			});
 
 		})
 	</script>

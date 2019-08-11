@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -29,6 +31,7 @@ import com.model.UserInformationModel;
 
 @Controller
 public class MenuAccessController {
+	
 	RoleDao roledao = new RoleDao();
 	MenuDao menudao = new MenuDao();
 
@@ -81,12 +84,12 @@ public class MenuAccessController {
 	@RequestMapping(method = RequestMethod.GET, value = "getEditMode")
 
 	public List<MenuAccess> getEditMode(HttpServletRequest request, HttpServletResponse response) {
-		MenuAccessDao menuaccessdao = new MenuAccessDao();
+		
 		String ROLE_CODE = request.getParameter("ROLE_CODE");
 		List<MenuAccess> list = null;
 
 		try {
-			list = menuaccessdao.getModeList(ROLE_CODE);
+			list = MenuAccessDao.getModeList(ROLE_CODE);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -96,12 +99,14 @@ public class MenuAccessController {
 
 	}
 
+	@RequestMapping(value = "/saveModeList", method = RequestMethod.POST)
 	@ResponseBody
-	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json", value = "saveModeList")
 
-	public String saveModeList(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+	public String saveModeList(String ROLE_CODE, String menu_mode,  Model model, Locale locale,HttpSession session)
 			throws JsonParseException, JsonMappingException, IOException {
-		String ROLE_CODE = request.getParameter("ROLE_CODE");
+
+//		String ROLE_CODE = request.getParameter("ROLE_CODE");
+		System.out.println(" role code = " + ROLE_CODE);
 		if (ROLE_CODE == null) {
 			return "Please Enter role code ";
 		}
@@ -111,19 +116,22 @@ public class MenuAccessController {
 			return "redirect:/login";
 		}
 
-		String menu_mode = request.getParameter("menu_mode");
+//		String menu_mode = request.getParameter("menu_mode");
 
 		ObjectMapper mapper = new ObjectMapper();
 
-		List<MenuAccess> editmodelist = mapper.readValue(menu_mode, new TypeReference<List<MenuAccess>>() {
-		});
-
-
+//		List<MenuAccess> editmodelist = mapper.readValue(menu_mode, new TypeReference<List<MenuAccess>>() {
+//		});
+	
+		List<Map<String, Object>> myObjects = mapper.readValue(menu_mode,
+                new TypeReference<List<Map<String, Object>>>() {
+        });
+		
 //		SaveMenuAccess
 		MenuAccessDao menuaccessdao = new MenuAccessDao();
 		String msg = null;
 		try {
-			msg = menuaccessdao.SaveMenuAccess(ROLE_CODE, editmodelist, user.getUSER_ID());
+			msg = menuaccessdao.SaveMenuAccess(ROLE_CODE, myObjects, user.getUSER_ID());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

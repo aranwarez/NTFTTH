@@ -77,9 +77,7 @@ public class CcController {
 	
 		
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		if (user == null) {
-
-		}
+	
 		List<CollCenter> list = null;
 		
 		CollCenterDao ccdao=new CollCenterDao();
