@@ -177,7 +177,7 @@ function filePicked(oEvent) {
 	// Tell JS To Start Reading The File.. You could delay this if desired
 	reader.readAsBinaryString(oFile);
 	$('#my_file_output').show();
-	
+
 }
 
 function getImpNtspFilterList() {
@@ -396,7 +396,7 @@ function updateImpntsp() {
 		// temp.clear().draw();
 		if (data.substring(0, 6) === "Succes") {
 			getImpNtspFilterList();
-			 $('.modal').modal('hide');
+			$('.modal').modal('hide');
 		}
 
 	});

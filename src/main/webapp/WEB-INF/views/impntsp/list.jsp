@@ -71,7 +71,7 @@
 					<li class="active">Data tables</li>
 				</ol>
 				<br /> <br />
-				<div class="table-responsive">
+				<div class="table-responsive" >
 				<table>
 					<tr>
 						<c:forEach var="DAT" items="${Date_list}">
