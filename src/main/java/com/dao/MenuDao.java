@@ -178,6 +178,7 @@ public class MenuDao {
 	        List<Menu> list = new ArrayList<Menu>();
 	        Menu abc = null;
 
+	        
 	        try {
 	            PreparedStatement pst = con.prepareStatement("select DISTINCT a.menu_code,a.menu_desc,a.parent_menu,a.MENU_URL from web_menu_entry a left join EDIT_MODE b on b.menu_code=a.menu_code\r\n" + 
 	            		"where  a.status_type='Y' and b.LIST_FLAG='Y' and a.parent_menu=? and b.role_code=?  order by a.menu_code");
