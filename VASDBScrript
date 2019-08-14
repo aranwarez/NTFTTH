@@ -294,3 +294,157 @@ vat_per number,
   POST_FLAG    VARCHAR2(1 BYTE),
   ESME_CODE_V  NUMBER)
 ;
+
+-------------------------------------------------
+CREATE OR REPLACE FORCE VIEW vasntw.v_compare (imp_year,
+                                               imp_period,
+                                               imp_month,
+                                               service_code,
+                                               s_no,
+                                               esme_code,
+                                               rate,
+                                               start_dt,
+                                               mo_1st_nt,
+                                               mo_1st_sp,
+                                               mt_1st_nt,
+                                               mt_1st_sp,
+                                               tot_mo_nt,
+                                               tot_mt_nt,
+                                               tot_mo_sp,
+                                               tot_mt_sp,
+                                               post_flag
+                                              )
+AS
+   (SELECT imp_year, imp_period, imp_month, service_code, s_no, esme_code,
+           rate, start_dt, mo_1st mo_1st_nt, 0 mo_1st_sp, mt_1st mt_1st_nt,
+           0 mt_1st_sp, NVL (mo_1st, 0) tot_mo_nt, NVL (mt_1st, 0) tot_mt_nt,
+           0 tot_mo_sp, 0 tot_mt_sp, post_flag
+      FROM imp_nt
+    UNION ALL
+    SELECT imp_year, imp_period, imp_month, service_code, s_no, esme_code,
+           rate, start_dt, 0 mo_1st_nt, mo_1st mo_1st_sp, 0 mt_1st_nt,
+           mt_1st mt_1st_sp, 0 tot_mo_sp, 0 tot_mt_sp,
+           NVL (mo_1st, 0) tot_mo_nt, NVL (mt_1st, 0) tot_mt_nt, post_flag
+      FROM imp_nt);
+      
+      -------------------------------------------
+      CREATE OR REPLACE FORCE VIEW vasntw.v_sum_compare (imp_year,
+                                                   imp_period,
+                                                   imp_month,
+                                                   service_code,
+                                                   s_no,
+                                                   esme_code,
+                                                   rate,
+                                                   mo_1st_nt,
+                                                   mo_1st_sp,
+                                                   mt_1st_nt,
+                                                   mt_1st_sp,
+                                                   post_flag
+                                                  )
+AS
+   (SELECT   imp_year, imp_period, imp_month, service_code, s_no, esme_code,
+             rate, SUM (NVL (mo_1st_nt, 0)) mo_1st_nt,
+             SUM (NVL (mo_1st_sp, 0)) mo_1st_sp,
+             SUM (NVL (mt_1st_nt, 0)) mt_1st_nt,
+             SUM (NVL (mt_1st_sp, 0)) mt_1st_sp, post_flag
+        FROM v_compare
+    GROUP BY imp_year,
+             imp_period,
+             imp_period,
+             imp_month,
+             service_code,
+             s_no,
+             esme_code,
+             rate,
+             post_flag);
+
+-------------------------------------------------------------
+alter table TMP_IMP_SMS_NT_SP  add (post_by varchar2(15), post_dt date);
+ALTER TABLE VASNTW.M_WAP_APP_TARIFF
+ ADD (MO_MT_RATIO  NUMBER                           DEFAULT 0);
+
+ALTER TABLE VASNTW.M_SP_BG
+ ADD (Remarks  VARCHAR2(250 BYTE));
+
+
+-----------
+CREATE OR REPLACE PROCEDURE VASNTW.TRANSFER_IMPORT_DATA(inyear number, ivperiod varchar2, 
+ivmonth varchar2, ivservice varchar2, ivntsp varchar2, ivuser varchar2) IS
+   ln_count NUMBER:=0;
+   lv_error varchar2(200);
+BEGIN
+   FOR i in(SELECT trans_no,seq_no, imp_year, imp_period, imp_month, service_code, nt_sp,
+            s_no, cp_desc, esme_code, mo_1st, mt_1st, category
+            FROM tmp_imp_sms_nt_sp
+            WHERE imp_year= inyear
+            AND imp_period=ivperiod
+            AND imp_month=ivmonth
+            AND service_code=ivservice
+            AND nt_sp=ivntsp
+	        AND post_flag in('N','E')
+	        AND s_no is not null
+	        AND esme_code is not null
+            ORDER BY trans_no, seq_no) 
+   LOOP
+      IF ln_count=0 THEN 
+         BEGIN
+   	        INSERT INTO imp_main_master(imp_year, imp_period, create_dt,create_by,post_flag)
+   	                    VALUES(inyear,ivperiod,sysdate,ivuser,'N');
+   	     EXCEPTION WHEN  dup_val_on_index THEN
+   	      	 null;
+   	     END;	  
+      END IF;
+            
+      BEGIN
+         --ld_date:=to_Date(i.start_dt,'DD-MON-RRRR');
+         BEGIN
+            IF i.nt_sp='NT' THEN
+               INSERT INTO imp_nt(trans_id, trans_no,seq_no, imp_year, imp_period, imp_month, service_code,
+                               nt_sp, s_no, cp_desc, services, esme_code, 
+                               rate, start_dt,mo_1st,mt_1st, create_dt, create_by, post_flag)
+                        VALUES(seq_imp_nt_id.nextval,i.trans_no,i.seq_no, i.imp_year, i.imp_period,i.imp_month, i.service_code,
+                               i.nt_sp, i.s_no, null, null, i.esme_code,
+                               1, sysdate, i.mo_1st, i.mt_1st, sysdate, ivuser,'N');
+               /*INSERT INTO imp_sp(trans_id, trans_no,seq_no, imp_year, imp_period, imp_month, service_code,
+                               nt_sp, s_no, cp_desc, services, esme_code, 
+                               rate, start_dt,mo_1st,mt_1st, create_dt, create_by, post_flag)
+                        VALUES(seq_imp_sp_id.nextval,i.trans_no,i.seq_no, i.imp_year, i.imp_period,i.imp_month, i.service_code,
+                               i.nt_sp, i.s_no, null, null, i.esme_code,
+                               1, sysdate, 0, 0, sysdate, ivuser,'N');*/
+              
+            ELSE
+               INSERT INTO imp_sp(trans_id, trans_no,seq_no, imp_year, imp_period, imp_month, service_code,
+                               nt_sp, s_no, cp_desc, services, esme_code, 
+                               rate, start_dt,mo_1st,mt_1st, create_dt, create_by, post_flag)
+                        VALUES(seq_imp_sp_id.nextval,i.trans_no,i.seq_no, i.imp_year, i.imp_period,i.imp_month, i.service_code,
+                               i.nt_sp, i.s_no, null, null, i.esme_code,
+                               1, sysdate, i.mo_1st, i.mt_1st, sysdate, ivuser,'N');
+            
+            END IF;
+            UPDATE tmp_imp_sms_nt_sp set post_flag='Y', remarks=null, post_dt=sysdate, post_by=ivuser
+            WHERE trans_no=i.trans_no and seq_no=i.seq_no;                 
+         EXCEPTION WHEN OTHERS THEN                          
+               delete from imp_nt where trans_no=i.trans_no and seq_no=i.seq_no
+               AND imp_year=i.imp_year and imp_period=i.imp_period;
+               delete from imp_sp where trans_no=i.trans_no and seq_no=i.seq_no 
+               AND imp_year=i.imp_year and imp_period=i.imp_period;
+            	 lv_error:=SQLCODE;
+               UPDATE tmp_imp_sms_nt_sp set remarks='Insert Error '||lv_error, post_flag='E'
+               WHERE trans_no=i.trans_no and seq_no=i.seq_no;    	
+         END;
+	  EXCEPTION WHEN OTHERS THEN
+	        UPDATE tmp_imp_sms_nt_sp set remarks='Error in date', post_flag='E'
+            WHERE trans_no=i.trans_no and seq_no=i.seq_no;
+      END;        
+      
+      ln_count:=ln_count+1;
+   END LOOP;
+   commit;
+   
+EXCEPTION
+     WHEN OTHERS THEN
+     rollback;
+       -- Consider logging the error and then re-raise
+       RAISE;
+END TRANSFER_IMPORT_DATA;
+----------------------------------------
