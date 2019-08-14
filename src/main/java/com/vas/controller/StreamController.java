@@ -6,10 +6,12 @@
 package com.vas.controller;
 
 import com.dao.StreamDao;
+import com.model.UserInformationModel;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -48,12 +50,13 @@ public class StreamController {
     
     @RequestMapping(value = "/stream/saveJS", method = RequestMethod.POST)
     @ResponseBody
-    public String saveJSStream(String STREAM_TYPE, String DESCRIPTION,  Model model, Locale locale) {
+    public String saveJSStream(String STREAM_TYPE, String DESCRIPTION, HttpSession session, Model model, Locale locale) {
 
         logger.info("Save stream {}.", locale);
         StreamDao dao = new StreamDao();
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
         model.addAttribute("fx", "Stream controller list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;
@@ -74,12 +77,13 @@ public class StreamController {
     
     @RequestMapping(value = "/stream/update", method = RequestMethod.POST)
     @ResponseBody
-    public String updateStream(String STREAM_TYPE, String DESCRIPTION,  Model model, Locale locale) {
+    public String updateStream(String STREAM_TYPE, String DESCRIPTION,  HttpSession session, Model model, Locale locale) {
 
         logger.info("Updata stream {}.", locale);
         StreamDao dao = new StreamDao();
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Stream controller list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;

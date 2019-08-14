@@ -57,15 +57,15 @@ public class SpTargetDao {
         return null;
     }
 
-    public String saveSpTarget(String SP_CODE, String EFFECTIVE_DT, String REVENUE_TARGET, String MINIMUM_GUARENTEE, String USER) throws SQLException {
+    public String saveSpTarget(String SP_CODE, String EFFECTIVE_DT, String REVENUE_TARGET, String MINIMUM_GUARENTEE, String USER, String SERVICE_CODE) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
 
             String qry = "INSERT INTO VASNTW.M_SP_TARGET (\n"
                     + "   TRANS_ID, SP_CODE, EFFECTIVE_DT, \n"
-                    + "   REVENUE_TARGET, MINIMUM_GUARENTEE, CREATE_BY,   CREATE_DT) \n"
+                    + "   REVENUE_TARGET, MINIMUM_GUARENTEE, CREATE_BY,   CREATE_DT, SERVICE_CODE) \n"
                     + "VALUES (SEQ_SPTARGET_TRANSID.NEXTVAL , ?, COMMON.TO_AD(?),\n"
-                    + "    NVL(?,0), NVL(?,0), ?, SYSDATE )";
+                    + "    NVL(?,0), NVL(?,0), ?, SYSDATE, ? )";
 
             PreparedStatement pst = con.prepareStatement(qry);
             pst.setString(1, SP_CODE);
@@ -73,6 +73,7 @@ public class SpTargetDao {
             pst.setString(3, REVENUE_TARGET);
             pst.setString(4, MINIMUM_GUARENTEE);
             pst.setString(5, USER);
+            pst.setString(6, SERVICE_CODE);
 
             pst.executeUpdate();
 
@@ -87,13 +88,13 @@ public class SpTargetDao {
         }
     }
 
-    public String updateSpTarget(String TRANS_ID, String SP_CODE, String EFFECTIVE_DT, String REVENUE_TARGET, String MINIMUM_GUARENTEE, String USER) throws SQLException {
+    public String updateSpTarget(String TRANS_ID, String SP_CODE, String EFFECTIVE_DT, String REVENUE_TARGET, String MINIMUM_GUARENTEE, String USER, String SERVICE_CODE) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
 
             String qry = "UPDATE VASNTW.M_SP_TARGET\n"
                     + "SET    SP_CODE           = ?, EFFECTIVE_DT  = COMMON.TO_AD(?),  REVENUE_TARGET = nvl(?,0),\n"
-                    + "       MINIMUM_GUARENTEE = nvl(?,0), UPDATE_BY  = ?,  UPDATE_DT    = SYSDATE\n"
+                    + "       MINIMUM_GUARENTEE = nvl(?,0), UPDATE_BY  = ?,  UPDATE_DT    = SYSDATE, SERVICE_CODE=? \n"
                     + "WHERE  TRANS_ID          = ?";
 
             PreparedStatement pst = con.prepareStatement(qry);
@@ -103,7 +104,9 @@ public class SpTargetDao {
             pst.setString(3, REVENUE_TARGET);
             pst.setString(4, MINIMUM_GUARENTEE);
             pst.setString(5, USER);
-            pst.setString(6, TRANS_ID);
+            pst.setString(6, SERVICE_CODE);
+            pst.setString(7, TRANS_ID);
+            
 
             pst.executeUpdate();
 

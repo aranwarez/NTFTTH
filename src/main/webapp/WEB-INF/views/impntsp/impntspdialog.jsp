@@ -68,7 +68,7 @@
                             <td>
                                 <label for="Vas Services">VAS Services</label> 
                                 <select style="width: 180px;" class="form-control" name="SERVICE_CODE"
-                                        id="SERVICE_CODE">
+                                        id="SERVICE_CODE" onchange="momtlablechange('a');">
                                     <option value=''>Select :</option>
                                     <c:forEach var="VASSER" items="${VASSer_list}">
                                         <option value="${VASSER.SERVICE_CODE}">
@@ -80,7 +80,7 @@
                             <td>
                                 <label for="NTSP">NT/SP</label> 
                                 <select style="width: 80px;" class="form-control"
-                                        name="NT_SP" id=NT_SP">
+                                        name="NT_SP" id="NT_SP">
                                     <option value='NT'>NT</option>
                                     <option value='SP'>SP</option>
                                 </select>
@@ -105,12 +105,12 @@
                                        placeholder="Enter ESME Code"> 
                             </td>
                             <td>
-                                <label  for="MO">MO</label> 
+                                <label  for="MO" id="addmo">MO</label> 
                                 <input type="number" style="width: 80px;" class="form-control" name="MO_1ST" id="MO_1ST"
                                        placeholder="Enter MO"> 
                             </td>
                             <td>
-                                <label  for="MT">MT</label> 
+                                <label  for="MT" id="addmt">MT</label> 
                                 <input type="number" style="width: 80px;" class="form-control" name="MT_1ST" id="MT_1ST"
                                        placeholder="Enter MT"> 
                             </td>
@@ -215,7 +215,7 @@
                                 <td>
                                     <label for="Vas Services">VAS Services</label> 
                                     <select style="width: 180px;" class="form-control" name="EDITSERVICE_CODE"
-                                            id="EDITSERVICE_CODE">
+                                            id="EDITSERVICE_CODE" onchange="momtlablechange('b');">
                                         <option value=''>Select :</option>
                                         <c:forEach var="VASSER" items="${VASSer_list}">
                                             <option value="${VASSER.SERVICE_CODE}">
@@ -252,15 +252,15 @@
                                            placeholder="Enter ESME Code"> 
                                 </td>
                                 <td>
-                                <label  for="MO">MO</label> 
-                                <input type="number" style="width: 80px;" class="form-control" name="EDITMO_1ST" id="EDITMO_1ST"
-                                       placeholder="Enter MO"> 
-                            </td>
-                            <td>
-                                <label  for="MT">MT</label> 
-                                <input type="number" style="width: 80px;" class="form-control" name="EDITMT_1ST" id="EDITMT_1ST"
-                                       placeholder="Enter MT"> 
-                            </td>
+                                    <label  for="MO" id="editmo">MO</label> 
+                                    <input type="number" style="width: 80px;" class="form-control" name="EDITMO_1ST" id="EDITMO_1ST"
+                                           placeholder="Enter MO"> 
+                                </td>
+                                <td>
+                                    <label  for="MT" id="editmt">MT</label> 
+                                    <input type="number" style="width: 80px;" class="form-control" name="EDITMT_1ST" id="EDITMT_1ST"
+                                           placeholder="Enter MT"> 
+                                </td>
                             </tr>
                         </table>
                         <br/>
@@ -327,32 +327,64 @@
 
 <!-- import dialog box -->
 
-	<div class="modal fade" id="importdialog" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel">
+<div class="modal fade" id="importdialog" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
 
-		<div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document">
 
-			<div class="modal-content">
+        <div class="modal-content">
 
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title" id="myModalLabel">Import Csv File </h4>
-				</div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Import Csv File </h4>
+            </div>
 
-				<div class="modal-body">
-					<p>Are you sure you want to import this data. This cannot be
-						undone</p>
-				</div>
-                            
-				<div class="modal-footer">
-				                                 
-					<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-					<button type="button" class="btn btn-primary"  onclick="importdata();">Yes</button>
-                                  
-				</div>
-			</div>
-		</div>
-	</div>
+            <div class="modal-body">
+                <p>Are you sure you want to import this data. This cannot be
+                    undone</p>
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary"  onclick="importdata();">Yes</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- main delete  dialog box -->
+
+<div class="modal fade" id="maindeletedialog" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Delete all selected temporary data </h4>
+            </div>
+
+            <div class="modal-body">
+                <p>Are you sure you want to delete bulk temporary data. This cannot be
+                    undone</p>
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary"  onclick="maindeletedata();">Yes</button>
+
+            </div>
+        </div>
+    </div>
+</div>
