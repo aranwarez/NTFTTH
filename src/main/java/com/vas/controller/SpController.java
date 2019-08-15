@@ -44,7 +44,7 @@ public class SpController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        model.addAttribute("fx", "Service Provider List");
+        model.addAttribute("fx", "VAS Provider Profile");
         model.addAttribute("data_list", list);
 
         COADao COA = new COADao();

@@ -45,7 +45,7 @@ public class CpController {
 //            // TODO Auto-generated catch block
 //            e.printStackTrace();
 //        }
-        model.addAttribute("fx", "Content Provider List");
+        model.addAttribute("fx", "VAS Provider's Client Profile");
         model.addAttribute("data_list", list);
         SpDao sp = new SpDao();
         model.addAttribute("Sp_list", sp.getSpList()); 

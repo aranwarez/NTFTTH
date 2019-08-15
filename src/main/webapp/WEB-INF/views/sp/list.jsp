@@ -63,7 +63,7 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<h1>Service Provider Entry</h1>
+				<h1>VAS Provider Profile</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li><a href="#">Tables</a></li>
@@ -108,7 +108,7 @@
 							%>
 
 							<!-- /.box-header -->
-							<div class="box-body">
+							<div class="box-body table-responsive">
 								<table id="example1" class="table table-bordered table-striped">
 									<thead>
 										<tr>
