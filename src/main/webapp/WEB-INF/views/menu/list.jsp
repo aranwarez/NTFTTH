@@ -87,7 +87,7 @@
 
 				</ol>
 
-				<c:if test="${ADD_FLAG == 'Y'}">
+				<c:if test="${menuaccess.getADD_FLAG() == 'Y'}">
 					<a href="#" class="btn btn-primary pull-right" data-toggle="modal"
 						data-target="#myModal"> <i class="fa fa-plus"></i> Add
 					</a>
@@ -140,10 +140,10 @@
 											<th>Parent Menu</th>
 											<th>STATUS_TYPE</th>
 											<th>MODULE</th>
-											<c:if test="${EDIT_FLAG == 'Y'}">
+											<c:if test="${menuaccess.getEDIT_FLAG() == 'Y'}">
 												<th>Edit</th>
 											</c:if>
-											<c:if test="${DELETE_FLAG == 'Y'}">
+											<c:if test="${menuaccess.getDELETE_FLAG() == 'Y'}">
 												<th>Delete</th>
 											</c:if>
 										</tr>
@@ -160,7 +160,7 @@
 												<td>${user.getSTATUS_TYPE()}</td>
 												<td>${user.getMODULE_TYPE()}</td>
 
-												<c:if test="${EDIT_FLAG == 'Y'}">
+												<c:if test="${menuaccess.getEDIT_FLAG() == 'Y'}">
 													<td>
 
 														<div class="btn-group">
@@ -172,7 +172,7 @@
 														</div>
 													</td>
 												</c:if>
-												<c:if test="${DELETE_FLAG == 'Y'}">
+												<c:if test="${menuaccess.getDELETE_FLAG() == 'Y'}">
 													<td>
 														<div>
 															<a href="" class="btn btn-default" data-toggle="modal"

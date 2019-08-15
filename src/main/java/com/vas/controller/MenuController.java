@@ -49,12 +49,14 @@ public class MenuController {
 			model.addAttribute("fx", "Unauthorized Page for this role!!");
 			return "/home";
 		}
-		model.addAttribute("LIST_FLAG", menuaccess.getLIST_FLAG());
-		model.addAttribute("ADD_FLAG", menuaccess.getADD_FLAG());
-		model.addAttribute("EDIT_FLAG", menuaccess.getEDIT_FLAG());
-		model.addAttribute("DELETE_FLAG", menuaccess.getDELETE_FLAG());
-		model.addAttribute("POST_FLAG", menuaccess.getPOST_FLAG());
-		model.addAttribute("CANCEL_FLAG", menuaccess.getCANCEL_FLAG());
+		
+                model.addAttribute("menuaccess", menuaccess);
+//                model.addAttribute("LIST_FLAG", menuaccess.getLIST_FLAG());
+//		model.addAttribute("ADD_FLAG", menuaccess.getADD_FLAG());
+//		model.addAttribute("EDIT_FLAG", menuaccess.getEDIT_FLAG());
+//		model.addAttribute("DELETE_FLAG", menuaccess.getDELETE_FLAG());
+//		model.addAttribute("POST_FLAG", menuaccess.getPOST_FLAG());
+//		model.addAttribute("CANCEL_FLAG", menuaccess.getCANCEL_FLAG());
 		model.addAttribute("fx", "Menu List");
 		model.addAttribute("data_list", list);
 		return "menu/list";
