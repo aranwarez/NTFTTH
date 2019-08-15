@@ -18,11 +18,11 @@ $(document).ready(function () {
         placeholder: "Select a Service Provider Code"
                 // allowClear: false
     });
-    // $("#EDITS_NO").select2({
-    // dropdownParent: $("#editModal"),
-    // placeholder: "Select a Service Provider Code",
-    // //allowClear: false
-    // });
+     $("#EDITS_NO").select2({
+     dropdownParent: $("#editModal"),
+     placeholder: "Select a Service Provider Code",
+     //allowClear: false
+     });
 
     // $("#SERVICE_CODE").select2({
     // dropdownParent: $("#myModal"),
@@ -403,6 +403,8 @@ function editImpntsp(code, seqno) {
             $("#EDITCATEGORY").val(row[i][7]);
             $("#EDITCP_DESC").val(row[i][8]);
             $("#EDITS_NO").val(row[i][9]);
+             $("#EDITS_NO").trigger('change');
+            
             $("#EDITESME_CODE").val(row[i][10]);
             $("#EDITMO_1ST").val(row[i][13]);
             $("#EDITMT_1ST").val(row[i][14]);
