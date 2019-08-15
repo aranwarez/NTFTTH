@@ -1,7 +1,6 @@
 package com.vas.controller;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dao.MenuAccessDao;
 import com.dao.UserDao;
-import com.model.MenuAccess;
 import com.model.UserInformationModel;
 
 @Controller

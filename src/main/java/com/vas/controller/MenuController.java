@@ -10,16 +10,11 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
-
 import com.dao.CommonMenuDao;
 import com.dao.MenuDao;
 import com.model.Menu;
@@ -40,11 +35,7 @@ public class MenuController {
 
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 
-		if (user == null) {
-			return "redirect:/login";
-
-		}
-		
+		String url = request.getServletPath();
 		List<Menu> list = null;
 		try {
 			list = dao.getlist();
@@ -53,18 +44,19 @@ public class MenuController {
 			e.printStackTrace();
 		}
 //menu code should know before validate
-		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), "M0043");
-
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), url);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
 		model.addAttribute("LIST_FLAG", menuaccess.getLIST_FLAG());
 		model.addAttribute("ADD_FLAG", menuaccess.getADD_FLAG());
 		model.addAttribute("EDIT_FLAG", menuaccess.getEDIT_FLAG());
 		model.addAttribute("DELETE_FLAG", menuaccess.getDELETE_FLAG());
 		model.addAttribute("POST_FLAG", menuaccess.getPOST_FLAG());
 		model.addAttribute("CANCEL_FLAG", menuaccess.getCANCEL_FLAG());
-		
 		model.addAttribute("fx", "Menu List");
 		model.addAttribute("data_list", list);
-
 		return "menu/list";
 
 	}

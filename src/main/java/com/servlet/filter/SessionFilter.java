@@ -38,7 +38,8 @@ public class SessionFilter implements Filter {
 			// action to record attemp of the user login
 			System.out.println("error page");
 		}
-		if (url != null && url.length() > 19 && url.substring(0, 19).equals("/resources/adminltd")) {
+
+		else if (url != null && url.length() > 19 && url.substring(0, 19).equals("/resources/adminltd")) {
 			// action to record attemp of the user login
 			System.out.println("Getting resource :" + url);
 		}
