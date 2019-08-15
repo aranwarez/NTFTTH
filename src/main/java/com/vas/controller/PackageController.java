@@ -7,10 +7,12 @@ package com.vas.controller;
 
 
 import com.dao.PackageDao;
+import com.model.UserInformationModel;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -49,12 +51,12 @@ public class PackageController {
     
     @RequestMapping(value = "/package/saveJS", method = RequestMethod.POST)
     @ResponseBody
-    public String saveJSPackage(String PACKAGE_TYPE, String DESCRIPTION,  Model model, Locale locale) {
-
+    public String saveJSPackage(String PACKAGE_TYPE, String DESCRIPTION,  HttpSession session, Model model, Locale locale) {
         logger.info("Save package {}.", locale);
         PackageDao dao = new PackageDao();
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Package controller list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;
@@ -75,12 +77,13 @@ public class PackageController {
     
     @RequestMapping(value = "/package/update", method = RequestMethod.POST)
     @ResponseBody
-    public String updatePackage(String PACKAGE_TYPE, String DESCRIPTION,  Model model, Locale locale) {
+    public String updatePackage(String PACKAGE_TYPE, String DESCRIPTION, HttpSession session, Model model, Locale locale) {
 
         logger.info("Updata Package {}.", locale);
         PackageDao dao = new PackageDao();
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Package controller list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;

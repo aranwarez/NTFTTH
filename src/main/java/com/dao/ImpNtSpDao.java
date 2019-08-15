@@ -67,7 +67,7 @@ public class ImpNtSpDao {
     }
 
     public String saveExcelData(List<Map<String, Object>> JSONarrayList, String Filename, String IMP_YEAR,
-            String Period, String IMP_MONTH, String Services, String NT_SP, String SERVICE_CODE, String IMP_PERIOD)
+            String Period, String IMP_MONTH, String Services, String NT_SP, String SERVICE_CODE, String IMP_PERIOD, String USER)
             throws SQLException {
         Connection con = DbCon.getConnection();
         con.setAutoCommit(false);
@@ -98,7 +98,7 @@ public class ImpNtSpDao {
                 pst.setString(12, Filename);
                 pst.setString(13, (String) obj.get("CATEGORY"));
                 // CP_CODE, CREATE_BY, POST_FLAG, IMP_PERIOD
-                pst.setString(14, "CREATE_BY");
+                pst.setString(14, USER);
                 pst.setString(15, IMP_PERIOD);
                 pst.executeUpdate();
                 index = index + 1;
@@ -216,6 +216,27 @@ public class ImpNtSpDao {
             PreparedStatement pst = con.prepareStatement("delete from TMP_IMP_SMS_NT_SP where trans_no=? AND seq_no=?");
             pst.setString(1, TRANS_NO);
             pst.setString(2, SEQ_NO);
+            
+            pst.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Failed Reason :" + e.getLocalizedMessage();
+        } finally {
+            con.close();
+        }
+        return "Record deleted successfully.";
+    }
+    
+    public String DeleteAllImpNtSp(String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH, String SERVICE_CODE, String NT_SP, String POST_FLAG) throws SQLException {
+        Connection con = DbCon.getConnection();
+        try {
+            PreparedStatement pst = con.prepareStatement("delete from TMP_IMP_SMS_NT_SP where imp_year=? AND imp_period=? AND imp_month=? AND service_code=? AND nt_sp=? AND post_flag=?");
+            pst.setString(1, IMP_YEAR);
+            pst.setString(2, IMP_PERIOD);
+            pst.setString(3, IMP_MONTH);
+            pst.setString(4, SERVICE_CODE);
+            pst.setString(5, NT_SP);
+            pst.setString(6, POST_FLAG);
             
             pst.executeUpdate();
         } catch (Exception e) {

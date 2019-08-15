@@ -5,14 +5,13 @@
  */
 package com.vas.controller;
 
-import com.dao.COADao;
 import com.dao.CpDao;
 import com.dao.PackageDao;
 import com.dao.SpDao;
 import com.dao.SpServiceDao;
-import com.dao.SpTargetDao;
 import com.dao.StreamDao;
 import com.dao.VASServiceDao;
+import com.model.UserInformationModel;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
@@ -79,12 +78,13 @@ public class CpController {
     @ResponseBody
     public String saveJSCp(String CP_CODE, String SP_CODE, String SERVICE_CODE, String CP_NAME, String ESME_CODE,
             String SRV_FOR, String PACKAGE_TYPE, String STREAM_TYPE, String START_DT, String END_DT, String SHARING_TYPE,
-            String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, Model model, Locale locale) {
+            String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, HttpSession session, Model model, Locale locale) {
 
         logger.info("Save content provider {}.", locale);
         CpDao dao = new CpDao();
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Cp controller list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;
@@ -108,12 +108,13 @@ public class CpController {
     @ResponseBody
     public String updateCp(String CP_CODE, String SP_CODE, String SERVICE_CODE, String CP_NAME, String ESME_CODE,
             String SRV_FOR, String PACKAGE_TYPE, String STREAM_TYPE, String START_DT, String END_DT, String SHARING_TYPE,
-            String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, Model model, Locale locale) {
+            String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, HttpSession session, Model model, Locale locale) {
 
         logger.info("Updata Content Provider {}.", locale);
         CpDao dao = new CpDao();
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Cp controller list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;

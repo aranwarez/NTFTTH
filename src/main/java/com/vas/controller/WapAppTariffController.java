@@ -12,6 +12,7 @@ import com.dao.SpServiceDao;
 import com.dao.StreamDao;
 import com.dao.VASServiceDao;
 import com.dao.WapAppTariffDao;
+import com.model.UserInformationModel;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
@@ -66,12 +67,13 @@ public class WapAppTariffController {
     @RequestMapping(value = "/wapapptariff/saveJS", method = RequestMethod.POST)
     @ResponseBody
     public String saveJSWapapptariff(String SERVICE_CODE, String PACKAGE_TYPE, String RATE,
-            String EFFECTIVE_DT, String RANGE_FROM, String RANGE_TO, String MO_MT_RATIO, Model model, Locale locale) {
+            String EFFECTIVE_DT, String RANGE_FROM, String RANGE_TO, String MO_MT_RATIO, HttpSession session, Model model, Locale locale) {
 
         logger.info("Save WAP APP Tariff {}.", locale);
         WapAppTariffDao dao = new WapAppTariffDao();
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Wapapptariff controller list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;
@@ -88,12 +90,13 @@ public class WapAppTariffController {
     @RequestMapping(value = "/wapapptariff/update", method = RequestMethod.POST)
     @ResponseBody
     public String updateWapapptariff(String TRANS_ID, String SERVICE_CODE, String PACKAGE_TYPE, String RATE,
-            String EFFECTIVE_DT, String RANGE_FROM, String RANGE_TO, String MO_MT_RATIO, Model model, Locale locale) {
+            String EFFECTIVE_DT, String RANGE_FROM, String RANGE_TO, String MO_MT_RATIO, HttpSession session, Model model, Locale locale) {
 
         logger.info("Updata Wap App Tariff {}.", locale);
         WapAppTariffDao dao = new WapAppTariffDao();
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "WAP APP Tariff list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;

@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.model.UserInformationModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -85,11 +86,12 @@ public class ImpNtSpController {
     @RequestMapping(value = "/impntsp/postExcelData", method = RequestMethod.POST)
     @ResponseBody
     public String saveExcelData(String JSONarrayList, String Filename, Model model, Locale locale, String IMP_YEAR,
-            String Period, String IMP_MONTH, String Services, String NT_SP, String SERVICE_CODE, String IMP_PERIOD)
+            String Period, String IMP_MONTH, String Services, String NT_SP, String SERVICE_CODE, String IMP_PERIOD, HttpSession session)
             throws JsonParseException, JsonMappingException, IOException, SQLException {
 
         logger.info("Saving Excel data in TMP table in DB {}.", locale);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         ObjectMapper mapper = new ObjectMapper();
 
 //		TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
@@ -101,16 +103,17 @@ public class ImpNtSpController {
                 new TypeReference<List<Map<String, Object>>>() {
         });
         String msg = dao.saveExcelData(myObjects, Filename, IMP_YEAR, Period, IMP_MONTH, Services, NT_SP, SERVICE_CODE,
-                IMP_PERIOD);
+                IMP_PERIOD, USER);
         return msg;
     }
 
     @RequestMapping(value = "/impntsp/postExcelDataTransaction", method = RequestMethod.POST)
     @ResponseBody
     public String postExcelDataTrans(Model model, Locale locale, String IMP_YEAR, String Period, String IMP_MONTH,
-            String Services, String NT_SP, String SERVICE_CODE, String IMP_PERIOD) throws SQLException {
+            String Services, String NT_SP, String SERVICE_CODE, String IMP_PERIOD, HttpSession session) throws SQLException {
         logger.info("Saving Excel data in TMP table in DB {}.", locale);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         ImpNtSpDao dao = new ImpNtSpDao();
         String msg = dao.postExcelImportData(IMP_YEAR, IMP_PERIOD, IMP_MONTH, Services, NT_SP, USER);
         return msg;
@@ -119,13 +122,15 @@ public class ImpNtSpController {
     @RequestMapping(value = "/impntsp/saveJS", method = RequestMethod.POST)
     @ResponseBody
     public String saveJSImpntsp(String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH, String SERVICE_CODE, String NT_SP,
-            String CATEGORY, String CP_DESC, String S_NO, String ESME_CODE, String MO_1ST, String MT_1ST,
+            String CATEGORY, String CP_DESC, String S_NO, String ESME_CODE, String MO_1ST, String MT_1ST, HttpSession session,
             Model model, Locale locale) {
 
         logger.info("Save Imp nt sp {}.", locale);
         ImpNtSpDao dao = new ImpNtSpDao();
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
+
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
 
         model.addAttribute("fx", "Impntsp controller list ");
         model.addAttribute("userName", "NEPal");
@@ -139,31 +144,32 @@ public class ImpNtSpController {
         }
         return msg;
     }
-    
+
     @RequestMapping(value = "/impntsp/update", method = RequestMethod.POST)
     @ResponseBody
     public String updateImpntsp(String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH, String SERVICE_CODE, String NT_SP,
-            String CATEGORY, String CP_DESC, String S_NO, String ESME_CODE, String MO_1ST, String MT_1ST, 
-            String TRANS_NO, String SEQ_NO, Model model, Locale locale) {
+            String CATEGORY, String CP_DESC, String S_NO, String ESME_CODE, String MO_1ST, String MT_1ST,
+            String TRANS_NO, String SEQ_NO, HttpSession session, Model model, Locale locale) {
 
         logger.info("Updata Imp Nt sp {}.", locale);
         ImpNtSpDao dao = new ImpNtSpDao();
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Imp Nt sp list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;
         try {
             msg = dao.updateImpNtSp(IMP_YEAR, IMP_PERIOD, IMP_MONTH, SERVICE_CODE, NT_SP, CATEGORY, CP_DESC,
                     S_NO, ESME_CODE, MO_1ST, MT_1ST, USER, TRANS_NO, SEQ_NO);
-            
+
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return msg;
     }
-    
+
     @RequestMapping(value = "/impntsp/delete", method = RequestMethod.POST)
     @ResponseBody
     public String impntspDelete(String TRANS_NO, String SEQ_NO, Model model, Locale locale) {
@@ -172,7 +178,7 @@ public class ImpNtSpController {
 //        System.out.println("delete service code==" + SERVICE_CODE);
         String msg = null;
         try {
-            msg = dao.DeleteImpNtSp(TRANS_NO,SEQ_NO);
+            msg = dao.DeleteImpNtSp(TRANS_NO, SEQ_NO);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -180,4 +186,24 @@ public class ImpNtSpController {
         return msg;
 
     }
+    
+    
+    @RequestMapping(value = "/impntsp/deleteall", method = RequestMethod.POST)
+    @ResponseBody
+    public String impntspDeleteall(String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH, String SERVICE_CODE, String NT_SP,
+            String POST_FLAG, Model model, Locale locale) {
+        logger.info("delete impntsp", locale);
+        ImpNtSpDao dao = new ImpNtSpDao();
+//        System.out.println("delete service code==" + SERVICE_CODE);
+        String msg = null;
+        try {
+            msg = dao.DeleteAllImpNtSp(IMP_YEAR, IMP_PERIOD, IMP_MONTH, SERVICE_CODE, NT_SP, POST_FLAG);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return msg;
+
+    }
+
 }

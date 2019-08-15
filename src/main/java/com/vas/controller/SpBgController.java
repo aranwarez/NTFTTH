@@ -12,6 +12,7 @@ import com.dao.SpBgDao;
 import com.dao.SpDao;
 import com.dao.SpServiceDao;
 import com.dao.TranstypeDao;
+import com.model.UserInformationModel;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
@@ -83,12 +84,13 @@ public class SpBgController {
     @RequestMapping(value = "/spbg/saveJS", method = RequestMethod.POST)
     @ResponseBody
     public String saveJSSpbg(String TRANS_CD, String SP_CODE, String TRANS_DT, String BANK_CD, String BANK_GUARENTEE_DATE,
-            String AMT, String BANK_VALIDITY_DATE, String REMARKS, Model model, Locale locale) {
+            String AMT, String BANK_VALIDITY_DATE, String REMARKS, HttpSession session, Model model, Locale locale) {
 
         logger.info("Save Bank Deposit/Refund/Granrentee {}.", locale);
         SpBgDao dao = new SpBgDao();        
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Cp controller list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;
@@ -104,12 +106,13 @@ public class SpBgController {
     @RequestMapping(value = "/spbg/update", method = RequestMethod.POST)
     @ResponseBody
     public String updateSpbg(String TRANS_ID, String TRANS_CD, String SP_CODE, String TRANS_DT, String BANK_CD, String BANK_GUARENTEE_DATE,
-            String AMT, String BANK_VALIDITY_DATE, String REMARKS, Model model, Locale locale) {
+            String AMT, String BANK_VALIDITY_DATE, String REMARKS, HttpSession session, Model model, Locale locale) {
 
         logger.info("Bank Deposit/Refund/Granrentee {}", locale);
         SpBgDao dao = new SpBgDao();        
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Cp controller list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;

@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.dao.VASServiceDao;
 
 import com.model.Service;
+import com.model.UserInformationModel;
 import java.util.Map;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class ServiceController {
@@ -50,12 +52,13 @@ public class ServiceController {
 
     @RequestMapping(value = "/service/saveJS", method = RequestMethod.POST)
     @ResponseBody
-    public String saveJSService(String SERVICE_CODE, String DESCRIPTION, String SLDG_CODE, String DATA_IMPORT, String ACTIVE_FLAG, Model model, Locale locale) {
+    public String saveJSService(String SERVICE_CODE, String DESCRIPTION, String SLDG_CODE, String DATA_IMPORT, String ACTIVE_FLAG, HttpSession session, Model model, Locale locale) {
 
         logger.info("Save Service {}.", locale);
         VASServiceDao dao = new VASServiceDao();
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Service controller list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;
@@ -69,10 +72,11 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/service/save", method = RequestMethod.POST)
-    public String saveVasService(@Validated Service service, Model model, Locale locale) {
+    public String saveVasService(@Validated Service service, HttpSession session, Model model, Locale locale) {
         logger.info("Trying to save new vas service by user id:", locale);
         VASServiceDao dao = new VASServiceDao();
-        service.setUSER("Nepal");
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        service.setUSER(userinfo.getUSER_ID());
         model.addAttribute("ServiceCode", service.getSERVICE_CODE());
         String msg = null;
         //            msg = dao.saveVasService(service);
@@ -93,12 +97,13 @@ public class ServiceController {
 
     @RequestMapping(value = "/service/update", method = RequestMethod.POST)
     @ResponseBody
-    public String updateService(String SERVICE_CODE, String DESCRIPTION, String SLDG_CODE, String DATA_IMPORT, String ACTIVE_FLAG, Model model, Locale locale) {
+    public String updateService(String SERVICE_CODE, String DESCRIPTION, String SLDG_CODE, String DATA_IMPORT, String ACTIVE_FLAG, HttpSession session, Model model, Locale locale) {
 
         logger.info("Updata Service {}.", locale);
         VASServiceDao dao = new VASServiceDao();
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
-        String USER = "NEpal";
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Service controller list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;
