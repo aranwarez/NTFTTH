@@ -113,21 +113,22 @@ public class NettingController {
 		return msg;
 	}
 
-	@RequestMapping(value = "/Netttingimpntsp/saveJS", method = RequestMethod.POST)
+	@RequestMapping(value = "/Netting/saveNTSP", method = RequestMethod.POST)
 	@ResponseBody
-	public String saveJSImpntsp(String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH, String SERVICE_CODE, String NT_SP,
-			String CATEGORY, String CP_DESC, String S_NO, String ESME_CODE, String MO_1ST, String MT_1ST, Model model,
-			Locale locale, HttpSession session) {
+	public String saveNettingSImpntsp(String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH, String SERVICE_CODE,
+			String NT_SP, String CATEGORY, String CP_DESC, String S_NO, String ESME_CODE, String MO_1ST, String MT_1ST,
+			Model model, Locale locale, HttpSession session) {
+		String msg = "Bad";
 
-		logger.info("Save Imp nt sp {}.", locale);
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-
-		NettingDao dao = new NettingDao();
-//        System.out.println("uddate Servce code==" + SERVICE_CODE);
-		String USER = user.getUSER_ID();
-
-		String msg = null;
 		try {
+
+			logger.info("Save Imp nt sp {}.", locale);
+			UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+
+			NettingDao dao = new NettingDao();
+//        System.out.println("uddate Servce code==" + SERVICE_CODE);
+			String USER = user.getUSER_ID();
+
 			if (NT_SP.equals("NT"))
 
 				msg = dao.saveImpNT(IMP_YEAR, IMP_PERIOD, IMP_MONTH, SERVICE_CODE, NT_SP, CATEGORY, CP_DESC, S_NO,
@@ -143,4 +144,32 @@ public class NettingController {
 		}
 		return msg;
 	}
+
+	@RequestMapping(value = "/Netting/postExcelDataTransaction", method = RequestMethod.POST)
+	@ResponseBody
+	public String postExcelDataTrans(Model model, Locale locale, String IMP_YEAR, String Period, String IMP_MONTH,
+			String Services, String NT_SP, String SERVICE_CODE, String IMP_PERIOD, HttpSession session)
+			throws SQLException {
+		logger.info("Saving Excel data in TMP table in DB {}.", locale);
+		UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+		String USER = userinfo.getUSER_ID();
+		NettingDao dao = new NettingDao();
+		String msg = dao.postExcelImportData(IMP_YEAR, IMP_PERIOD, IMP_MONTH, Services, NT_SP, USER);
+		return msg;
+	}
+
+	// getting list of all Sharing Non Sharing Netting
+	@ResponseBody
+	@RequestMapping(value = "/netting/getSharingData", method = RequestMethod.GET)
+
+	public List<Map<String, Object>> getSharinglist(String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH,
+			String SERVICE_CODE, String SHARING_TYPE, String POST_FLAG, Locale locale, Model model)
+			throws SQLException {
+
+		NettingDao dao = new NettingDao();
+
+		return dao.getNonSharing(IMP_YEAR, IMP_PERIOD, IMP_MONTH, SERVICE_CODE, SHARING_TYPE, POST_FLAG);
+
+	}
+
 }

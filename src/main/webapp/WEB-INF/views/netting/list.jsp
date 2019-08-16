@@ -137,10 +137,10 @@
 						<tr>
 							<td><input type="button" value="Query"
 								onclick="getImpNtspFilterList();"></td>
-							<td><input type="button" value="NT" onclick="getNTnetting"></td>
-							<td><input type="button" value="SP" onclick="getSPnetting"></td>
+							<td><input type="button" value="Sharing" onclick="sharingnetting('Y')"></td>
+							<td><input type="button" value="Non Sharing" onclick="sharingnetting('N')"></td>
 
-							<td><input type="button" value="Post"
+							<td><input type="button" value="Detail Post"
 								onclick="postExcelTransaction();"></td>
 
 							<td><input type="button" value="Delete"
@@ -167,26 +167,6 @@
 								<h3 class="box-title">${fx}</h3>
 							</div>
 
-							<%
-								if (request.getParameter("sucess") != null) {
-							%>>
-							<div class="alert alert-success">
-								<strong> <%=request.getParameter("sucess")%>
-								</strong>
-							</div>
-							<%
-								}
-							%>
-							<%
-								if (request.getParameter("error") != null) {
-							%>>
-							<div class="alert alert-danger">
-								<strong> <%=request.getParameter("error")%>
-								</strong>
-							</div>
-							<%
-								}
-							%>
 
 							<!-- /.box-header -->
 							<div class="box-body table-responsive">
@@ -197,7 +177,7 @@
 									<tbody></tbody>
 
 								</table>
-
+								<div id="jsdiv" class='table-responsive'></div>
 
 
 								<table id="example1" class="table table-bordered table-striped">
@@ -323,9 +303,6 @@
 	</script>
 
 	<script src="<c:url value="/resources/function/Netting/Netting.js" />"></script>
-
-
-
 
 </body>
 </html>
