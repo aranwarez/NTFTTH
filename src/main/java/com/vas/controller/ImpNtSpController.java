@@ -6,9 +6,7 @@
 package com.vas.controller;
 
 import com.dao.CommonDateDao;
-import com.dao.CpDao;
 import com.dao.ImpNtSpDao;
-import com.dao.PackageDao;
 import com.dao.SpDao;
 import com.dao.VASServiceDao;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -19,7 +17,6 @@ import com.model.UserInformationModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;

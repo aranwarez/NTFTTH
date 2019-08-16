@@ -23,11 +23,7 @@
 </c:forEach>
 
 <script>
-	var IsLoggedIn = new Boolean(false);
 	function getSubMenu(sn, PARENT_MENU, ROLE_CODE) {
-		jQuery.ajaxSetup({
-			async : false
-		});
 		var array = {};
 		var innerHtml;
 
@@ -48,16 +44,16 @@
 											response,
 											function(index, value) {
 
-												innerHtml = "<li><a  href=" + value.menu_URL + "><i class='fa fa-circle-o'></i>"
+												innerHtml = "<li><a  href=" + value.menu_URL + "><i class='fa fa-circle-o'></i><span>"
 														+ value.menu_DESC
-														+ " </a></li>";
-												if (value.menu_CODE == 'M0003001'
-														|| value.menu_CODE == 'SUPER002') {
-													// alert('sadsad');
-													innerHtml = "<li><a  href=" + value.menu_URL + " target='_blank'><i class='fa fa-circle-o'></i>"
-															+ value.menu_DESC
-															+ " </a></li>";
-												}
+														+ " </span></a></li>";
+												// 												if (value.menu_CODE == 'M0003001'
+												// 														|| value.menu_CODE == 'SUPER002') {
+												// 													// alert('sadsad');
+												// 													innerHtml = "<li><a  href=" + value.menu_URL + " target='_blank'><i class='fa fa-circle-o'></i>"
+												// 															+ value.menu_DESC
+												// 															+ " </a></li>";
+												// 												}
 
 												$("#details" + sn).append(
 														innerHtml);

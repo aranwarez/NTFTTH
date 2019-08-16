@@ -140,7 +140,6 @@ public class ImpNtSpDao {
     public String saveImpNtSp(String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH, String SERVICE_CODE, String NT_SP,
             String CATEGORY, String CP_DESC, String S_NO, String ESME_CODE, String MO_1ST, String MT_1ST, String USER) throws SQLException {
         Connection con = DbCon.getConnection();
-        String transid = null;
         try {
 
             String qry = "INSERT INTO TMP_IMP_SMS_NT_SP (TRANS_NO, SEQ_NO, IMP_YEAR, IMP_PERIOD, IMP_MONTH, SERVICE_CODE, \n"

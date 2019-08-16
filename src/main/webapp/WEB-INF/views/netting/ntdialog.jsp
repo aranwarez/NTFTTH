@@ -80,7 +80,7 @@
                             <td>
                                 <label for="NTSP">NT/SP</label> 
                                 <select style="width: 80px;" class="form-control"
-                                        name="NT_SP" id=NT_SP">
+                                        name="NT_SP" id="NT_SP">
                                     <option value='NT'>NT</option>
                                     <option value='SP'>SP</option>
                                 </select>

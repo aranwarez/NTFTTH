@@ -1,3 +1,22 @@
+//validation code
+function validateform(Parameters) {
+	var item = 0;
+	$.each(Parameters, function(key, value) {
+		if (isempty(value)) {
+			item = key;
+		}
+		return (!isempty(value));
+	});
+	return item;
+};
+
+function isempty(object) {
+	if (object == "" || object === "" || typeof (object) === "undefined") {
+		return true;
+	} else
+		return false;
+}
+
 function getImpNtspFilterList() {
 	var year = $("#QIMP_YEAR").val();
 	var period = $("#QIMP_PERIOD").val();
@@ -160,7 +179,6 @@ function saveImpntsp() {
 		return;
 	}
 	// alert('Invalid sp code!!!');
-	var CODE = $("#TRANS_NO").val();
 	var IMP_YEAR = $("#IMP_YEAR").val();
 	var IMP_PERIOD = $("#IMP_PERIOD").val();
 	var IMP_MONTH = $("#IMP_MONTH").val();
@@ -172,9 +190,24 @@ function saveImpntsp() {
 	var ESME_CODE = $("#ESME_CODE").val();
 	var MO_1ST = $("#MO_1ST").val();
 	var MT_1ST = $("#MT_1ST").val();
+
+	var valid = validateform({
+		IMP_YEAR : IMP_YEAR,
+		IMP_PERIOD : IMP_PERIOD,
+		IMP_MONTH : IMP_MONTH,
+		NT_SP : NT_SP,
+		CP_DESC : CP_DESC,
+		S_NO : S_NO,
+		ESME_CODE : ESME_CODE
+
+	});
+
+	if (valid !== 0) {
+		alert("Invalid !!!!! " + valid)
+		return false;
+	}
 	// alert("nabin"+SHORT_CODE);
-	$.post('Netttingimpntsp/saveJS', {
-		TRANS_NO : CODE,
+	$.post('Netting/saveNTSP', {
 		IMP_YEAR : IMP_YEAR,
 		IMP_PERIOD : IMP_PERIOD,
 		IMP_MONTH : IMP_MONTH,
@@ -192,4 +225,94 @@ function saveImpntsp() {
 			location.reload();
 		}
 	});
+}
+
+function postExcelTransaction() {
+	// validation before posting
+
+	var param = {
+		IMP_YEAR : $('#QIMP_YEAR').val(),
+		Period : $('#QIMP_PERIOD').val(),
+		SERVICE_CODE : $('#QSERVICE_CODE').val(),
+		IMP_PERIOD : $('#QIMP_PERIOD').val(),
+		IMP_MONTH : $('#QIMP_MONTH').val(),
+		NT_SP : $('#QNT_SP').val()
+	};
+	var valid = validateform(param);
+	if (valid !== 0) {
+		alert("Invalid !!!!! " + valid)
+		return false;
+	}
+
+	// --------------------
+
+	$.post('Netting/postExcelDataTransaction', {
+		IMP_YEAR : $('#QIMP_YEAR').val(),
+		Period : $('#QIMP_PERIOD').val(),
+		Services : $('#QSERVICE_CODE').val(),
+		IMP_PERIOD : $('#QIMP_PERIOD').val(),
+		IMP_MONTH : $('#QIMP_MONTH').val(),
+		NT_SP : $('#QNT_SP').val()
+
+	}, function(data) {
+		alert(data);
+		if (data.substring(0, 6) === "Succes") {
+			location.reload();
+		}
+
+	});
+
+}
+
+// Append table for Sharing and Non Sharing
+function sharingnetting(a) {
+	$('#jsdiv').empty();
+	var table = '<table id="jstable">';
+	table = table + '<thead>'
+	table = table + '<td>Month</td><td>ESME_CODE</td>';
+	table = table
+			+ "<td>SHARING_TYPE</td><td>SHARE_NT_PER</td>	<td>RATE</td>	<td>START_DT</td>	<td>MO1NT</td>	<td>MT1NT</td>	<td>MO1SP</td>	<td>MT1SP</td>	<td>MO1FINAL</td>	<td>MT1FINAL</td>	<td>REDUCE1</td>	<td>MO_MT_RATIO</td>	<td>BILL_MT</td>	<td>ROYALTY_PER</td>	<td>VAT_PER</td>	<td>POST_FLAG</td>	";
+	table = table + '</thead></table>';
+	$('#jsdiv').append(table);
+
+	var year = $("#QIMP_YEAR").val();
+	var period = $("#QIMP_PERIOD").val();
+	var month = $("#QIMP_MONTH").val();
+	var service = $("#QSERVICE_CODE").val();
+
+	var postflag = $("#QPOST_FLAG").val();
+	if (service == 'SMS') {
+		$("#thmo").html("MO");
+	} else {
+
+		$("#thmo").html("MIN");
+	}
+	reponse = null;
+
+	$.get('netting/getSharingData', {
+		IMP_YEAR : year,
+		IMP_PERIOD : period,
+		IMP_MONTH : month,
+		SERVICE_CODE : service,
+		SHARING_TYPE : a,
+		POST_FLAG : postflag
+	}, function(response) {
+
+		if (response !== null) {
+			debugger;
+			temp = $('#jstable').DataTable();
+			temp.clear().draw();
+			$.each(response, function(key, value) {
+				$("#jstable").dataTable().fnAddData(
+						[ value.IMP_MONTH, value.ESME_CODE, value.SHARING_TYPE,
+								value.SHARE_NT_PER, value.RATE, value.START_DT,
+								value.MO1NT, value.MT1NT, value.MO1SP,
+								value.MT1SP, value.MO1FINAL, value.MT1FINAL,
+								value.REDUCE1, value.MO_MT_RATIO,
+								value.MO_MT_RATIO, value.BILL_MT,
+								value.ROYALTY_PER, value.VAT_PER ]);
+			});
+		}
+	});
+
 }
