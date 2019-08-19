@@ -628,3 +628,12 @@ EXCEPTION
        RAISE;
 END VAS_NETTING;
 /
+------------------query for cp_detail
+SELECT a.*, (SELECT rate FROM m_cp_detail 
+WHERE cp_code=a.cp_code 
+AND effective_dt=(SELECT max(effective_dt) FROM m_cp_detail WHERE cp_code=a.cp_code)) RATE,
+(SELECT max(effective_dt) FROM m_cp_detail WHERE cp_code=a.cp_code) EFFECTIVE_DT
+common.to_bs(SELECT max(effective_dt) FROM m_cp_detail WHERE cp_code=a.cp_code) NEP_EFFECTIVE_DT
+FROM m_cp a
+WHERE service_code in('APP','WAP','IVR')
+ORDER BY a.esme_code
