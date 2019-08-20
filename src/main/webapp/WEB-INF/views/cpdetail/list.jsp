@@ -63,7 +63,7 @@
                 <div class="content-wrapper">
                     <!-- Content Header (Page header) -->
                     <section class="content-header">
-                        <h1>VAS Provider's Client Profile</h1>
+                        <h1>VAS Provider's Client Rate</h1>
                         <ol class="breadcrumb">
                             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                             <li><a href="#">Tables</a></li>
@@ -83,24 +83,21 @@
                                 </select>
                             </td> 
                             <td>Service Provider Services</td>      
-                                <td>  
-                                    <select  style="width: 200px;" name="QSERVICE_CODE" id="QSERVICE_CODE" > 
-                                        <option value=''>Select :</option>
+                            <td>  
+                                <select  style="width: 200px;" name="QSERVICE_CODE" id="QSERVICE_CODE" > 
+                                    <option value=''>Select :</option>
                                     <c:forEach var="VASSER" items="${VASSer_list}">
                                         <option value="${VASSER.SERVICE_CODE}"> ${VASSER.SERVICE_CODE}</option>
                                     </c:forEach>
                                 </select>
                             </td>
                             <td>
-                                <input type="button" value="QUERY" onclick="getCpFilterList();">    
+                                <input type="button" value="QUERY" onclick="getCpdetailFilterList();">    
                             </td>
-                            
+
                         </tr>
                     </table> 
-                    
-                    <a href="#" class="btn btn-primary pull-right" data-toggle="modal"
-                       data-target="#myModal"> <i class="fa fa-plus"></i> Add
-                    </a>
+
                 </section>
 
                 <!-- Main content -->
@@ -143,24 +140,13 @@
                                             <tr>
                                                 <th>Cp Code</th>
                                                 <th>Sp Code</th>
-                                                <th>Service Provider</th>
+                                                <th>VAS Provider</th>
                                                 <th>Service Code</th>
                                                 <th>CP Name</th>
                                                 <th>ESME CODE</th>
-                                                <th>CategoryMap</th>
-                                                <th>ESMECodeMap</th>
-                                                <th>Srv. For</th>
-                                                <th>Package Type</th>
-                                                <th>Stream Type</th>
-                                                <th>Start Dt.</th>
-                                                <th>End Dt.</th>
-                                                <th>Sharing Type</th>
-                                                <th>Share(%)</th>
-                                                <th>AFS</th>
-                                                <th>Min Qty</th>
-                                                <th>Rental</th>
-                                                <th>VPN</th>
-                                                <th>Space</th>
+                                                <th>Rate</th>
+                                                <th>Effective Dt</th>
+                                                <th>Add</th>
                                                 <th>Edit</th>
                                                 <th>Delete</th>
 
@@ -175,26 +161,20 @@
                                                     <td>${user.SERVICE_CODE}</td>
                                                     <td>${user.CP_NAME}</td>
                                                     <td>${user.ESME_CODE}</td>
-                                                    <td>${user.CATEGORY_MAP}</td>
-                                                    <td>${user.ESME_CODE_MAP}</td>
-                                                    <td>${user.SRV_FOR}</td>
-                                                    <td>${user.PACKAGE_TYPE}</td>
-                                                    <td>${user.STREAM_TYPE}</td>
-                                                    <td>${user.START_DT}</td>
-                                                    <td>${user.END_DT}</td>
-                                                    <td>${user.SHARING_TYPE}</td>
-                                                    <td>${user.SHARE_NT_PER}</td>
-                                                    <td>${user.AFS_FLAG}</td>
-                                                    <td>${user.MIN_QTY}</td>
-                                                    <td>${user.RENTAL_ITEM_CODE}</td>
-                                                    <td>${user.VPN_ITEM_CODE}</td>
-                                                    <td>${user.SPACE_ITEM_CODE}</td>
-
+                                                    <td>${user.RATE}</td>
+                                                    <td>${user.NEP_EFFECTIVE_DT}</td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <a href="#" class="btn btn-info" data-toggle="modal"
+                                                               data-target="#myModal" > <i class="fa fa-plus"></i> Add
+                                                            </a>
+                                                        </div>
+                                                    </td>
                                                     <td>
                                                         <div class="btn-group">
                                                             <a href="#" class="btn btn-info" data-toggle="modal"
                                                                data-target="#editModal"
-                                                               onclick="return editCp('${user.CP_CODE}')"> <i
+                                                               onclick="return editCpdetail('${user.CP_CODE}')"> <i
                                                                     class="fa fa-edit"></i> Edit
                                                             </a>
                                                         </div>
@@ -203,7 +183,7 @@
                                                         <div>
                                                             <a href="" class="btn btn-default" data-toggle="modal"
                                                                data-target="#deleteModal"
-                                                               onclick="return deleteCp('${user.CP_CODE}')"> <i
+                                                               onclick="return deleteCpdetail('${user.CP_CODE}')"> <i
                                                                     class="fa fa-trash"></i> Delete
                                                             </a>
                                                         </div>
@@ -246,7 +226,7 @@
             </div>
             <!-- ./wrapper -->
 
-        <jsp:include page="${request.contextPath}/dialogcp"></jsp:include>
+        <jsp:include page="${request.contextPath}/dialogcpdetail"></jsp:include>
 
         <jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
@@ -257,7 +237,7 @@
 
                 })
             </script>
-            <script src="<c:url value="/resources/function/cp.js" />"></script>
+            <script src="<c:url value="/resources/function/cpdetail.js" />"></script>
 
 
 

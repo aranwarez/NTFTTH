@@ -26,7 +26,7 @@ public class CpDao {
         Connection con = DbCon.getConnection();
         try {
             PreparedStatement pst = con.prepareStatement("SELECT M.CP_CODE, M.SP_CODE, A.SP_NAME, M.SERVICE_CODE, \n"
-                    + "M.CP_NAME, M.ESME_CODE, M.SRV_FOR, M.PACKAGE_TYPE, M.STREAM_TYPE, common.to_bs(M.START_DT) START_DT, common.to_bs(M.END_DT) END_DT, M.SHARING_TYPE, M.SHARE_NT_PER, M.AFS_FLAG, M.MIN_QTY\n"
+                    + "M.CP_NAME, M.ESME_CODE, M.SRV_FOR, M.PACKAGE_TYPE, M.STREAM_TYPE, common.to_bs(M.START_DT) START_DT, common.to_bs(M.END_DT) END_DT, M.SHARING_TYPE, M.SHARE_NT_PER, M.AFS_FLAG, M.MIN_QTY, M.CATEGORY_MAP, M.ESME_CODE_MAP,M.RENTAL_ITEM_CODE,M.VPN_ITEM_CODE,M.SPACE_ITEM_CODE\n"
                     + "FROM M_CP M, M_SP A\n"
                     + "WHERE A.SP_CODE=M.SP_CODE\n"
                     + "AND A.SP_CODE=NVL(?,A.SP_CODE)\n"
@@ -56,16 +56,18 @@ public class CpDao {
 
     public String saveCp(String SP_CODE, String SERVICE_CODE, String CP_NAME, String ESME_CODE,
             String SRV_FOR, String PACKAGE_TYPE, String STREAM_TYPE, String START_DT, String END_DT, 
-            String SHARING_TYPE,  String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, String USER) throws SQLException {
+            String SHARING_TYPE,  String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, String USER, 
+            String  CATEGORY_MAP, String ESME_CODE_MAP, String RENTAL_ITEM_CODE, String VPN_ITEM_CODE, 
+            String SPACE_ITEM_CODE) throws SQLException {
         Connection con = DbCon.getConnection();
         String transid = null;
         try {
             String qry = "INSERT INTO M_CP (CP_CODE, SP_CODE, SERVICE_CODE, CP_NAME, ESME_CODE, SRV_FOR, \n"
                     + "   PACKAGE_TYPE, STREAM_TYPE, START_DT, END_DT, SHARING_TYPE, SHARE_NT_PER, \n"
-                    + "   AFS_FLAG, MIN_QTY, CREATE_BY, CREATE_DT) \n"
+                    + "   AFS_FLAG, MIN_QTY, CREATE_BY, CREATE_DT, CATEGORY_MAP, ESME_CODE_MAP, RENTAL_ITEM_CODE, VPN_ITEM_CODE, SPACE_ITEM_CODE) \n"
                     + "VALUES (lpad(SEQ_CP_CODE.NEXTVAL,8,'0'), ?, ?, ?, ?, ?,\n"
                     + "    ?, ?, common.to_ad(?), common.to_ad(?), ?, ?,\n"
-                    + "    ?, ?, ?, SYSDATE )";
+                    + "    ?, ?, ?, SYSDATE, ?, ?,?,?,? )";
             PreparedStatement pst = con.prepareStatement(qry);
             pst.setString(1, SP_CODE);
             pst.setString(2, SERVICE_CODE);
@@ -81,6 +83,11 @@ public class CpDao {
             pst.setString(12, AFS_FLAG);
             pst.setString(13, MIN_QTY);
             pst.setString(14, USER);
+            pst.setString(15, CATEGORY_MAP);
+            pst.setString(16, ESME_CODE_MAP);
+            pst.setString(17, RENTAL_ITEM_CODE);
+            pst.setString(18, VPN_ITEM_CODE);
+            pst.setString(19, SPACE_ITEM_CODE);
             pst.executeUpdate();
             return "Succesfully Saved Content Provider";
         } catch (Exception e) {
@@ -94,7 +101,8 @@ public class CpDao {
 
     public String updateCp(String CP_CODE, String SP_CODE, String SERVICE_CODE, String CP_NAME, String ESME_CODE,
             String SRV_FOR, String PACKAGE_TYPE, String STREAM_TYPE, String START_DT, String END_DT, String SHARING_TYPE,
-            String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, String USER) throws SQLException {
+            String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, String USER, String  CATEGORY_MAP, String ESME_CODE_MAP,
+            String RENTAL_ITEM_CODE, String VPN_ITEM_CODE, String SPACE_ITEM_CODE) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
             String qry = "UPDATE M_CP\n"
@@ -102,7 +110,7 @@ public class CpDao {
                     + "       ESME_CODE    = ?, SRV_FOR      = ?,  PACKAGE_TYPE = ?,\n"
                     + "       STREAM_TYPE  = ?, START_DT = common.to_ad(?),  END_DT       = common.to_ad(?),\n"
                     + "       SHARING_TYPE = ?,  SHARE_NT_PER = ?,   AFS_FLAG     = ?,\n"
-                    + "       MIN_QTY      = nvl(?,0),    UPDATE_BY    = ?,   UPDATE_DT    = sysdate\n"
+                    + "       MIN_QTY      = nvl(?,0),    UPDATE_BY    = ?,   UPDATE_DT    = sysdate, CATEGORY_MAP=?, ESME_CODE_MAP=?, RENTAL_ITEM_CODE=?, VPN_ITEM_CODE=?, SPACE_ITEM_CODE=?\n"
                     + "WHERE  CP_CODE      = ?";
             PreparedStatement pst = con.prepareStatement(qry);
             pst.setString(1, SP_CODE);
@@ -119,7 +127,12 @@ public class CpDao {
             pst.setString(12, AFS_FLAG);
             pst.setString(13, MIN_QTY);
             pst.setString(14, USER);
-            pst.setString(15, CP_CODE);
+            pst.setString(15, CATEGORY_MAP);
+            pst.setString(16, ESME_CODE_MAP);
+            pst.setString(17, RENTAL_ITEM_CODE);
+            pst.setString(18, VPN_ITEM_CODE);
+            pst.setString(19, SPACE_ITEM_CODE);
+            pst.setString(20, CP_CODE);
             pst.executeUpdate();
             return "Succesfully Updated";
         } catch (Exception e) {
