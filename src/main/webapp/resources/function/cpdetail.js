@@ -20,8 +20,9 @@ function getCpdetailFilterList() {
     jQuery.ajaxSetup({async: false});
     var sp_code = $("#QSP_CODE").val();
     var service = $("#QSERVICE_CODE").val();
+    var cp_code="";
     reponse = null;
-    $.get('../cpdetail/getCpDetaillist', {SP_CODE: sp_code, SERVICE_CODE: service
+    $.get('../cpdetail/getCpDetaillist', {SP_CODE: sp_code, SERVICE_CODE: service, CP_CODE: cp_code
     }, function (response) {
         //  alert(JSON.stringify(response));
         if (response !== null) {
@@ -37,6 +38,7 @@ function getCpdetailFilterList() {
                     value.SERVICE_CODE,
                     value.CP_NAME,
                     value.ESME_CODE,
+                    value.PACKAGE_TYPE,
                     value.RATE,
                     value.NEP_EFFECTIVE_DT,
                     '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="return addCp(\'' + value.CP_CODE + '\')"> <i class="fa fa-plus"></i> Add </a>',
@@ -63,8 +65,9 @@ function addCp(code) {
             $("#SERVICE_CODE").val(row[i][3]);
             $("#CP_NAME").val(row[i][4]);
             $("#ESME_CODE").val(row[i][5]);
-            $("#RATE").val(row[i][6]);
-            $("#EFFECTIVE_DT").val(row[i][7]);
+            $("#PACKAGE_TYPE").val(row[i][6]);
+            //$("#RATE").val(row[i][7]);
+            //$("#EFFECTIVE_DT").val(row[i][8]);
             jQuery.ajaxSetup({async: true});
         }
     }

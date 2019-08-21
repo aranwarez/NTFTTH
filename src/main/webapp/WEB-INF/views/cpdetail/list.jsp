@@ -144,6 +144,7 @@
                                                 <th>Service Code</th>
                                                 <th>CP Name</th>
                                                 <th>ESME CODE</th>
+                                                <th>Package</th>
                                                 <th>Rate</th>
                                                 <th>Effective Dt</th>
                                                 <th>Add</th>
@@ -161,6 +162,7 @@
                                                     <td>${user.SERVICE_CODE}</td>
                                                     <td>${user.CP_NAME}</td>
                                                     <td>${user.ESME_CODE}</td>
+                                                    <td>${user.PACKAGE_TYPE}</td>
                                                     <td>${user.RATE}</td>
                                                     <td>${user.NEP_EFFECTIVE_DT}</td>
                                                     <td>

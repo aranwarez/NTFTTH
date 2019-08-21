@@ -22,7 +22,7 @@ import util.DbCon;
  */
 public class CpDetailDao {
 
-    public List<Map<String, Object>> getCpDetailList(String SP_CODE, String SERVICE_CODE) throws SQLException {
+    public List<Map<String, Object>> getCpDetailList(String SP_CODE, String SERVICE_CODE, String CP_CODE) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
             PreparedStatement pst = con.prepareStatement("SELECT a.cp_code, a.sp_code, a.service_code, a.esme_code, a.cp_name, (SELECT sp_name FROM m_sp WHERE sp_code=a.sp_code) sp_name,\n"
@@ -30,14 +30,15 @@ public class CpDetailDao {
                     + "WHERE cp_code=a.cp_code \n"
                     + "AND effective_dt=(SELECT max(effective_dt) FROM m_cp_detail WHERE cp_code=a.cp_code)) RATE,\n"
                     + "(SELECT max(effective_dt) FROM m_cp_detail WHERE cp_code=a.cp_code) EFFECTIVE_DT,\n"
-                    + "(SELECT common.to_bs(max(effective_dt)) FROM m_cp_detail WHERE cp_code=a.cp_code) NEP_EFFECTIVE_DT \n"
-                    + "FROM m_cp a\n"
+                    + "(SELECT common.to_bs(max(effective_dt)) FROM m_cp_detail WHERE cp_code=a.cp_code) NEP_EFFECTIVE_DT, \n"
+                    + "((SELECT description FROM m_package_type WHERE package_type=a.package_type)|| '-'||a.package_type) PACKAGE_TYPE FROM m_cp a\n"
                     + "WHERE a.service_code in('APP','WAP','IVR')\n"
                     + "AND a.sp_code=nvl(?, a.sp_code)\n"
-                    + "AND a.service_code=nvl(?,a.service_code)\n"
+                    + "AND a.service_code=nvl(?,a.service_code) AND a.cp_code=nvl(?,a.cp_code)\n"
                     + "ORDER BY a.sp_code, a.service_code, a.esme_code");
             pst.setString(1, SP_CODE);
             pst.setString(2, SERVICE_CODE);
+            pst.setString(3, CP_CODE);
             ResultSet rs = pst.executeQuery();
             List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
             Map<String, Object> row = null;
@@ -59,6 +60,40 @@ public class CpDetailDao {
         return null;
     }
 
+    public List<Map<String, Object>> getCpDetailListAll(String SP_CODE, String SERVICE_CODE, String CP_CODE) throws SQLException {
+        Connection con = DbCon.getConnection();
+        try {
+            PreparedStatement pst = con.prepareStatement("SELECT a.cp_code, a.sp_code, a.service_code, a.esme_code, a.cp_name,\n"
+                    + "(SELECT sp_name FROM m_sp WHERE sp_code=a.sp_code) sp_name, b.RATE, b.effective_dt, common.to_bs(b.effective_dt) nep_effective_dt\n"
+                    + "((SELECT description FROM m_package_type WHERE package_type=a.package_type)|| '-'||a.package_type) PACKAGE_TYPE FROM m_cp a, m_cp_detail b \n"
+                    + "WHERE a.cp_code=b.cp_code AND a.service_code in('APP','WAP','IVR')\n"
+                    + "AND a.sp_code=nvl(?, a.sp_code)\n"
+                    + "AND a.service_code=nvl(?,a.service_code) AND a.cp_code=nvl(?,a.cp_code)\n"
+                    + "ORDER BY a.sp_code, a.service_code, a.esme_code, effective_dt");
+            pst.setString(1, SP_CODE);
+            pst.setString(2, SERVICE_CODE);
+            pst.setString(3, CP_CODE);
+            ResultSet rs = pst.executeQuery();
+            List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+            Map<String, Object> row = null;
+            ResultSetMetaData metaData = rs.getMetaData();
+            Integer columnCount = metaData.getColumnCount();
+            while (rs.next()) {
+                row = new HashMap<String, Object>();
+                for (int i = 1; i <= columnCount; i++) {
+                    row.put(metaData.getColumnName(i), rs.getObject(i));
+                }
+                resultList.add(row);
+            }
+            return resultList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            con.close();
+        }
+        return null;
+    }
+    
     public String saveCpDetail(String CP_CODE, String RATE, String EFFECTIVE_DT, String USER
     ) throws SQLException {
         Connection con = DbCon.getConnection();

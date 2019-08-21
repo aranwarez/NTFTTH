@@ -33,7 +33,7 @@ public class CpDetailController {
     private static final Logger logger = LoggerFactory.getLogger(CpDetailController.class);
 
     @RequestMapping(value = "/cpdetail/list", method = RequestMethod.GET)
-    public String cpdetaillist(String SP_CODE, String SERVICE_CODE, Locale locale, Model model) throws SQLException {
+    public String cpdetaillist(String SP_CODE, String SERVICE_CODE, String CP_CODE, Locale locale, Model model) throws SQLException {
         logger.info("Getting Content Provider List", locale);
         CpDao dao = new CpDao();
         List<Map<String, Object>> list = null;
@@ -51,10 +51,10 @@ public class CpDetailController {
     // getting list of all SP target
     @ResponseBody
     @RequestMapping(value = "/cpdetail/getCpDetaillist", method = RequestMethod.GET)
-    public List<Map<String, Object>> getCpDetaillist(String SP_CODE, String SERVICE_CODE, Locale locale, Model model,
+    public List<Map<String, Object>> getCpDetaillist(String SP_CODE, String SERVICE_CODE, String CP_CODE, Locale locale, Model model,
             HttpSession session) throws SQLException {
         CpDetailDao dao = new CpDetailDao();
-        return dao.getCpDetailList(SP_CODE, SERVICE_CODE);
+        return dao.getCpDetailList(SP_CODE, SERVICE_CODE,CP_CODE);
     }
     @RequestMapping(method = RequestMethod.GET, value = "dialogcpdetail")
     public String dialogcp(Model model, Locale locale) {

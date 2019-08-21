@@ -13,7 +13,7 @@
                         aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">New Content Provider Define</h4>
+                <h4 class="modal-title" id="myModalLabel">New Content Provider Rate Define</h4>
             </div>
 
             <div class="modal-body">
@@ -40,6 +40,9 @@
                            placeholder="Enter Content Provider"> 
                     <label  for="esmecode">ESME Code</label> 
                     <input type="text" class="form-control" name="ESME_CODE" id="ESME_CODE" readonly="true"
+                           placeholder="Enter Esme Code"> 
+                    <label  for="package">Package</label> 
+                    <input type="text" class="form-control" name="PACKAGE_TYPE" id="PACKAGE_TYPE" readonly="true"
                            placeholder="Enter Esme Code"> 
                     <table>     
                         <tr>

@@ -29,7 +29,7 @@ import com.model.UserInformationModel;
 public class NettingController {
 	private static final Logger logger = LoggerFactory.getLogger(ImpNtSpController.class);
 
-	@RequestMapping(value = "/Netting", method = RequestMethod.GET)
+	@RequestMapping(value = "/Netting/list", method = RequestMethod.GET)
 	public String menuList(Locale locale, Model model, HttpServletRequest request, HttpSession session)
 			throws Exception {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
