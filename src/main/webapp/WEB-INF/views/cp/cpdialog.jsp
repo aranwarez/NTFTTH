@@ -33,7 +33,7 @@
                     <br/> 
 
                     <label for="servicecode">Service</label> 
-                    <select style="width: 500px;" name="SERVICE_CODE"  id="SERVICE_CODE"> </select> 
+                    <select style="width: 500px;" name="SERVICE_CODE"  id="SERVICE_CODE"  onchange="getItemTariffList()"> </select> 
                     <Br> 
                     <label for="cpname">Cp Name</label> 
                     <input type="text"   class="form-control" name="CP_NAME" id="CP_NAME"
@@ -42,6 +42,46 @@
                     <input type="text" class="form-control" name="ESME_CODE" id="ESME_CODE"
                            placeholder="Enter Esme Code"> 
                     <table>
+                        <tr>
+                            <td>
+                                <label for="CategoryMap">Category Map ID</label> 
+                                <input style="width: 280px;" class="form-control" name="CATEGORY_MAP" id="CATEGORY_MAP"
+                                       placeholder="Enter Category Map ID">
+                            </td>                             
+                            <td>
+                                <label for="esmecodemap">Esme Map Code</label> 
+                                <input style="width: 280px;" class="form-control" name="ESME_CODE_MAP" id="ESME_CODE_MAP"
+                                       placeholder="Enter ESME CODE MAP"> 
+                            </td>
+                        </tr>
+                    </table>    
+                    <table>     
+                        <tr>
+                            <td>
+                                <label for="Srvfor">Srv. for</label> 
+                                <input style="width: 560px;" class="form-control" name="SRV_FOR" id="SRV_FOR"
+                                       placeholder="Enter service for">
+                            </td>                             
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="Rentalitem">Rental Charge Code</label> 
+                                <select style="width: 188px;" class="form-control" name="RENTAL_ITEM_CODE"  id="RENTAL_ITEM_CODE"> </select> 
+                            </td>                             
+                            <td>
+                                <label for="VPNitem">VPN Charge Code</label> 
+                                <select style="width: 188px;" class="form-control" name="VPN_ITEM_CODE"  id="VPN_ITEM_CODE"> </select> 
+                            </td>                            
+                            <td>
+                                <label for="Space">Space Charge Code</label> 
+                                <select style="width: 188px;" class="form-control" name="SPACE_ITEM_CODE"  id="SPACE_ITEM_CODE"> </select> 
+
+                            </td>                             
+                        </tr>
+                    </table>    
+                    <table>     
                         <tr>
                             <td>
                                 <label for="Package">Package</label> 
@@ -149,7 +189,7 @@
                         <br/> 
 
                         <label for="servicecode">Service</label> 
-                        <select style="width: 500px;" name="EDITSERVICE_CODE"  id="EDITSERVICE_CODE"> </select> 
+                        <select style="width: 500px;" name="EDITSERVICE_CODE"  id="EDITSERVICE_CODE" onchange="getItemTariffList()"> </select> 
                         <Br> 
                         <label for="cpname">Cp Name</label> 
                         <input type="text"   class="form-control" name="EDITCP_NAME" id="EDITCP_NAME"
@@ -157,6 +197,46 @@
                         <label  for="esmecode">ESME Code</label> 
                         <input type="text" class="form-control" name="EDITESME_CODE" id="EDITESME_CODE"
                                placeholder="Enter Esme Code"> 
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="CategoryMap">Category Map ID</label> 
+                                    <input style="width: 280px;" class="form-control" name="CATEGORY_MAP" id="EDITCATEGORY_MAP"
+                                           placeholder="Enter Category Map ID">
+                                </td>                             
+                                <td>
+                                    <label for="esmecodemap">Esme Map Code</label> 
+                                    <input style="width: 280px;" class="form-control" name="ESME_CODE_MAP" id="EDITESME_CODE_MAP"
+                                           placeholder="Enter ESME CODE MAP"> 
+                                </td>
+                            </tr>
+                        </table>    
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="Srvfor">Srv. for</label> 
+                                    <input style="width: 560px;" class="form-control" name="EDITSRV_FOR" id="EDITSRV_FOR"
+                                           placeholder="Enter service for">
+                                </td>                             
+                            </tr>
+                        </table>
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="Rentalitem">Rental Charge Code</label> 
+                                    <select style="width: 188px;" class="form-control" name="EDITRENTAL_ITEM_CODE"  id="EDITRENTAL_ITEM_CODE"> </select> 
+                                </td>                             
+                                <td>
+                                    <label for="VPNitem">VPN Charge Code</label> 
+                                    <select style="width: 188px;" class="form-control" name="EDITVPN_ITEM_CODE"  id="EDITVPN_ITEM_CODE"> </select> 
+                                </td>                            
+                                <td>
+                                    <label for="Space">Space Charge Code</label> 
+                                    <select style="width: 188px;" class="form-control" name="EDITSPACE_ITEM_CODE"  id="EDITSPACE_ITEM_CODE"> </select> 
+
+                                </td>                             
+                            </tr>
+                        </table>    
                         <table>
                             <tr>
                                 <td>

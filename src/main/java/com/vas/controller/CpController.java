@@ -6,6 +6,7 @@
 package com.vas.controller;
 
 import com.dao.CpDao;
+import com.dao.ItemTariffDao;
 import com.dao.PackageDao;
 import com.dao.SpDao;
 import com.dao.SpServiceDao;
@@ -35,7 +36,7 @@ public class CpController {
     private static final Logger logger = LoggerFactory.getLogger(CpController.class);
 
     @RequestMapping(value = "/cp/list", method = RequestMethod.GET)
-    public String cplist(String SP_CODE, String SERVICE_CODE, Locale locale, Model model) throws SQLException {
+    public String cplist(String SP_CODE, String SERVICE_CODE, String ITEM_CODE, Locale locale, Model model) throws SQLException {
         logger.info("Getting Content Provider List", locale);
         CpDao dao = new CpDao();
         List<Map<String, Object>> list = null;
@@ -57,6 +58,9 @@ public class CpController {
         model.addAttribute("Service_list", ser.getSpServiceList(SP_CODE));
         VASServiceDao VASSER = new VASServiceDao();
         model.addAttribute("VASSer_list", VASSER.getVasServiceList());
+        ItemTariffDao item = new ItemTariffDao();
+        model.addAttribute("ItemTariff_list", item.getItemTariffCodeList(SERVICE_CODE, ITEM_CODE));
+        
         
         //COADao COA = new COADao();
         //model.addAttribute("COA_list", COA.getCOAlist());
@@ -78,7 +82,8 @@ public class CpController {
     @ResponseBody
     public String saveJSCp(String CP_CODE, String SP_CODE, String SERVICE_CODE, String CP_NAME, String ESME_CODE,
             String SRV_FOR, String PACKAGE_TYPE, String STREAM_TYPE, String START_DT, String END_DT, String SHARING_TYPE,
-            String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, HttpSession session, Model model, Locale locale) {
+            String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, String  CATEGORY_MAP, String ESME_CODE_MAP, 
+            String RENTAL_ITEM_CODE, String VPN_ITEM_CODE, String SPACE_ITEM_CODE, HttpSession session, Model model, Locale locale) {
 
         logger.info("Save content provider {}.", locale);
         CpDao dao = new CpDao();
@@ -91,7 +96,8 @@ public class CpController {
         try {
             msg = dao.saveCp(SP_CODE, SERVICE_CODE, CP_NAME, ESME_CODE, SRV_FOR,
                     PACKAGE_TYPE, STREAM_TYPE, START_DT, END_DT, SHARING_TYPE,
-                    SHARE_NT_PER, AFS_FLAG, MIN_QTY, USER);
+                    SHARE_NT_PER, AFS_FLAG, MIN_QTY, USER, CATEGORY_MAP, ESME_CODE_MAP, 
+                    RENTAL_ITEM_CODE, VPN_ITEM_CODE, SPACE_ITEM_CODE);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -108,7 +114,8 @@ public class CpController {
     @ResponseBody
     public String updateCp(String CP_CODE, String SP_CODE, String SERVICE_CODE, String CP_NAME, String ESME_CODE,
             String SRV_FOR, String PACKAGE_TYPE, String STREAM_TYPE, String START_DT, String END_DT, String SHARING_TYPE,
-            String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, HttpSession session, Model model, Locale locale) {
+            String SHARE_NT_PER, String AFS_FLAG, String MIN_QTY, String  CATEGORY_MAP, String ESME_CODE_MAP, 
+            String RENTAL_ITEM_CODE, String VPN_ITEM_CODE, String SPACE_ITEM_CODE, HttpSession session, Model model, Locale locale) {
 
         logger.info("Updata Content Provider {}.", locale);
         CpDao dao = new CpDao();
@@ -121,7 +128,8 @@ public class CpController {
         try {
             msg = dao.updateCp(CP_CODE, SP_CODE, SERVICE_CODE, CP_NAME, ESME_CODE, SRV_FOR,
                     PACKAGE_TYPE, STREAM_TYPE, START_DT, END_DT, SHARING_TYPE,
-                    SHARE_NT_PER, AFS_FLAG, MIN_QTY, USER);
+                    SHARE_NT_PER, AFS_FLAG, MIN_QTY, USER, CATEGORY_MAP, ESME_CODE_MAP,
+                    RENTAL_ITEM_CODE, VPN_ITEM_CODE, SPACE_ITEM_CODE);
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -147,4 +155,12 @@ public class CpController {
 
     }
 
+    // getting list of all SP wise Service List
+    @ResponseBody
+    @RequestMapping(value = "/cp/getItemTariffList", method = RequestMethod.GET)
+    public List<Map<String, Object>> getItemTariffList(String SERVICE_CODE, String ITEM_CODE, Locale locale, Model model, HttpSession session)
+            throws SQLException {
+        ItemTariffDao dao = new ItemTariffDao();
+        return dao.getItemTariffCodeList(SERVICE_CODE, ITEM_CODE);         
+    }
 }

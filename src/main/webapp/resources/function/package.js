@@ -1,6 +1,6 @@
 function savePackage() {
     //debugger;
-    if ($('#PACKAGE_TYPE') == null || $('#PACKAGE_TYPE') == "" || $('#PACKAGE_TYPE').val().length > 8) {
+    if ($('#PACKAGE_TYPE') == null || $('#PACKAGE_TYPE') == "" || $('#PACKAGE_TYPE').val().length > 10) {
         alert('Invalid Package Type!!!');
         return;
     }
