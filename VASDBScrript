@@ -923,3 +923,7 @@ EXCEPTION
        RAISE;
 END VAS_NETTING;
 /
+----------------------------
+22aug2019
+---------------------
+alter table m_item add (cash_sale_flag varchar2(1), active_flag varchar2(1))
