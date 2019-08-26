@@ -138,7 +138,7 @@
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Cp Code</th>
+	                                            <th>Cp Code</th>
                                                 <th>Sp Code</th>
                                                 <th>VAS Provider</th>
                                                 <th>Service Code</th>
@@ -153,46 +153,7 @@
 
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <c:forEach var="user" items="${data_list}">
-                                                <tr>
-                                                    <td>${user.CP_CODE}</td>
-                                                    <td>${user.SP_CODE}</td>
-                                                    <td>${user.SP_NAME}</td>
-                                                    <td>${user.SERVICE_CODE}</td>
-                                                    <td>${user.CP_NAME}</td>
-                                                    <td>${user.ESME_CODE}</td>
-                                                    <td>${user.PACKAGE_TYPE}</td>
-                                                    <td>${user.RATE}</td>
-                                                    <td>${user.NEP_EFFECTIVE_DT}</td>
-                                                    <td>
-                                                        <div class="btn-group">
-                                                            <a href="#" class="btn btn-info" data-toggle="modal"
-                                                               data-target="#myModal" > <i class="fa fa-plus"></i> Add
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="btn-group">
-                                                            <a href="#" class="btn btn-info" data-toggle="modal"
-                                                               data-target="#editModal"
-                                                               onclick="return editCpdetail('${user.CP_CODE}')"> <i
-                                                                    class="fa fa-edit"></i> Edit
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div>
-                                                            <a href="" class="btn btn-default" data-toggle="modal"
-                                                               data-target="#deleteModal"
-                                                               onclick="return deleteCpdetail('${user.CP_CODE}')"> <i
-                                                                    class="fa fa-trash"></i> Delete
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
-                                        </tbody>
+                                        
                                     </table>
                                 </div>
                                 <!-- /.box-body -->
