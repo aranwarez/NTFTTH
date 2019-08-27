@@ -63,7 +63,7 @@
                 <div class="content-wrapper">
                     <!-- Content Header (Page header) -->
                     <section class="content-header">
-                        <h1>VAS Provider's Client Rate</h1>
+                        <h1>Item Tariff Entry</h1>
                         <ol class="breadcrumb">
                             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                             <li><a href="#">Tables</a></li>
@@ -72,32 +72,34 @@
                         <br/>
                         <br/>
                         <table>
-                            <tr>
-                                <td>Service Provider </td>      
-                                <td>  
-                                    <select style="width: 400px;" name="QSP_CODE" id="QSP_CODE"> 
-                                        <option value=''>Select :</option>
-                                    <c:forEach var="SP" items="${Sp_list}">
-                                        <option value="${SP.SP_CODE}">${SP.SP_NAME} ${SP.SP_CODE}</option>
-                                    </c:forEach>
-                                </select>
-                            </td> 
                             <td>Service Provider Services</td>      
                             <td>  
                                 <select  style="width: 200px;" name="QSERVICE_CODE" id="QSERVICE_CODE" > 
                                     <option value=''>Select :</option>
-                                    <c:forEach var="VASSER" items="${VASSer_list}">
-                                        <option value="${VASSER.SERVICE_CODE}"> ${VASSER.SERVICE_CODE}</option>
-                                    </c:forEach>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="button" value="QUERY" onclick="getCpdetailFilterList();">    
-                            </td>
+                                <c:forEach var="VASSER" items="${VASSer_list}">
+                                    <option value="${VASSER.SERVICE_CODE}"> ${VASSER.SERVICE_CODE}</option>
+                                </c:forEach>
+                            </select>
+                        </td>
+                        <td>ITEM_CODE</td>      
+                        <td>  
+                            <select  style="width: 200px;" name="QITEM_CODE" id="QITEM_CODE" > 
+                                <option value=''>Select :</option>
+                                <c:forEach var="ITEM" items="${Item_list}">
+                                    <option value="${ITEM.ITEM_CODE}"> ${ITEM.ITEM_CODE} ${ITEM.DESCRIPTION}</option>
+                                </c:forEach>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="button" value="QUERY" onclick="getItemtariffFilterList();">    
+                        </td>
 
                         </tr>
                     </table> 
 
+                    <a href="#" class="btn btn-primary pull-right" data-toggle="modal"
+                       data-target="#myModal"> <i class="fa fa-plus"></i> Add
+                    </a>
                 </section>
 
                 <!-- Main content -->
@@ -138,21 +140,18 @@
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-	                                            <th>Cp Code</th>
-                                                <th>Sp Code</th>
-                                                <th>VAS Provider</th>
-                                                <th>Service Code</th>
-                                                <th>CP Name</th>
-                                                <th>ESME CODE</th>
-                                                <th>Package</th>
-                                                <th>Rate</th>
+                                                <th>Trans ID</th>
+                                                <th>Item Code</th>
+                                                <th>Item</th>
+                                                <th>Category</th>
+                                                <th>Service</th>
+                                                <th>Amount</th>
                                                 <th>Effective Dt</th>
-                                                <th>Add</th>
-                                                <th>Detail</th>
-                                                
+                                                <th>Active Flag</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
                                             </tr>
                                         </thead>
-                                        
                                     </table>
                                 </div>
                                 <!-- /.box-body -->
@@ -188,7 +187,7 @@
             </div>
             <!-- ./wrapper -->
 
-        <jsp:include page="${request.contextPath}/dialogcpdetail"></jsp:include>
+        <jsp:include page="${request.contextPath}/dialogitemtariff"></jsp:include>
 
         <jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
@@ -199,7 +198,7 @@
 
                 })
             </script>
-            <script src="<c:url value="/resources/function/cpdetail.js" />"></script>
+            <script src="<c:url value="/resources/function/itemtariff.js" />"></script>
 
 
 

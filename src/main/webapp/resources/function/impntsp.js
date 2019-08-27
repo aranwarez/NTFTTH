@@ -280,10 +280,11 @@ function getImpNtspFilterList() {
                                                                     value.CP_DESC,
                                                                     value.S_NO,
                                                                     value.ESME_CODE,
-                                                                    value.RATE,
-                                                                    value.START_DT,
                                                                     value.MO_1ST,
                                                                     value.MT_1ST,
+                                                                    value.RATE,
+                                                                    value.START_DT,
+                                                                    value.REMARKS,
                                                                     '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#editModal" onclick="return editImpntsp(\''
                                                                             + value.TRANS_NO
                                                                             + "','"

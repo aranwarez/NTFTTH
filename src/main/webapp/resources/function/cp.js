@@ -124,11 +124,11 @@ function editCp(code) {
             $("#EDITSHARE_NT_PER").val(row[i][14]);
             $("#EDITAFS_FLAG").val(row[i][15]);
             $("#EDITMIN_QTY").val(row[i][16]);
-            getItemTariffListRental(row[i][3],"RENTAL")
+            getItemTariffListRental(row[i][3], "RENTAL")
             $("#EDITRENTAL_ITEM_CODE").val(row[i][17]);
-            getItemTariffListVpn(row[i][3],"VPN")
+            getItemTariffListVpn(row[i][3], "VPN")
             $("#EDITVPN_ITEM_CODE").val(row[i][18]);
-            getItemTariffListSpace(row[i][3],"SPACE")
+            getItemTariffListSpace(row[i][3], "SPACE")
             $("#EDITSPACE_ITEM_CODE").val(row[i][19]);
 
             jQuery.ajaxSetup({async: true});
@@ -207,14 +207,14 @@ function del() {
         $('.modal').modal('hide');
     });
 }
-function getItemTariffList(){
+function getItemTariffList() {
     getItemTariffListRental();
     getItemTariffListVpn();
     getItemTariffListSpace();
-    
+
 }
-function getItemTariffListRental(SERVICE_CODE,ITEM_CODE){
-    
+function getItemTariffListRental(SERVICE_CODE, ITEM_CODE) {
+
     var servicecode;
     var itemcode;
     if (SERVICE_CODE != null) {
@@ -236,13 +236,13 @@ function getItemTariffListRental(SERVICE_CODE,ITEM_CODE){
         $.each(response, function (index, value) {
             $('<option>').val(value.ITEM_CODE).text(value.ITEM_CODE).appendTo(
                     select);
-        
+
         });
     });
-    
+
 }
-function getItemTariffListVpn(SERVICE_CODE,ITEM_CODE){
-    
+function getItemTariffListVpn(SERVICE_CODE, ITEM_CODE) {
+
     var servicecode;
     var itemcode;
     if (SERVICE_CODE != null) {
@@ -267,8 +267,8 @@ function getItemTariffListVpn(SERVICE_CODE,ITEM_CODE){
         });
     });
 }
-function getItemTariffListSpace(SERVICE_CODE,ITEM_CODE){
-    
+function getItemTariffListSpace(SERVICE_CODE, ITEM_CODE) {
+
     var servicecode;
     var itemcode;
     if (SERVICE_CODE != null) {
@@ -329,7 +329,7 @@ function getCpFilterList() {
                     .draw();
             $.each(response, function (key, value) {
                 $("#example1").dataTable().fnAddData([
-                    value.CP_CODE,
+                    '<a href="../cpdetail/list?cp_code=' + value.CP_CODE + '" target="_blank">' + value.CP_CODE + '</a>',
                     value.SP_CODE,
                     value.SP_NAME,
                     value.SERVICE_CODE,

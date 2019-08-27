@@ -130,6 +130,7 @@
                                             name="QPOST_FLAG" id="QPOST_FLAG">
                                         <option value='N'>N</option>
                                         <option value='Y'>Y</option>
+                                        <option value='E'>E</option>
                                         <option value=''>All</option>
                                     </select></td>
                                 <td><input type="file" id="my_file_input"
@@ -213,10 +214,11 @@
                                                 <th>ESME Imp.</th>
                                                 <th>Sp Code</th>
                                                 <th>ESME</th>
-                                                <th>Rate</th>
-                                                <th>StartDt</th>
                                                 <th id="thmo">MO</th>
                                                 <th id="thmt">MT</th>
+                                                <th>Rate</th>
+                                                <th>StartDt</th>
+                                                <th>Remarks</th>
                                                 <th>Edit</th>
                                                 <th>Delete</th>
                                             </tr>
@@ -235,10 +237,11 @@
                                                     <td>${user.CP_DESC}</td>
                                                     <td>${user.S_NO}</td>
                                                     <td>${user.ESME_CODE}</td>
-                                                    <td>${user.RATE}</td>
-                                                    <td>${user.START_DT}</td>
                                                     <td>${user.MO_1ST}</td>
                                                     <td>${user.MT_1ST}</td>
+                                                    <td>${user.RATE}</td>
+                                                    <td>${user.START_DT}</td>
+                                                    <td>${user.REMARKS}</td>
                                                     <td>
                                                         <div class="btn-group">
                                                             <a href="#" class="btn btn-info" data-toggle="modal"
