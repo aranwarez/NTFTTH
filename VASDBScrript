@@ -927,3 +927,321 @@ END VAS_NETTING;
 22aug2019
 ---------------------
 alter table m_item add (cash_sale_flag varchar2(1), active_flag varchar2(1))
+
+------------------------27aug19------------------
+CREATE SEQUENCE VASNTW.SEQ_ITEM_TARIFF_ID
+  START WITH 3
+  MAXVALUE 999999999
+  MINVALUE 0
+  NOCYCLE
+  NOCACHE
+  ORDER;
+
+CREATE OR REPLACE PROCEDURE VASNTW.TRANSFER_IMPORT_DATA(inyear number, ivperiod varchar2, 
+ivmonth varchar2, ivservice varchar2, ivntsp varchar2, ivuser varchar2) IS
+   ln_count NUMBER:=0;
+   lv_error varchar2(200);
+   lv_cp_code VARCHAR2(8); 
+   lv_sp_code VARCHAR2(8);
+   lv_esme_code VARCHAR2(20);  
+   lv_package_type VARCHAR2(10);
+   ld_start_dt DATE;
+BEGIN
+   FOR i in(SELECT trans_no,seq_no, imp_year, imp_period, imp_month, service_code, nt_sp,
+            s_no, cp_desc, esme_code, mo_1st, mt_1st, category
+            FROM tmp_imp_sms_nt_sp
+            WHERE imp_year= inyear
+            AND imp_period=ivperiod
+            AND imp_month=ivmonth
+            AND service_code=ivservice
+            AND nt_sp=ivntsp
+	        AND post_flag in('N','E')
+	        AND s_no is not null
+	        AND esme_code is not null
+            ORDER BY trans_no, seq_no) 
+   LOOP
+      lv_cp_code :=null; 
+      lv_sp_code :=null;
+      lv_esme_code :=null;  
+      lv_package_type :=null;
+      ld_start_dt :=null;
+      IF ln_count=0 THEN 
+         BEGIN
+   	        INSERT INTO imp_main_master(imp_year, imp_period, create_dt,create_by,post_flag)
+   	                    VALUES(inyear,ivperiod,sysdate,ivuser,'N');
+   	     EXCEPTION WHEN  dup_val_on_index THEN
+   	      	 null;
+   	     END;	  
+      END IF;
+      BEGIN
+         SELECT cp_code, sp_code, esme_code, package_type, start_dt
+         INTO lv_cp_code, lv_sp_code, lv_esme_code, lv_package_type, ld_start_dt
+         FROM m_cp 
+         WHERE service_code=i.service_code
+         AND category_map=i.category 
+         AND rental_item_code=i.cp_desc
+         AND rownum<2;
+          
+         
+            BEGIN
+                IF i.nt_sp='NT' THEN
+                    INSERT INTO imp_nt(trans_id, trans_no,seq_no, imp_year, imp_period, imp_month, service_code,
+                                   nt_sp, s_no, cp_desc, services, esme_code, 
+                                   rate, start_dt,mo_1st,mt_1st, create_dt, create_by, post_flag)
+                            VALUES(seq_imp_nt_id.nextval,i.trans_no,i.seq_no, i.imp_year, i.imp_period,i.imp_month, i.service_code,
+                                   i.nt_sp, i.s_no, null, null, i.esme_code,
+                                1, ld_start_dt, i.mo_1st, i.mt_1st, sysdate, ivuser,'N');
+                ELSE
+                   INSERT INTO imp_sp(trans_id, trans_no,seq_no, imp_year, imp_period, imp_month, service_code,
+                               nt_sp, s_no, cp_desc, services, esme_code, 
+                               rate, start_dt,mo_1st,mt_1st, create_dt, create_by, post_flag)
+                        VALUES(seq_imp_sp_id.nextval,i.trans_no,i.seq_no, i.imp_year, i.imp_period,i.imp_month, i.service_code,
+                               i.nt_sp, i.s_no, null, null, i.esme_code,
+                               1, ld_start_dt, i.mo_1st, i.mt_1st, sysdate, ivuser,'N');
+            
+                END IF;
+                UPDATE tmp_imp_sms_nt_sp set post_flag='Y', remarks=null, post_dt=sysdate, post_by=ivuser
+                WHERE trans_no=i.trans_no and seq_no=i.seq_no;                 
+            EXCEPTION WHEN OTHERS THEN                          
+               delete from imp_nt where trans_no=i.trans_no and seq_no=i.seq_no
+               AND imp_year=i.imp_year and imp_period=i.imp_period;
+               delete from imp_sp where trans_no=i.trans_no and seq_no=i.seq_no 
+               AND imp_year=i.imp_year and imp_period=i.imp_period;
+            	 lv_error:=SQLCODE;
+               UPDATE tmp_imp_sms_nt_sp set remarks='Insert Error '||lv_error, post_flag='E'
+               WHERE trans_no=i.trans_no and seq_no=i.seq_no;    	
+            END;
+      EXCEPTION WHEN OTHERS THEN
+	        UPDATE tmp_imp_sms_nt_sp set remarks='Mapping Value Not found.', post_flag='E'
+            WHERE trans_no=i.trans_no and seq_no=i.seq_no;
+      END;      
+      ln_count:=ln_count+1;
+   END LOOP;
+   commit;
+   
+EXCEPTION
+     WHEN OTHERS THEN
+     rollback;
+       -- Consider logging the error and then re-raise
+       RAISE;
+END TRANSFER_IMPORT_DATA;
+/
+
+-----------------------------------------------
+CREATE OR REPLACE PROCEDURE VASNTW.VAS_NETTING(inyear number, ivperiod varchar2, 
+ivmonth varchar2, ivservice varchar2,  ivuser varchar2) IS
+   ln_count NUMBER:=0;
+   lv_error varchar2(200);
+   lv_sharing_type VARCHAR2(10); 
+      ln_share_nt_per number:=0; 
+      lv_afs varchar2(10); 
+      ln_qty number:=0; 
+      lv_cp_code varchar2(10);
+      lv_package_type varchar2(10);
+      ln_rate number:=0;
+      ln_ratio number:=0;
+      ln_1st_mo number:=0;
+      ln_1st_mt number:=0;
+      ln_tot_mo number:=0;
+      ln_tot_mt number:=0;
+      ln_1st_diff_nt number:=0;
+      ln_1st_diff_sp number:=0;
+      ln_1st number:=0;
+      ln_1_reduce number:=0;
+      ln_mt_bill number:=0;
+      ln_trans_id number:=0;
+      ln_range_from number:=0; 
+      ln_range_to number:=0;
+      ld_start_dt date;
+BEGIN
+   FOR i IN(SELECT  imp_year, imp_period, imp_month, service_code, s_no, esme_code, rate, 
+            mo_1st_nt,  mo_1st_sp, mt_1st_nt, mt_1st_sp, post_flag
+            FROM v_sum_compare
+            WHERE imp_year=inyear
+            AND imp_period=ivperiod
+            AND imp_month=ivmonth
+            AND service_code=ivservice
+            AND post_flag='N')
+   LOOP
+      ld_start_dt :=null;
+      lv_sharing_type :=null; 
+      ln_share_nt_per :=0; 
+      lv_afs :=null;
+      ln_qty :=0; 
+      lv_cp_code :=null;
+      lv_package_type :=null;
+      ln_rate :=0;
+      ln_ratio:=0;
+      ln_1st_diff_nt :=0;
+      ln_1st_diff_sp :=0;
+      ln_1st :=0;
+      ln_1st_mo :=0;
+      ln_1st_mt :=0;
+      ln_tot_mo :=0;
+      ln_tot_mt :=0;
+      ln_1_reduce :=0;
+      ln_mt_bill :=0;
+      ln_range_from :=0; 
+      ln_range_to :=0;
+      
+      BEGIN
+         SELECT sharing_type, share_nt_per, afs_flag, min_qty, cp_code, package_type, start_dt 
+         INTO lv_sharing_type, ln_share_nt_per, lv_afs, ln_qty, lv_cp_code, lv_package_type, ld_start_dt
+         from m_cp
+         WHERE service_code=i.service_code
+         AND sp_code=i.s_no
+         AND esme_code=i.esme_code
+         AND rownum<2;
+      EXCEPTION WHEN NO_DATA_FOUND THEN
+             lv_afs:='N';
+             ln_qty:=0;
+      END;
+      IF i.service_code NOT IN('APP','WAP','IVR') THEN
+         BEGIN
+            SELECT nvl(rate,0), nvl(mo_mt_Ratio,1), range_from, range_to INTO ln_rate, ln_ratio, ln_range_from, ln_range_to
+            FROM m_wap_app_tariff
+            WHERE service_code=i.service_code
+            AND package_type=lv_package_type
+            AND effective_dt<=(select max(effective_dt) FROM m_wap_app_tariff
+                               WHERE service_code=i.service_code
+                               AND package_type=lv_package_type
+                               AND effective_dt<=sysdate
+                               AND ROWNUM<2);
+         EXCEPTION WHEN NO_DATA_FOUND THEN
+                 --MESSAGE(' Rate and mo mt not define for esme '||i.esme_code);
+                 --MESSAGE(' Rate and mo mt not define for esme '||i.esme_code);
+                 ln_rate:=null;
+                 --RAISE FORM_TRIGGER_FAILURE;
+         END;      
+      ELSE
+         BEGIN
+            SELECT nvl(rate,0) INTO ln_rate
+            FROM m_cp_detail
+            WHERE cp_code=lv_cp_code
+            AND effective_dt<=(select max(effective_dt) FROM m_cp_detail
+                               WHERE cp_code=lv_cp_code
+                               AND effective_dt<=sysdate
+                               AND ROWNUM<2);
+         EXCEPTION WHEN NO_DATA_FOUND THEN
+                 --MESSAGE(' Rate and mo mt not define for esme '||i.esme_code);
+                 --MESSAGE(' Rate and mo mt not define for esme '||i.esme_code);
+                 ln_rate:=null;
+                 --RAISE FORM_TRIGGER_FAILURE;
+         END;
+      END IF;      
+      IF ln_rate is null THEN
+        IF lv_sharing_type='Y' THEN
+            IF i.service_code NOT IN('APP','WAP','IVR') THEN
+                ln_1st_mo:=least(i.mo_1st_nt,  i.mo_1st_sp);
+                ln_tot_mo:=ln_1st_mo;
+                ln_1st_mt:=greatest(i.mt_1st_nt,  i.mt_1st_sp);
+                ln_tot_mt:=ln_1st_mt;
+                ln_1st_diff_nt:=i.mt_1st_nt-(ln_ratio*i.mo_1st_nt);
+                ln_1st_diff_sp:=i.mt_1st_sp-(ln_ratio*ln_1st_mo);
+                IF ln_1st_diff_nt<0 THEN
+                     ln_1st_diff_nt:=0;
+                END IF;     
+                IF ln_1st_diff_sp<0 THEN
+                     ln_1st_diff_sp:=0;
+                END IF;     
+                IF ln_1st_diff_nt>=ln_1st_diff_sp THEN
+                    IF ln_1st_diff_nt>0 THEN
+                        ln_1st:=     ln_1st_diff_nt;
+                    END IF;
+                ELSE
+                    ln_1st:=greatest(ln_1st_diff_nt,ln_1st_diff_sp);    
+                END IF;
+            ELSE   
+                ln_1st_mo:=least(i.mo_1st_nt,  i.mo_1st_sp);
+                ln_tot_mo:=ln_1st_mo;
+                ln_1st_mt:=least(i.mt_1st_nt,  i.mt_1st_sp);
+                ln_tot_mt:=ln_1st_mt;
+            END IF;
+            IF i.mo_1st_nt<i.mo_1st_sp THEN
+                IF nvl(i.mt_1st_nt,0)<>0 THEN
+                    ln_1_reduce:=i.mo_1st_sp-i.mo_1st_nt;
+                ELSE   
+                    ln_1_reduce:=i.mt_1st_sp-i.mt_1st_nt;
+                END IF;   
+            END IF;
+            ln_1st:=nvl(ln_tot_mo,0)+nvl(ln_tot_mt,0);
+        ELSE
+           IF i.service_code NOT IN('APP','WAP','IVR') THEN
+                IF lv_afs is null then 
+                  lv_afs:='N';
+                END IF;
+                IF lv_afs='N' THEN
+                    ln_1st_mo:=nvl(i.mt_1st_sp,0)-nvl(i.mo_1st_sp,0); --sp
+                    ln_1st_mt:=nvl(i.mt_1st_nt,0)-nvl(i.mo_1st_nt,0); --nt
+                    IF ln_1st_mo<0 THEN
+                        ln_1st_mo:=0;
+                    END IF;
+                    IF ln_1st_mt<0 THEN
+                        ln_1st_mt:=0;
+                    END IF;
+                    IF inyear>=2073 THEN
+                        if nvl(i.mt_1st_sp,0)=0 and nvl(i.mo_1st_sp,0)=0 and nvl(i.mt_1st_nt,0)=0 and nvl(i.mo_1st_nt,0)=0 THEN
+                          ln_1st:=0;
+                        ELSE    
+                            --ln_1st:=greatest(ln_1st_mo, ln_1st_mt,ln_qty);
+                            ln_1st:=greatest(ln_1st_mo, ln_1st_mt,ln_range_from);
+                        END IF;   
+                    ELSE   
+             	        ln_1st:=greatest(ln_1st_mo, ln_1st_mt);
+                    END IF;   
+                ELSIF lv_afs='Y' THEN
+      	            ln_1st_mo:=null;
+                    ln_1st_mt:=null;
+                    ln_1st:=greatest(i.mo_1st_nt, i.mt_1st_nt,  i.mo_1st_sp, i.mt_1st_sp);
+                END IF;
+           END IF;   
+        END IF;
+        ln_mt_bill:=(ln_1st);   
+        IF lv_sharing_type='N' THEN
+      	     ln_mt_bill:=ln_mt_bill*ln_rate;
+      	    ln_1st:=ln_1st*ln_rate;
+        END If;
+         BEGIN
+            INSERT INTO sms_netting(trans_id, imp_year, imp_period, imp_month, s_no, esme_code, sharing_type, 
+                              share_nt_per, rate, start_dt, 
+         	                          mo1nt, mt1nt, mo1sp, mt1sp, mo1final, mt1final, 
+         	                          reduce1, bill_mt, MO_MT_RATIO, royalty_per,vat_per,
+         	                          create_dt, create_by, post_flag)
+         	                   VALUES(ln_trans_id, inyear, ivperiod, ivmonth, i.s_no,  i.esme_code, lv_sharing_type, 
+                                      ln_share_nt_per, ln_rate, sysdate,
+         	                           i.mo_1st_nt, i.mt_1st_nt,  i.mo_1st_sp, i.mt_1st_sp, ln_1st_mo, ln_1st_mt,
+         	                           ln_1_reduce, ln_mt_bill,  ln_ratio, .6, 13,
+         	                           sysdate, ivuser, 'N');
+         
+         	             
+      	       
+      	       update imp_nt
+      	       set post_flag='Y'
+      	       WHERE service_code=ivservice
+               AND imp_year=inyear
+      	       AND imp_period=ivperiod
+      	       AND s_no=i.s_no
+      	       AND esme_code=i.esme_code
+      	       AND post_flag='N';
+      	      
+      	       update imp_sp
+      	       set post_flag='Y'
+      	       WHERE service_code=ivservice
+               AND imp_year=inyear
+      	       AND imp_period=ivperiod
+      	       AND s_no=i.s_no
+      	       AND esme_code=i.esme_code
+      	       AND post_flag='N';
+         EXCEPTION WHEN OTHERS THEN 
+             null;
+         END;
+      END IF;   	  	 
+   END LOOP;
+
+EXCEPTION
+     WHEN OTHERS THEN
+     rollback;
+       -- Consider logging the error and then re-raise
+       RAISE;
+END VAS_NETTING;
+/
