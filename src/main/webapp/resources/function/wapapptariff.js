@@ -6,11 +6,11 @@ $(document).ready(function () {
     $.fn.dataTable.ext.errMode = 'none';
     $("#QSERVICE_CODE").select2({
         placeholder: "Select a Service  Code",
-                 allowClear: true
+        allowClear: true
     });
     $("#QPACKAGE_TYPE").select2({
         placeholder: "Select Package",
-                 allowClear: true
+        allowClear: true
     });
     $("#SERVICE_CODE").select2({
         dropdownParent: $("#myModal"),
@@ -41,7 +41,7 @@ function saveWapapptariff() {
     var RANGE_FROM = $("#RANGE_FROM").val();
     var RANGE_TO = $("#RANGE_TO").val();
     var MO_MT_RATIO = $("#MO_MT_RATIO").val();
-    
+
     // alert("nabin"+SHORT_CODE);
     $.post('../wapapptariff/saveJS', {
         SERVICE_CODE: SERVICE_CODE,
@@ -50,11 +50,13 @@ function saveWapapptariff() {
         EFFECTIVE_DT: EFFECTIVE_DT,
         RANGE_FROM: RANGE_FROM,
         RANGE_TO: RANGE_TO,
-        MO_MT_RATIO :MO_MT_RATIO
+        MO_MT_RATIO: MO_MT_RATIO
     }, function (data) {
         alert(data);
         if (data.substring(0, 6) === "Succes") {
-            location.reload();
+            //location.reload();
+            getWapapptariffFilterList();
+            $('.modal').modal('hide');
         }
     });
 }
@@ -108,7 +110,9 @@ function updateWapapptariff() {
         // temp = $('#example1').DataTable();
         // temp.clear().draw();
         if (data.substring(0, 6) === "Succes") {
-            location.reload();
+            //location.reload();
+            getWapapptariffFilterList();
+            $('.modal').modal('hide');
         }
 
     });
@@ -123,7 +127,9 @@ function del() {
     $.post('../wapapptariff/delete', {
         TRANS_ID: CODE
     }, function (data) {
-        location.reload();
+        //location.reload();
+        getWapapptariffFilterList();
+        $('.modal').modal('hide');
         alert(data);
     });
 }
@@ -152,8 +158,8 @@ function getWapapptariffFilterList() {
                     value.RANGE_FROM,
                     value.RANGE_TO,
                     value.MO_MT_RATIO,
-                    '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#editModal" onclick="return editWapapptariff(\''+value.TRANS_ID+'\')"> <i class="fa fa-edit"></i> Edit </a>',
-                    '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#deleteModal" onclick="return deleteWapapptariff(\''+value.TRANS_ID+'\')"> <i class="fa fa-trash"></i> Delete </a>'
+                    '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#editModal" onclick="return editWapapptariff(\'' + value.TRANS_ID + '\')"> <i class="fa fa-edit"></i> Edit </a>',
+                    '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#deleteModal" onclick="return deleteWapapptariff(\'' + value.TRANS_ID + '\')"> <i class="fa fa-trash"></i> Delete </a>'
                 ]);
             }
             );
