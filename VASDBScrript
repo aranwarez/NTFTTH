@@ -1298,3 +1298,18 @@ ALTER TABLE SALES_DETAIL ADD (
  FOREIGN KEY (CC_CODE, TRANS_NO) 
  REFERENCES SALES_MASTER (CC_CODE, TRANS_NO));
  
+CREATE or REPLACE FUNCTION get_tax_rate(iv_item IN VARCHAR2,iv_date IN DATE)  RETURN NUMBER IS
+   ln_amt number:=0;
+BEGIN
+	 SELECT amount INTO ln_amt FROM m_item_tariff
+         WHERE item_code=iv_item
+         AND effective_dt in(SELECT max(effective_dt)
+         FROM m_item_tariff          
+         WHERE item_code=iv_item
+         AND effective_dt<=iv_date)
+         AND rownum<2;
+	 
+   RETURN(ln_amt);
+EXCEPTION WHEN NO_DATA_FOUND THEN
+	 RETURN(0);
+END;
