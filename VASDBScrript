@@ -1245,3 +1245,54 @@ EXCEPTION
        RAISE;
 END VAS_NETTING;
 /
+
+-----------------------------------
+11sep2019 table for cash sales item
+----------------------------------------
+CREATE TABLE SALES_MASTER
+( CC_CODE constraint fk_sm_cc_code references m_coll_center(cc_code), 
+  TRANS_NO       NUMBER,
+  SALES_DATE     DATE                           NOT NULL,
+  CUSTOMER_CODE  constraint fk_sm_sp_code references m_sp(sp_code) not null,
+  PMT_MODE       VARCHAR2(1 BYTE),
+  BANK_PAY_AMT   NUMBER,
+  BANK_CD        varchar2(15),
+  REMARKS        VARCHAR2(250 BYTE),
+  POST_FLAG      VARCHAR2(1 BYTE),
+  CANCEL_BY      VARCHAR2(15 BYTE),
+  CANCEL_DT      DATE,
+  CREATE_BY      VARCHAR2(15 BYTE)              NOT NULL,
+  CREATE_DT      DATE                           DEFAULT SYSDATE               NOT NULL,
+  UPDATE_BY      VARCHAR2(15 BYTE),
+  UPDATE_DT      DATE,
+  constraint pk_sm_cc_trans primary key(cc_code, trans_no)
+);
+
+ALTER TABLE SALES_MASTER ADD (
+  CONSTRAINT FK_SM_CC_BANK
+ FOREIGN KEY (CC_CODE, BANK_CD) 
+ REFERENCES M_bank (CC_CODE, BANK_CD));
+ 
+ CREATE TABLE SALES_DETAIL
+( trans_id number constraint pk_sd_ti primary key, 
+  CC_CODE VARCHAR2(8),
+  TRANS_NO       NUMBER,
+  ITEM_CODE      constraint fk_sd_item_code references m_item(item_code) not null,
+  QTY            NUMBER                         NOT NULL,
+  RATE           NUMBER(13,2)                   NOT NULL,
+  REVENUE_AMT    NUMBER,
+  TSC_AMT        NUMBER,
+  VAT_AMT        NUMBER,
+  OWT_AMT        NUMBER,
+  DISC           NUMBER,
+  CREATE_BY      VARCHAR2(15 BYTE)              NOT NULL,
+  CREATE_DT      DATE                           DEFAULT SYSDATE               NOT NULL,
+  UPDATE_BY      VARCHAR2(15 BYTE),
+  UPDATE_DT      DATE
+);
+
+ALTER TABLE SALES_DETAIL ADD (
+  CONSTRAINT FK_SD_CC_TRANS 
+ FOREIGN KEY (CC_CODE, TRANS_NO) 
+ REFERENCES SALES_MASTER (CC_CODE, TRANS_NO));
+ 
