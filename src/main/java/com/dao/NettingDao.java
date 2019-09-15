@@ -317,7 +317,7 @@ public class NettingDao {
 			pst.executeUpdate();
 			// String result = pst.getString(10);
                         
-                        System.out.println(inyear+ivperiod+ivmonth+ivservice+ivuser);
+                        //System.out.println(inyear+ivperiod+ivmonth+ivservice+ivuser);
 			return "Sucessfully Posted to Bill";
 		} catch (Exception e) {
 			e.printStackTrace();

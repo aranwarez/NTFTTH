@@ -305,7 +305,7 @@ function sharingnetting(a) {
     }, function (response) {
 
         if (response !== null) {
-            debugger;
+           // debugger;
             temp = $('#jstable').DataTable();
             temp.clear().draw();
             $.each(response, function (key, value) {
