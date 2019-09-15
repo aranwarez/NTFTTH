@@ -296,3 +296,109 @@ EXCEPTION
        RAISE;
 END VAS_NETTING;
 /
+--------------------------------------
+15sep2019
+----------------------------------------
+CREATE SEQUENCE VASNTW.SEQ_BILL_TRANS_NO
+  START WITH 1
+  MAXVALUE 999999
+  MINVALUE 0
+  CYCLE
+  NOCACHE
+  ORDER;
+
+
+CREATE SEQUENCE VASNTW.SEQ_BILL_TRANS_ID
+  START WITH 1
+  MAXVALUE 999999999
+  MINVALUE 0
+  NOCYCLE
+  NOCACHE
+  ORDER;
+  
+  CREATE OR REPLACE PROCEDURE VASNTW.VAS_BILL_POSTING(inyear number, ivperiod varchar2, 
+   ivmonth varchar2, ivservice varchar2,  ivuser varchar2) IS
+  lv_char varchar2(1);
+  ln_trans_no number;
+  POSTED_EXCEPTION EXCEPTION;
+BEGIN
+   BEGIN
+      SELECT post_flag, trans_no into lv_char, ln_trans_no FROM bill_master 
+      WHERE imp_year=inyear
+      AND imp_period=ivperiod
+      AND imp_month=ivmonth
+      AND service_code=ivservice;
+      IF lv_char='Y' THEN
+         RAISE POSTED_EXCEPTION;
+      END IF;   
+      IF lv_char='N' THEN
+         delete from bill_detail
+         WHERE trans_no=ln_trans_no;
+         FOR i in(SELECT s_no, sharing_type, sum(bill_mt) amt, sum(royalty_per*bill_mt/100) royalty,
+           ((sum(bill_mt)-sum(royalty_per*bill_mt/100))*13/100) vat
+                  FROM sms_netting
+                  WHERE imp_year=inyear
+          AND imp_period=ivperiod
+          AND imp_month=ivmonth
+          AND service_code=ivservice
+          GROUP BY s_no, sharing_type
+                  ORDER BY s_no, sharing_type)
+         LOOP
+           INSERT INTO bill_detail(trans_id,trans_no, s_no, sharing_type, item_code, dr_cr_flag, 
+           amt, royalty_amt, tsc_amt, vat_amt, create_by, create_dt)
+           VALUES(SEQ_BILL_TRANS_ID.NEXTVAL,ln_trans_no,i.s_no, i.sharing_type, ivservice, decode (i.sharing_type,'Y',-1,1),
+           nvl(i.amt,0), nvl(i.royalty,0), 0, nvl(i.vat,0), ivuser, sysdate);
+           UPDATE sms_netting set post_flag='Y'
+           WHERE imp_year=inyear
+           AND imp_period=ivperiod
+           AND imp_month=ivmonth
+           AND service_code=ivservice
+           AND s_no=i.s_no
+           AND sharing_type=i.sharing_type;
+           commit;
+         END LOOP;
+      END IF;
+   EXCEPTION WHEN NO_DATA_FOUND THEN
+      BEGIN
+         SELECT SEQ_BILL_TRANS_NO.NEXTVAL INTO ln_trans_no from dual;
+         ln_trans_no:=inyear||substr((inyear+1),3,2)||LPAD(ln_trans_no,6,'0');
+         
+         INSERT INTO bill_master(trans_no, trans_dt, imp_year, imp_period, imp_month,
+         service_code, post_flag, post_by, post_dt, create_by, create_dt)
+         VALUES(ln_trans_no,sysdate, inyear,ivperiod, ivmonth, ivservice, 'N', null, null, ivuser, sysdate);
+         FOR i in(SELECT s_no, sharing_type, sum(bill_mt) amt, sum(royalty_per*bill_mt/100) royalty,
+           ((sum(bill_mt)-sum(royalty_per*bill_mt/100))*13/100) vat
+                  FROM sms_netting
+                  WHERE imp_year=inyear
+          AND imp_period=ivperiod
+          AND imp_month=ivmonth
+          AND service_code=ivservice
+          GROUP BY s_no, sharing_type
+                  ORDER BY s_no, sharing_type)
+         LOOP
+           INSERT INTO bill_detail(trans_id,trans_no, s_no, sharing_type, item_code, dr_cr_flag, 
+           amt, royalty_amt, tsc_amt, vat_amt, create_by, create_dt)
+           VALUES(SEQ_BILL_TRANS_ID.NEXTVAL,ln_trans_no,i.s_no, i.sharing_type, ivservice, decode (i.sharing_type,'Y',-1,1),
+           nvl(i.amt,0), nvl(i.royalty,0), 0, nvl(i.vat,0), ivuser, sysdate);
+           UPDATE sms_netting set post_flag='Y'
+           WHERE imp_year=inyear
+           AND imp_period=ivperiod
+           AND imp_month=ivmonth
+           AND service_code=ivservice
+           AND s_no=i.s_no
+           AND sharing_type=i.sharing_type;
+           commit; 
+         END LOOP;
+   
+      EXCEPTION WHEN OTHERS THEN
+          dbms_output.put_line('error');
+          ROLLBACK;
+      END;  
+   WHEN  POSTED_EXCEPTION THEN
+     DBMS_OUTPUT.PUT_LINE('Already Posted');
+   WHEN OTHERS THEN
+          dbms_output.put_line('error');
+          ROLLBACK;    
+   END;
+END;
+/
