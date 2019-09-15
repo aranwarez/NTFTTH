@@ -301,6 +301,30 @@ public class NettingDao {
 		}
 		return null;
 	}
-
+        
+        public String postNettingtoBill(String inyear, String ivperiod, String ivmonth, String ivservice, 
+			String ivuser) throws SQLException {
+		Connection con = DbCon.getConnection();
+		try {
+			String getDBUSERByUserIdSql = "{call VAS_BILL_POSTING(?,?,?,?,?)}";
+			CallableStatement pst = con.prepareCall(getDBUSERByUserIdSql);
+			pst.setString(1, inyear);
+			pst.setString(2, ivperiod);
+			pst.setString(3, ivmonth);
+			pst.setString(4, ivservice);
+			pst.setString(5, ivuser);
+			// pst.registerOutParameter(10, java.sql.Types.VARCHAR);
+			pst.executeUpdate();
+			// String result = pst.getString(10);
+                        
+                        System.out.println(inyear+ivperiod+ivmonth+ivservice+ivuser);
+			return "Sucessfully Posted to Bill";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Failed to save " + e.getMessage();
+		} finally {
+			con.close();
+		}
+	}
 
 }

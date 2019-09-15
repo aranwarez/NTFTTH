@@ -248,13 +248,15 @@
                             style="width: 50px;" name="ACTIVE_FLAG" id="sACTIVE_FLAG">
                         <option value='N'>N</option>
                         <option value='Y'>Y</option>
-                    </select> <br> <label for="ACTIVE_DT">Active Date </label> <input
+                    </select> 
+                    <br> 
+                    <label for="ACTIVE_DT">Contract Dt</label> 
+                    <input
                         type="text" class="nepali-calendar" name="ACTIVE_DT"
-                        id="sACTIVE_DT"> <label for=DEACTIVATE_DT>Effective
-                        Date </label> <input type="text" class="nepali-calendar"
-                                         name="DEACTIVATE_DT" id="sDEACTIVATE_DT">
-
-
+                        id="sACTIVE_DT"> 
+                    <label for=DEACTIVATE_DT>Effective/Commercial Dt </label> 
+                    <input type="text" class="nepali-calendar"
+                           name="DEACTIVATE_DT" id="sDEACTIVATE_DT">
                 </div>
             </div>
             <div class="modal-footer">
@@ -288,8 +290,8 @@
                             <tr>
                                 <th>SERVICE_CODE</th>
                                 <th>ACTIVE_FLAG</th>
-                                <th>ACTIVE_DT</th>
-                                <th>DEACTIVATE_DT</th>
+                                <th>Contract Dt</th>
+                                <th>Effective/Commericial Dt</th>
                                 <th>UPDATE_DT</th>
                                 <th>Edit</th>
                                 <th>Delete</th>
@@ -340,10 +342,9 @@
                         style="width: 50px;" name="ACTIVE_FLAG" id="esACTIVE_FLAG">
                         <option value='N'>N</option>
                         <option value='Y'>Y</option>
-                    </select> <br> <label for="ACTIVE_DT">Active Date </label> <input
+                    </select> <br> <label for="ACTIVE_DT">Contract Dt</label> <input
                         type="text" class="nepali-calendar" name="ACTIVE_DT"
-                        id="esACTIVE_DT"> <label for=DEACTIVATE_DT>Effective
-                        Date </label> <input type="text" class="nepali-calendar"
+                        id="esACTIVE_DT"> <label for=DEACTIVATE_DT>Effective/Commercial Dt </label> <input type="text" class="nepali-calendar"
                                          name="DEACTIVATE_DT" id="esDEACTIVATE_DT">
 
 

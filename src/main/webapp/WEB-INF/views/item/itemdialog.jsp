@@ -41,6 +41,7 @@
                     <select style="width: 280px;" class="form-control" name="IS_RECURRING" id="IS_RECURRING">
                         <option value='Y'>Y</option>
                         <option value='N'>N</option>
+                        <option value='T'>T</option>
                     </select> 
                 </div>
                 <div class="form-group">
@@ -114,6 +115,7 @@
                         <select style="width: 280px;" class="form-control" name="EDITIS_RECURRING" id="EDITIS_RECURRING">
                             <option value='Y'>Y</option>
                             <option value='N'>N</option>
+                            <option value='T'>T</option>
                         </select> 
                     </div>
                     <div class="form-group">

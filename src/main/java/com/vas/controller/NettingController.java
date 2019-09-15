@@ -171,5 +171,18 @@ public class NettingController {
 		return dao.getNonSharing(IMP_YEAR, IMP_PERIOD, IMP_MONTH, SERVICE_CODE, SHARING_TYPE, POST_FLAG);
 
 	}
+        
+        @RequestMapping(value = "/Netting/postNettingtoBill", method = RequestMethod.POST)
+	@ResponseBody
+	public String postNettingtoBill(Model model, Locale locale, String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH,
+			String SERVICE_CODE,  HttpSession session)
+			throws SQLException {
+		logger.info("Posting netting to bill", locale);
+		UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+		String USER = userinfo.getUSER_ID();
+		NettingDao dao = new NettingDao();
+		String msg = dao.postNettingtoBill(IMP_YEAR, IMP_PERIOD, IMP_MONTH, SERVICE_CODE, USER);
+		return msg;
+	}
 
 }
