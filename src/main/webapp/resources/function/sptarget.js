@@ -184,7 +184,7 @@ function getSPServiceList() {
                         SP_CODE: currentSP
                     },
                     function (response) {
-                        debugger;
+                        //debugger;
                         if (response !== null) {
                             temp = $('#spservice').DataTable();
                             temp.clear().draw();

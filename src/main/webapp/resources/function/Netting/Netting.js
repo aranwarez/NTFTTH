@@ -273,7 +273,7 @@ function sharingnetting(a) {
     $('#jsdiv').show();
     $('#querydiv').hide();
     $('#jsdiv').empty();
-    var table = '<table id="jstable">';
+    var table = '<table id="jstable" class="table table-bordered table-striped">';
     table = table + '<thead>'
     table = table + '<td>Month</td><td>ESME_CODE</td>';
     table = table
@@ -305,7 +305,7 @@ function sharingnetting(a) {
     }, function (response) {
 
         if (response !== null) {
-            debugger;
+           // debugger;
             temp = $('#jstable').DataTable();
             temp.clear().draw();
             $.each(response, function (key, value) {
@@ -315,10 +315,41 @@ function sharingnetting(a) {
                             value.MO1NT, value.MT1NT, value.MO1SP,
                             value.MT1SP, value.MO1FINAL, value.MT1FINAL,
                             value.REDUCE1, value.MO_MT_RATIO,
-                            value.MO_MT_RATIO, value.BILL_MT,
-                            value.ROYALTY_PER, value.VAT_PER]);
+                             value.BILL_MT,
+                            value.ROYALTY_PER, value.VAT_PER, value.POST_FLAG]);
             });
         }
+    });
+
+}
+
+
+function mainbillpost() {
+    // validation before posting
+
+    var param = {
+        IMP_YEAR: $('#QIMP_YEAR').val(),
+        IMP_PERIOD: $('#QIMP_PERIOD').val(),
+        IMP_MONTH: $('#QIMP_MONTH').val(),
+        SERVICE_CODE: $('#QSERVICE_CODE').val()
+    };
+    var valid = validateform(param);
+    if (valid !== 0) {
+        alert("Invalid !!!!! " + valid)
+        return false;
+    }
+    $.post('../Netting/postNettingtoBill', {
+        IMP_YEAR: $('#QIMP_YEAR').val(),
+        IMP_PERIOD: $('#QIMP_PERIOD').val(),
+        IMP_MONTH: $('#QIMP_MONTH').val(),
+        SERVICE_CODE: $('#QSERVICE_CODE').val()
+        
+    }, function (data) {
+        alert(data);
+        if (data.substring(0, 6) === "Succes") {
+            location.reload();
+        }
+
     });
 
 }

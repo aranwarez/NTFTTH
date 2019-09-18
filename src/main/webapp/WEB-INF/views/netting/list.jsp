@@ -123,16 +123,17 @@
                                         <option value='SP'>SP</option>
                                     </select></td>
                                 <td>Post</td>
-
-
-
-                                <td><select style="width: 80px;" class="form-control"
+                                <td>
+                                    <select style="width: 80px;" class="form-control"
                                             name="QPOST_FLAG" id="QPOST_FLAG">
                                         <option value='N'>N</option>
                                         <option value='Y'>Y</option>
                                         <option value=''>All</option>
-                                    </select></td>
-
+                                    </select>
+                                </td>
+                                <td><input data-toggle="modal" data-target="#mainpostdialog" 
+                                           type="button" value="Post Netting to Bill" >
+                                </td>
                             </tr>
                             <tr>
                                 <td><input type="button" value="Query"
@@ -279,8 +280,12 @@
                     $('#example1').DataTable({
                         "iDisplayLength": 100
                     });
+                    $('#jstable').DataTable({
+                        "iDisplayLength": 100
+                    });
 
                 });
+                
 
                 $('.nepali-calendar').nepaliDatePicker();
                 $.fn.dataTable.ext.errMode = 'none';
