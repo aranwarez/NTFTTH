@@ -20,21 +20,29 @@ import util.DbCon;
  *
  * @author nabin
  */
-public class CommonDateDao {
-    
-    public List<Map<String, Object>> getDateList() throws SQLException {
+public class InvoiceLockDao {
+
+    public List<Map<String, Object>> getBillMasterList(String IMP_YEAR, String IMP_PERIOD, String IMP_MONTH,
+            String SERVICE_CODE, String POST_FLAG) throws SQLException {
         Connection con = DbCon.getConnection();
-
         try {
-            PreparedStatement pst = con.prepareStatement("select trunc(sysdate) today_date, common.to_bs(sysdate) nep_today_date, common.to_bs(sysdate-30) nep_from_date, substr(common.to_bs(sysdate),1,4) cur_year, substr(common.to_bs(sysdate),6,2) cur_month, decode(substr(common.to_bs(sysdate),6,2),'04','01','05','01','06','01','07','02','08','02','09','02','10','03','11','03','12','03','04') cur_period from sys.dual");
-            ResultSet rs = pst.executeQuery();
 
+            PreparedStatement pst = con.prepareStatement(
+                    "SELECT B.TRANS_NO, B.TRANS_DT, B.IMP_YEAR,  B.IMP_PERIOD, B.IMP_MONTH, B.SERVICE_CODE, \n"
+                    + "   B.POST_FLAG, B.POST_BY, B.POST_DT,    B.CREATE_BY, B.CREATE_DT, B.UPDATE_BY,   B.UPDATE_DT\n"
+                    + "FROM VASNTW.BILL_MASTER B WHERE imp_year=? AND imp_period=? AND imp_month=? AND service_code=nvl(?,service_code) AND post_flag=NVL(?,post_flag) ORDER BY 3,4,5,6");
+
+            pst.setString(1, IMP_YEAR);
+            pst.setString(2, IMP_PERIOD);
+            pst.setString(3, IMP_MONTH);
+            pst.setString(4, SERVICE_CODE);
+            pst.setString(5, POST_FLAG);
+
+            ResultSet rs = pst.executeQuery();
             List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
             Map<String, Object> row = null;
-
             ResultSetMetaData metaData = rs.getMetaData();
             Integer columnCount = metaData.getColumnCount();
-
             while (rs.next()) {
                 row = new HashMap<String, Object>();
                 for (int i = 1; i <= columnCount; i++) {
@@ -50,20 +58,22 @@ public class CommonDateDao {
         }
         return null;
     }
-    
-    public List<Map<String, Object>> getNepMonthList() throws SQLException {
+
+    public List<Map<String, Object>> getBillDetailList(String TRANS_NO) throws SQLException {
         Connection con = DbCon.getConnection();
-
         try {
-            PreparedStatement pst = con.prepareStatement("select MONTH_CD, NEP_MONTH, FISCAL_Cd FROM NEPALI_MONTHS");
-            ResultSet rs = pst.executeQuery();
 
+            PreparedStatement pst = con.prepareStatement("SELECT B.TRANS_ID, B.TRANS_NO, B.S_NO, B.ITEM_CODE, B.SHARING_TYPE,  B.DR_CR_FLAG, \n"
+                    + "   B.AMT, B.ROYALTY_AMT, B.TSC_AMT, B.VAT_AMT, B.CREATE_BY, B.CREATE_DT,  B.UPDATE_BY, B.UPDATE_DT\n"
+                    + "FROM VASNTW.BILL_DETAIL B WHERE TRANS_NO=? ORDER BY 3,4,5");
+
+            pst.setString(1, TRANS_NO);
+
+            ResultSet rs = pst.executeQuery();
             List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
             Map<String, Object> row = null;
-
             ResultSetMetaData metaData = rs.getMetaData();
             Integer columnCount = metaData.getColumnCount();
-
             while (rs.next()) {
                 row = new HashMap<String, Object>();
                 for (int i = 1; i <= columnCount; i++) {
@@ -79,4 +89,5 @@ public class CommonDateDao {
         }
         return null;
     }
+
 }
