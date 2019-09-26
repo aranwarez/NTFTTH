@@ -14,22 +14,6 @@
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
 	name="viewport">
 <jsp:include page="${request.contextPath}/headCss"></jsp:include>
-<style>
-.example-modal .modal {
-	position: relative;
-	top: auto;
-	bottom: auto;
-	right: auto;
-	left: auto;
-	display: block;
-	z-index: 1;
-}
-
-.example-modal .modal {
-	background: transparent !important;
-}
-</style>
-	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -79,13 +63,48 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<h1>Menu Access List</h1>
+				<h1>${fx}</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li><a href="#">Tables</a></li>
 					<li class="active">Data tables</li>
-
 				</ol>
+				<br />
+				<div style="margin:0;" class="box">
+					<div class="pull-right">
+
+						Date :
+						<c:forEach var="DAT" items="${Date_list}">
+							<input type="text" id="nepdate" value="${DAT.NEP_TODAY_DATE}"
+								class="nepali-calendar">
+						</c:forEach>
+
+					</div>
+
+					<table class="table-condensed">
+						<tr>
+							<td>Trans No.</td>
+							<td><input readonly type="text" id="transno"></td>
+							<td>Customer No.</td>
+							<td><select style="width: 400px;" name="QSP_CODE"
+								id="SP_CODE" onchange="getcustomerinfo()">
+									<option value=''>Select :</option>
+									<c:forEach var="SP" items="${Sp_list}">
+										<option value="${SP.SP_CODE}">${SP.SP_NAME}
+											${SP.SP_CODE}</option>
+									</c:forEach>
+							</select></td>
+
+
+						</tr>
+						<tr>
+							<td>Address</td>
+							<td id="address"></td>
+							<td>Pan No.</td>
+							<td id="panno"></td>
+						</tr>
+					</table>
+				</div>
 
 			</section>
 
@@ -93,64 +112,93 @@
 			<section class="content">
 				<div class="row">
 					<div class="col-xs-12">
-						<select id="ROLE_CODE" onchange="return getEditMode()" class="form-control">
-							<option value="">Select</option>
-
-
-							<c:forEach var="role" items="${rolelist}">
-
-								<option value="${role.getROLE_CODE()}">${role.getDESCRIPTION()}
-									(${role.getROLE_CODE()})</option>
-
-							</c:forEach>
-
-						</select>
-
 
 						<!-- /.box -->
 
 						<div class="box">
-							<div class="box-header">
-								<h3 class="box-title">${fx}</h3>
-							</div>
-
-							<%
-								if (request.getParameter("sucess") != null) {
-							%>>
-							<div class="alert alert-success">
-								<strong> <%=request.getParameter("sucess")%>
-								</strong>
-							</div>
-							<%
-								}
-							%>
-							<%
-								if (request.getParameter("error") != null) {
-							%>>
-							<div class="alert alert-danger">
-								<strong> <%=request.getParameter("error")%>
-								</strong>
-							</div>
-							<%
-								}
-							%>
+							<!-- 							<div class="box-header"> -->
+							<%-- 								<h3 class="box-title">${fx}</h3> --%>
+							<!-- 							</div> -->
 
 <div class="overlay">
   <i class="fa fa-refresh fa-spin"></i>
 </div>
 
-
 							<!-- /.box-header -->
-							<div class="box-body ">
-							
-							<jsp:include page="${request.contextPath}/menuaccessbody"></jsp:include>
-							
-							
-							
+							<div class="box-body table-responsive">
+								<table id="example1" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th style="text-align: center"><a href="#"
+												class="btn btn-default bg-green" onclick="additem()"> <i
+													class="fa fa-plus"></i>
+											</a></th>
+											<th>Code</th>
+											<th>Name</th>
+											<th>Quantity</th>
+											<th>Rate</th>
+											<th>Revenue</th>
+											<th>TSC</th>
+											<th>VAT</th>
+											<th>Total</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th colspan="5">Total</th>
+											<th id="sumrev">-</th>
+
+											<th id="sumtsc">-</th>
+
+											<th id="sumvat">-</th>
+											<th id="sumtot">-</th>
+
+										</tr>
+									</tfoot>
+
+								</table>
+
 							</div>
 							<!-- /.box-body -->
+							<hr>
+							<table class="table-condensed">
+								<tr>
+									<td>Bank</td>
+									<td><select style="width: 400px;" name="BANK_CODE"
+										id="BANK_CODE">
+											<option value=''>Select :</option>
+											<c:forEach var="SP" items="${bank_list}">
+												<option value="${SP.BANK_CD}">${SP.BANK_NAME}
+													${SP.BANK_CODE}</option>
+											</c:forEach>
+									</select></td>
+									<td>Received Amount</td>
+									<td><input style="text-align: right"
+										onchange="number2text(this.value)" class="form-control"
+										id="AMT" placeholder="Enter Amount" type="number"></td>
+								</tr>
+								<tr>
+									<td><label>Remarks</label></td>
+									<td><input type="text" id="remarks" class="form-control"
+										placeholder="Enter Remarks"></td>
+								</tr>
+								<tr>
+									<td><label>Amount In Words</label></td>
+									<td colspan="3"><input id="inwords" class="form-control"
+										type="text" readonly="readonly"></td>
+								</tr>
+								<tr><td>
+								<button id="savebtn" onclick="post()" class='btn bg-blue myClickDisabledElm'>Save</button></td>
+								<td>
+								<button class='btn bg-purple' disabled="disabled">Print</button> </td>
+								</tr>
+
+							</table>
+
 						</div>
 						<!-- /.box -->
+
+
 					</div>
 					<!-- /.col -->
 				</div>
@@ -181,18 +229,15 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialogmenuaccess"></jsp:include>
+
+	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
 
-	<script>
-		$(function() {
+	<script src="<c:url value="/resources/function/SalesBill/Bill.js" />"></script>
+	<script
+		src="<c:url value="/resources/function/SalesBill/Amt2Words.js" />"></script>
+		<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
-			$('#example1').DataTable()
-
-		})
-	</script>
-	<script src="<c:url value="/resources/function/menuaccess.js" />"></script>
-	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 
 </body>

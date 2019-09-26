@@ -60,7 +60,7 @@ public class COADao {
 		con.setAutoCommit(false);
 
 		String tPARENT_SLDG_CODE = null;
-		String tSTATEMENT_TYPE = null;
+		String tAC_Type = null;
 		try {
 			PreparedStatement pst1 = con.prepareStatement(
 					"select a.PARENT_SLDG_CODE,a.STATEMENT_TYPE from M_CHART_OF_ACCOUNTS a where SLDG_CODE=?");
@@ -68,13 +68,13 @@ public class COADao {
 			ResultSet rs = pst1.executeQuery();
 			while (rs.next()) {
 				tPARENT_SLDG_CODE = rs.getString("PARENT_SLDG_CODE");
-				tSTATEMENT_TYPE = rs.getString("STATEMENT_TYPE");
+				tAC_Type = rs.getString("AC_TYPE");
 
 			}
 			// next level ko lagi-- parent same hunchha
-			if (tSTATEMENT_TYPE.equals("T")) {
+			if (tAC_Type.equals("T")) {
 				PreparedStatement pst2 = con
-						.prepareStatement("update M_CHART_OF_ACCOUNTS set STATEMENT_TYPE=? where SLDG_CODE=?");
+						.prepareStatement("update M_CHART_OF_ACCOUNTS set AC_TYPE=? where SLDG_CODE=?");
 				pst2.setString(1, "F");
 				pst2.setString(2, tPARENT_SLDG_CODE);
 				pst2.executeUpdate();
@@ -109,15 +109,15 @@ public class COADao {
 	}
 
 	public String Update(String COMP_CODE, String SLDG_CODE, String ENG_DESC, String STATEMENT_TYPE, String ACTIVE_FLAG,
-			String DR_CR_FLAG, String AC_TYPE, String REMARKS, String User) throws SQLException {
+			String DR_CR_FLAG, String REMARKS, String User) throws SQLException {
 		Connection con = DbCon.getConnection();
 
 		try {
 			PreparedStatement pst = con.prepareStatement(
-					"update M_CHART_OF_ACCOUNTS SET ENG_DESC=?,ACTIVE_FLAG=?,DR_CR_FLAG=?,REMARKS=?,UPDATE_BY=?,UPDATE_DT=sysdate where SLDG_CODE=?");
+					"update M_CHART_OF_ACCOUNTS SET ENG_DESC=?,STATEMENT_TYPE=?,DR_CR_FLAG=?,REMARKS=?,UPDATE_BY=?,UPDATE_DT=sysdate where SLDG_CODE=?");
 
 			pst.setString(1, ENG_DESC);
-			pst.setString(2, ACTIVE_FLAG);
+			pst.setString(2, STATEMENT_TYPE);
 			pst.setString(3, DR_CR_FLAG);
 			pst.setString(4, REMARKS);
 			pst.setString(5, User);
@@ -157,7 +157,7 @@ public class COADao {
 				rs = pst.executeQuery();
 				if (!rs.next()) {
 					pst = con.prepareStatement(
-							"update M_CHART_OF_ACCOUNTS SET STATEMENT_TYPE=?,UPDATE_BY=?,UPDATE_DT=sysdate where SLDG_CODE=?");
+							"update M_CHART_OF_ACCOUNTS SET AC_TYPE=?,UPDATE_BY=?,UPDATE_DT=sysdate where SLDG_CODE=?");
 
 					pst.setString(1, "T");
 					pst.setString(2, User);
@@ -178,3 +178,4 @@ public class COADao {
 	}
 
 }
+

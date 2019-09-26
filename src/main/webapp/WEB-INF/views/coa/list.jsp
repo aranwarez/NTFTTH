@@ -69,11 +69,14 @@
 					<li><a href="#">Tables</a></li>
 					<li class="active">Data tables</li>
 				</ol>
-				<br>
-				
-				<a href="#" class="btn bg-green pull-left"
+				<br> <a href="#" class="btn bg-green pull-left"
 					onclick="return getFolder()"> <i class="fa fa-globe"></i> Root
 				</a>
+				<c:if test="${MENU_ACCESS.ADD_FLAG == 'Y'}">
+					<a href="#" class="btn btn-primary pull-right" data-toggle="modal"
+						data-target="#myModal"> <i class="fa fa-plus"></i> Add
+					</a>
+				</c:if>
 				<div class="box pull-left" id="html1"></div>
 
 			</section>
@@ -125,8 +128,12 @@
 											<th>DR/CR</th>
 											<th>AC TYPE</th>
 											<th>REMARKS</th>
-											<th>Edit</th>
-											<th>Delete</th>
+											<c:if test="${MENU_ACCESS.EDIT_FLAG == 'Y'}">
+												<th>Edit</th>
+											</c:if>
+											<c:if test="${MENU_ACCESS.DELETE_FLAG == 'Y'}">
+												<th>Delete</th>
+											</c:if>
 
 										</tr>
 									</thead>
@@ -166,7 +173,7 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialogcpdetail"></jsp:include>
+	<jsp:include page="${request.contextPath}/dialogCOA"></jsp:include>
 
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 	<link rel="stylesheet"
