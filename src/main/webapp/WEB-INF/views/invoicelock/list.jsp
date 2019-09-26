@@ -107,16 +107,6 @@
                                                 </c:forEach>
                                         </select></td>
                                     </c:forEach>
-                                <td>VAS Services</td>
-                                <td><select style="width: 200px;" name="QSERVICE_CODE"
-                                            id="QSERVICE_CODE">
-                                        <option value=''>Select :</option>
-                                        <c:forEach var="VASSER" items="${VASSer_list}">
-                                            <option value="${VASSER.SERVICE_CODE}">
-                                                ${VASSER.SERVICE_CODE}</option>
-                                            </c:forEach>
-                                    </select></td>
-                                <td>NT/SP</td>
                                 <td>Post</td>
                                 <td><select style="width: 80px;" class="form-control"
                                             name="QPOST_FLAG" id="QPOST_FLAG">
@@ -128,13 +118,15 @@
                             <tr>
                                 <td><input type="button" value="Query"
                                            onclick="getInvoiceLockList();"></td>
-                                <td><input type="button" value="Post"
-                                           onclick="postExcelTransaction();"></td>
+                                <td>
+                                <input type="submit" id="postdata" value="Post" onclick="return post()">
+                                <input type="submit" id="selectcheck" value="select all" onclick="return select_check(true)"> 
+                                <input type="submit"  style="display:none" id="selectcheckf" value="Unselect all" onclick="return select_check(false)">
+                                </td>
                                 <td><input data-toggle="modal" data-target="#maindeletedialog" 
                                            type="button" value="Delete" >
                                 </td>
-                            <input type="submit" id="selectcheck" value="select all" onclick="return select_check(true)"> 
-                            <input type="submit"  style="display:none" id="selectcheckf" value="Unselect all" onclick="return select_check(false)">
+                            
                             </tr>
                         </table>
                     </div>
@@ -194,12 +186,13 @@
                                                 <th>Year</th>
                                                 <th>Period</th>
                                                 <th>Month</th>
-                                                <th>Service</th>
+                                                <th>SPCode</th>
+                                                <th>Sharing Amt</th>
+                                                <th>Non Sharing Amt</th>
                                                 <th>Post Flag</th>
                                                 <th>Post By</th>
-                                                <th>Post Dt.</th>
-
                                                 <th>View</th>
+                                                <th>Unpost</th>
                                                 <th>Delete</th>
                                             </tr>
                                         </thead>
@@ -207,20 +200,30 @@
                                             <c:forEach var="user" items="${data_list}">
                                                 <tr>
                                                     <td>${user.TRANS_NO}</td>
-                                                    <td>${user.TRANS_DT}</td>
+                                                    <td>${user.NEP_DT}</td>
                                                     <td>${user.IMP_YEAR}</td>
                                                     <td>${user.IMP_PERIOD}</td>
                                                     <td>${user.IMP_MONTH}</td>
-                                                    <td>${user.SERVICE_CODE}</td>
+                                                    <td>${user.S_NO}</td>
+                                                    <td>${user.SHARING}</td>
+                                                    <td>${user.NON_SHARING}</td>
                                                     <td>${user.POST_FLAG}</td>
                                                     <td>${user.POST_BY}</td>
-                                                    <td>${user.POST_DT}</td>
                                                     <td>
                                                         <div class="btn-group">
                                                             <a href="#" class="btn btn-info" data-toggle="modal"
                                                                data-target="#editModal"
                                                                onclick="return viewInvoicelock('${user.TRANS_NO}')"> <i
                                                                     class="fa fa-edit"></i> View
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <a href="" class="btn btn-default" data-toggle="modal"
+                                                               data-target="#unpostModal"
+                                                               onclick="return unpostInvoicelock('${user.TRANS_NO}')"> <i
+                                                                    class="fa fa-trash"></i> Unpost
                                                             </a>
                                                         </div>
                                                     </td>
