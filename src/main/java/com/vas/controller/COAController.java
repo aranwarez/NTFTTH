@@ -6,11 +6,7 @@
 package com.vas.controller;
 
 import com.dao.COADao;
-import com.dao.CommonDateDao;
 import com.dao.CommonMenuDao;
-import com.dao.SpDao;
-import com.dao.VASServiceDao;
-import com.model.Menu;
 import com.model.MenuAccess;
 import com.model.UserInformationModel;
 
@@ -34,12 +30,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class COAController {
 
-	@RequestMapping(value = "/COA/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/coa/list", method = RequestMethod.GET)
 	public String menuList(Locale locale, Model model, HttpServletRequest request, HttpSession session)
 			throws Exception {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		String url = request.getServletPath();
-		List<Menu> list = null;
 
 //menu code should know before validate
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), url);
@@ -48,32 +43,22 @@ public class COAController {
 			return "/home";
 		}
 		model.addAttribute("MENU_ACCESS", menuaccess);
-//		model.addAttribute("EDIT_FLAG", menuaccess.getEDIT_FLAG());
-//		model.addAttribute("DELETE_FLAG", menuaccess.getDELETE_FLAG());
-//		model.addAttribute("POST_FLAG", menuaccess.getPOST_FLAG());
-//		model.addAttribute("CANCEL_FLAG", menuaccess.getCANCEL_FLAG());
 		model.addAttribute("fx", "Chart Of Accounts");
-		model.addAttribute("data_list", list);
-
-		VASServiceDao VASSER = new VASServiceDao();
-		model.addAttribute("VASSer_list", VASSER.getVasServiceList());
-		CommonDateDao DAT = new CommonDateDao();
-		model.addAttribute("Date_list", DAT.getDateList());
-		CommonDateDao mon = new CommonDateDao();
-		model.addAttribute("Mon_list", mon.getNepMonthList());
-		SpDao sp = new SpDao();
-		model.addAttribute("Sp_list", sp.getSpList());
-
 		return "coa/list";
 
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/COA/getCOAList", method = RequestMethod.GET)
+	@RequestMapping(value = "/coa/getCOAList", method = RequestMethod.GET)
 	public List<Map<String, Object>> getCOAList(Locale locale, Model model, HttpSession session) throws SQLException {
 		COADao dao = new COADao();
 		return dao.getCOAlist();
 
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "dialogCOA")
+	public String dialogcp(Model model, Locale locale) {
+		return "coa/modal";
 	}
 
 }
