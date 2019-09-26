@@ -26,7 +26,7 @@ public class CommonDateDao {
         Connection con = DbCon.getConnection();
 
         try {
-            PreparedStatement pst = con.prepareStatement("select trunc(sysdate) today_date, common.to_bs(sysdate) nep_today_date, common.to_bs(sysdate-30) nep_from_date, substr(common.to_bs(sysdate),1,4) cur_year, substr(common.to_bs(sysdate),6,2) cur_month, decode(substr(common.to_bs(sysdate+200),6,2),'04','01','05','01','06','01','07','02','08','02','09','02','10','03','11','03','12','03','04') cur_period from sys.dual");
+            PreparedStatement pst = con.prepareStatement("select trunc(sysdate) today_date, common.to_bs(sysdate) nep_today_date, common.to_bs(sysdate-30) nep_from_date, substr(common.to_bs(sysdate),1,4) cur_year, substr(common.to_bs(sysdate),6,2) cur_month, decode(substr(common.to_bs(sysdate),6,2),'04','01','05','01','06','01','07','02','08','02','09','02','10','03','11','03','12','03','04') cur_period from sys.dual");
             ResultSet rs = pst.executeQuery();
 
             List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
