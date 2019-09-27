@@ -80,6 +80,7 @@ function getSpbgFilterList() {
                     value.NEP_BANK_GUARENTEE_DATE,
                     value.NEP_BANK_VALIDITY_DATE,
                     value.AMT,
+                    value.REMARKS,
                     value.POST_FLAG,
                     value.POST_DT,
                     value.POST_BY,

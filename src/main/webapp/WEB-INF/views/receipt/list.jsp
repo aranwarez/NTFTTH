@@ -63,7 +63,7 @@
                 <div class="content-wrapper">
                     <!-- Content Header (Page header) -->
                     <section class="content-header">
-                        <h1>Bank Deposit/Refund/Bank Guarentee Entry</h1>
+                        <h1>Receipt</h1>
                         <ol class="breadcrumb">
                             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                             <li><a href="#">Tables</a></li>
@@ -83,16 +83,7 @@
                                 </select>
                             </td> 
 
-                            <td>Trans Code </td>      
-                            <td>  
-                                <select style="width: 150px;" name="QTRANS_CD" id="QTRANS_CD"> 
-                                    <option value=''>Select :</option>
-                                    <c:forEach var="TRA" items="${Trans_list}">
-                                        <option value="${TRA.TRANS_CD}">${TRA.TRANS_CD}</option>
-                                    </c:forEach>
-                                </select>
-                            </td> 
-                            <td>Post Flag</td>      
+                            <td>Cancel Flag</td>      
                             <td>  
                                 <select  style="width: 100px;" name="QPOST_FLAG" id="QPOST_FLAG" > 
                                     <option value='N'>N</option>
@@ -114,7 +105,7 @@
                                 </td>
 
                                 <td>
-                                    <input type="button" style="width: 150px;" value="QUERY" onclick="getSpbgFilterList();">    
+                                    <input type="button" style="width: 150px;" value="QUERY" onclick="getReceiptFilterList();">    
                                 </td>
                             </c:forEach>
                         </tr>
@@ -163,45 +154,43 @@
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>TransID</th>
-                                                <th>Trans Cd</th>
+                                                <th>ReceiptNo.</th>
+                                                <th>Date</th>
                                                 <th>SP Code</th>
-                                                <th>SP NAME</th>
-                                                <th>Trans Dt</th>
                                                 <th>Bank</th>
-                                                <th>Bank GuarenteeDt</th>
-                                                <th>ValidtyDt</th>
-                                                <th>AMT</th>
-                                                <th>REMARKS</th>
-                                                <th>POST_FLAG</th>
-                                                <th>POST_DT</th>
-                                                <th>POST_BY</th>
-                                                <th>Edit</th>
-                                                <th>Delete</th>
+                                                <th>BankName</th>
+                                                <th>ChequeNo.</th>
+                                                <th>Receipt Amt</th>
+                                                <th>Remarks</th>
+                                                <th>Create By</th>
+                                                <th>Create Dt</th>
+                                                <th>Cancel By</th>
+                                                <th>Cancel Dt</th>
+                                                <th>View</th>
+                                                <th>Cancel</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <c:forEach var="user" items="${data_list}">
                                                 <tr>
-                                                    <td>${user.TRANS_ID}</td>
-                                                    <td>${user.TRANS_CD}</td>
-                                                    <td>${user.SP_CODE}</td>
-                                                    <td>${user.SP_NAME}</td>
-                                                    <td>${user.NEP_TRANS_DT}</td>
+                                                    <td>${user.RECEIPT_NO}</td>
+                                                    <td>${user.NEP_DT}</td>
+                                                    <td>${user.S_NO}</td>
                                                     <td>${user.BANK_CD}</td>
-                                                    <td>${user.NEP_BANK_GUARENTEE_DATE}</td>
-                                                    <td>${user.NEP_BANK_VALIDITY_DATE}</td>
-                                                    <td>${user.AMT}</td>
+                                                    <td>${user.BANK_NAME}</td>
+                                                    <td>${user.CHEQUE_NO}</td>
+                                                    <td>${user.PAID_AMT}</td>
                                                     <td>${user.REMARKS}</td>
-                                                    <td>${user.POST_FLAG}</td>
-                                                    <td>${user.POST_DT}</td>
-                                                    <td>${user.POST_BY}</td>
+                                                    <td>${user.CREATE_BY}</td>
+                                                    <td>${user.CREATE_DT}</td>
+                                                    <td>${user.CANCEL_BY}</td>
+                                                    <td>${user.CANCEL_DT}</td>
                                                     <td>
                                                         <div class="btn-group">
                                                             <a href="#" class="btn btn-info" data-toggle="modal"
                                                                data-target="#editModal"
-                                                               onclick="return editSpbg('${user.TRANS_ID}')"> <i
-                                                                    class="fa fa-edit"></i> Edit
+                                                               onclick="return editReceipt('${user.RECEIPT_NO}')"> <i
+                                                                    class="fa fa-edit"></i> View
                                                             </a>
                                                         </div>
                                                     </td>
@@ -209,8 +198,8 @@
                                                         <div>
                                                             <a href="" class="btn btn-default" data-toggle="modal"
                                                                data-target="#deleteModal"
-                                                               onclick="return deleteSpbg('${user.TRANS_ID}')"> <i
-                                                                    class="fa fa-trash"></i> Delete
+                                                               onclick="return deleteReceipt('${user.RECEIPT_NO}')"> <i
+                                                                    class="fa fa-trash"></i> Cancel
                                                             </a>
                                                         </div>
                                                     </td>
@@ -252,7 +241,7 @@
             </div>
             <!-- ./wrapper -->
 
-        <jsp:include page="${request.contextPath}/dialogspbg"></jsp:include>
+        <jsp:include page="${request.contextPath}/dialogreceipt"></jsp:include>
 
         <jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
@@ -263,9 +252,6 @@
 
                 })
             </script>
-            <script src="<c:url value="/resources/function/spbg.js" />"></script>
-
-
-
+            <script src="<c:url value="/resources/function/receipt.js" />"></script>
     </body>
 </html>
