@@ -164,6 +164,9 @@
                                 <%
                                     }
                                 %>
+                                <div class="overlay">
+                                    <i class="fa fa-refresh fa-spin"></i>
+                                </div>
 
                                 <!-- /.box-header -->
                                 <div class="box-body table-responsive">
@@ -288,6 +291,7 @@
             </script>
 
             <script src="<c:url value="/resources/function/invoicelock.js?v=1.1" />"></script>
+        <script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 
 
