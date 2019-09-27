@@ -9,11 +9,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.dao.BankDao;
 import com.dao.CashSaleDao;
@@ -29,6 +31,7 @@ import com.model.UserInformationModel;
 
 @Controller
 public class CashSaleBillController {
+	private static final String classname="../cashsale/bill";
 
 	@RequestMapping(value = "/cashsale/bill", method = RequestMethod.GET)
 	public String menuList(Locale locale, Model model, HttpServletRequest request, HttpSession session)
@@ -76,6 +79,15 @@ public class CashSaleBillController {
 	@RequestMapping(value = "/cashsale/savebill", method = RequestMethod.POST)
 	public String saveBill(String SP_CODE,String nepdate,String BANK_CODE,String REMARKS, String AMT, String DATA, Locale locale, Model model, HttpSession session) throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+			throw new ResponseStatusException(
+			           HttpStatus.FORBIDDEN, "Unauthorized");
+			
+		//	throw new ForbiddenException();
+	//		model.addAttribute("fx", "Unauthorized Action for this role!!");
+		//	return "/home";
+		}
 		
 		ObjectMapper mapper = new ObjectMapper();
 
@@ -95,5 +107,5 @@ public class CashSaleBillController {
 		
 		
 	}
-
+	
 }
