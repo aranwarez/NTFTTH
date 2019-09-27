@@ -596,3 +596,20 @@ ALTER TABLE PAYMENT_MASTER ADD (
  REFERENCES M_COLL_CENTER (CC_CODE));
 
 
+--------------------------------27sep2019-
+
+    CREATE SEQUENCE VASNTW.SEQ_RECEIPT_NO
+  START WITH 1
+  MAXVALUE 999999
+  MINVALUE 0
+  CYCLE
+  NOCACHE
+  ORDER;
+  
+  create or replace view vw_bill as SELECT a.trans_no, (a.imp_year||'/'||a.imp_month ||'/'||'01') nep_inv_dt, a.trans_dt, a.imp_year, a.imp_period, a.imp_month, a.s_no,
+a.post_flag, a.post_by, a.post_dt, b.trans_id, b.service_code, b.sharing_type,
+b.item_code, b.dr_cr_flag, nvl(b.dr_cr_flag*b.amt,0) amt, nvl(b.dr_cr_flag*b.royalty_amt,0) royalty_amt, 
+nvl(b.dr_cr_flag*b.tsc_amt,0) tsc_amt, nvl(b.dr_cr_flag*b.vat_amt,0) vat_amt
+FROM bill_master a, bill_detail b
+WHERE a.trans_no=b.trans_no;
+order by 4,6,7
