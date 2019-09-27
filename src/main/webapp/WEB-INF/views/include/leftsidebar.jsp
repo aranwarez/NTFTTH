@@ -28,40 +28,50 @@
 		var innerHtml;
 
 		$("#details" + sn).html('');
-		$
-				.get(
-						'../getChildMenulist',
-						{
-							getChildlist : "getChildlist",
-							PARENT_MENU : PARENT_MENU,
-							ROLE_CODE : ROLE_CODE
-						},
-						function(response) {
-							//  alert(JSON.stringify(response));
+		
+		$.ajax({
+			url : "../getChildMenulist",
+			type : "GET",
+			//async : false,
+		//	global : false,
+			dataType : 'json',
+			data : {getChildlist : "getChildlist",
+				PARENT_MENU : PARENT_MENU,
+				ROLE_CODE : ROLE_CODE}
 
-							$
-									.each(
-											response,
-											function(index, value) {
+		}).done(function(data, textStatus, jqXHR) {
+			if (data) {
+				$
+				.each(
+						data,
+						function(index, value) {
 
-												innerHtml = "<li><a  href=" + value.menu_URL + "><i class='fa fa-circle-o'></i><span>"
-														+ value.menu_DESC
-														+ " </span></a></li>";
-												// 												if (value.menu_CODE == 'M0003001'
-												// 														|| value.menu_CODE == 'SUPER002') {
-												// 													// alert('sadsad');
-												// 													innerHtml = "<li><a  href=" + value.menu_URL + " target='_blank'><i class='fa fa-circle-o'></i>"
-												// 															+ value.menu_DESC
-												// 															+ " </a></li>";
-												// 												}
+							innerHtml = "<li><a  href=" + value.menu_URL + "><i class='fa fa-circle-o'></i><span>"
+									+ value.menu_DESC
+									+ " </span></a></li>";
+							// 												if (value.menu_CODE == 'M0003001'
+							// 														|| value.menu_CODE == 'SUPER002') {
+							// 													// alert('sadsad');
+							// 													innerHtml = "<li><a  href=" + value.menu_URL + " target='_blank'><i class='fa fa-circle-o'></i>"
+							// 															+ value.menu_DESC
+							// 															+ " </a></li>";
+							// 												}
 
-												$("#details" + sn).append(
-														innerHtml);
-
-											});
+							$("#details" + sn).append(
+									innerHtml);
 
 						});
+				// location.reload();
+			}
 
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+		
+			if (jqXHR.status === 200) {
+					} else
+				alert("Error while connecting to server!!");
+		}).always(function(jqXHROrData, textStatus, jqXHROrErrorThrown) {
+			// alert("complete");
+		});
 	}
 </script>
 
