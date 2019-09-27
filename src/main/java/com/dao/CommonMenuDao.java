@@ -16,9 +16,9 @@ public class CommonMenuDao {
 			MenuAccess m = new MenuAccess();
 
 			PreparedStatement pst = con.prepareStatement(
-					"select * from edit_mode where ROLE_CODE=? and menu_code=(select menu_code FROM WEB_MENU_ENTRY WHERE menu_url like ?)");
+					"select * from edit_mode where ROLE_CODE=? and menu_code=(select menu_code FROM WEB_MENU_ENTRY WHERE menu_url= ?)");
 			pst.setString(1, ROLE_CODE);
-			pst.setString(2, "%" + MENU_URL);
+			pst.setString(2,  MENU_URL);
 			ResultSet rs = pst.executeQuery();
 			if (rs.next()) {
 				m.setLIST_FLAG(rs.getString("LIST_FLAG"));

@@ -148,7 +148,9 @@
                                 <%
                                     }
                                 %>
-
+                                <div class="overlay">
+                                    <i class="fa fa-refresh fa-spin"></i>
+                                </div>
                                 <!-- /.box-header -->
                                 <div class="box-body table-responsive">
                                     <table id="example1" class="table table-bordered table-striped">
@@ -253,5 +255,6 @@
                 })
             </script>
             <script src="<c:url value="/resources/function/receipt.js" />"></script>
+        <script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
     </body>
 </html>
