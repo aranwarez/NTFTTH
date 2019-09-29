@@ -208,14 +208,17 @@ function itemchange(a) {
 }
 
 function calc(a) {
-	// debugger;
+	debugger;
 	var itemid = a.id.substring(4);
 	var rate = $('#rate' + itemid).val();
 	var quantity = $('#quan' + itemid).val();
-	var tsc = globaltsc * 0.01 * rate * quantity;
+	var tsc = globaltsc * 0.01 * Number(rate) * Number(quantity);
+	tsc=Number(tsc.toFixed(2));
 	$('#tsc' + itemid).html(tsc);
-	var vat = globalvat * 0.01 * (tsc + (rate * quantity));
-	var rev = (rate * quantity) + tsc + vat;
+	var vat = globalvat * 0.01 * Number(tsc + (rate * quantity));
+	vat=Number(vat.toFixed(2));
+	var rev = Number(rate * quantity) + Number(tsc) + Number(vat);
+	rev=Number(rev.toFixed(2));
 	$('#vat' + itemid).html(vat);
 	$('#rev' + itemid).html(rate * quantity);
 
