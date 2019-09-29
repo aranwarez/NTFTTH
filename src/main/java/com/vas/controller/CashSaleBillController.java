@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
@@ -29,17 +28,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.MenuAccess;
 import com.model.UserInformationModel;
 
+
+
 @Controller
 public class CashSaleBillController {
-	private static final String classname="../cashsale/bill";
+	private static final String classname="../cashsale/list";
 
 	@RequestMapping(value = "/cashsale/bill", method = RequestMethod.GET)
-	public String menuList(Locale locale, Model model, HttpServletRequest request, HttpSession session)
+	public String menuList(Locale locale, Model model, HttpSession session)
 			throws Exception {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		String url = request.getServletPath();
-		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), url);
-		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
 			model.addAttribute("fx", "Unauthorized Page for this role!!");
 			return "/home";
 		}
@@ -108,4 +108,88 @@ public class CashSaleBillController {
 		
 	}
 	
+//Cash Sale Master Form
+	
+	@RequestMapping(value = "/cashsale/list", method = RequestMethod.GET)
+	public String getMasterList(Locale locale, Model model, HttpSession session)
+			throws Exception {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
+		model.addAttribute("MENU_ACCESS", menuaccess);
+		model.addAttribute("fx", "Bill Master");
+
+		// getting list of paramater required
+		SpDao sp = new SpDao();
+		model.addAttribute("Sp_list", sp.getSpList());
+//		BankDao bank = new BankDao();
+//
+//		model.addAttribute("bank_list", bank.getBankListforCC(user.getCC_CODE()));
+		CommonDateDao DAT = new CommonDateDao();
+		model.addAttribute("Date_list", DAT.getDateList());
+
+		return "cashsale/Master";
+
+	}
+	@ResponseBody
+	@RequestMapping(value = "/cashsale/getMasterlist", method = RequestMethod.GET)
+	public List<Map<String, Object>> getBillMaster(String S_NO, String FROM_DT, String TO_DT,String POST_FLAG,Locale locale, Model model, HttpSession session) throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(
+			           HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		CashSaleDao dao = new CashSaleDao();
+		
+		List<Map<String, Object>> data= dao.getReceiptList(S_NO, FROM_DT, TO_DT, POST_FLAG);
+		return data;
+	
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/cashsale/cancelbill", method = RequestMethod.POST)
+	public String Cancelbill(String Transno,Locale locale, Model model, HttpSession session) throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		System.out.println(menuaccess.getCANCEL_FLAG());
+		if (menuaccess == null || menuaccess.getCANCEL_FLAG().equals("N")) {
+			throw new ResponseStatusException(
+			           HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		CashSaleDao dao = new CashSaleDao();
+		
+		return dao.DeleteReceipt(Transno, user.getUSER_ID());
+		
+	
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/cashsale/dialog")
+    public String dialogreceipt(Model model, Locale locale) {
+        return "cashsale/Masterdialog";
+    }
+	
+		
+	@ResponseBody
+	@RequestMapping(value = "/cashsale/getDetaillist", method = RequestMethod.GET)
+	public List<Map<String, Object>> getBillDetail(String transno,Locale locale, Model model, HttpSession session) throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(
+			           HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		CashSaleDao dao = new CashSaleDao();
+		
+		return dao.getDetailList(transno);
+		
+	
+	}
+
+
+
 }

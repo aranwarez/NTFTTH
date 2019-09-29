@@ -43,11 +43,9 @@ $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
 });
 
 $(document).ajaxError(function(event, xhr, settings) {
-	debugger;
-	if(xhr.status===403){
+	if (xhr.status === 403) {
 		alert('Unauthorized Action for this role!!! Please contact admin');
-	}
-	else
-	alert('Error!!! Try to refresh the page');
+	} else
+		alert('Error!!! Try to refresh the page');
 
 });

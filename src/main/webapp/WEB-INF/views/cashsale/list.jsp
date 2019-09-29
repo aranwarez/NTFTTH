@@ -73,15 +73,10 @@
 				<div style="margin:0;" class="box">
 					<div class="pull-right">
 
-						Date :
-						<c:forEach var="DAT" items="${Date_list}">
-							<input type="text" id="nepdate" value="${DAT.NEP_TODAY_DATE}"
-								class="nepali-calendar">
-						</c:forEach>
-
+					
 					</div>
 
-					<table class="table-condensed">
+					<table class="table table-condensed">
 						<tr>
 							<td>Trans No.</td>
 							<td><input readonly type="text" id="transno"></td>
@@ -94,6 +89,15 @@
 											${SP.SP_CODE}</option>
 									</c:forEach>
 							</select></td>
+							<td>
+								Date :
+						<c:forEach var="DAT" items="${Date_list}">
+							<input type="text" id="nepdate" value="${DAT.NEP_TODAY_DATE}"
+								class="nepali-calendar">
+						</c:forEach>
+							
+							
+							</td>
 
 
 						</tr>
