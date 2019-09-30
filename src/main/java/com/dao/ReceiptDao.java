@@ -110,7 +110,7 @@ public class ReceiptDao {
             con.close();
         }
     }
-    
+
     public String DeleteReceipt(String RECEIPT_NO, String USER) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
@@ -128,6 +128,29 @@ public class ReceiptDao {
         } finally {
             con.close();
         }
+    }
+
+    public String getSpdue(String SP_CODE) throws SQLException {
+        Connection con = DbCon.getConnection();
+
+        try {
+            PreparedStatement pst = con.prepareStatement("SELECT sum(total_amt) bal_amt FROM vw_ledger\n"
+                    + "WHERE s_no=?\n"
+                    + "AND post_flag='Y'");
+            pst.setString(1, SP_CODE);
+            ResultSet rs = pst.executeQuery();
+
+            
+            while (rs.next()) {
+            return rs.getString(1);
+            }
+            return "0";
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            con.close();
+        }
+        return null;
     }
 
 }

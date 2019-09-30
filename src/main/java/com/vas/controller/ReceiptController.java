@@ -48,6 +48,7 @@ public class ReceiptController {
             model.addAttribute("fx", "Unauthorized Page for this role!!");
             return "/home";
         }
+        model.addAttribute("MENU_ACCESS", menuaccess);
 
         ReceiptDao dao = new ReceiptDao();
         List<Map<String, Object>> list = null;
@@ -137,5 +138,12 @@ public class ReceiptController {
         return msg;
 
     }
-
+// getting list of all SP wise Service List
+    @ResponseBody
+    @RequestMapping(value = "/receipt/getSpdue", method = RequestMethod.GET)
+    public String getSpdue(String SP_CODE, Locale locale, Model model, HttpSession session)
+            throws SQLException {
+        ReceiptDao dao = new ReceiptDao();
+        return dao.getSpdue(SP_CODE);
+    }
 }

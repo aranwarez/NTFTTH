@@ -70,6 +70,25 @@ function getReceiptFilterList() {
 
 }
 
+function getSpDue(SP_CODE) {
+    var sp_code
+    //debugger;
+    if (SP_CODE != null) {
+        sp_code = SP_CODE;
+    } else {
+        sp_code = $('#SP_CODE').val();
+    }
+    
+    $.get('../receipt/getSpdue', {SP_CODE: sp_code
+    }, function (response) {
+        if(Number(response)>=0){
+            $('#BALAMT').css({'color':'black'});
+        }else $('#BALAMT').css({'color':'red'});
+        
+        $('#BALAMT').html(response);
+    });
+}
+
 function getSPServiceList(SP_CODE) {
     var sp_code
     //debugger;
@@ -91,6 +110,8 @@ function getSPServiceList(SP_CODE) {
 
     });
 }
+
+
 
 function saveReceipt() {
     // debugger;
