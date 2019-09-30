@@ -613,3 +613,101 @@ b.dr_cr_flag*decode(b.sharing_type,'Y', (nvl(b.amt,0)-nvl(b.royalty_amt,0)-nvl(b
 FROM bill_master a, bill_detail b
 WHERE a.trans_no=b.trans_no
 order by 4,6,7;
+----------30sep2019
+DROP VIEW VASNTW.VW_LEDGER;
+
+/* Formatted on 2019/09/30 16:14 (Formatter Plus v4.8.8) */
+CREATE OR REPLACE FORCE VIEW vasntw.vw_ledger (trans_type,
+                                               trans_no,
+                                               trans_dt,
+                                               imp_year,
+                                               imp_month,
+                                               imp_period,
+                                               s_no,
+                                               trans_id,
+                                               service_code,
+                                               sharing_type,
+                                               item_code,
+                                               dr_cr_flag,
+                                               amt,
+                                               royalty,
+                                               tsc_amt,
+                                               vat_amt,
+                                               total_amt,
+                                               post_flag,
+                                               post_by,
+                                               post_dt,
+                                               create_by,
+                                               create_dt
+                                              )
+AS
+   (SELECT 'IV' trans_type, trans_no, common.to_ad (nep_inv_dt) trans_dt,
+           imp_year, imp_month, imp_period, s_no, trans_id, service_code,
+           sharing_type, item_code, dr_cr_flag, amt, royalty_amt royalty,
+           tsc_amt, vat_amt, total_amt, post_flag, post_by, post_dt,
+           create_by, create_dt
+      FROM vw_bill
+    UNION ALL
+    SELECT 'RV' trans_type, receipt_no trans_no, receipt_dt trans_dt,
+           TO_NUMBER (SUBSTR (common.to_bs (receipt_dt), 1, 4)) imp_year,
+           SUBSTR (common.to_bs (receipt_dt), 6, 2) imp_month,
+           NULL imp_period, s_no, 1 trans_id, NULL service_code,
+           NULL sharing_type, bank_cd item_code, -1 dr_cr_flag,
+           -1 * paid_amt amt, 0 royalty, 0 tsc_amt, 0 vat_amt,
+           -1 * paid_amt total_amt, post_flag, post_by, post_dt, create_by,
+           create_dt
+      FROM receipt_master
+     WHERE cancel_flag = 'N');
+
+CREATE OR REPLACE FORCE VIEW vasntw.vw_bill (trans_no,
+                                             nep_inv_dt,
+                                             trans_dt,
+                                             imp_year,
+                                             imp_period,
+                                             imp_month,
+                                             s_no,
+                                             post_flag,
+                                             post_by,
+                                             post_dt,
+                                             trans_id,
+                                             service_code,
+                                             sharing_type,
+                                             item_code,
+                                             dr_cr_flag,
+                                             amt,
+                                             royalty_amt,
+                                             tsc_amt,
+                                             vat_amt,
+                                             total_amt,
+                                             create_by,
+                                             create_dt
+                                            )
+AS
+   SELECT   a.trans_no,
+            (a.imp_year || '/' || a.imp_month || '/' || '01') nep_inv_dt,
+            a.trans_dt, a.imp_year, a.imp_period, a.imp_month, a.s_no,
+            a.post_flag, a.post_by, a.post_dt, b.trans_id, b.service_code,
+            b.sharing_type, b.item_code, b.dr_cr_flag,
+            b.dr_cr_flag * NVL (b.amt, 0) amt,
+            b.dr_cr_flag * NVL (b.royalty_amt, 0) royalty_amt,
+            b.dr_cr_flag * NVL (b.tsc_amt, 0) tsc_amt,
+            b.dr_cr_flag * NVL (b.vat_amt, 0) vat_amt,
+              b.dr_cr_flag
+            * DECODE (b.sharing_type,
+                      'Y', (  NVL (b.amt, 0)
+                            - NVL (b.royalty_amt, 0)
+                            - NVL (b.vat_amt, 0)
+                            - NVL (b.tsc_amt, 0)
+                       ),
+                      (  NVL (b.amt, 0)
+                       + NVL (b.royalty_amt, 0)
+                       + NVL (b.vat_amt, 0)
+                       + NVL (b.tsc_amt, 0)
+                      )
+                     ) total_amt,
+            a.create_by, a.create_dt
+       FROM bill_master a, bill_detail b
+      WHERE a.trans_no = b.trans_no
+   ORDER BY 4, 6, 7;
+
+
