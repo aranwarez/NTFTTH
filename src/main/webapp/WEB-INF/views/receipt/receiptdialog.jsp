@@ -6,7 +6,7 @@
 <!-- new modal -->
 <div class="modal fade" id="myModal" tabindex=-1 role="dialog"
      aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"
@@ -18,7 +18,7 @@
 
             <div class="modal-body">
                 <div class="form-group">
-                    <table>
+                    <table class="table table-bordered">
                         <tr>
                             <td>
                                 <label for="Receipt No ">Receipt No.</label> 
@@ -36,7 +36,8 @@
                         <tr>
                             <td>
                                 <label for="spcode">Service Provider</label> 
-                                <select style="width: 280px;" name="SP_CODE" id="SP_CODE">
+                                <br>
+                                <select class="form-control" style="width: 280px;" name="SP_CODE" id="SP_CODE" onchange="getSpDue(this.val);">
                                     <option value=''>Select :</option>
                                     <c:forEach var="SP" items="${Sp_list}">
                                         <option value="${SP.SP_CODE}">${SP.SP_NAME} ${SP.SP_CODE}</option>
@@ -45,6 +46,7 @@
                             </td>
                             <td>
                                 <label for="Bankcd">Bank Code</label> 
+                                <br>
                                 <select  class="form-control" style="width: 280px;" name="BANK_CD" id="BANK_CD">
                                     <option value=''>Select</option>
                                     <c:forEach var="BANK" items="${Bank_list}">
@@ -73,10 +75,18 @@
                         </tr>
                         <tr>
                             <td>
+                                <label for="balamt">Bal Amount.</label> 
+                                <label style="font-size: 30px"id="BALAMT"> </label>
+                            </td>
+                            <td>
                                 <label for="amt">Amount.</label> 
                                 <input style="width: 280px;" class="form-control" type="number" name="AMT" id="AMT"
                                        placeholder="Enter Amount"> 
                             </td>
+                            
+                            
+                        </tr>
+                        <tr>
                             <td>
                                 <label for="Createby">Create by</label> 
                                 <input type="text" class="form-control" style="width: 280px;"  name="createby" id="CREATE_BY"
