@@ -30,28 +30,7 @@ $(document).ready(function () {
         placeholder: "Select a Bank Code"
                 // allowClear: false
     });
-    $("#EDITTRANS_CD").select2({
-        dropdownParent: $("#editModal"),
-        placeholder: "Select a Trans Code"
-                // allowClear: false
-    });
     
-    $("#EDITSP_CODE").select2({
-        dropdownParent: $("#editModal"),
-        placeholder: "Select a Service Provider Code"
-                // allowClear: false
-    });
-    
-    $("#EDITBANK_CD").select2({
-        dropdownParent: $("#editModal"),
-        placeholder: "Select a Bank Code"
-                // allowClear: false
-    });
-
-    
-    
-    
-
 });
 
 function getSpbgFilterList() {

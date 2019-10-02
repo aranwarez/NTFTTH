@@ -13,7 +13,7 @@
                         aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">New Receipt</h4>
+                <h4 class="modal-title" id="myModalLabel">New Payment</h4>
             </div>
 
             <div class="modal-body">
@@ -21,15 +21,15 @@
                     <table class="table table-bordered">
                         <tr>
                             <td>
-                                <label for="Receipt No ">Receipt No.</label> 
-                                <input type="text"  style="width: 380px;" class="form-control" name="RECEIPT_NO" id="RECEIPT_NO"
-                                       placeholder="Auto generate Receipt No." readonly="true"> 
+                                <label for="Payment No ">Payment No.</label> 
+                                <input type="text"  style="width: 380px;" class="form-control" name="PAYMENT_NO" id="PAYMENT_NO"
+                                       placeholder="Auto generate Payment No." readonly="true"> 
                             </td>
                             <c:forEach var="DAT" items="${Date_list}">
                                 <td>
-                                    <label for="receiptdt">Receipt Dt.</label> 
-                                    <input type="text" style="width: 380px;" value="${DAT.NEP_TODAY_DATE}" class="nepali-calendar form-control" name="RECEIPT_DT" id="RECEIPT_DT"
-                                           placeholder="Select Receipt Dt."> 
+                                    <label for="PAYMENTdt">Payment Dt.</label> 
+                                    <input type="text" style="width: 380px;" value="${DAT.NEP_TODAY_DATE}" class="nepali-calendar form-control" name="PAYMENT_DT" id="PAYMENT_DT"
+                                           placeholder="Select Payment Dt."> 
                                 </td>
                             </c:forEach>
                         </tr>
@@ -54,43 +54,30 @@
                                     </c:forEach>
                                 </select> 
                             </td> 
-                            
+
                         </tr>
                         <tr>
-                            <td>
-                                <label for="BankName">Bank Name</label> 
-                                <select  class="form-control" style="width: 380px;" name="BANK_NAME" id="BANK_NAME">
-                                    <option value=''>Select</option>
-                                    <c:forEach var="OBANK" items="${OBank_list}">
-                                        <option value="${OBANK.BANK_CODE}">${OBANK.BANK_CODE} ${OBANK.BANK_NAME}</option>
-                                    </c:forEach>
-                                </select> 
-                            </td>
                             <td>
                                 <label for="ChequeNo">Cheque No.</label> 
                                 <input style="width: 380px;" class="form-control" type="text" name="chequeno" id="CHEQUE_NO"
                                        placeholder="Enter Cheque number."> 
                             </td>
-                            
-                        </tr>
-                        <tr>
                             <td>
                                 <label for="balamt">Bal Amount.</label> 
                                 <label style="font-size: 30px"id="BALAMT"> </label>
                             </td>
+
+                        </tr>
+                        <tr>
                             <td>
                                 <label for="amt">Amount.</label> 
                                 <input style="width: 380px;" class="form-control" type="number" name="AMT" id="AMT"
                                        placeholder="Enter Amount"> 
                             </td>
-                            
-                            
-                        </tr>
-                        <tr>
                             <td>
                                 <label for="Createby">Create by</label> 
                                 <input type="text" class="form-control" style="width: 380px;"  name="createby" id="CREATE_BY"
-                                       placeholder="Receipt By" readonly="true"> 
+                                       placeholder="Payment By" readonly="true"> 
                             </td>
                         </tr>
 
@@ -103,7 +90,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" onclick="saveReceipt()">Save</button>
+                <button type="submit" class="btn btn-primary" onclick="savePayment()">Save</button>
             </div>
             </form>
         </div>
@@ -121,79 +108,70 @@
                         aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">View Receipt</h4>
+                <h4 class="modal-title" id="myModalLabel">View Payment</h4>
             </div>
 
-            <form action="<c:url value="/receipt/update" />" method="post"
+            <form action="<c:url value="/payment/update" />" method="post"
                   acceptCharset="UTF-8">
 
                 <div class="modal-body">
                     <div class="form-group">
                         <table>
                             <tr>
-                            <td>
-                                <label for="Receipt No ">Receipt No.</label> 
-                                <input type="text"  style="width: 380px;" class="form-control" name="RECEIPT_NO" id="EDITRECEIPT_NO"
-                                       placeholder="Auto generate Receipt No." readonly="true"> 
-                            </td>
-                            <c:forEach var="DAT" items="${Date_list}">
                                 <td>
-                                    <label for="receiptdt">Receipt Dt.</label> 
-                                    <input type="text" style="width: 380px;" value="${DAT.NEP_TODAY_DATE}" class="nepali-calendar form-control" name="RECEIPT_DT" id="EDITRECEIPT_DT"
-                                           placeholder="Select Receipt Dt." readonly="true"> 
+                                    <label for="Payment No ">Payment No.</label> 
+                                    <input type="text"  style="width: 380px;" class="form-control" name="PAYMENT_NO" id="EDITPAYMENT_NO"
+                                           placeholder="Auto generate Payment No." readonly="true"> 
                                 </td>
-                            </c:forEach>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label for="spcode">Service Provider</label> 
-                                <select style="width: 380px;" name="SP_CODE" id="EDITSP_CODE" readonly="true">
-                                    <option value=''>Select :</option>
-                                    <c:forEach var="SP" items="${Sp_list}">
-                                        <option value="${SP.SP_CODE}">${SP.SP_NAME} ${SP.SP_CODE}</option>
-                                    </c:forEach>
-                                </select> 
-                            </td>
-                            <td>
-                                <label for="Bankcd">Bank Code</label> 
-                                <select  class="form-control" style="width: 380px;" name="BANK_CD" id="EDITBANK_CD" readonly="true">
-                                    <option value=''>Select</option>
-                                    <c:forEach var="BANK" items="${Bank_list}">
-                                        <option value="${BANK.BANK_CD}">${BANK.BANK_CD} ${BANK.ACCT_NO} ${BANK.ADDRESS}</option>
-                                    </c:forEach>
-                                </select> 
-                            </td> 
-                            
-                        </tr>
-                        <tr>
-                            <td>
-                                <label for="BankName">Bank Name</label> 
-                                <select  class="form-control" style="width: 380px;" name="BANK_NAME" id="EDITBANK_NAME" readonly="true">
-                                    <option value=''>Select</option>
-                                    <c:forEach var="OBANK" items="${OBank_list}">
-                                        <option value="${OBANK.BANK_CODE}">${OBANK.BANK_CODE} ${OBANK.BANK_NAME}</option>
-                                    </c:forEach>
-                                </select> 
-                            </td>
-                            <td>
-                                <label for="ChequeNo">Cheque No.</label> 
-                                <input style="width: 380px;" class="form-control" type="text" name="chequeno" id="EDITCHEQUE_NO" readonly="true"
-                                       placeholder="Enter Cheque number."> 
-                            </td>
-                            
-                        </tr>
-                        <tr>
-                            <td>
-                                <label for="amt">Amount.</label> 
-                                <input style="width: 380px;" class="form-control" type="number" name="AMT" id="EDITAMT"
-                                       placeholder="Enter Amount" readonly="true"> 
-                            </td>
-                            <td>
-                                <label for="Createby">Create by</label> 
-                                <input type="text" style="width: 380px;" class="form-control" name="createby" id="EDITCREATE_BY"
-                                       placeholder="Receipt By" readonly="true"> 
-                            </td>
-                        </tr>
+                                <c:forEach var="DAT" items="${Date_list}">
+                                    <td>
+                                        <label for="PAYMENTdt">Payment Dt.</label> 
+                                        <input type="text" style="width: 380px;" value="${DAT.NEP_TODAY_DATE}" class="nepali-calendar form-control" name="PAYMENT_DT" id="EDITPAYMENT_DT"
+                                               placeholder="Select Payment Dt." readonly="true"> 
+                                    </td>
+                                </c:forEach>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="spcode">Service Provider</label> 
+                                    <br>
+                                    <select style="width: 380px;" name="SP_CODE" id="EDITSP_CODE" readonly="true">
+                                        <option value=''>Select :</option>
+                                        <c:forEach var="SP" items="${Sp_list}">
+                                            <option value="${SP.SP_CODE}">${SP.SP_NAME} ${SP.SP_CODE}</option>
+                                        </c:forEach>
+                                    </select> 
+                                </td>
+                                <td>
+                                    <label for="Bankcd">Bank Code</label> 
+                                    <select  class="form-control" style="width: 380px;" name="BANK_CD" id="EDITBANK_CD" readonly="true">
+                                        <option value=''>Select</option>
+                                        <c:forEach var="BANK" items="${Bank_list}">
+                                            <option value="${BANK.BANK_CD}">${BANK.BANK_CD} ${BANK.ACCT_NO} ${BANK.ADDRESS}</option>
+                                        </c:forEach>
+                                    </select> 
+                                </td> 
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="ChequeNo">Cheque No.</label> 
+                                    <input style="width: 380px;" class="form-control" type="text" name="chequeno" id="EDITCHEQUE_NO" readonly="true"
+                                           placeholder="Enter Cheque number."> 
+                                </td>
+                                <td>
+                                    <label for="amt">Amount.</label> 
+                                    <input style="width: 380px;" class="form-control" type="number" name="AMT" id="EDITAMT"
+                                           placeholder="Enter Amount" readonly="true"> 
+                                </td>
+                                
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="Createby">Create by</label> 
+                                    <input type="text" style="width: 380px;" class="form-control" name="createby" id="EDITCREATE_BY"
+                                           placeholder="Payment By" readonly="true"> 
+                                </td>
+                            </tr>
 
                         </table>
 
@@ -226,16 +204,16 @@
                         aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Cancel Receipt</h4>
+                <h4 class="modal-title" id="myModalLabel">Cancel Payment</h4>
             </div>
 
             <div class="modal-body">
-                <p>Are you sure you want to cancel this receipt. This cannot be
+                <p>Are you sure you want to cancel this Payment. This cannot be
                     undone</p>
             </div>
 
             <div class="modal-footer">
-                <form action="<c:url value="/receipt/delete" />" method="post"
+                <form action="<c:url value="/payment/delete" />" method="post"
                       acceptCharset="UTF-8">
                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                     <button type="button" class="btn btn-primary"
