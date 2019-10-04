@@ -189,6 +189,24 @@ public class CashSaleBillController {
 		
 	
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/cashsale/getCustomerInfo", method = RequestMethod.GET)
+	public List<Map<String, Object>> getCustomerInfo(String SPCODE,Locale locale, Model model, HttpSession session) throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		System.out.println(menuaccess.getLIST_FLAG());
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(
+			           HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		SpDao dao = new SpDao();
+		
+		return dao.getSPInfo(SPCODE);
+		
+	
+	}
+
 
 
 

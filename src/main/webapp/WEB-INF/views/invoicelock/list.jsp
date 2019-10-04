@@ -143,27 +143,6 @@
                                 <div class="box-header">
                                     <h3 class="box-title">${fx}</h3>
                                 </div>
-
-                                <%
-                                    if (request.getParameter("sucess") != null) {
-                                %>>
-                                <div class="alert alert-success">
-                                    <strong> <%=request.getParameter("sucess")%>
-                                    </strong>
-                                </div>
-                                <%
-                                    }
-                                %>
-                                <%
-                                    if (request.getParameter("error") != null) {
-                                %>>
-                                <div class="alert alert-danger">
-                                    <strong> <%=request.getParameter("error")%>
-                                    </strong>
-                                </div>
-                                <%
-                                    }
-                                %>
                                 <div class="overlay">
                                     <i class="fa fa-refresh fa-spin"></i>
                                 </div>
@@ -200,48 +179,16 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <c:forEach var="user" items="${data_list}">
-                                                <tr>
-                                                    <td>${user.TRANS_NO}</td>
-                                                    <td>${user.NEP_DT}</td>
-                                                    <td>${user.IMP_YEAR}</td>
-                                                    <td>${user.IMP_PERIOD}</td>
-                                                    <td>${user.IMP_MONTH}</td>
-                                                    <td>${user.S_NO}</td>
-                                                    <td>${user.SHARING}</td>
-                                                    <td>${user.NON_SHARING}</td>
-                                                    <td>${user.POST_FLAG}</td>
-                                                    <td>${user.POST_BY}</td>
-                                                    <td>
-                                                        <div class="btn-group">
-                                                            <a href="#" class="btn btn-info" data-toggle="modal"
-                                                               data-target="#editModal"
-                                                               onclick="return viewInvoicelock('${user.TRANS_NO}')"> <i
-                                                                    class="fa fa-edit"></i> View
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div>
-                                                            <a href="" class="btn btn-default" data-toggle="modal"
-                                                               data-target="#unpostModal"
-                                                               onclick="return unpostInvoicelock('${user.TRANS_NO}')"> <i
-                                                                    class="fa fa-trash"></i> Unpost
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div>
-                                                            <a href="" class="btn btn-default" data-toggle="modal"
-                                                               data-target="#deleteModal"
-                                                               onclick="return deleteInvoicelock('${user.TRANS_NO}')"> <i
-                                                                    class="fa fa-trash"></i> Delete
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
+                                            
                                         </tbody>
+                                        			<tfoot>
+            <tr>
+                <th colspan="7" style="text-align:right">Total Current:<BR>Total Page</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
+                                        
                                     </table>
                                 </div>
                                 <!-- /.box-body -->
@@ -281,14 +228,6 @@
 
         <jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
-            <script>
-                $(function () {
-                    $('#example1').DataTable({
-                        "iDisplayLength": 100
-                    });
-
-                })
-            </script>
 
             <script src="<c:url value="/resources/function/invoicelock.js?v=1.1" />"></script>
         <script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>

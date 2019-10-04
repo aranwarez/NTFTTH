@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,4 +80,23 @@ public class CommonDateDao {
         }
         return null;
     }
+    
+    
+    public static Date convertDateAD(String date) throws SQLException {
+
+        try (Connection con = DbCon.getConnection() //  System.out.println("date= "+date);
+                ) {
+            PreparedStatement pst = con.prepareStatement("select common.to_ad(?)from dual");
+            pst.setString(1, date);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return rs.getDate(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
 }
