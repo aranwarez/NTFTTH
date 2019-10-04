@@ -147,4 +147,36 @@ public class SpDao {
         }
         return "Record deleted successfully.";
     }
+    
+    public List<Map<String, Object>> getSPInfo(String SPCODE) throws SQLException {
+        Connection con = DbCon.getConnection();
+
+        try {
+            PreparedStatement pst = con.prepareStatement("select * from M_SP where SP_CODE=?");
+            pst.setString(1, SPCODE);
+            ResultSet rs = pst.executeQuery();
+
+            List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+            Map<String, Object> row = null;
+
+            ResultSetMetaData metaData = rs.getMetaData();
+            Integer columnCount = metaData.getColumnCount();
+
+            while (rs.next()) {
+                row = new HashMap<String, Object>();
+                for (int i = 1; i <= columnCount; i++) {
+                    row.put(metaData.getColumnName(i), rs.getObject(i));
+                }
+                resultList.add(row);
+            }
+            return resultList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            con.close();
+        }
+        return null;
+    }
+
+    
 }

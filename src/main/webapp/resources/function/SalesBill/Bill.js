@@ -6,8 +6,6 @@ var rowcount = 0;
 var globaltsc;
 var globalvat;
 
-
-
 $(document).ready(function() {
 
 	// prevent multiple click
@@ -30,8 +28,6 @@ $(document).ready(function() {
 
 	getTaxableRate();
 	getItem();
-	
-	
 
 	$('.overlay').fadeOut();
 });
@@ -84,7 +80,16 @@ function isempty(object) {
 		return false;
 }
 
-function getcustomerinfo() {
+function getcustomerinfo(SPCODE) {
+	$.get('../cashsale/getCustomerInfo', {
+		SPCODE : SPCODE
+	}, function(response) {
+		$.each(response, function(key, value) {
+			$('#address').html(value.ADDRESS);
+			$('#panno').html(value.PAN_NO);
+		});
+		// alert(JSON.stringify(response));
+	});
 
 }
 
@@ -213,12 +218,12 @@ function calc(a) {
 	var rate = $('#rate' + itemid).val();
 	var quantity = $('#quan' + itemid).val();
 	var tsc = globaltsc * 0.01 * Number(rate) * Number(quantity);
-	tsc=Number(tsc.toFixed(2));
+	tsc = Number(tsc.toFixed(2));
 	$('#tsc' + itemid).html(tsc);
 	var vat = globalvat * 0.01 * Number(tsc + (rate * quantity));
-	vat=Number(vat.toFixed(2));
+	vat = Number(vat.toFixed(2));
 	var rev = Number(rate * quantity) + Number(tsc) + Number(vat);
-	rev=Number(rev.toFixed(2));
+	rev = Number(rev.toFixed(2));
 	$('#vat' + itemid).html(vat);
 	$('#rev' + itemid).html(rate * quantity);
 

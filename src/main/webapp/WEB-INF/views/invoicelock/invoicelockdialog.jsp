@@ -33,6 +33,16 @@
                                                                 <th>Total</th>
 							</tr>
 						</thead>
+						<tfoot>
+            <tr>
+                <th colspan="5" style="text-align:right">Total Current</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
 
 					</table>
 				</div>
