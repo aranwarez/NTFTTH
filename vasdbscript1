@@ -711,3 +711,11 @@ AS
    ORDER BY 4, 6, 7;
 
 
+--------------------- service wise monthly revenue pie chart-------------------
+select service_code, sum(amt) 
+FROM vw_bill
+WHERE imp_year=2076
+AND imp_month='04'
+AND sharing_type='N'
+AND post_flag='Y'
+group by service_code;
