@@ -719,3 +719,57 @@ AND imp_month='04'
 AND sharing_type='N'
 AND post_flag='Y'
 group by service_code;
+
+CREATE OR REPLACE FORCE VIEW vasntw.vw_bill (trans_no,
+                                             nep_inv_dt,
+                                             trans_dt,
+                                             imp_year,
+                                             imp_period,
+                                             imp_month,
+                                             s_no, sp_name, account_no, address,
+                                             pan_no,
+                                             post_flag,
+                                             post_by,
+                                             post_dt,
+                                             trans_id,
+                                             service_code,
+                                             sharing_type,
+                                             item_code,
+                                             dr_cr_flag,
+                                             amt,
+                                             royalty_amt,
+                                             tsc_amt,
+                                             vat_amt,
+                                             total_amt,
+                                             create_by,
+                                             create_dt
+                                            )
+AS
+   SELECT   a.trans_no,
+            (a.imp_year || '/' || a.imp_month || '/' || '01') nep_inv_dt,
+            a.trans_dt, a.imp_year, a.imp_period, a.imp_month, a.s_no, c.sp_name, c.short_code,
+            c.address, c.pan_no,
+            a.post_flag, a.post_by, a.post_dt, b.trans_id, b.service_code,
+            b.sharing_type, b.item_code, b.dr_cr_flag,
+            b.dr_cr_flag * NVL (b.amt, 0) amt,
+            b.dr_cr_flag * NVL (b.royalty_amt, 0) royalty_amt,
+            b.dr_cr_flag * NVL (b.tsc_amt, 0) tsc_amt,
+            b.dr_cr_flag * NVL (b.vat_amt, 0) vat_amt,
+              b.dr_cr_flag
+            * DECODE (b.sharing_type,
+                      'Y', (  NVL (b.amt, 0)
+                            - NVL (b.royalty_amt, 0)
+                            - NVL (b.vat_amt, 0)
+                            - NVL (b.tsc_amt, 0)
+                       ),
+                      (  NVL (b.amt, 0)
+                       + NVL (b.royalty_amt, 0)
+                       + NVL (b.vat_amt, 0)
+                       + NVL (b.tsc_amt, 0)
+                      )
+                     ) total_amt,
+            a.create_by, a.create_dt
+       FROM bill_master a, bill_detail b, m_sp c
+      WHERE a.trans_no = b.trans_no
+      AND a.s_no=c.sp_code
+   ORDER BY 4, 6, 7;
