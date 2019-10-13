@@ -125,8 +125,9 @@
                                             </tr>
                                             <tr><td>Report Name</td>
                                                 <td>
-                                                    <select name="reportname"><option value="SpBalanceRep">VAS Provider Balance Report</option>
-                                                        <option value="spdledger">VAS Provide Debtor Ledger</option>
+                                                    <select name="reportname">
+                                                        <option value="SpBalanceRep">VAS Provider Balance Report</option>
+                                                        <option value="SpDebtorLedger">VAS Provider Debtor Ledger</option>
                                                     </select>
                                                 </td>
                                             </tr>

@@ -101,7 +101,7 @@ public class ReportController {
 
     @RequestMapping(value = "ReportView", method = RequestMethod.POST)
     public ResponseEntity<byte[]> getRpt(HttpServletRequest request, HttpServletResponse response)
-            throws JRException, IOException {
+             {
         logger.info("Preparing for report");
         try {
             InputStream jasperStream = this.getClass().getResourceAsStream("/Report/" + request.getParameter("reportname") + ".jasper");
@@ -160,6 +160,16 @@ public class ReportController {
         if (request.getParameter("TO_MONTH") != null) {
             filterparam = filterparam + "TO_MONTH : " + request.getParameter("TO_MONTH").toString();
             parameters.put("pm_to_month", request.getParameter("TO_MONTH"));
+        }
+        
+        if (request.getParameter("QFROM_DT") != null && !request.getParameter("QFROM_DT").isEmpty()) {
+            Date FROM_DATE = CommonDateDao.convertDateAD(request.getParameter("QFROM_DT"));
+            parameters.put("pm_frm_dt", FROM_DATE);
+            filterparam = filterparam + " From Date : " + request.getParameter("QFROM_DT").toString();
+        } else if (request.getParameter("QFROM_DT") == null || request.getParameter("QFROM_DT").isEmpty()) {
+                       Date FROM_DATE = new Date();
+                       parameters.put("pm_frm_dt", FROM_DATE);
+            filterparam = filterparam + " From Today";
         }
         
         if (request.getParameter("QTO_DT") != null && !request.getParameter("QTO_DT").isEmpty()) {
