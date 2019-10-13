@@ -773,3 +773,51 @@ AS
       WHERE a.trans_no = b.trans_no
       AND a.s_no=c.sp_code
    ORDER BY 4, 6, 7;
+-------------------------------------------
+13sep2019
+=====================
+CREATE OR REPLACE VIEW vw_cash_sales as
+SELECT a.cc_code, a.trans_no, a.sales_date, common.to_bs(a.sales_date) nep_date, 
+a.customer_code, c.sp_name, c.short_code, c.address, c.pan_no,
+a.bank_cd, a.bank_pay_amt, a.remarks, a.post_flag, a.cancel_by, a.cancel_dt,
+a.create_by, b.trans_id, b.item_code, b.qty, b.rate, b.revenue_amt, b.tsc_amt,
+b.vat_amt, nvl(revenue_amt,0)+nvl(tsc_amt,0)+nvl(vat_amt,0) total_amt,
+nvl((select sum(nvl(revenue_amt,0)+nvl(tsc_amt,0)+nvl(vat_amt,0)) FROM
+sales_detail WHERE cc_code=a.cc_code AND trans_no=a.trans_no),0) bill_amt
+FROM sales_master a, sales_detail b, m_sp c
+WHERE a.cc_code=b.cc_code
+AND a.trans_no=b.trans_no
+AND a.customer_code=c.sp_code
+ORDER BY a.trans_no, b.trans_id;
+
+CREATE OR REPLACE FORCE VIEW vasntw.vw_ledger
+AS
+   (SELECT 'IV' trans_type, trans_no, common.to_ad (nep_inv_dt) trans_dt,
+           imp_year, imp_month, imp_period, s_no, trans_id, service_code,
+           sharing_type, item_code, dr_cr_flag, amt, royalty_amt royalty,
+           tsc_amt, vat_amt, total_amt, post_flag, post_by, post_dt,
+           create_by, create_dt, ('invoice of '||imp_year||imp_month) remarks 
+      FROM vw_bill
+    UNION ALL
+    SELECT 'RV' trans_type, receipt_no trans_no, receipt_dt trans_dt,
+           TO_NUMBER (SUBSTR (common.to_bs (receipt_dt), 1, 4)) imp_year,
+           SUBSTR (common.to_bs (receipt_dt), 6, 2) imp_month,
+           NULL imp_period, s_no, 1 trans_id, NULL service_code,
+           NULL sharing_type, bank_cd item_code, -1 dr_cr_flag,
+           -1 * paid_amt amt, 0 royalty, 0 tsc_amt, 0 vat_amt,
+           -1 * paid_amt total_amt, post_flag, post_by, post_dt, create_by,
+           create_dt, remarks
+      FROM receipt_master
+     WHERE cancel_flag = 'N'
+     UNION ALL
+     SELECT 'PV' trans_type, payment_no trans_no, payment_dt trans_dt,
+           TO_NUMBER (SUBSTR (common.to_bs (payment_dt), 1, 4)) imp_year,
+           SUBSTR (common.to_bs (payment_dt), 6, 2) imp_month,
+           NULL imp_period, s_no, 1 trans_id, NULL service_code,
+           NULL sharing_type, bank_cd item_code, 1 dr_cr_flag,
+           paid_amt amt, 0 royalty, 0 tsc_amt, 0 vat_amt,
+           paid_amt total_amt, post_flag, post_by, post_dt, create_by,
+           create_dt, remarks
+      FROM payment_master
+     WHERE cancel_flag = 'N');
+     
