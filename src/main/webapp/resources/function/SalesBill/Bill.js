@@ -101,7 +101,7 @@ function getItemTariff() {
 function getItem() {
 	$.get('../cashsale/getitemlist', {}, function(response) {
 		itemlist = response;
-		// alert(JSON.stringify(response));
+	//	alert(JSON.stringify(response));
 	});
 
 }
@@ -155,7 +155,9 @@ function additem() {
 			+ rowcount
 			+ '" style="text-align:right;"type="number" min="0" placeholder="Rate" onchange="calc(this)" onfocus="focusFunction('
 			+ '\'' + rowcount + '\'' + ')"  onblur="blurFunction(' + '\''
-			+ rowcount + '\'' + ')"></td>';
+			+ rowcount + '\'' + ')"><input id="tscflag' + rowcount
+			+ '" type="hidden"><input id="vatflag' + rowcount
+			+ '" type="hidden"></td>';
 	appendrow = appendrow
 			+ '<td><span id="rev'
 			+ rowcount
@@ -197,12 +199,14 @@ function itemchange(a) {
 	$('#itemcode' + itemid).html(a.value);
 
 	// filling rate and
+
 	$.each(itemlist, function(key, value) {
 		if (value.ITEM_CODE === a.value) {
 			$.get('../cashsale/getitemtariff', {
 				Itemcode : a.value
 			}, function(response) {
-
+				$('#tscflag' + itemid).val(value.TAXABLE_AMT);
+				$('#vatflag' + itemid).val(value.VATABLE_AMT);
 				$('#rate' + itemid).val(Number(response));
 
 			});
@@ -213,15 +217,22 @@ function itemchange(a) {
 }
 
 function calc(a) {
-	debugger;
+
 	var itemid = a.id.substring(4);
 	var rate = $('#rate' + itemid).val();
 	var quantity = $('#quan' + itemid).val();
-	var tsc = globaltsc * 0.01 * Number(rate) * Number(quantity);
-	tsc = Number(tsc.toFixed(2));
+	var tsc = 0;
+	if ($('#tscflag' + itemid).val() != 0) {
+		tsc = globaltsc * 0.01 * Number(rate) * Number(quantity);
+		tsc = Number(tsc.toFixed(2));
+	}
+
 	$('#tsc' + itemid).html(tsc);
-	var vat = globalvat * 0.01 * Number(tsc + (rate * quantity));
-	vat = Number(vat.toFixed(2));
+	var vat = 0;
+	if ($('#tscflag' + itemid).val() != 0) {
+		vat = globalvat * 0.01 * Number(tsc + (rate * quantity));
+		vat = Number(vat.toFixed(2));
+	}
 	var rev = Number(rate * quantity) + Number(tsc) + Number(vat);
 	rev = Number(rev.toFixed(2));
 	$('#vat' + itemid).html(vat);
@@ -268,7 +279,6 @@ function tfooter(clas, fid, msid) {
 }
 
 function post() {
-	debugger;
 	var temparray = [];
 	$(".revclass").each(function() {
 		var rowid = (this.id.substring(3));
@@ -315,13 +325,18 @@ function post() {
 		DATA : JSON.stringify(temparray)
 
 	}, function(response) {
+		debugger;
 		alert((response));
 		$('#savebtn').prop('disabled', false);
-
+		$("#savebtn").html('response.substring(0, 6)');
+		
 		if (response.substring(0, 6) === "Sucess") {
+			$("#transno").val(response.substring(40));
 			$("#savebtn").html('Saved');
 			$('#savebtn').prop('disabled', true);
-
+			$("#hiddentransno").val(response.substring(40));
+			$('#printbtn').prop('disabled', false);
+			
 		}
 
 		// this.disabled=false;

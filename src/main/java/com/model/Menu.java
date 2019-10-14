@@ -10,6 +10,7 @@ public class Menu {
 	private String LEVEL;
 	private String STATUS_TYPE;
 	private String MODULE_TYPE;
+	private String ICON;
 	
 	public int getSN() {
 		return SN;
@@ -64,5 +65,11 @@ public class Menu {
 	}
 	public void setMODULE_TYPE(String mODULE_TYPE) {
 		MODULE_TYPE = mODULE_TYPE;
+	}
+	public String getICON() {
+		return ICON;
+	}
+	public void setICON(String iCON) {
+		ICON = iCON;
 	}
 }

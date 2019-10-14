@@ -65,13 +65,14 @@
 			<section class="content-header">
 				<h1>${fx}</h1>
 				<ol class="breadcrumb">
-					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-					<li><a href="#">Tables</a></li>
-					<li class="active">Data tables</li>
+
+					<li><a href="list" class="btn bg-red"> <i
+							class="fa fa-backward"></i> BACK
+					</a></li>
+
 				</ol>
 				<br />
 				<div style="margin: 0;" class="box">
-					<div class="pull-right"></div>
 
 					<table class="table table-condensed">
 						<tr>
@@ -86,10 +87,11 @@
 											${SP.SP_CODE}</option>
 									</c:forEach>
 							</select></td>
-							<td><label>Date : </label><c:forEach var="DAT" items="${Date_list}">
-										<input type="text" id="nepdate" value="${DAT.NEP_TODAY_DATE}"
-											class="nepali-calendar">
-									</c:forEach></td>
+							<td><label>Date : </label> <c:forEach var="DAT"
+									items="${Date_list}">
+									<input type="text" id="nepdate" value="${DAT.NEP_TODAY_DATE}"
+										class="nepali-calendar">
+								</c:forEach></td>
 						</tr>
 						<tr>
 							<td><label>Pan No.</label></td>
@@ -182,18 +184,31 @@
 									<td colspan="3"><input id="inwords" class="form-control"
 										type="text" readonly="readonly"></td>
 								</tr>
+
 								<tr>
+
 									<td>
+
 										<button id="savebtn" onclick="post()"
 											class='btn bg-blue myClickDisabledElm'>Save</button>
 									</td>
 									<td>
-										<button class='btn bg-purple' disabled="disabled">Print</button>
+
+
+										<button id="printbtn" type="submit" form="my_form" class='btn bg-purple'
+											disabled="disabled">Print</button>
+
+
 									</td>
+
+
 								</tr>
 
 							</table>
-
+							<form id="my_form" class="form" action="../ReportView" method=post>
+								<input type="hidden" name="reportname" value="CashSaleReceipt">
+								<input type="hidden" name="TRANS_NO" id="hiddentransno">
+							</form>
 						</div>
 						<!-- /.box -->
 

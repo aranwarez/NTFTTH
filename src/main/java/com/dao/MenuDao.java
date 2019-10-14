@@ -16,8 +16,6 @@ public class MenuDao {
 
 	public List<Menu> getlist() throws SQLException {
 
-		
-		
 		Connection con = DbCon.getConnection();
 		Menu m = null;
 		List<Menu> list = new ArrayList<Menu>();
@@ -139,109 +137,112 @@ public class MenuDao {
 		}
 		return list;
 	}
-	
-	
+
 	public List<Menu> getMenuDisplay(String ROLE_CODE) throws SQLException {
-        Connection con = DbCon.getConnection();
-        List<Menu> list = new ArrayList<Menu>();
-        Menu abc = null;
+		Connection con = DbCon.getConnection();
+		List<Menu> list = new ArrayList<Menu>();
+		Menu abc = null;
 
-        try {
-            PreparedStatement pst = con.prepareStatement("select a.menu_code,a.menu_desc,a.parent_menu,a.module_type from web_menu_entry a left join \r\n" + 
-            		"EDIT_MODE b on b.menu_code=a.menu_code\r\n" + 
-            		"where a.PARENT_MENU IS NULL and  a.status_type='Y' and b.LIST_FLAG='Y'and b.role_code=? order by a.menu_code");
-            pst.setString(1, ROLE_CODE);
-            ResultSet rs = pst.executeQuery();
-            int i = 1;
-            while (rs.next()) {
-                abc = new Menu();
-                abc.setSN(i);
-                abc.setPARENT_MENU(rs.getString("PARENT_MENU"));
-                abc.setMENU_CODE(rs.getString("MENU_CODE"));
-                abc.setMENU_DESC(rs.getString("MENU_DESC"));
-                
-                abc.setMODULE_TYPE(rs.getString("MODULE_TYPE"));
+		try {
+			PreparedStatement pst = con.prepareStatement(
+					"select a.menu_code,a.menu_desc,a.parent_menu,a.module_type,a.menu_url,a.icon from web_menu_entry a left join \r\n" + 
+					"						EDIT_MODE b on b.menu_code=a.menu_code\r\n" + 
+					"							where  a.status_type='Y' and b.LIST_FLAG='Y'and b.role_code=? order by a.menu_code");
+			pst.setString(1, ROLE_CODE);
+			ResultSet rs = pst.executeQuery();
+			int i = 1;
+			while (rs.next()) {
+				abc = new Menu();
+				abc.setSN(i);
+				abc.setPARENT_MENU(rs.getString("PARENT_MENU"));
+				abc.setMENU_CODE(rs.getString("MENU_CODE"));
+				abc.setMENU_DESC(rs.getString("MENU_DESC"));
+				abc.setMENU_URL(rs.getString("MENU_URL"));
+				abc.setICON(rs.getString("ICON"));
+				abc.setMODULE_TYPE(rs.getString("MODULE_TYPE"));
 
-                list.add(abc);
-                i = i + 1;
-            }
-        } catch (SQLException ex) {
-           
-        } finally {
-            con.close();
-        }
-        return list;
-    }
-	
-	   public List<Menu> getChildCode(String parent_menu, String role_code) throws SQLException {
-	        Connection con = DbCon.getConnection();
-	        List<Menu> list = new ArrayList<Menu>();
-	        Menu abc = null;
+				list.add(abc);
+				i = i + 1;
+			}
+		} catch (SQLException ex) {
 
-	        
-	        try {
-	            PreparedStatement pst = con.prepareStatement("select DISTINCT a.menu_code,a.menu_desc,a.parent_menu,a.MENU_URL from web_menu_entry a left join EDIT_MODE b on b.menu_code=a.menu_code\r\n" + 
-	            		"where  a.status_type='Y' and b.LIST_FLAG='Y' and a.parent_menu=? and b.role_code=?  order by a.menu_code");
-	            pst.setString(1, parent_menu);
-	            pst.setString(2, role_code);
-	            ResultSet rs = pst.executeQuery();
-	            int i = 1;
-	            while (rs.next()) {
-	                abc = new Menu();	                
-	                abc.setSN(i);
-	                abc.setMENU_CODE(rs.getString("MENU_CODE"));
-	                abc.setMENU_DESC(rs.getString("MENU_DESC"));
-	                abc.setMENU_URL(rs.getString("MENU_URL"));
-	                list.add(abc);
-	                i = i + 1;
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        } finally {
-	            con.close();
-	        }
-	        return list;
-	    }
-	   
-	   /*
-	     ---------------------------------------------------------------------------------------------
-	     get MENU_CODE,   EDIT_FLAG, DELETE_FLAG, POST_FLAG  by ROLE_CODE
-	    
-	    
-	     select * from EDIT_MODE where ROLE_CODE=?
-	     -----------------------------------------------------------------------------------------------
-	     */
-	    public List<MenuAccess> getModeList(String ROLE_CODE) throws Exception {
-	        Connection con = DbCon.getConnection();
-	        List<MenuAccess> modelist = new ArrayList<MenuAccess>();
-	        MenuAccess m = null;
-	        try {
+		} finally {
+			con.close();
+		}
+		return list;
+	}
 
-	            PreparedStatement pst = con.prepareStatement("select * from EDIT_MODE where ROLE_CODE=?");
-	            pst.setString(1, ROLE_CODE);
-	            ResultSet rs = pst.executeQuery();
-	            while (rs.next()) {
-	            	
-	                m = new MenuAccess();
-	                
-	                m.setLIST_FLAG(rs.getString("LIST_FLAG"));
-	                m.setMENU_CODE(rs.getString("MENU_CODE"));
-	                m.setEDIT_FLAG(rs.getString("EDIT_FLAG"));
-	                m.setDELETE_FLAG(rs.getString("DELETE_FLAG"));
-	                m.setPOST_FLAG(rs.getString("POST_FLAG"));
+	public List<Menu> getChildCode(String parent_menu, String role_code) throws SQLException {
+		Connection con = DbCon.getConnection();
+		List<Menu> list = new ArrayList<Menu>();
+		Menu abc = null;
 
-	                m.setADD_FLAG(rs.getString("ADD_FLAG"));
-	                m.setCANCEL_FLAG(rs.getString("CANCEL_FLAG"));
-	                modelist.add(m);
+		try {
+			PreparedStatement pst = con.prepareStatement(
+					"select DISTINCT a.menu_code,a.menu_desc,a.parent_menu,a.MENU_URL,a.icon from web_menu_entry a left join EDIT_MODE b on b.menu_code=a.menu_code\r\n"
+							+ "where  a.status_type='Y' and b.LIST_FLAG='Y' and a.parent_menu=? and b.role_code=?  order by a.menu_code");
+			pst.setString(1, parent_menu);
+			pst.setString(2, role_code);
+			ResultSet rs = pst.executeQuery();
+			int i = 1;
+			while (rs.next()) {
+				abc = new Menu();
+				abc.setSN(i);
+				abc.setMENU_CODE(rs.getString("MENU_CODE"));
+				abc.setMENU_DESC(rs.getString("MENU_DESC"));
+				abc.setMENU_URL(rs.getString("MENU_URL"));
+				abc.setICON(rs.getString("ICON"));
+				list.add(abc);
+				i = i + 1;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			con.close();
+		}
+		return list;
+	}
 
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        } finally {
-	            con.close();
-	        }
-	        return modelist;
-	    }
-	
+	/*
+	 * -----------------------------------------------------------------------------
+	 * ---------------- get MENU_CODE, EDIT_FLAG, DELETE_FLAG, POST_FLAG by
+	 * ROLE_CODE
+	 * 
+	 * 
+	 * select * from EDIT_MODE where ROLE_CODE=?
+	 * -----------------------------------------------------------------------------
+	 * ------------------
+	 */
+	public List<MenuAccess> getModeList(String ROLE_CODE) throws Exception {
+		Connection con = DbCon.getConnection();
+		List<MenuAccess> modelist = new ArrayList<MenuAccess>();
+		MenuAccess m = null;
+		try {
+
+			PreparedStatement pst = con.prepareStatement("select * from EDIT_MODE where ROLE_CODE=?");
+			pst.setString(1, ROLE_CODE);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+
+				m = new MenuAccess();
+
+				m.setLIST_FLAG(rs.getString("LIST_FLAG"));
+				m.setMENU_CODE(rs.getString("MENU_CODE"));
+				m.setEDIT_FLAG(rs.getString("EDIT_FLAG"));
+				m.setDELETE_FLAG(rs.getString("DELETE_FLAG"));
+				m.setPOST_FLAG(rs.getString("POST_FLAG"));
+
+				m.setADD_FLAG(rs.getString("ADD_FLAG"));
+				m.setCANCEL_FLAG(rs.getString("CANCEL_FLAG"));
+				modelist.add(m);
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			con.close();
+		}
+		return modelist;
+	}
 
 }

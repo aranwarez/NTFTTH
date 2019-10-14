@@ -39,7 +39,7 @@ public class LoginController {
 			
 			
 			model.addAttribute("fx", "Thank you for signing up!");
-			return "redirect:/role/list";
+			return "redirect:/dashboard/list";
 
 		} else if (level != null && level.getLOCK_FLAG().equalsIgnoreCase("Y")) {
 

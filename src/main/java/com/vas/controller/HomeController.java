@@ -30,7 +30,7 @@ public class HomeController {
 
 		model.addAttribute("fx", "HomeController : home()");
 
-		return "home";
+		return "dashboard";
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -47,13 +47,13 @@ public class HomeController {
 //        return "user";
 //    }
 
-	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+	@RequestMapping(value = "/dashboard/list", method = RequestMethod.GET)
 	public String dashboard(Locale locale, Model model) {
 
-		model.addAttribute("fx", "Dashboard - Nepal Telecom");
+		model.addAttribute("fx", "Dashboard");
 
-		return "NTC/dashboard/index";
-
+		//return "NTC/dashboard/index";
+		return "dashboard";
 	}
 
 	@RequestMapping(value = "/data", method = RequestMethod.GET)

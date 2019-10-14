@@ -65,7 +65,7 @@ public class CashSaleDao {
 
 			con.commit();
 
-			return "Sucessfully added data";
+			return "Sucessfully saved data for transaction :"+transno;
 
 		} catch (SQLException ex) {
 			con.rollback();
