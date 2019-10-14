@@ -821,3 +821,8 @@ AS
       FROM payment_master
      WHERE cancel_flag = 'N');
      
+     ---10/14/2019
+     ALTER TABLE WEB_MENU_ENTRY 
+ADD (ICON VARCHAR2(20) DEFAULT 'folder' NOT NULL);
+
+     
