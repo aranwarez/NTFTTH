@@ -20,7 +20,7 @@ public class dashboardquery {
 			PreparedStatement pst = con.prepareStatement("select service_code, sum(amt) sum \r\n" + 
 					"FROM vw_bill\r\n" + 
 					"WHERE imp_year=2076\r\n" + 
-					"AND imp_month='05'\r\n" + 
+					"AND imp_month='04'\r\n" + 
 					"AND sharing_type='N'\r\n" + 
 					"\r\n" + 
 					"group by service_code");
@@ -56,7 +56,7 @@ public class dashboardquery {
 			PreparedStatement pst = con.prepareStatement("select service_code, abs(sum(amt)) sum \r\n" + 
 					"FROM vw_bill\r\n" + 
 					"WHERE imp_year=2076\r\n" + 
-					"AND imp_month='05'\r\n" + 
+					"AND imp_month='04'\r\n" + 
 					"AND sharing_type='Y'\r\n" + 
 					"\r\n" + 
 					"group by service_code");
