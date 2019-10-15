@@ -99,9 +99,9 @@ function getReceiptFilterList() {
 											// Update footer
 											$(api.column(4).footer())
 													.html(
-															+pageTotal
+															+pageTotal.toFixed(2)
 																	+ '<BR> '
-																	+ total);
+																	+ total.toFixed(2));
 										
 										}
 									});
@@ -206,6 +206,8 @@ function editReceipt(code) {
 		if (row[i][0] == code) {
 			// getSPServiceList(row[i][1]);
 			$("#transno").html(row[i][0]);
+			$("#hiddentransno").val(row[i][0]);
+			
 			$("#salesdt").html(row[i][1]);
 			$("#spcode").html(row[i][2]);
 			$("#bankcd").html(row[i][3]);

@@ -64,7 +64,12 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<form id="my_form" class="form" action="../ReportView" method=post target="_blank">
+								<input type="hidden" name="reportname" value="CashSaleReceipt">
+								<input type="hidden" name="TRANS_NO" id="hiddentransno">
+				<button type="submit" class="btn bg-purple pull-left"><i class="fa fa-print"></i> Re-Print</button>
+			</form>
+				<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa  fa-close"></i> Close</button>
 			</div>
 
 
