@@ -205,7 +205,7 @@
 								</tr>
 
 							</table>
-							<form id="my_form" class="form" action="../ReportView" method=post>
+							<form id="my_form" class="form" action="../ReportView" method=post target="_blank">
 								<input type="hidden" name="reportname" value="CashSaleReceipt">
 								<input type="hidden" name="TRANS_NO" id="hiddentransno">
 							</form>
