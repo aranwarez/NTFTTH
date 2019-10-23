@@ -10,6 +10,7 @@ import com.dao.CommonDateDao;
 import com.dao.CommonMenuDao;
 import com.dao.PaymentDao;
 import com.dao.SpDao;
+import com.dao.VASServiceDao;
 import com.model.MenuAccess;
 import com.model.UserInformationModel;
 import java.sql.SQLException;
@@ -65,6 +66,8 @@ public class PaymentController {
         model.addAttribute("Bank_list", BAN.getBankList());
         CommonDateDao DAT = new CommonDateDao();
         model.addAttribute("Date_list", DAT.getDateList());
+        VASServiceDao VASSER = new VASServiceDao();
+        model.addAttribute("VASSer_list", VASSER.getVasServiceList());
         return "payment/list";
     }
 
@@ -85,7 +88,7 @@ public class PaymentController {
     @RequestMapping(value = "/payment/saveJS", method = RequestMethod.POST)
     @ResponseBody
     public String saveJSPayment(String CC_CODE, String PAYMENT_NO, String PAYMENT_DT, String S_NO, String BANK_CD,
-            String CHEQUE_NO, String PAID_AMT, String REMARKS, HttpSession session, Model model, Locale locale) {
+            String CHEQUE_NO, String PAID_AMT, String REMARKS,String SERVICE_CODE, HttpSession session, Model model, Locale locale) {
         UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
         MenuAccess menuaccess = CommonMenuDao.checkAccess(userinfo.getROLE_CODE(), classname);
         if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
@@ -101,7 +104,7 @@ public class PaymentController {
         String msg = null;
         try {
             msg = dao.savePayment(CC_CODE, PAYMENT_NO, PAYMENT_DT, S_NO, BANK_CD,
-                    CHEQUE_NO, PAID_AMT, USER, REMARKS);
+                    CHEQUE_NO, PAID_AMT, USER, REMARKS,SERVICE_CODE);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -137,9 +140,9 @@ public class PaymentController {
 // getting list of all SP wise Service List
     @ResponseBody
     @RequestMapping(value = "/payment/getSpdue", method = RequestMethod.GET)
-    public String getSpdue(String SP_CODE, Locale locale, Model model, HttpSession session)
+    public Map<String, Object> getSpdue(String SP_CODE, String SERVICE_CODE, Locale locale, Model model, HttpSession session)
             throws SQLException {
         PaymentDao dao = new PaymentDao();
-        return dao.getSpdue(SP_CODE);
+        return dao.getSpdue(SP_CODE,SERVICE_CODE);
     }
 }

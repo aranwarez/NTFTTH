@@ -48,9 +48,12 @@ function getPaymentFilterList() {
                     value.BANK_CD,
                     value.CHEQUE_NO,
                     value.PAID_AMT,
+                    value.ROYALTY,
+                    value.VAT,
+                    value.TOTAL_AMT,
                     value.REMARKS,
                     value.CREATE_BY,
-                    value.CREATE_DT,
+                    value.NEP_CREATE_DT,
                     value.CANCEL_BY,
                     value.CANCEL_DT,
                     '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#editModal" onclick="return editPayment(\''+value.PAYMENT_NO+'\')"> <i class="fa fa-edit"></i> View </a>',
@@ -63,22 +66,32 @@ function getPaymentFilterList() {
 
 }
 
-function getSpDue(SP_CODE) {
+function getSpDue(SP_CODE, SERVICE_CODE) {
     var sp_code
+    var service_code
+    service_code=SERVICE_CODE;
     //debugger;
     if (SP_CODE != null) {
         sp_code = SP_CODE;
     } else {
         sp_code = $('#SP_CODE').val();
     }
+    if (SERVICE_CODE != null) {
+        service_code = SERVICE_CODE;
+    } else {
+        service_code = $('#SERVICE_CODE').val();
+    }
     
-    $.get('../payment/getSpdue', {SP_CODE: sp_code
+    $.get('../payment/getSpdue', {SP_CODE: sp_code, SERVICE_CODE: service_code
     }, function (response) {
-        if(Number(response)>=0){
+        if(Number(response.BAL_AMT)>=0){
             $('#BALAMT').css({'color':'black'});
-        }else $('#BALAMT').css({'color':'red'});
-        
-        $('#BALAMT').html(response);
+            $('#BALAMTTAX').css({'color':'black'});
+        }else{ $('#BALAMT').css({'color':'red'});
+         $('#BALAMTTAX').css({'color':'red'});
+    }
+        $('#BALAMT').html(response.PAYABLE_BEFORE_TAX);
+        $('#BALAMTTAX').html(response.BAL_AMT_WITH_TAX);
     });
 }
 
@@ -121,6 +134,7 @@ function savePayment() {
     var CHEQUE_NO = $("#CHEQUE_NO").val();
     var AMT = $("#AMT").val();
     var REMARKS = $("#REMARKS").val();
+    var SERVICE_CODE = $("#SERVICE_CODE").val();
     // alert("nabin"+SHORT_CODE);
     $.post('../payment/saveJS', {
         CC_CODE: CC_CODE,
@@ -130,7 +144,8 @@ function savePayment() {
         BANK_CD: BANK_CD,
         CHEQUE_NO: CHEQUE_NO,
         PAID_AMT: AMT,
-        REMARKS: REMARKS
+        REMARKS: REMARKS,
+        SERVICE_CODE: SERVICE_CODE
     }, function (data) {
         alert(data);
         if (data.substring(0, 6) === "Succes") {

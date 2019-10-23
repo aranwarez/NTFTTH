@@ -28,8 +28,8 @@ public class PaymentDao {
             PreparedStatement pst = con.prepareStatement("SELECT \n"
                     + "R.CC_CODE, R.PAYMENT_NO, R.PAYMENT_DT, COMMON.to_bs(R.PAYMENT_DT) nep_dt, R.TRANS_FROM, R.S_NO, R.PAYMENT_MODE, \n"
                     + "   R.BANK_CD, R.CHEQUE_NO,   R.BANK_ADDRESS, R.PAID_AMT, R.BAL_AMT, \n"
-                    + "   R.TSC, R.VAT, R.ROYALTY,    R.REMARKS, R.CANCEL_FLAG, R.CANCEL_BY, \n"
-                    + "   R.CANCEL_DT, R.POST_FLAG, R.POST_BY,   R.POST_DT, R.CREATE_BY, R.CREATE_DT, \n"
+                    + "   R.TSC, R.VAT, R.ROYALTY, (R.PAID_AMT-NVL(R.ROYALTY,0)+NVL(R.TSC,0)+NVL(R.VAT,0)) TOTAL_AMT,   R.REMARKS, R.CANCEL_FLAG, R.CANCEL_BY, \n"
+                    + "   R.CANCEL_DT, R.POST_FLAG, R.POST_BY,   R.POST_DT, R.CREATE_BY, R.CREATE_DT, common.to_bs(R.CREATE_DT) NEP_CREATE_DT, \n"
                     + "   R.UPDATE_BY, R.UPDATE_DT\n"
                     + "FROM VASNTW.PAYMENT_MASTER R\n"
                     + "WHERE cc_code=nvl(?,'CC040501')\n"
@@ -66,8 +66,8 @@ public class PaymentDao {
         return null;
     }
 
-    public String savePayment(String CC_CODE, String PAYMENT_NO, String PAYMENT_DT, String S_NO, String BANK_CD, 
-            String CHEQUE_NO, String PAID_AMT, String USER, String REMARKS) throws SQLException {
+    public String savePayment(String CC_CODE, String PAYMENT_NO, String PAYMENT_DT, String S_NO, String BANK_CD,
+            String CHEQUE_NO, String PAID_AMT, String USER, String REMARKS, String SERVICE_CODE) throws SQLException {
         Connection con = DbCon.getConnection();
         String transid = null;
         try {
@@ -75,6 +75,23 @@ public class PaymentDao {
             PreparedStatement prs1 = con.prepareStatement(qry1);
             prs1.setString(1, PAYMENT_DT);
             ResultSet rs1 = prs1.executeQuery();
+            
+            PreparedStatement bpst = con.prepareStatement("SELECT abs(sum(nvl(amt,0))) payable_amt, abs(sum(nvl(royalty,0))) royalty,sum(nvl(amt,0)-nvl(royalty,0)) payable_before_tax, abs(sum(nvl(tsc_amt,0))) tsc, abs(sum(nvl(vat_amt,0))) vat, nvl(sum(total_amt),0) bal_amt_with_tax FROM vw_ledger\n"
+                    + "WHERE s_no=? AND item_code=?\n"
+                    + "AND sharing_type='Y' AND post_flag='Y'");
+            bpst.setString(1, S_NO);
+            bpst.setString(2, SERVICE_CODE);
+            ResultSet brs = bpst.executeQuery();
+            String tsc=null;
+            String vat=null;
+            String royalty=null; 
+            String payable_amt=null;
+           while(brs.next()){
+            tsc=brs.getString("TSC");
+            vat=brs.getString("VAT");
+            royalty=brs.getString("ROYALTY");
+            payable_amt=brs.getString("PAYABLE_AMT");
+            }
             if (rs1.next()) {
                 transid = rs1.getString(1);
             }
@@ -82,11 +99,11 @@ public class PaymentDao {
                     + "   CC_CODE, PAYMENT_NO, PAYMENT_DT,TRANS_FROM, S_NO, PAYMENT_MODE, \n"
                     + "   BANK_CD, CHEQUE_NO,  BANK_ADDRESS, PAID_AMT, BAL_AMT, \n"
                     + "   TSC, VAT, ROYALTY,  REMARKS, CANCEL_FLAG, POST_FLAG, POST_BY, \n"
-                    + "   POST_DT, CREATE_BY, CREATE_DT) \n"
+                    + "   POST_DT, CREATE_BY, CREATE_DT, SERVICE_CODE) \n"
                     + "VALUES ( ?, ?, common.to_ad(?),'PAY', ?, 'Q',\n"
                     + "    ?, ?, null, ?, 0,\n"
-                    + "    0,0, 0, ?,'N', 'Y', ?,\n"
-                    + "    sysdate, ?, sysdate)";
+                    + "    ?,?, ?, ?,'N', 'Y', ?,\n"
+                    + "    sysdate, ?, sysdate,?)";
 
             PreparedStatement pst = con.prepareStatement(qry);
             pst.setString(1, CC_CODE);
@@ -95,10 +112,14 @@ public class PaymentDao {
             pst.setString(4, S_NO);
             pst.setString(5, BANK_CD);
             pst.setString(6, CHEQUE_NO);
-            pst.setString(7, PAID_AMT);
-            pst.setString(8, REMARKS);
-            pst.setString(9, USER);
-            pst.setString(10, REMARKS);
+            pst.setString(7, payable_amt);
+            pst.setString(8, tsc);
+            pst.setString(9, vat);
+            pst.setString(10, royalty);
+            pst.setString(11, REMARKS);
+            pst.setString(12, USER);
+            pst.setString(13, USER);
+            pst.setString(14, SERVICE_CODE);
             pst.executeUpdate();
             return "Succesfully Saved Payment Transaction";
         } catch (Exception e) {
@@ -129,21 +150,29 @@ public class PaymentDao {
         }
     }
 
-    public String getSpdue(String SP_CODE) throws SQLException {
+    public Map<String, Object> getSpdue(String SP_CODE, String ITEM_CODE) throws SQLException {
         Connection con = DbCon.getConnection();
-
         try {
-            PreparedStatement pst = con.prepareStatement("SELECT nvl(sum(total_amt),0) bal_amt FROM vw_ledger\n"
-                    + "WHERE s_no=?\n"
-                    + "AND post_flag='Y'");
+            PreparedStatement pst = con.prepareStatement("SELECT sum(nvl(amt,0)) payable_amt, sum(nvl(royalty,0)) royalty,sum(nvl(amt,0)-nvl(royalty,0)) payable_before_tax, sum(nvl(tsc_amt,0)), sum(nvl(vat_amt,0)), nvl(sum(total_amt),0) bal_amt_with_tax FROM vw_ledger\n"
+                    + "WHERE s_no=? AND item_code=?\n"
+                    + "AND sharing_type='Y' AND post_flag='Y'");
             pst.setString(1, SP_CODE);
+            pst.setString(2, ITEM_CODE);
             ResultSet rs = pst.executeQuery();
 
-            
+            Map<String, Object> row = null;
+
+            ResultSetMetaData metaData = rs.getMetaData();
+            Integer columnCount = metaData.getColumnCount();
             while (rs.next()) {
-            return rs.getString(1);
+                row = new HashMap<String, Object>();
+
+                for (int i = 1; i <= columnCount; i++) {
+                    row.put(metaData.getColumnName(i), rs.getObject(i));
+                }
+
             }
-            return "0";
+            return row;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
