@@ -161,7 +161,10 @@
                                                 <th>SP Code</th>
                                                 <th>Bank</th>
                                                 <th>ChequeNo.</th>
-                                                <th>Payment Amt</th>
+                                                <th>Payable Amt</th>
+                                                <th>Royalty</th>
+                                                <th>VAT</th>
+                                                <th>Total</th>
                                                 <th>Remarks</th>
                                                 <th>Create By</th>
                                                 <th>Create Dt</th>
@@ -180,6 +183,9 @@
                                                     <td>${user.BANK_CD}</td>
                                                     <td>${user.CHEQUE_NO}</td>
                                                     <td>${user.PAID_AMT}</td>
+                                                    <td>${user.ROYALTY}</td>
+                                                    <td>${user.VAT}</td>
+                                                    <td>${user.TOTAL_AMT}</td>
                                                     <td>${user.REMARKS}</td>
                                                     <td>${user.CREATE_BY}</td>
                                                     <td>${user.CREATE_DT}</td>

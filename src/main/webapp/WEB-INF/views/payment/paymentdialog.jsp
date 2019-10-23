@@ -37,13 +37,26 @@
                             <td>
                                 <label for="spcode">Service Provider</label> 
                                 <br>
-                                <select class="form-control" style="width: 380px;" name="SP_CODE" id="SP_CODE" onchange="getSpDue(this.val);">
+                                <select class="form-control" style="width: 380px;" name="SP_CODE" id="SP_CODE" onchange="getSpDue(this.val,$('#SERVICE_CODE').val());">
                                     <option value=''>Select :</option>
                                     <c:forEach var="SP" items="${Sp_list}">
                                         <option value="${SP.SP_CODE}">${SP.SP_NAME} ${SP.SP_CODE}</option>
                                     </c:forEach>
                                 </select> 
                             </td>
+                            <td>
+                                <label for="vasservice">VAS Service</label> 
+                                <br>
+                                <select class="form-control" style="width: 380px;" name="SERVICE_CODE" id="SERVICE_CODE" onchange="getSpDue($('#SP_CODE').val(),this.val);">
+                                    <option value=''>Select :</option>
+                                    <c:forEach var="VASSer" items="${VASSer_list}">
+                                        <option value="${VASSer.SERVICE_CODE}">${VASSer.DESCRIPTION} ${VASSer.SERVICE_CODE}</option>
+                                    </c:forEach>
+                                </select> 
+                            </td>
+                            
+                        </tr>
+                        <tr>
                             <td>
                                 <label for="Bankcd">Bank Code</label> 
                                 <br>
@@ -54,19 +67,23 @@
                                     </c:forEach>
                                 </select> 
                             </td> 
-
-                        </tr>
-                        <tr>
                             <td>
                                 <label for="ChequeNo">Cheque No.</label> 
                                 <input style="width: 380px;" class="form-control" type="text" name="chequeno" id="CHEQUE_NO"
                                        placeholder="Enter Cheque number."> 
                             </td>
+                            
+
+                        </tr>
+                        <tr>
                             <td>
-                                <label for="balamt">Bal Amount.</label> 
+                                <label for="balamt">Bal Without Tax</label> 
                                 <label style="font-size: 30px"id="BALAMT"> </label>
                             </td>
-
+                            <td>
+                                <label for="balamt">Bal With Tax</label> 
+                                <label style="font-size: 30px"id="BALAMTTAX"> </label>
+                            </td>
                         </tr>
                         <tr>
                             <td>
