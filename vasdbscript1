@@ -824,5 +824,72 @@ AS
      ---10/14/2019
      ALTER TABLE WEB_MENU_ENTRY 
 ADD (ICON VARCHAR2(20) DEFAULT 'folder' NOT NULL);
+--------------------------------------
+27oct2019
+--------------------------
+CREATE OR REPLACE FORCE VIEW vasntw.vw_ledger (trans_type,
+                                               trans_no,
+                                               trans_dt,
+                                               imp_year,
+                                               imp_month,
+                                               imp_period,
+                                               s_no,
+                                               trans_id,
+                                               service_code,
+                                               sharing_type,
+                                               item_code,
+                                               dr_cr_flag,
+                                               amt,
+                                               royalty,
+                                               tsc_amt,
+                                               vat_amt,
+                                               total_amt,
+                                               post_flag,
+                                               post_by,
+                                               post_dt,
+                                               create_by,
+                                               create_dt,
+                                               remarks,
+                                               bank_cd
+                                              )
+AS
+   (SELECT 'IV' trans_type, trans_no, common.to_ad (nep_inv_dt) trans_dt,
+           imp_year, imp_month, imp_period, s_no, trans_id, service_code,
+           sharing_type, item_code, dr_cr_flag, amt, royalty_amt royalty,
+           tsc_amt, vat_amt, total_amt, post_flag, post_by, post_dt,
+           create_by, create_dt,
+           DECODE (sharing_type,
+                   'N', ('Invoice of ' || imp_year || imp_month),
+                   'Y', ('Payable of ' || imp_year || imp_month)
+                  ) remarks,
+           NULL bank_cd
+      FROM vw_bill
+    UNION ALL
+    SELECT 'RV' trans_type, trans_no, sales_date trans_dt,
+           TO_NUMBER (SUBSTR (common.to_bs (sales_date), 1, 4)) imp_year,
+           SUBSTR (common.to_bs (sales_date), 6, 2) imp_month,
+           NULL imp_period, customer_code s_no, trans_id,
+           item_code service_code, 'N' sharing_type, item_code, -1 dr_cr_flag,
+           -1 * revenue_amt amt, 0 royalty, tsc_amt, vat_amt,
+           -1 * total_amt total_amt, post_flag, create_by post_by,
+           create_dt post_dt, create_by, create_dt,
+           NVL (remarks, 'Receipt from bank ' || bank_cd) remarks, bank_cd
+      FROM vw_cash_sales
+     WHERE category_code IN ('SERVICE', 'BILLITEM') AND post_flag <> 'C'
+    UNION ALL
+    SELECT 'PV' trans_type, payment_no trans_no, payment_dt trans_dt,
+           TO_NUMBER (SUBSTR (common.to_bs (payment_dt), 1, 4)) imp_year,
+           SUBSTR (common.to_bs (payment_dt), 6, 2) imp_month,
+           NULL imp_period, s_no, 1 trans_id, service_code, 'Y' sharing_type,
+           service_code item_code, 1 dr_cr_flag, paid_amt amt,
+           NVL (royalty, 0) royalty, NVL (tsc, 0) tsc_amt,
+           NVL (vat, 0) vat_amt,
+           (paid_amt - NVL (royalty, 0) + NVL (tsc, 0) + NVL (vat, 0)
+           ) total_amt,
+           post_flag, post_by, post_dt, create_by, create_dt,
+           NVL (remarks, 'Pay from bank ' || bank_cd) remarks, bank_cd
+      FROM payment_master
+     WHERE cancel_flag = 'N');
+
 
      
