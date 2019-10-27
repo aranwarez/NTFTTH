@@ -13,10 +13,14 @@
 	<parameter name="pm_sp_code" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="pm_service" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT s_no, (SELECT sp_name FROM m_sp WHERE sp_code=a.s_no) sp_name,
 sum(total_amt) bal_amt FROM vw_ledger a
 WHERE s_no= nvl($P{pm_sp_code},s_no)
+AND service_code=nvl($P{pm_service},service_code)
 AND trans_dt<=$P{pm_to_dt}
 AND post_flag='Y'
 GROUP BY s_no

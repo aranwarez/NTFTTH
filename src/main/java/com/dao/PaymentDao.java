@@ -30,7 +30,7 @@ public class PaymentDao {
                     + "   R.BANK_CD, R.CHEQUE_NO,   R.BANK_ADDRESS, R.PAID_AMT, R.BAL_AMT, \n"
                     + "   R.TSC, R.VAT, R.ROYALTY, (R.PAID_AMT-NVL(R.ROYALTY,0)+NVL(R.TSC,0)+NVL(R.VAT,0)) TOTAL_AMT,   R.REMARKS, R.CANCEL_FLAG, R.CANCEL_BY, \n"
                     + "   R.CANCEL_DT, R.POST_FLAG, R.POST_BY,   R.POST_DT, R.CREATE_BY, R.CREATE_DT, common.to_bs(R.CREATE_DT) NEP_CREATE_DT, \n"
-                    + "   R.UPDATE_BY, R.UPDATE_DT\n"
+                    + "   R.UPDATE_BY, R.UPDATE_DT, R.SERVICE_CODE\n"
                     + "FROM VASNTW.PAYMENT_MASTER R\n"
                     + "WHERE cc_code=nvl(?,'CC040501')\n"
                     + "AND PAYMENT_dt BETWEEN nvl(common.to_ad(?),sysdate-30) AND nvl(common.to_ad(?),sysdate)\n"

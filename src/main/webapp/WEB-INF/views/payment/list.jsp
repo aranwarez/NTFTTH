@@ -159,9 +159,10 @@
                                                 <th>PaymentNo.</th>
                                                 <th>Date</th>
                                                 <th>SP Code</th>
+                                                <th>VAS Service</th>
                                                 <th>Bank</th>
                                                 <th>ChequeNo.</th>
-                                                <th>Payable Amt</th>
+                                                <th>Payable Amt </th>
                                                 <th>Royalty</th>
                                                 <th>VAT</th>
                                                 <th>Total</th>
@@ -180,6 +181,7 @@
                                                     <td>${user.PAYMENT_NO}</td>
                                                     <td>${user.NEP_DT}</td>
                                                     <td>${user.S_NO}</td>
+                                                    <td>${user.SERVICE_CODE}</td>
                                                     <td>${user.BANK_CD}</td>
                                                     <td>${user.CHEQUE_NO}</td>
                                                     <td>${user.PAID_AMT}</td>

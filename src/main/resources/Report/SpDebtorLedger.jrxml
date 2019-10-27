@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BankLedgerRep" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="13a36392-f148-43c4-8b24-e189d16e7ff9">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="115"/>
+	<property name="ireport.y" value="124"/>
 	<parameter name="pm_cc_code" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -19,17 +19,21 @@
 	<parameter name="pm_sp_code" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="pm_service" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT s_no, (SELECT SP_NAME FROM m_sp WHERE sp_code=a.s_no) sp_name, trans_type, trans_no, trans_dt, common.to_bs(trans_dt) nep_trans_dt,
 item_code,dr_amt, cr_amt, (dr_amt-cr_amt) bal_amt, remarks, create_by, create_dt,
 nvl((SELECT sum(total_amt) FROM vw_ledger
-where s_no=a.s_no AND trans_dt<$P{pm_frm_dt}
+where s_no=a.s_no AND item_code=a.item_code AND trans_dt<$P{pm_frm_dt}
 AND post_flag='Y'),0) opening_bal
 FROM
 (select s_no, trans_type, trans_no, trans_dt, imp_year, imp_month, item_code,
 dr_cr_flag, total_amt dr_amt, 0 cr_amt, remarks, create_by, create_dt
 from vw_ledger
 WHERE s_no=$P{pm_sp_code}
+AND item_code=nvl($P{pm_service},item_code)
 AND trans_dt between $P{pm_frm_dt} and $P{pm_to_dt}
 AND dr_cr_flag=1
 AND post_flag='Y'
@@ -38,6 +42,7 @@ select s_no, trans_type, trans_no, trans_dt, imp_year, imp_month, item_code,
 dr_cr_flag, 0 dr_amt, abs(total_amt) cr_amt, remarks, create_by, create_dt
 from vw_ledger
 WHERE s_no=$P{pm_sp_code}
+AND item_code=nvl($P{pm_service},item_code)
 AND trans_dt between $P{pm_frm_dt} and $P{pm_to_dt}
 AND dr_cr_flag=-1
 AND post_flag='Y'
