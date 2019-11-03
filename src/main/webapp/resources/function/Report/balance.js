@@ -5,7 +5,13 @@ $(document).ready(function() {
 	$('.nepali-calendar').nepaliDatePicker();
 
 	$("#SP_CODE").select2({
-		placeholder : "Select a Service Provider Code"
+		placeholder : "Select a Service Provider Code",
+                allowClear: true
+	// allowClear: false
+	});
+        $("#SERVICE_CODE").select2({
+		placeholder : "Select a Service Provider Code",
+                allowClear: true
 	// allowClear: false
 	});
 });

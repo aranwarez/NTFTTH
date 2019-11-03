@@ -19,7 +19,7 @@ $(document).ready(function () {
         placeholder: "Select a Bank Code"
                 // allowClear: false
     });
-$('#example1').DataTable().column(4).visible(false);
+$('#example1').DataTable().column(5).visible(false);
 
 
 });
@@ -36,6 +36,7 @@ function getPaymentFilterList() {
     }, function (response) {
         //  alert(JSON.stringify(response));
         if (response !== null) {
+            
             temp = $('#example1').DataTable();
             temp
                     .clear()
@@ -45,6 +46,7 @@ function getPaymentFilterList() {
                     value.PAYMENT_NO,
                     value.NEP_DT,
                     value.S_NO,
+                    value.SERVICE_CODE,
                     value.BANK_CD,
                     value.CHEQUE_NO,
                     value.PAID_AMT,
@@ -166,11 +168,15 @@ function editPayment(code) {
             $("#EDITPAYMENT_NO").val(row[i][0]);
             $("#EDITPAYMENT_DT").val(row[i][1]);
             $("#EDITSP_CODE").val(row[i][2]);
-            $("#EDITBANK_CD").val(row[i][3]);
-            $("#EDITCHEQUE_NO").val(row[i][4]);
-            $("#EDITAMT").val(row[i][5]);
-            $("#EDITREMARKS").val(row[i][6]);
-            $("#EDITCREATE_BY").val(row[i][7]);            
+            $("#EDITSERVICE_CODE").val(row[i][3]);
+            $("#EDITBANK_CD").val(row[i][4]);
+            $("#EDITCHEQUE_NO").val(row[i][5]);
+            $("#EDITAMT").val(row[i][6]);
+            $("#EDITROYALTY").val(row[i][7]);
+            $("#EDITVAT").val(row[i][8]);
+            $("#EDITTOTAL").val(row[i][9]);
+            $("#EDITREMARKS").val(row[i][10]);
+            $("#EDITCREATE_BY").val(row[i][11]);            
             jQuery.ajaxSetup({async: true});
         }
     }

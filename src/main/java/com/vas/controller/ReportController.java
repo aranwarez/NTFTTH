@@ -147,10 +147,22 @@ public class ReportController {
 			filterparam = filterparam + "TRANS_NO : " + request.getParameter("TRANS_NO").toString();
 			parameters.put("pm_trans_no", request.getParameter("TRANS_NO"));
 		}
-		if (request.getParameter("SP_CODE") != null) {
+		if (request.getParameter("SP_CODE") != null  && !request.getParameter("SP_CODE").isEmpty()) {
 			filterparam = filterparam + "SP_CODE : " + request.getParameter("SP_CODE").toString();
 			parameters.put("pm_sp_code", request.getParameter("SP_CODE"));
+		} else if (request.getParameter("SP_CODE") == null || request.getParameter("SP_CODE").isEmpty()) {
+			filterparam = filterparam + "SP_CODE : All ";
+			parameters.put("pm_sp_code", request.getParameter("SP_CODE"));
 		}
+                if (request.getParameter("SERVICE_CODE") != null && !request.getParameter("SERVICE_CODE").isEmpty()) {
+			filterparam = filterparam + "SERVICE_CODE : " + request.getParameter("SERVICE_CODE").toString();
+			parameters.put("pm_service", request.getParameter("SERVICE_CODE"));
+		} else if (request.getParameter("SERVICE_CODE") == null || request.getParameter("SERVICE_CODE").isEmpty()) {
+			filterparam = filterparam + "SERVICE_CODE : All ";
+			parameters.put("pm_service", request.getParameter("SERVICE_CODE"));
+		}
+                
+                        
 		if (request.getParameter("FRM_YEAR") != null) {
 			filterparam = filterparam + "FRM_YEAR : " + request.getParameter("FRM_YEAR").toString();
 			parameters.put("pm_frm_year", request.getParameter("FRM_YEAR"));

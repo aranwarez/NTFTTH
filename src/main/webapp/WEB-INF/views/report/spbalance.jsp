@@ -101,7 +101,21 @@
                                                             <option value="${SP.SP_CODE}">${SP.SP_NAME}
                                                                 ${SP.SP_CODE}</option>
                                                             </c:forEach>
-                                                    </select></td>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>VAS Service</td>
+                                                <td><select style="width: 400px;" name="SERVICE_CODE"
+                                                            id="SERVICE_CODE">
+                                                        <option value=''>Select :</option>
+                                                        <c:forEach var="SER" items="${VASSer_list}">
+                                                            <option value="${SER.SERVICE_CODE}">${SER.DESCRIPTION}
+                                                                ${SER.SERVICE_CODE}</option>
+                                                            </c:forEach>
+                                                    </select>
+                                                </td>
 
 
                                             </tr>
@@ -179,7 +193,7 @@
 
         <%--         <jsp:include page="${request.contextPath}/cashsale/dialog"></jsp:include> --%>
 
-        
+
         <jsp:include page="${request.contextPath}/footJS"></jsp:include>
         <script src="<c:url value="/resources/function/Report/balance.js" />"></script>
         <script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>

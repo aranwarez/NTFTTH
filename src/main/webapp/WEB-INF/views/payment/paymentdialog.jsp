@@ -37,7 +37,7 @@
                             <td>
                                 <label for="spcode">Service Provider</label> 
                                 <br>
-                                <select class="form-control" style="width: 380px;" name="SP_CODE" id="SP_CODE" onchange="getSpDue(this.val,$('#SERVICE_CODE').val());">
+                                <select class="form-control" style="width: 380px;" name="SP_CODE" id="SP_CODE" onchange="getSpDue(this.val, $('#SERVICE_CODE').val());">
                                     <option value=''>Select :</option>
                                     <c:forEach var="SP" items="${Sp_list}">
                                         <option value="${SP.SP_CODE}">${SP.SP_NAME} ${SP.SP_CODE}</option>
@@ -47,14 +47,14 @@
                             <td>
                                 <label for="vasservice">VAS Service</label> 
                                 <br>
-                                <select class="form-control" style="width: 380px;" name="SERVICE_CODE" id="SERVICE_CODE" onchange="getSpDue($('#SP_CODE').val(),this.val);">
+                                <select class="form-control" style="width: 380px;" name="SERVICE_CODE" id="SERVICE_CODE" onchange="getSpDue($('#SP_CODE').val(), this.val);">
                                     <option value=''>Select :</option>
                                     <c:forEach var="VASSer" items="${VASSer_list}">
                                         <option value="${VASSer.SERVICE_CODE}">${VASSer.DESCRIPTION} ${VASSer.SERVICE_CODE}</option>
                                     </c:forEach>
                                 </select> 
                             </td>
-                            
+
                         </tr>
                         <tr>
                             <td>
@@ -72,7 +72,7 @@
                                 <input style="width: 380px;" class="form-control" type="text" name="chequeno" id="CHEQUE_NO"
                                        placeholder="Enter Cheque number."> 
                             </td>
-                            
+
 
                         </tr>
                         <tr>
@@ -160,6 +160,19 @@
                                     </select> 
                                 </td>
                                 <td>
+                                    <label for="vasservice">VAS Service</label> 
+                                    <br>
+                                    <select class="form-control" style="width: 380px;" name="EDITSERVICE_CODE" id="EDITSERVICE_CODE" readonly="true"> 
+                                        <option value=''>Select :</option>
+                                        <c:forEach var="VASSer" items="${VASSer_list}">
+                                            <option value="${VASSer.SERVICE_CODE}">${VASSer.DESCRIPTION} ${VASSer.SERVICE_CODE}</option>
+                                        </c:forEach>
+                                    </select> 
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
                                     <label for="Bankcd">Bank Code</label> 
                                     <select  class="form-control" style="width: 380px;" name="BANK_CD" id="EDITBANK_CD" readonly="true">
                                         <option value=''>Select</option>
@@ -168,19 +181,37 @@
                                         </c:forEach>
                                     </select> 
                                 </td> 
-                            </tr>
-                            <tr>
                                 <td>
                                     <label for="ChequeNo">Cheque No.</label> 
                                     <input style="width: 380px;" class="form-control" type="text" name="chequeno" id="EDITCHEQUE_NO" readonly="true"
                                            placeholder="Enter Cheque number."> 
                                 </td>
+                            </tr>
+                            <tr>
                                 <td>
-                                    <label for="amt">Amount.</label> 
-                                    <input style="width: 380px;" class="form-control" type="number" name="AMT" id="EDITAMT"
+                                    <label for="amt">Payable Amount.</label> 
+                                    <input style="width: 380px;" class="form-control" type="number" name="AMT" id="EDITAMT" readonly="true"
                                            placeholder="Enter Amount" readonly="true"> 
                                 </td>
-                                
+                                <td>
+                                    <label for="Royalty">Royalty.</label> 
+                                    <input style="width: 380px;" class="form-control" type="number" name="EDITROYALTY" id="EDITROYALTY" readonly="true"
+                                           placeholder="Enter Royalty" readonly="true"> 
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="vat">VAT</label> 
+                                    <input style="width: 380px;" class="form-control" type="number" name="EDITVAT" id="EDITVAT" readonly="true"
+                                           placeholder="Enter VAT" readonly="true"> 
+                                </td>
+                                <td>
+                                    <label for="Total">Total</label> 
+                                    <input style="width: 380px;" class="form-control" type="number" name="EDITTotal" id="EDITTOTAL" readonly="true"
+                                           placeholder="Enter VAT" readonly="true"> 
+                                </td>
+
                             </tr>
                             <tr>
                                 <td>
@@ -188,13 +219,17 @@
                                     <input type="text" style="width: 380px;" class="form-control" name="createby" id="EDITCREATE_BY"
                                            placeholder="Payment By" readonly="true"> 
                                 </td>
+                                <td>
+                                    <label for="Remarks">Remarks</label> 
+                                    <input type="text" class="nepali-calendar form-control" style="width: 380px;" name="REMARKS" id="EDITREMARKS"
+                                           placeholder="Enter Remarks" readonly="true"> 
+                                </td>
+
                             </tr>
 
                         </table>
 
-                        <label for="Remarks">Remarks</label> 
-                        <input type="text" class="nepali-calendar form-control" style="width: 760px;" name="REMARKS" id="EDITREMARKS"
-                               placeholder="Enter Remarks" readonly="true"> 
+
                     </div>
                 </div>
                 <div class="modal-footer">
