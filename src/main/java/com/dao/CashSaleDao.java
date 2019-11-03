@@ -172,5 +172,39 @@ public class CashSaleDao {
 			con.close();
 		}
 	}
+	
+	
+	
+	 public Map<String, Object> getSpdue(String SP_CODE, String ITEM_CODE) throws SQLException {
+	        Connection con = DbCon.getConnection();
+	        try {
+	            PreparedStatement pst = con.prepareStatement("SELECT sum(nvl(amt,0)) payable_amt, sum(nvl(royalty,0)) royalty,nvl(sum(nvl(amt,0)-nvl(royalty,0)),0) payable_before_tax, sum(nvl(tsc_amt,0)), sum(nvl(vat_amt,0)), nvl(sum(total_amt),0) bal_amt_with_tax FROM vw_ledger\n"
+	                    + "WHERE s_no=? AND item_code=?\n"
+	                    + "AND sharing_type='N' AND post_flag='Y'");
+	            pst.setString(1, SP_CODE);
+	            pst.setString(2, ITEM_CODE);
+	            ResultSet rs = pst.executeQuery();
+
+	            Map<String, Object> row = null;
+
+	            ResultSetMetaData metaData = rs.getMetaData();
+	            Integer columnCount = metaData.getColumnCount();
+	            while (rs.next()) {
+	                row = new HashMap<String, Object>();
+
+	                for (int i = 1; i <= columnCount; i++) {
+	                    row.put(metaData.getColumnName(i), rs.getObject(i));
+	                }
+
+	            }
+	            return row;
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            con.close();
+	        }
+	        return null;
+	    }
+
 
 }

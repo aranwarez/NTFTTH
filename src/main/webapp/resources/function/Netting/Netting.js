@@ -277,7 +277,7 @@ function sharingnetting(a) {
     table = table + '<thead>'
     table = table + '<td>Month</td><td>ESME_CODE</td>';
     table = table
-            + "<td>SHARING_TYPE</td><td>SHARE_NT_PER</td>	<td>RATE</td>	<td>START_DT</td>	<td>MO1NT</td>	<td>MT1NT</td>	<td>MO1SP</td>	<td>MT1SP</td>	<td>MO1FINAL</td>	<td>MT1FINAL</td>	<td>REDUCE1</td>	<td>MO_MT_RATIO</td>	<td>BILL_MT</td>	<td>ROYALTY_PER</td>	<td>VAT_PER</td>	<td>POST_FLAG</td>	";
+            + "<td>Tolerance</td><td>SHARE_NT%</td>	<td>RATE</td>	<td>START_DT</td>	<td>MO1NT</td>	<td>MT1NT</td>	<td>MO1SP</td>	<td>MT1SP</td>	<td>MO1FINAL</td>	<td>MT1FINAL</td>	<td>REDUCE1</td>	<td>MO_MT_RATIO</td>	<td>BILL_MT</td>	<td>ROYALTY%</td>	<td>VAT%</td>	<td>POST_FLAG</td>	";
     table = table + '</thead></table>';
     $('#jsdiv').append(table);
 
@@ -306,11 +306,17 @@ function sharingnetting(a) {
 
         if (response !== null) {
            // debugger;
-            temp = $('#jstable').DataTable();
+            temp = $('#jstable').DataTable({
+            	 "sDom": "Rlfrtip",
+            	colReorder: true
+            //	stateSave: true 
+            });
             temp.clear().draw();
             $.each(response, function (key, value) {
+            	debugger;
+            	var tolerance=(value.MO1NT- value.MO1SP)*100 / (value.MO1SP);
                 $("#jstable").dataTable().fnAddData(
-                        [value.IMP_MONTH, value.ESME_CODE, value.SHARING_TYPE,
+                        [value.IMP_MONTH, value.ESME_CODE, tolerance.toFixed(2),
                             value.SHARE_NT_PER, value.RATE, value.START_DT,
                             value.MO1NT, value.MT1NT, value.MO1SP,
                             value.MT1SP, value.MO1FINAL, value.MT1FINAL,

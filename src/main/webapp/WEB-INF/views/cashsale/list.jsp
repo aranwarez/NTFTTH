@@ -130,7 +130,6 @@
 												class="btn btn-default bg-green" onclick="additem()"> <i
 													class="fa fa-plus"></i>
 											</a></th>
-											<th>Code</th>
 											<th>Name</th>
 											<th>Quantity</th>
 											<th>Rate</th>
@@ -138,17 +137,25 @@
 											<th>TSC</th>
 											<th>VAT</th>
 											<th>Total</th>
+											<th>Bal (W/O TAX)</th>
+											<th>Bal (W TAX)</th>
+						
 										</tr>
 									</thead>
 									<tfoot>
 										<tr>
-											<th colspan="5">Total</th>
+											<th colspan="4">Total</th>
+
+
 											<th id="sumrev">-</th>
 
 											<th id="sumtsc">-</th>
 
 											<th id="sumvat">-</th>
 											<th id="sumtot">-</th>
+											<th id="sumbal">-</th>
+											<th id="sumbaltax">-</th>
+
 
 										</tr>
 									</tfoot>
@@ -195,8 +202,8 @@
 									<td>
 
 
-										<button id="printbtn" type="submit" form="my_form" class='btn bg-purple'
-											disabled="disabled">Print</button>
+										<button id="printbtn" type="submit" form="my_form"
+											class='btn bg-purple' disabled="disabled">Print</button>
 
 
 									</td>
@@ -205,7 +212,8 @@
 								</tr>
 
 							</table>
-							<form id="my_form" class="form" action="../ReportView" method=post target="_blank">
+							<form id="my_form" class="form" action="../ReportView"
+								method=post target="_blank">
 								<input type="hidden" name="reportname" value="CashSaleReceipt">
 								<input type="hidden" name="TRANS_NO" id="hiddentransno">
 							</form>

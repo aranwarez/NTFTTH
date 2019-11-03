@@ -104,9 +104,9 @@
                         </tr>
                         <tr>
                             <td>
-                                <label for="startdt">Start Dt.</label> 
+                                <label for="startdt">Start Dt. / Service Live Dt</label> 
                                 <input type="text" style="width: 280px;" class="nepali-calendar form-control" name="START_DT" id="START_DT"
-                                       placeholder="Enter start dt."> 
+                                       placeholder="Enter start dt. / Service Live Dt"> 
 
                             </td>
                             <td>
@@ -260,9 +260,9 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label for="startdt">Start Dt.</label> 
+                                    <label for="startdt">Start Dt. / Service Live Dt</label> 
                                     <input type="text" style="width: 280px;" class="nepali-calendar form-control" name="EDITSTART_DT" id="EDITSTART_DT"
-                                           placeholder="Enter start dt."> 
+                                           placeholder="Enter start dt./ Service Live Dt"> 
 
                                 </td>
                                 <td>
