@@ -195,7 +195,6 @@ public class CashSaleBillController {
 	public List<Map<String, Object>> getCustomerInfo(String SPCODE,Locale locale, Model model, HttpSession session) throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
-		System.out.println(menuaccess.getLIST_FLAG());
 		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
 			throw new ResponseStatusException(
 			           HttpStatus.FORBIDDEN, "Unauthorized");
@@ -206,6 +205,23 @@ public class CashSaleBillController {
 		
 	
 	}
+
+	
+	//getting balance for billing item
+	@ResponseBody
+    @RequestMapping(value = "/payment/getSpdueforbilling", method = RequestMethod.GET)
+    public Map<String, Object> getSpdue(String SP_CODE, String ITEM_CODE, Locale locale, Model model, HttpSession session)
+            throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+			throw new ResponseStatusException(
+			           HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+
+        CashSaleDao dao = new CashSaleDao();
+        return dao.getSpdue(SP_CODE,ITEM_CODE);
+    }
 
 
 

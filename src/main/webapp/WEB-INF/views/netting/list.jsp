@@ -14,6 +14,8 @@
             content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
             name="viewport">
         <jsp:include page="${request.contextPath}/headCss"></jsp:include>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/colreorder/1.5.2/css/colReorder.dataTables.min.css"/>
+                
         </head>
         <body class="hold-transition skin-blue sidebar-mini">
             <div class="wrapper">
@@ -21,6 +23,7 @@
                 <header class="main-header">
 
                 <jsp:include page="${request.contextPath}/topmenu"></jsp:include>
+                
                 </header>
                 <!-- Left side column. contains the logo and sidebar -->
                 <aside class="main-sidebar">
@@ -299,6 +302,8 @@
                             // allowClear: false
                 });
             </script>
+ 
+<script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
 
             <script src="<c:url value="/resources/function/Netting/Netting.js" />"></script>
 

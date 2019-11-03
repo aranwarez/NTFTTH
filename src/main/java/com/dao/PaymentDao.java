@@ -153,7 +153,7 @@ public class PaymentDao {
     public Map<String, Object> getSpdue(String SP_CODE, String ITEM_CODE) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
-            PreparedStatement pst = con.prepareStatement("SELECT sum(nvl(amt,0)) payable_amt, sum(nvl(royalty,0)) royalty,sum(nvl(amt,0)-nvl(royalty,0)) payable_before_tax, sum(nvl(tsc_amt,0)), sum(nvl(vat_amt,0)), nvl(sum(total_amt),0) bal_amt_with_tax FROM vw_ledger\n"
+            PreparedStatement pst = con.prepareStatement("SELECT sum(nvl(amt,0)) payable_amt, sum(nvl(royalty,0)) royalty,nvl(sum(nvl(amt,0)-nvl(royalty,0)),0) payable_before_tax, sum(nvl(tsc_amt,0)), sum(nvl(vat_amt,0)), nvl(sum(total_amt),0) bal_amt_with_tax FROM vw_ledger\n"
                     + "WHERE s_no=? AND item_code=?\n"
                     + "AND sharing_type='Y' AND post_flag='Y'");
             pst.setString(1, SP_CODE);
@@ -181,4 +181,6 @@ public class PaymentDao {
         return null;
     }
 
+    
+    
 }

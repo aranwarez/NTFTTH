@@ -16,7 +16,12 @@ $(document).ready(function() {
 
 	$("#SP_CODE").select2({
 		placeholder : "Select a Customer",
-		allowClear : true
+		allowClear : true,
+		 sorter: function(data) {
+		        return data.sort(function(a, b) {
+		            return a.text < b.text ? -1 : a.text > b.text ? 1 : 0;
+		        });
+		    }
 	});
 
 	$("#BANK_CODE").select2({
@@ -90,6 +95,16 @@ function getcustomerinfo(SPCODE) {
 		});
 		// alert(JSON.stringify(response));
 	});
+	
+	// clear all item
+	
+	$(".bg-red").each(function() {
+		var rowid = (this.id.substring(3));
+	//	debugger;
+		removeitem(this);
+		
+	});
+	
 
 }
 
@@ -101,7 +116,7 @@ function getItemTariff() {
 function getItem() {
 	$.get('../cashsale/getitemlist', {}, function(response) {
 		itemlist = response;
-	//	alert(JSON.stringify(response));
+		// alert(JSON.stringify(response));
 	});
 
 }
@@ -136,8 +151,7 @@ function additem() {
 			+ rowcount
 			+ '" class="btn btn-default bg-red" onclick="removeitem(this)"><i class="fa fa-trash"></i></a>';
 	var appendrow = '<tr id="rowcnt' + rowcount
-			+ '"><td style="text-align:center">' + button
-			+ '</td><td id="itemcode' + rowcount + '"></td>';
+			+ '"><td style="text-align:center">' + button + '</td>';
 	appendrow = appendrow + '<td><select style="width: 100%;" id="item'
 			+ rowcount
 			+ '" onchange="itemchange(this)" onfocus="focusFunction(' + '\''
@@ -157,7 +171,15 @@ function additem() {
 			+ '\'' + rowcount + '\'' + ')"  onblur="blurFunction(' + '\''
 			+ rowcount + '\'' + ')"><input id="tscflag' + rowcount
 			+ '" type="hidden"><input id="vatflag' + rowcount
-			+ '" type="hidden"></td>';
+			+ '" type="hidden">' + '<input id="catflag' + rowcount
+			+ '" type="hidden">';
+	appendrow = appendrow
+			+ '<input id="pamt'
+			+ rowcount
+			+ '" style="text-align:right;"type="number" min="0" placeholder="Paid Amount" onchange="calc(this)" onfocus="focusFunction('
+			+ '\'' + rowcount + '\'' + ')"  onblur="blurFunction(' + '\''
+			+ rowcount + '\'' + ')"></td>';
+
 	appendrow = appendrow
 			+ '<td><span id="rev'
 			+ rowcount
@@ -175,12 +197,23 @@ function additem() {
 	appendrow = appendrow
 			+ '<td><span id="total'
 			+ rowcount
-			+ '" style="text-align:right;"type="number" min="0" class="totclass"></span></td></tr>';
+			+ '" style="text-align:right;"type="number" min="0" class="totclass"></span></td>';
+	appendrow = appendrow
+	+ '<td><span id="totalbal'
+	+ rowcount
+	+ '" style="text-align:right;"type="number" min="0" class="totbalclass"></span></td>';
+	appendrow = appendrow
+	+ '<td><span id="totalbalvat'
+	+ rowcount
+	+ '" style="text-align:right;"type="number" min="0" class="totbalvatclass"></span></td></tr>';
 
+	
+	
+	
 	$('#example1').append(appendrow);
 
 	$.each(itemlist, function(key, value) {
-		if (value.IS_RECURRING === 'N') {
+		if (value.IS_RECURRING !== 'T') {
 			$('#item' + rowcount)
 					.append(
 							new Option(value.DESCRIPTION, value.ITEM_CODE,
@@ -189,8 +222,8 @@ function additem() {
 	});
 	$('#item' + rowcount).val('');
 	$('#item' + rowcount).select2({
-		placeholder : "Select a item",
-		allowClear : true
+		placeholder : "Select a item"
+	// allowClear : true
 	});
 }
 
@@ -199,6 +232,8 @@ function itemchange(a) {
 	$('#itemcode' + itemid).html(a.value);
 
 	// filling rate and
+	$('#totalbal'+  itemid).html('X');
+	$('#totalbalvat'+  itemid).html('X');	
 
 	$.each(itemlist, function(key, value) {
 		if (value.ITEM_CODE === a.value) {
@@ -207,18 +242,57 @@ function itemchange(a) {
 			}, function(response) {
 				$('#tscflag' + itemid).val(value.TAXABLE_AMT);
 				$('#vatflag' + itemid).val(value.VATABLE_AMT);
-				$('#rate' + itemid).val(Number(response));
+				$('#catflag' + itemid).val(value.CATEGORY_CODE);
+				if (value.CATEGORY_CODE == "SERVICE" || value.CATEGORY_CODE == "BILLITEM") {
+					$('#rate' + itemid).hide();
+					$('#pamt' + itemid).show();
+					$.get('../payment/getSpdueforbilling', {
+						ITEM_CODE : a.value,
+						SP_CODE : $('#SP_CODE').val()
+					}, function(response) {
+					$('#totalbal'+  itemid).html(response.PAYABLE_BEFORE_TAX);
+					$('#totalbalvat'+  itemid).html(response.BAL_AMT_WITH_TAX);	
+					$('#quan' + itemid).val('1');
+					$('#quan' + itemid).prop('readonly', true);
+					});
 
+				} else {
+					$('#rate' + itemid).show();
+					$('#pamt' + itemid).val('');
+					$('#pamt' + itemid).hide();
+					$('#quan' + itemid).prop('readonly', false);
+				}
+				$('#rate' + itemid).val(Number(response));
+				calc(a);
 			});
 
 		}
 
 	});
+	
 }
 
 function calc(a) {
-
+	//debugger;
 	var itemid = a.id.substring(4);
+	// for billing item type
+
+	if ($('#catflag' + itemid).val() == 'SERVICE' || $('#catflag' + itemid).val() == 'BILLITEM' ) {
+		var divisor = (1 + (globaltsc / 100) + ((globalvat / 100) * (1 + (globaltsc / 100))));
+		var rev = $('#pamt'+itemid).val()/divisor;
+		tsc= ((globaltsc/100)*rev).toFixed(2);
+		vat =+($('#pamt'+itemid).val())- +rev- +tsc;
+		vat = vat.toFixed(2);
+		rev = rev.toFixed(2);
+		$('#vat' + itemid).html(vat);
+		$('#rev' + itemid).html(rev);
+		$('#tsc' + itemid).html(tsc);
+		// var total=
+		$('#total' + itemid).html(+tsc+ +vat+ +rev);
+		
+	}
+	else {
+	
 	var rate = $('#rate' + itemid).val();
 	var quantity = $('#quan' + itemid).val();
 	var tsc = 0;
@@ -234,14 +308,35 @@ function calc(a) {
 		vat = Number(vat.toFixed(2));
 	}
 	var rev = Number(rate * quantity) + Number(tsc) + Number(vat);
+	
 	rev = Number(rev.toFixed(2));
 	$('#vat' + itemid).html(vat);
 	$('#rev' + itemid).html(rate * quantity);
 
 	$('#total' + itemid).html(rev);
-
+	}
 	// getting sum of footer
 	getsumoffooter();
+}
+
+function revcalc(a){
+	var itemid = a.id.substring(4);
+
+	if ($('#catflag' + itemid).val() == 'SERVICE' ) {
+		var divisor = (1 + (globaltsc / 100) + ((globalvat / 100) * (1 + (globaltsc / 100))));
+		var rev = $('#pamt'+itemid).val()/divisor;
+		tsc= ((globaltsc/100)*rev).toFixed(2);
+		vat =+($('#pamt'+itemid).val())- +rev- +tsc;
+		vat = vat.toFixed(2);
+		rev = rev.toFixed(2);
+		$('#vat' + itemid).html(vat);
+		$('#rev' + itemid).html(rev);
+		$('#tsc' + itemid).html(tsc);
+		// var total=
+		$('#total' + itemid).html(+tsc+ +vat+ +rev);
+		
+	}
+	
 }
 
 function getsumoffooter() {
@@ -280,9 +375,16 @@ function tfooter(clas, fid, msid) {
 
 function post() {
 	var temparray = [];
+	var validflag=true;
 	$(".revclass").each(function() {
 		var rowid = (this.id.substring(3));
-
+		debugger;
+		if(isempty($('#rev' + rowid).html()) || Number($('#rev' + rowid).html())<=0 ){
+			alert('Invalid Amount!!!!');
+			$('#pamt' + rowid).focus();
+			validflag= false;
+		}
+		
 		var arraydata = new Object();
 		arraydata.ITEM_CODE = $('#item' + rowid).val();
 		arraydata.RATE = $('#rate' + rowid).val();
@@ -291,7 +393,9 @@ function post() {
 		arraydata.TSC = $('#tsc' + rowid).html();
 		arraydata.VAT = $('#vat' + rowid).html();
 		temparray.push(arraydata);
+		
 	});
+	
 	// alert(JSON.stringify(temparray));
 	var param = {
 		SP_CODE : $('#SP_CODE').val(),
@@ -310,6 +414,9 @@ function post() {
 		alert("Invalid Bank Amount");
 		return false;
 	}
+	if(validflag==false){
+		return false;
+	}
 	$('.overlay').fadeIn();
 	$('#savebtn').prop('disabled', true);
 
@@ -325,18 +432,18 @@ function post() {
 		DATA : JSON.stringify(temparray)
 
 	}, function(response) {
-		debugger;
+		
 		alert((response));
 		$('#savebtn').prop('disabled', false);
 		$("#savebtn").html('response.substring(0, 6)');
-		
+
 		if (response.substring(0, 6) === "Sucess") {
 			$("#transno").val(response.substring(40));
 			$("#savebtn").html('Saved');
 			$('#savebtn').prop('disabled', true);
 			$("#hiddentransno").val(response.substring(40));
 			$('#printbtn').prop('disabled', false);
-			
+
 		}
 
 		// this.disabled=false;
