@@ -38,7 +38,7 @@
                     <label for="cpname">Cp Name</label> 
                     <input type="text"   class="form-control" name="CP_NAME" id="CP_NAME"
                            placeholder="Enter Content Provider"> 
-                    <label  for="esmecode">ESME Code</label> 
+                    <label  for="esmecode">ESME Code/Busy Code</label> 
                     <input type="text" class="form-control" name="ESME_CODE" id="ESME_CODE"
                            placeholder="Enter Esme Code"> 
                     <table>
@@ -194,7 +194,7 @@
                         <label for="cpname">Cp Name</label> 
                         <input type="text"   class="form-control" name="EDITCP_NAME" id="EDITCP_NAME"
                                placeholder="Enter Content Provider"> 
-                        <label  for="esmecode">ESME Code</label> 
+                        <label  for="esmecode">ESME Code/Busy Code</label> 
                         <input type="text" class="form-control" name="EDITESME_CODE" id="EDITESME_CODE"
                                placeholder="Enter Esme Code"> 
                         <table>

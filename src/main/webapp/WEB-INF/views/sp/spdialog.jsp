@@ -30,7 +30,14 @@
                     <input type="text" class="form-control" name="ADDRESS" id="ADDRESS"
                            placeholder="Enter Address"> <label for="ContactPerson">Contact</label>
                     <input type="text" class="form-control" name="CONTACT_PERSON"
-                           id="CONTACT_PERSON" placeholder="Enter Contact Person"> <label
+                           id="CONTACT_PERSON" placeholder="Enter Contact Person"> 
+                           <label for="ContractDt">Contract Dt.</label> 
+                    <input type="text" class="nepali-calendar" name="CONTRACT_DT" id="CONTRACT_DT" placeholder="Enter contract dt."> 
+                    
+                    <label for="TerminateDt">Terminate Dt.</label> 
+                    <input type="text" class="nepali-calendar" name="CONTRACT_TER_DT" id="CONTRACT_TER_DT" placeholder="Enter termination dt.">
+                           <br>
+                           <label
                            for="TelNo">Tel No.</label> <input type="text"
                            class="form-control" name="TEL_NO" id="TEL_NO"
                            placeholder="Enter Tel No."> <label for="MobileNo">Mobile
@@ -48,13 +55,7 @@
                                 ${COA.ENG_DESC}</option>
                             </c:forEach>
                     </select> 
-                    <Br>    
-                    <label for="ContractDt">Contract Dt.</label> 
-                    <input type="text" class="nepali-calendar" name="CONTRACT_DT" id="CONTRACT_DT" placeholder="Enter contract dt."> 
                     
-                    <label for="TerminateDt">Terminate Dt.</label> 
-                    <input type="text" class="nepali-calendar" name="CONTRACT_TER_DT" id="CONTRACT_TER_DT" placeholder="Enter termination dt.">
-
                 </div>
             </div>
             <div class="modal-footer">
@@ -96,6 +97,13 @@
                            for="ContactPerson">Contact</label> <input type="text"
                            class="form-control" name="CONTACT_PERSON"
                            id="EDITCONTACT_PERSON" placeholder="Enter Contact Person">
+                      <label for="ContractDt">Contract Dt.</label> 
+                    <input type="text" class="nepali-calendar" name="CONTRACT_DT" id="EDITCONTRACT_DT" placeholder="Enter contract dt."> 
+                    <label for="TerminateDt">Terminate Dt.</label> 
+                    <input type="text" class="nepali-calendar" name="CONTRACT_TER_DT" id="EDITCONTRACT_TER_DT" placeholder="Enter contract terminate dt.">
+                
+                    <br>
+                    
                     <label for="TelNo">Tel No.</label> <input type="text"
                                                               class="form-control" name="TEL_NO" id="EDITTEL_NO"
                                                               placeholder="Enter Tel No."> <label for="MobileNo">Mobile
@@ -114,11 +122,7 @@
                             </c:forEach>
                     </select> 
                     <Br>
-                    <label for="ContractDt">Contract Dt.</label> 
-                    <input type="text" class="nepali-calendar" name="CONTRACT_DT" id="EDITCONTRACT_DT" placeholder="Enter contract dt."> 
-                    <label for="TerminateDt">Terminate Dt.</label> 
-                    <input type="text" class="nepali-calendar" name="CONTRACT_TER_DT" id="EDITCONTRACT_TER_DT" placeholder="Enter contract terminate dt.">
-                </div>
+                  </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

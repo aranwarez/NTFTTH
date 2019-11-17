@@ -18,7 +18,7 @@
 
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="name">PACKAGE_TYPE</label> <input type="text"
+                    <label for="name">PACKAGE CODE</label> <input type="text"
                                                                   class="form-control" name="PACKAGE_TYPE" id="PACKAGE_TYPE" placeholder="Enter Package Type">
                 </div>
                 <div class="form-group">
@@ -50,7 +50,7 @@
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="name">PACKAGE_TYPE</label>
+                        <label for="name">PACKAGE CODE</label>
                         <input type="text" class="form-control" name="PACKAGE_TYPE" id="EDITPACKAGE_TYPE" placeholder="Enter Package" readonly="readonly">
                     </div>
 

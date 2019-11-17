@@ -63,15 +63,13 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<h1>VAS Provider Profile</h1>
+				<h1>${fx}</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li><a href="#">Tables</a></li>
 					<li class="active">Data tables</li>
 				</ol>
-				<a href="#" class="btn btn-primary pull-right" data-toggle="modal"
-					data-target="#myModal"> <i class="fa fa-plus"></i> Add
-				</a>
+				
 			</section>
 
 			<!-- Main content -->
@@ -84,6 +82,9 @@
 						<div class="box">
 							<div class="box-header">
 								<h3 class="box-title">${fx}</h3>
+				<a href="#" class="btn bg-green pull-right" data-toggle="modal"
+					data-target="#myModal"> <i class="fa fa-plus"></i> Add
+				</a>
 							</div>
 
 							<%
@@ -108,48 +109,40 @@
 							%>
 
 							<!-- /.box-header -->
-							<div class="box-body table-responsive">
+							<div class="box-body">
 								<table id="example1" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-											<th>SP Code</th>
-											<th>Service Provider</th>
-											<th>Account Code</th>
-											<th>Address</th>
-											<th>Contact Person</th>
-											<th>Tel No.</th>
-											<th>Mobile No.</th>
-											<th>Email</th>
-											<th>Pan No.</th>
-											<th>Contract Dt</th>
-											<th>Terminate Dt</th>
-											<th>Sldg Code</th>
+											<th>BANK_CD</th>
+											<th>Name</th>
+											<th>ADDRESS</th>
+											<th>ACCT_NO</th>
+											<th>ACCT_TYPE</th>
+											<th>ACT_FLAG</th>
+											<th>DEACTIVE_DT</th>
+										
 											<th>Edit</th>
 											<th>Delete</th>
-
 										</tr>
 									</thead>
 									<tbody>
-										<c:forEach var="user" items="${data_list}">
+										<c:forEach var="user" items="${BANK_LIST}">
+
 											<tr>
-												<td>${user.SP_CODE}</td>
-												<td>${user.SP_NAME}</td>
-												<td>${user.SHORT_CODE}</td>
-												<td>${user.ADDRESS}</td>
-												<td>${user.CONTACT_PERSON}</td>
-												<td>${user.TEL_NO}</td>
-												<td>${user.MOBILE_NO}</td>
-												<td>${user.EMAIL}</td>
-												<td>${user.PAN_NO}</td>
-												<td>${user.NEPCONTRACT_DT}</td>
-												<td>${user.NEPCONTRACT_TER_DT}</td>
-												<td>${user.SLDG_CODE}</td>
+												<td>${user.BANK_CD}</td>
+												<td>${user.BANK_NAME}</td>
+												<td>${user.BANK_ADDRESS}</td>
+												<td>${user.ACCT_NO}</td>
+												<td>${user.ACCT_TYPE}</td>
+												<td>${user.ACT_FLAG}</td>
+												<td>${user.DEACTIVE_DT}</td>
+												
 
 												<td>
 													<div class="btn-group">
 														<a href="#" class="btn btn-info" data-toggle="modal"
 															data-target="#editModal"
-															onclick="return editSp('${user.SP_CODE}')"> <i
+															onclick="return editStream('${user.BANK_CD}')"> <i
 															class="fa fa-edit"></i> Edit
 														</a>
 													</div>
@@ -158,8 +151,8 @@
 													<div>
 														<a href="" class="btn btn-default" data-toggle="modal"
 															data-target="#deleteModal"
-															onclick="return deleteSp('${user.SP_CODE}')"> <i
-															class="fa fa-trash"></i> Delete
+															onclick="return deleteStream('${user.BANK_CD}')">
+															<i class="fa fa-trash"></i> Delete
 														</a>
 													</div>
 												</td>
@@ -201,7 +194,7 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialogsp"></jsp:include>
+	<jsp:include page="${request.contextPath}/dialogbank"></jsp:include>
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
 	<script>
@@ -211,7 +204,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/sp.js" />"></script>
+	<script src="<c:url value="/resources/function/bank/bank.js" />"></script>
 
 
 </body>

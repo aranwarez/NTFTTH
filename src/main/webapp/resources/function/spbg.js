@@ -199,3 +199,25 @@ function del() {
         alert(data);
     });
 }
+
+function getbanklist(transcd){
+	  $.get('../bank/getBankList', {TRANSCD: transcd.value
+	    }, function (response) {
+	        var select = $('#BANK_CD,#EDITBANK_CD');
+	        select.find('option').remove();
+	        $('<option>').val("").text("SELECT").appendTo(select);
+	        $.each(response, function (index, value) {
+	        	debugger;
+	        	if(typeof value.BANK_CD !== 'undefined'){
+	            $('<option>').val(value.BANK_CD).text(value.BANK_NAME+':'+value.ACCT_NO+':'+value.BANK_ADDRESS).appendTo(
+	                    select);
+	        }else
+	        	$('<option>').val(value.BANK_CODE).text(value.BANK_NAME).appendTo(
+	                    select);
+
+	        });
+
+	    });
+	
+	
+}

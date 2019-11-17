@@ -26,7 +26,7 @@ public class SpDao {
         Connection con = DbCon.getConnection();
 
         try {
-            PreparedStatement pst = con.prepareStatement("select * from M_SP ORDER BY SP_CODE");
+            PreparedStatement pst = con.prepareStatement("select m.*,common.to_bs(m.contract_DT) nepcontract_dt,common.to_bs(m.contract_ter_DT) nepcontract_ter_dt from M_SP m ORDER BY sp_name");
             ResultSet rs = pst.executeQuery();
 
             List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
