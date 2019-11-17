@@ -154,6 +154,12 @@ function ServiceSpAction(SP_CODE) {
     $('#esSP_CODE').val(SP_CODE);
     $('.modal-title')
             .html('SP Service Entry for Service Provider : ' + SP_CODE);
+ 
+    
+    //getting contract date from Client Profile can change from form
+    
+    $('#sSP_CODE').val(SP_CODE);
+    
 }
 
 // Saves Service for SP_CODE

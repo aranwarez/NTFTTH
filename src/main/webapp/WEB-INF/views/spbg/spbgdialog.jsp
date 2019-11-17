@@ -36,7 +36,7 @@
                         <tr>
                             <td>
                                 <label for="Transcd">Trans Cd</label> 
-                                <select  class="form-control" style="width: 280px;" name="TRANS_CD" id="TRANS_CD">
+                                <select  class="form-control" style="width: 280px;" name="TRANS_CD" id="TRANS_CD" onchange="getbanklist(this)">
                                     <option value=''>Select</option>
                                     <c:forEach var="TRANS" items="${Trans_list}">
                                         <option value="${TRANS.TRANS_CD}">${TRANS.TRANS_CD}</option>
@@ -133,7 +133,7 @@
                             <tr>
                                 <td>
                                     <label for="Transcd">Trans Cd</label> 
-                                    <select  class="form-control" style="width: 280px;" name="EDITTRANS_CD" id="EDITTRANS_CD">
+                                    <select  class="form-control" style="width: 280px;" name="EDITTRANS_CD" id="EDITTRANS_CD" onchange="getbanklist(this)">
                                         <option value=''>Select</option>
                                         <c:forEach var="TRANS" items="${Trans_list}">
                                             <option value="${TRANS.TRANS_CD}">${TRANS.TRANS_CD}</option>

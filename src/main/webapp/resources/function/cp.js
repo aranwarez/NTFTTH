@@ -99,8 +99,7 @@ function saveCp() {
 
 function editCp(code) {
     CODE = code;
-
-    var row = $("#example1").dataTable().fnGetData();
+     var row = $("#example1").dataTable().fnGetData();
     var l = row.length;
     for (var i = 0; i < l; i++) {
         if (row[i][0] == code) {
@@ -329,8 +328,8 @@ function getCpFilterList() {
                     .draw();
             $.each(response, function (key, value) {
                 $("#example1").dataTable().fnAddData([
-                    '<a href="../cpdetail/list?cp_code=' + value.CP_CODE + '" target="_blank">' + value.CP_CODE + '</a>',
-                    value.SP_CODE,
+                	value.CP_CODE,
+                	value.SP_CODE,
                     value.SP_NAME,
                     value.SERVICE_CODE,
                     value.CP_NAME,
@@ -349,8 +348,10 @@ function getCpFilterList() {
                     value.RENTAL_ITEM_CODE,
                     value.VPN_ITEM_CODE,
                     value.SPACE_ITEM_CODE,
+                    '<a href="../cpdetail/list?cp_code=' + value.CP_CODE + '" target="_blank" class="btn bg-purple"><i class="fa fa-rupee"></i>RATES</a>',
+                    
                     '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#editModal" onclick="return editCp(\'' + value.CP_CODE + '\')"> <i class="fa fa-edit"></i> Edit </a>',
-                    '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#deleteModal" onclick="return deleteCp(\'' + value.CP_CODE + '\')"> <i class="fa fa-trash"></i> Delete </a>'
+                    '<a href="#" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="return deleteCp(\'' + value.CP_CODE + '\')"> <i class="fa fa-trash"></i> Delete </a>'
                 ]);
             }
             );

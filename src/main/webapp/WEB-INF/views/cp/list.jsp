@@ -147,8 +147,8 @@
                                                 <th>Service Code</th>
                                                 <th>CP Name</th>
                                                 <th>ESME CODE</th>
-                                                <th>CategoryMap</th>
-                                                <th>ESMECodeMap</th>
+                                                <th>Category Map</th>
+                                                <th>ESME Code Map</th>
                                                 <th>Srv. For</th>
                                                 <th>Package Type</th>
                                                 <th>Stream Type</th>
@@ -161,6 +161,7 @@
                                                 <th>Rental</th>
                                                 <th>VPN</th>
                                                 <th>Space</th>
+                                                <th>Rates</th>
                                                 <th>Edit</th>
                                                 <th>Delete</th>
 
@@ -189,7 +190,7 @@
                                                     <td>${user.RENTAL_ITEM_CODE}</td>
                                                     <td>${user.VPN_ITEM_CODE}</td>
                                                     <td>${user.SPACE_ITEM_CODE}</td>
-
+														
                                                     <td>
                                                         <div class="btn-group">
                                                             <a href="#" class="btn btn-info" data-toggle="modal"

@@ -244,7 +244,7 @@
                                 ${VASSER.SERVICE_CODE}</option>
                             </c:forEach>
                     </select> <label for="ACTIVE_FLAG">ACTIVE FLAG</label> 
-                    <select class="form-control"
+                    <select 
                             style="width: 50px;" name="ACTIVE_FLAG" id="sACTIVE_FLAG">
                         <option value='N'>N</option>
                         <option value='Y'>Y</option>

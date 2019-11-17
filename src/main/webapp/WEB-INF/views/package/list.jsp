@@ -112,7 +112,7 @@
 								<table id="example1" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-											<th>Package Type</th>
+											<th>Package Code</th>
 											<th>Description</th>
 											<th>Edit</th>
 											<th>Delete</th>
