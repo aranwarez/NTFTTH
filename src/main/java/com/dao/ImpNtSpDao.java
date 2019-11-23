@@ -79,9 +79,9 @@ public class ImpNtSpDao {
                 transno = rst.getInt(1);
             }
             PreparedStatement pst = con.prepareStatement("INSERT INTO VASNTW.TMP_IMP_SMS_NT_SP\r\n"
-                    + "(TRANS_NO, SEQ_NO, IMP_YEAR, IMP_MONTH, SERVICE_CODE, NT_SP, S_NO, "
-                    + " CP_DESC, ESME_CODE, MO_1ST, MT_1ST, FILE_NAME, CATEGORY,"
-                    + " CREATE_BY, POST_FLAG, IMP_PERIOD)\r\n" + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,'N',?)");
+                    + "(TRANS_NO, SEQ_NO, IMP_YEAR, IMP_MONTH, SERVICE_CODE, NT_SP,"
+                    + " CP_DESC,MO_1ST, MT_1ST, FILE_NAME, CATEGORY,"
+                    + " CREATE_BY, POST_FLAG, IMP_PERIOD)\r\n" + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,'N',?)");
             int index = 1;
             for (Map<String, Object> obj : JSONarrayList) {
                 pst.setInt(1, transno);
@@ -90,22 +90,21 @@ public class ImpNtSpDao {
                 pst.setString(4, IMP_MONTH);
                 pst.setString(5, SERVICE_CODE);
                 pst.setString(6, NT_SP);
-                pst.setString(7, (String) obj.get("S_NO"));
-                pst.setString(8, (String) obj.get("SHORT_CODE"));
-                pst.setString(9, (String) obj.get("ESME_CODE"));
-                pst.setString(10, (String) obj.get("MO_1ST"));
-                pst.setString(11, (String) obj.get("MT_1ST"));
-                pst.setString(12, Filename);
-                pst.setString(13, (String) obj.get("CATEGORY"));
+                pst.setString(7, (String) obj.get("1"));
+                pst.setString(8, (String) obj.get("2"));
+                pst.setString(9, (String) obj.get("3"));
+                pst.setString(10, Filename);
+                pst.setString(11, (String) obj.get("0"));
                 // CP_CODE, CREATE_BY, POST_FLAG, IMP_PERIOD
-                pst.setString(14, USER);
-                pst.setString(15, IMP_PERIOD);
+                pst.setString(12, USER);
+                pst.setString(13, IMP_PERIOD);
                 pst.executeUpdate();
                 index = index + 1;
             }
             con.commit();
             return "Sucessfully imported Excel Data";
         } catch (Exception e) {
+        	con.rollback();
             e.printStackTrace();
             return e.getMessage();
         } finally {
