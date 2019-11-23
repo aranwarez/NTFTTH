@@ -82,7 +82,8 @@ function importdata() {
         $.each(JSONimport[indexR], function (indexC, valueC) {
             if (indexR == 0) {
                 // Skipping header
-                indexmap[indexC] = valueC;
+                //indexmap[indexC] = valueC;  --remove comment if u need column header
+            	indexmap[indexC] = indexC.toString();
             } else if (indexC == 0 && valueC == "") {
                 // Skipping value without catergories
                 return false;
