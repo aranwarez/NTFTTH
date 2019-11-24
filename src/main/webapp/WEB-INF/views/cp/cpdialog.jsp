@@ -44,12 +44,12 @@
                     <table>
                         <tr>
                             <td>
-                                <label for="CategoryMap">Category Map ID</label> 
+                                <label for="CategoryMap">Package Mapping ID</label> 
                                 <input style="width: 280px;" class="form-control" name="CATEGORY_MAP" id="CATEGORY_MAP"
                                        placeholder="Enter Category Map ID">
                             </td>                             
                             <td>
-                                <label for="esmecodemap">Esme Map Code</label> 
+                                <label for="esmecodemap">ESME/BUSY Map Code</label> 
                                 <input style="width: 280px;" class="form-control" name="ESME_CODE_MAP" id="ESME_CODE_MAP"
                                        placeholder="Enter ESME CODE MAP"> 
                             </td>
@@ -58,7 +58,7 @@
                     <table>     
                         <tr>
                             <td>
-                                <label for="Srvfor">Srv. for</label> 
+                                <label for="Srvfor">Service Name</label> 
                                 <input style="width: 560px;" class="form-control" name="SRV_FOR" id="SRV_FOR"
                                        placeholder="Enter service for">
                             </td>                             
@@ -200,12 +200,12 @@
                         <table>
                             <tr>
                                 <td>
-                                    <label for="CategoryMap">Category Map ID</label> 
-                                    <input style="width: 280px;" class="form-control" name="CATEGORY_MAP" id="EDITCATEGORY_MAP"
+                                    <label for="CategoryMap">Package Mapping ID</label> 
+                                    <input style="width: 280px;" class="form-control" name="EDITCATEGORY_MAP" id="EDITCATEGORY_MAP"
                                            placeholder="Enter Category Map ID">
                                 </td>                             
                                 <td>
-                                    <label for="esmecodemap">Esme Map Code</label> 
+                                    <label for="esmecodemap">ESME/BUSY Map Code</label> 
                                     <input style="width: 280px;" class="form-control" name="ESME_CODE_MAP" id="EDITESME_CODE_MAP"
                                            placeholder="Enter ESME CODE MAP"> 
                                 </td>
@@ -214,7 +214,7 @@
                         <table>
                             <tr>
                                 <td>
-                                    <label for="Srvfor">Srv. for</label> 
+                                    <label for="Srvfor">Service Name</label> 
                                     <input style="width: 560px;" class="form-control" name="EDITSRV_FOR" id="EDITSRV_FOR"
                                            placeholder="Enter service for">
                                 </td>                             

@@ -327,6 +327,10 @@ function getCpFilterList() {
                     .clear()
                     .draw();
             $.each(response, function (key, value) {
+            	var rate="";
+            	if(value.SERVICE_CODE==="APP" || value.SERVICE_CODE==="IVR" || value.SERVICE_CODE==="WAP"){
+            		rate='<a href="../cpdetail/list?cp_code=' + value.CP_CODE + '" target="_blank" class="btn bg-purple"><i class="fa fa-rupee"></i>RATES</a>';
+            	}
                 $("#example1").dataTable().fnAddData([
                 	value.CP_CODE,
                 	value.SP_CODE,
@@ -348,7 +352,7 @@ function getCpFilterList() {
                     value.RENTAL_ITEM_CODE,
                     value.VPN_ITEM_CODE,
                     value.SPACE_ITEM_CODE,
-                    '<a href="../cpdetail/list?cp_code=' + value.CP_CODE + '" target="_blank" class="btn bg-purple"><i class="fa fa-rupee"></i>RATES</a>',
+                    rate,
                     
                     '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#editModal" onclick="return editCp(\'' + value.CP_CODE + '\')"> <i class="fa fa-edit"></i> Edit </a>',
                     '<a href="#" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="return deleteCp(\'' + value.CP_CODE + '\')"> <i class="fa fa-trash"></i> Delete </a>'
