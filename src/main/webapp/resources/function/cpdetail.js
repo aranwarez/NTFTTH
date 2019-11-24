@@ -47,6 +47,7 @@ function getCpdetailFilterList(cp_code) {
                                     .each(
                                             response,
                                             function (key, value) {
+                                            	if(value.SERVICE_CODE==="APP" || value.SERVICE_CODE==="WAP" || value.SERVICE_CODE==="IVR"){
                                                 $("#example1")
                                                         .dataTable()
                                                         .fnAddData(
@@ -66,8 +67,9 @@ function getCpdetailFilterList(cp_code) {
                                                                     '<a href="#" class="btn btn-info bg-green" data-toggle="modal" data-target="#myDetailModal" onclick="return detailCp(\''
                                                                             + value.CP_CODE
                                                                             + '\')"> <i class="fa fa-edit"></i> Detail </a>']);
-                                            });
-                        }
+                                            	}});
+                                            
+                                            }
                     });
 }
 
