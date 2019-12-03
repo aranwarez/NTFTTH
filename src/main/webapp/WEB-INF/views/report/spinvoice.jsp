@@ -152,7 +152,8 @@
                                             <tr><td>Report Name</td>
                                                 <td>
                                                     <select name="reportname"><option value="SpInvoiceRep">VAS Provider Invoice</option>
-                                                        <option value="SpPayableRep">VAS Provide Detail Payable Report</option>
+                                                        <option value="SpPayableRep">Detail Payable Statement</option>
+                                                        <option value="SpPayableSummaryRep">Partner wise Payable Statement</option>
                                                     </select>
                                                 </td>
                                             </tr>
