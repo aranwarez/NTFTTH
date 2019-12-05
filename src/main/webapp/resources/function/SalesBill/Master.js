@@ -1,5 +1,6 @@
 var CODE;
 
+
 $(document).ready(function() {
 	// $(".js-example-basic-single").select2();
 	$('.nepali-calendar').nepaliDatePicker();
@@ -48,7 +49,9 @@ function getReceiptFilterList() {
 							//temp = $('#example1').DataTable();
 							temp = $('#example1')
 							.DataTable(
-									{
+									{"aoColumnDefs": [
+									    { className: "money text-right", "targets": [ 4 ] }
+									    ],
 										"footerCallback" : function(
 												row, data, start, end,
 												display) {
@@ -56,6 +59,15 @@ function getReceiptFilterList() {
 
 											// Remove the formatting to
 											// get integer data for
+											
+											//currency formatter
+											var formater = OSREC.CurrencyFormatter.getFormatter
+											({
+											    selector: '.money',
+											    currency: 'NPR',
+											    pattern: '##,##,##,##,##,##,##,##0.00'
+											});
+											
 											// summation
 											var intVal = function(i) {
 												return typeof i === 'string' ? i
@@ -94,14 +106,14 @@ function getReceiptFilterList() {
 																		+ intVal(b);
 															}, 0);
 
-										
-
+											total=formater(+total);
+											pageTotal=formater(+pageTotal);
 											// Update footer
 											$(api.column(4).footer())
 													.html(
-															+pageTotal.toFixed(2)
+															pageTotal
 																	+ '<BR> '
-																	+ total.toFixed(2));
+																	+ total);
 										
 										}
 									});
@@ -109,6 +121,11 @@ function getReceiptFilterList() {
 							
 							//
 							temp.clear().draw();
+							temp.columns([4]).header().to$().removeClass("money").removeClass("text-right");
+							temp.columns([4]).footer().to$().removeClass("money");
+						
+							
+							
 							$
 									.each(
 											response,
@@ -134,6 +151,12 @@ function getReceiptFilterList() {
 																				+ value.TRANS_NO
 																				+ '\')"> <i class="fa fa-trash"></i> Cancel </a>' ]);
 											});
+							OSREC.CurrencyFormatter.formatAll(
+									   {
+										   selector: '.money',
+								           currency: 'NPR',
+								           pattern: '##,##,##,##,##,##,##,##0.00'
+									   });
 						}
 					});
 
@@ -199,6 +222,12 @@ function saveReceipt() {
 
 function editReceipt(code) {
 	CODE = code;
+	var formater = OSREC.CurrencyFormatter.getFormatter
+	({
+	    selector: '.money',
+	    currency: 'NPR',
+	    pattern: '##,##,##,##,##,##,##,##0.00'
+	});
 
 	var row = $("#example1").dataTable().fnGetData();
 	var l = row.length;
@@ -211,7 +240,7 @@ function editReceipt(code) {
 			$("#salesdt").html(row[i][1]);
 			$("#spcode").html(row[i][2]);
 			$("#bankcd").html(row[i][3]);
-			$("#amt").html(row[i][4]);
+			$("#amt").html(formater(row[i][4]));
 			$("#remarks").html(row[i][5]);
 		}
 	}
@@ -225,8 +254,14 @@ function editReceipt(code) {
 			function(response) {
 				// alert(JSON.stringify(response));
 				if (response !== null) {
-					temp = $('#detailtab').DataTable();
-					temp.clear().draw();
+					temp1 = $('#detailtab').DataTable({"aoColumnDefs": [
+					    { className: "moneydetail text-right", "targets": [ 3,4,5,6,7 ] }
+					    ]});
+					temp1.clear().draw();
+					temp1.columns([3,4,5,6,7]).header().to$().removeClass("moneydetail").removeClass("text-right");
+					temp1.columns([3,4,5,6,7]).footer().to$().removeClass("moneydetail");
+					
+					
 					$
 							.each(
 									response,
@@ -246,6 +281,13 @@ function editReceipt(code) {
 																total
 																 ]);
 									});
+					
+					 OSREC.CurrencyFormatter.formatAll(
+							   {
+								   selector: '.moneydetail',
+						           currency: 'NPR',
+						           pattern: '##,##,##,##,##,##,##,##0.00'
+							   });
 				}
 			});	
 	

@@ -83,14 +83,14 @@ public class BankDao {
 		return null;
 	}
 	
-	  public String saveBank(Bank m) throws SQLException {
+	  public String saveBank(Bank m,String user) throws SQLException {
 	        Connection con = DbCon.getConnection();
 	        try {
 
 	            PreparedStatement pst = con.prepareStatement("insert into M_BANK(CC_CODE,BANK_CD,BANK_NAME,BANK_ADDRESS,ACCT_NO,ACCT_TYPE,ACT_FLAG,DEACTIVE_DT,CREATE_BY,CREATE_DT)values(?,?,?,?,?,?,?,COMMON.TO_AD(?),?,sysdate)");
 	            //pst.setString(1, m.getCC_CODE());
 	            pst.setString(1, "VAS");
-	            
+	            System.out.println(m.getBANK_CD());
 	            pst.setString(2, m.getBANK_CD());
 	            pst.setString(3, m.getBANK_NAME());
 	            pst.setString(4, m.getBANK_ADDRESS());
@@ -98,7 +98,7 @@ public class BankDao {
 	            pst.setString(6, m.getACCT_TYPE());
 	            pst.setString(7, m.getACT_FLAG());
 	            pst.setString(8, m.getDEACTIVE_DT());
-	            pst.setString(9, m.getUSER());
+	            pst.setString(9, user);
 	            pst.executeUpdate();
 
 	        } catch (Exception e) {

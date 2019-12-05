@@ -54,12 +54,25 @@ function getInvoiceLockList() {
 							// footer callback
 							temp = $('#example1')
 									.DataTable(
-											{
+											{"aoColumnDefs": [
+											    { className: "money text-right", "targets": [ 7,8 ] }
+											    ]
+												,
 												"footerCallback" : function(
 														row, data, start, end,
 														display) {
 													var api = this.api(), data;
 
+													
+													//currency formatter
+													 var formater = OSREC.CurrencyFormatter.getFormatter
+										                ({
+										                    selector: '.money',
+										                    currency: 'NPR',
+										                    pattern: '##,##,##,##,##,##,##,##0.00'
+										                });
+													
+													
 													// Remove the formatting to
 													// get integer data for
 													// summation
@@ -123,21 +136,28 @@ function getInvoiceLockList() {
 																	}, 0);
 
 													// Update footer
+													pageTotal7=formater(+pageTotal7);
+													pageTotal8=formater(+pageTotal8);
+													total7=formater(+total7);
+													total8=formater(+total8);
+													
 													$(api.column(7).footer())
 															.html(
-																	+pageTotal7
+																	pageTotal7
 																			+ '<BR> '
 																			+ total7);
 													$(api.column(8).footer())
 															.html(
-																	+pageTotal8
+																	pageTotal8
 																			+ '<BR> '
 																			+ total8);
 												}
 											});
 
 							// end of footer callback
-
+							temp.columns([7, 8]).header().to$().removeClass("money").removeClass("text-right").addClass("heeeee");
+							temp.columns([7, 8]).footer().to$().removeClass("money");
+							
 							temp.clear().draw();
 							$
 									.each(
@@ -198,16 +218,22 @@ function getInvoiceLockList() {
 																		'<a href="#" class="btn btn-info" data-toggle="modal" data-target="#myDetailModal" onclick="return detailBill(\''
 																				+ value.TRANS_NO
 																				+ '\')"> <i class="fa fa-edit"></i> View </a>',
-																		'<a href="#" class="btn btn-info" data-toggle="modal" data-target="#unpostModal" onclick="return unpostInvoicelock(\''
+																		'<a href="#" class="btn bg-purple" data-toggle="modal" data-target="#unpostModal" onclick="return unpostInvoicelock(\''
 																				+ value.TRANS_NO
-																				+ '\')"> <i class="fa fa-trash"></i> Unpost </a>',
-																		'<a href="#" class="btn btn-info" data-toggle="modal" data-target="#deleteModal" onclick="return deleteInvoicelock(\''
+																				+ '\')"> <i class="fa fa-undo"></i> Unpost </a>',
+																		'<a href="#" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="return deleteInvoicelock(\''
 																				+ value.TRANS_NO
 																				+ '\')"> <i class="fa fa-trash"></i> Delete </a>' ]);
 											});
+							   OSREC.CurrencyFormatter.formatAll(
+									   {
+										   selector: '.money',
+								           currency: 'NPR',
+								           pattern: '##,##,##,##,##,##,##,##0.00'
+									   });
+						
 						}
 					});
-
 }
 
 function detailBill(trans_no) {
@@ -239,7 +265,10 @@ function detailBill(trans_no) {
 			tempdetaillist = response;
 
 			detailtemp = $('#detailtable').DataTable(
-					{
+					{"aoColumnDefs": [
+					    { className: "moneydetail text-right", "targets": [5,6, 7,8,9 ] }
+					    ]
+						,
 						"footerCallback" : function(row, data, start, end,
 								display) {
 							
@@ -298,6 +327,10 @@ function detailBill(trans_no) {
 						$(api.column(9).footer()).html(sumtot);
 						}
 					});
+			
+			detailtemp.columns([5,6,7, 8,9]).header().to$().removeClass("moneydetail").removeClass("text-right");
+		//	detailtemp.columns([5,6,7, 8,9]).footer().to$().removeClass("money");
+			
 
 			detailtemp.clear().draw();
 			$.each(response, function(key, value) {
@@ -309,6 +342,14 @@ function detailBill(trans_no) {
 								value.AMT, value.ROYALTY_AMT, value.TSC_AMT,
 								value.VAT_AMT, value.TOTAL ]);
 			});
+//			Convert pattern
+			   OSREC.CurrencyFormatter.formatAll(
+					   {
+						   selector: '.moneydetail',
+				           currency: 'NPR',
+				           pattern: '##,##,##,##,##,##,##,##0.00'
+					   });
+			
 		}
 	});
 

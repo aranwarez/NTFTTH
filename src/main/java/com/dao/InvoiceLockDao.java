@@ -63,7 +63,7 @@ public class InvoiceLockDao {
         try {
 
             PreparedStatement pst = con.prepareStatement("SELECT B.TRANS_ID, B.TRANS_NO, B.SERVICE_CODE, B.ITEM_CODE, B.SHARING_TYPE,  DECODE(B.DR_CR_FLAG,'1','DR','CR') DR_CR_FLAG, \n"
-                    + "   B.AMT, B.ROYALTY_AMT, B.TSC_AMT, B.VAT_AMT, decode(dr_cr_flag,'1',(b.amt+b.tsc_amt+b.vat_amt),(b.amt-b.royalty_amt-b.tsc_amt-b.vat_amt)) Total,B.CREATE_BY, B.CREATE_DT,  B.UPDATE_BY, B.UPDATE_DT\n"
+                    + "   B.AMT, B.ROYALTY_AMT, B.TSC_AMT, B.VAT_AMT, decode(dr_cr_flag,'1',(b.amt+b.tsc_amt+b.vat_amt),(b.amt-b.royalty_amt+b.tsc_amt+b.vat_amt)) Total,B.CREATE_BY, B.CREATE_DT,  B.UPDATE_BY, B.UPDATE_DT\n"
                     + "FROM VASNTW.BILL_DETAIL B WHERE TRANS_NO=? ORDER BY 3,4,5");
 
             pst.setString(1, TRANS_NO);

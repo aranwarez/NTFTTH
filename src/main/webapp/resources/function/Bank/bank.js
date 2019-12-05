@@ -1,3 +1,8 @@
+$(document).ready(function() {
+		$('.nepali-calendar').nepaliDatePicker();
+});
+
+
 function addbank() {
     //debugger;
     if ($('#BANK_CD') == null || $('#BANK_CD') == "" || $('#BANK_CD').val().length > 15) {
@@ -7,13 +12,13 @@ function addbank() {
     var CODE = $("#BANK_CD").val();
     var DESCRIPTION = $("#DESCRIPTION").val();
     
-    $.post('../stream/saveJS', {
+    $.post('../bank/save', {
     	BANK_CD: CODE,
     	BANK_NAME: DESCRIPTION,
-        ADDRESS: $('#ADDRESS').val(),
-        ACCTNO :  $('#ACCTNO').val(),
-        ACCT_TYPE : $('#ACCTYPE').val(),
-        ACT_FLAG :  $('#ACT_FLAG').val(),
+    	BANK_ADDRESS: $('#ADDRESS').val(),
+    	ACCT_NO :  $('#ACCTNO').val(),
+    	ACCT_TYPE : $('#ACCTYPE').val(),
+        ACT_FLAG :  $('#ACCTFLAG').val(),
         DEACTIVE_DT  : $('#DEACTIVE_DT').val()
         
     }, function (data) {
