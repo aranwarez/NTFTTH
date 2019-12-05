@@ -408,8 +408,8 @@ function editImpntsp(code, seqno) {
              $("#EDITS_NO").trigger('change');
             
             $("#EDITESME_CODE").val(row[i][10]);
-            $("#EDITMO_1ST").val(row[i][13]);
-            $("#EDITMT_1ST").val(row[i][14]);
+            $("#EDITMO_1ST").val(row[i][11]);
+            $("#EDITMT_1ST").val(row[i][12]);
             // jQuery.ajaxSetup({async: true});
         }
     }

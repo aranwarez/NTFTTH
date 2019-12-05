@@ -9,6 +9,7 @@ import com.dao.BankDao;
 import com.dao.BankListDao;
 import com.dao.COADao;
 import com.dao.CommonMenuDao;
+import com.model.Bank;
 import com.model.MenuAccess;
 import com.model.UserInformationModel;
 
@@ -19,11 +20,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  *
@@ -78,9 +82,33 @@ public class BankController {
 
 	}
 
+
 	@RequestMapping(method = RequestMethod.GET, value = "dialogbank")
 	public String dialogcp(Model model, Locale locale) {
 		return "bank/dialog";
 	}
+
+	   @RequestMapping(value = "/bank/save", method = RequestMethod.POST)
+	    @ResponseBody
+	    public String invoicelockDelete(Bank bank, HttpSession session, Model model, Locale locale) {
+	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+	        MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+	        if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+	            throw new ResponseStatusException(
+	                    HttpStatus.FORBIDDEN, "Unauthorized");
+	        }
+	        BankDao dao = new BankDao();
+//	        System.out.println("delete service code==" + SERVICE_CODE);
+	        String msg = null;
+	        try {
+	            msg = dao.saveBank(bank,user.getUSER_ID());
+	        } catch (SQLException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+	        return msg;
+
+	    }
+
 
 }

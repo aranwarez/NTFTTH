@@ -222,5 +222,7 @@
 	
 	<script src="<c:url value="/resources/function/SalesBill/Master.js" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
+		<script src="<c:url value="/resources/adminltd/js/currencyFormatter.js" />"></script>
+	
 </body>
 </html>

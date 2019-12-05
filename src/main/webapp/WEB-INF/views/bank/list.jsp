@@ -204,7 +204,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/bank/bank.js" />"></script>
+	<script src="<c:url value="/resources/function/Bank/bank.js" />"></script>
 
 
 </body>
