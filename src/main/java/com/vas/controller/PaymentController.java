@@ -142,6 +142,14 @@ public class PaymentController {
     @RequestMapping(value = "/payment/getSpdue", method = RequestMethod.GET)
     public Map<String, Object> getSpdue(String SP_CODE, String SERVICE_CODE, Locale locale, Model model, HttpSession session)
             throws SQLException {
+    	UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+
+        MenuAccess menuaccess = CommonMenuDao.checkAccess(userinfo.getROLE_CODE(), classname);
+        if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Unauthorized");
+        }
+
         PaymentDao dao = new PaymentDao();
         return dao.getSpdue(SP_CODE,SERVICE_CODE);
     }

@@ -26,7 +26,7 @@
 						<tr>
 							<td><label for="service">Service</label> <select
 								style="width: 280px;" class="form-control" name="SERVICE_CODE"
-								id="SERVICE_CODE">
+								id="SERVICE_CODE" onchange="getpackagelist(this.value)">
 									<option value=''>Select</option>
 									<c:forEach var="VASSER" items="${VASSer_list}">
 
@@ -119,7 +119,7 @@
 							<tr>
 								<td><label for="service">Service</label> <select
 									style="width: 280px;" class="form-control"
-									name="EDITSERVICE_CODE" id="EDITSERVICE_CODE">
+									name="EDITSERVICE_CODE" id="EDITSERVICE_CODE" onchange="getpackagelist(this.value)">
 										<option value=''>Select</option>
 										<c:forEach var="VASSER" items="${VASSer_list}">
 										<c:choose>

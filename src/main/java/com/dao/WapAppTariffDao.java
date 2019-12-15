@@ -75,7 +75,6 @@ public class WapAppTariffDao {
             pst.executeUpdate();
             return "Succesfully Saved Wap App Tariff";
         } catch (Exception e) {
-            con.rollback();
             e.printStackTrace();
             return "Failed to Save : " + e.getMessage();
         } finally {

@@ -9,7 +9,8 @@ function savePackage() {
     
     $.post('../package/saveJS', {
         PACKAGE_TYPE: CODE,
-        DESCRIPTION: DESCRIPTION
+        DESCRIPTION: DESCRIPTION,
+        SERVICE_CODE: $('#SERVICE_CODE').val()
     }, function (data) {
         alert(data);
         if (data.substring(0, 6) === "Succes") {
@@ -33,6 +34,7 @@ function editPackage(code) {
 
             $("#EDITPACKAGE_TYPE").val(row[i][0]);
             $("#EDITDESCRIPTION").val(row[i][1]);
+            $('#EDITSERVICE_CODE').val(row[i][2]);
         }
     }
 }
@@ -43,7 +45,8 @@ function updatePackage() {
     
     $.post('../package/update', {
         PACKAGE_TYPE: CODE,
-        DESCRIPTION: DESCRIPTION
+        DESCRIPTION: DESCRIPTION,
+        SERVICE_CODE: $('#EDITSERVICE_CODE').val()
     }, function (data) {
         // location.reload();
         alert(data);

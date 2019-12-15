@@ -25,6 +25,18 @@
                     <label for="name">DESCRIPTION</label> <input type="text"
                                                                  class="form-control" name="DESCRIPTION" id="DESCRIPTION" placeholder="Enter description">
                 </div>
+                <div>
+                                <label for="Vas Services">VAS Services</label> 
+                                <select style="width: 180px;" class="form-control" name="SERVICE_CODE"
+                                        id="SERVICE_CODE">
+                                    <option value=''>Select :</option>
+                                    <c:forEach var="VASSER" items="${VASSer_list}">
+                                        <option value="${VASSER.SERVICE_CODE}">
+                                            ${VASSER.SERVICE_CODE}</option>
+                                        </c:forEach>
+                                </select>
+                
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -58,6 +70,18 @@
                         <label for="name">DESCRIPTION</label>
                         <input type="text" class="form-control"  name="DESCRIPTION" id="EDITDESCRIPTION" placeholder="Enter description">
                     </div>
+                    <div>
+                                <label for="Vas Services">VAS Services</label> 
+                                <select style="width: 180px;" class="form-control" name="EDITSERVICE_CODE"
+                                        id="EDITSERVICE_CODE">
+                                    <option value=''>Select :</option>
+                                    <c:forEach var="VASSER" items="${VASSer_list}">
+                                        <option value="${VASSER.SERVICE_CODE}">
+                                            ${VASSER.SERVICE_CODE}</option>
+                                        </c:forEach>
+                                </select>
+                
+                </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

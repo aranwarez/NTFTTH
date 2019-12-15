@@ -114,6 +114,7 @@
 										<tr>
 											<th>Package Code</th>
 											<th>Description</th>
+											<th>SERVICE_CODE</th>
 											<th>Edit</th>
 											<th>Delete</th>
 
@@ -125,6 +126,8 @@
 											<tr>
 												<td>${user.PACKAGE_TYPE}</td>
 												<td>${user.DESCRIPTION}</td>
+												<td>${user.SERVICE_CODE}</td>
+												
 												<td>
 													<div class="btn-group">
 														<a href="#" class="btn btn-info" data-toggle="modal"

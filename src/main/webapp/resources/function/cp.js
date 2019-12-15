@@ -1,6 +1,14 @@
 var CODE;
+var packagelist;
 
 $(document).ready(function () {
+	
+	//get package list
+	  $.get('../package/getlist', {}, function (response) {
+	       packagelist=response;
+	    });
+	
+	
     //$(".js-example-basic-single").select2();
     $('.nepali-calendar').nepaliDatePicker();
     $.fn.dataTable.ext.errMode = 'none';
@@ -210,6 +218,19 @@ function getItemTariffList() {
     getItemTariffListRental();
     getItemTariffListVpn();
     getItemTariffListSpace();
+    
+    //filling package list according to service selected
+    var select = $('#PACKAGE_TYPE,#EDITPACKAGE_TYPE');
+    select.find('option').remove();
+    $('<option>').val("").text("SELECT").appendTo(select);
+    $.each(packagelist, function (index, value) {
+    	if(value.SERVICE_CODE===$('#SERVICE_CODE').val() || value.SERVICE_CODE===$('#EDITSERVICE_CODE').val()){
+    	
+        $('<option>').val(value.PACKAGE_TYPE).text(value.DESCRIPTION).appendTo(
+                select);
+    }
+    });
+    
 
 }
 function getItemTariffListRental(SERVICE_CODE, ITEM_CODE) {

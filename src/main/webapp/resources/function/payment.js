@@ -1,5 +1,4 @@
 var CODE;
-
 $(document).ready(function () {
     //$(".js-example-basic-single").select2();
     $('.nepali-calendar').nepaliDatePicker();
@@ -19,7 +18,9 @@ $(document).ready(function () {
         placeholder: "Select a Bank Code"
                 // allowClear: false
     });
-$('#example1').DataTable().column(5).visible(false);
+$('#example1').DataTable({"aoColumnDefs": [
+    { className: "money text-right", "targets": [ 6,7,8,9 ] }
+    ]}).column(5).visible(false);
 
 
 });
@@ -36,11 +37,12 @@ function getPaymentFilterList() {
     }, function (response) {
         //  alert(JSON.stringify(response));
         if (response !== null) {
-            
-            temp = $('#example1').DataTable();
+                temp = $('#example1').DataTable();
             temp
                     .clear()
                     .draw();
+        	temp.columns([ 6,7,8,9]).header().to$().removeClass("money").removeClass("text-right");
+			
             $.each(response, function (key, value) {
                 $("#example1").dataTable().fnAddData([
                     value.PAYMENT_NO,
@@ -62,8 +64,16 @@ function getPaymentFilterList() {
                     '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#deleteModal" onclick="return deletePayment(\''+value.PAYMENT_NO+'\')"> <i class="fa fa-trash"></i> Cancel </a>'
                 ]);
             }
+            
             );
         }
+        OSREC.CurrencyFormatter.formatAll(
+				   {
+					   selector: '.money',
+			           currency: 'NPR',
+			           pattern: '##,##,##,##,##,##,##,##0.00'
+				   });
+        
     });
 
 }
@@ -92,9 +102,17 @@ function getSpDue(SP_CODE, SERVICE_CODE) {
         }else{ $('#BALAMT').css({'color':'red'});
          $('#BALAMTTAX').css({'color':'red'});
     }
-        $('#BALAMT').html(response.PAYABLE_BEFORE_TAX);
-        $('#BALAMTTAX').html(response.BAL_AMT_WITH_TAX);
-    });
+   	 var formater = OSREC.CurrencyFormatter.getFormatter
+     ({
+         selector: '.money',
+         currency: 'NPR',
+         pattern: '##,##,##,##,##,##,##,##0.00'
+     });
+	
+        $('#BALAMT').html(formater(response.PAYABLE_BEFORE_TAX));
+        $('#BALAMTTAX').html(formater(response.BAL_AMT_WITH_TAX));
+        $('#AMT').val(formater(response.BAL_AMT_WITH_TAX));
+            });
 }
 
 function getSPServiceList(SP_CODE) {
@@ -158,12 +176,18 @@ function savePayment() {
 
 function editPayment(code) {
     CODE = code;
-
+  //currency formatter
+    var formater = OSREC.CurrencyFormatter.getFormatter
+       ({
+           selector: '.money',
+           currency: 'NPR',
+           pattern: '##,##,##,##,##,##,##,##0.00'
+       });
     var row = $("#example1").dataTable().fnGetData();
     var l = row.length;
     for (var i = 0; i < l; i++) {
         if (row[i][0] == code) {
-            jQuery.ajaxSetup({async: false});
+       // 	alert(JSON.stringify(row));
             //getSPServiceList(row[i][1]);
             $("#EDITPAYMENT_NO").val(row[i][0]);
             $("#EDITPAYMENT_DT").val(row[i][1]);
@@ -171,14 +195,19 @@ function editPayment(code) {
             $("#EDITSERVICE_CODE").val(row[i][3]);
             $("#EDITBANK_CD").val(row[i][4]);
             $("#EDITCHEQUE_NO").val(row[i][5]);
-            $("#EDITAMT").val(row[i][6]);
-            $("#EDITROYALTY").val(row[i][7]);
-            $("#EDITVAT").val(row[i][8]);
-            $("#EDITTOTAL").val(row[i][9]);
+            $("#EDITAMT").val(formater(row[i][6]));
+            $("#EDITROYALTY").val(formater(row[i][7]));
+            $("#EDITVAT").val(formater(row[i][8]));
+            $("#EDITTOTAL").val(formater(row[i][9]));
             $("#EDITREMARKS").val(row[i][10]);
-            $("#EDITCREATE_BY").val(row[i][11]);            
-            jQuery.ajaxSetup({async: true});
+            $("#EDITCREATE_BY").val(row[i][11]);
+            
+           
+         
+            
+       
         }
+        
     }
 }
 

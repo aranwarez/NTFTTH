@@ -35,13 +35,13 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @Controller
 public class BankController {
-	private static final String classname="../bank/list";
+	private static final String classname = "../bank/list";
 
 	@RequestMapping(value = "/bank/list", method = RequestMethod.GET)
 	public String BankList(Locale locale, Model model, HttpServletRequest request, HttpSession session)
 			throws Exception {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		//String url = request.getServletPath();
+		// String url = request.getServletPath();
 
 //menu code should know before validate
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
@@ -49,30 +49,27 @@ public class BankController {
 			model.addAttribute("fx", "Unauthorized Page for this role!!");
 			return "/home";
 		}
-		BankDao dao=new BankDao();
+		BankDao dao = new BankDao();
 		model.addAttribute("BANK_LIST", dao.getBankList());
 		model.addAttribute("MENU_ACCESS", menuaccess);
 		model.addAttribute("fx", "Bank Setup");
 		return "bank/list";
 	}
-	
-	//get out bank list
+
+	// get out bank list
 	@ResponseBody
 	@RequestMapping(value = "/bank/getBankList", method = RequestMethod.GET)
-	public List<Map<String, Object>> getOutbankList(Locale locale, Model model, HttpSession session,String TRANSCD) throws SQLException {
-		if(TRANSCD.equals("BANKG")) {
-		BankListDao dao=new BankListDao();
-		return dao.getBankList();
-		}
-		else {
+	public List<Map<String, Object>> getOutbankList(Locale locale, Model model, HttpSession session, String TRANSCD)
+			throws SQLException {
+		if (TRANSCD.equals("BANKG")) {
+			BankListDao dao = new BankListDao();
+			return dao.getBankList();
+		} else {
 			BankDao BAN = new BankDao();
-		return BAN.getBankList();
+			return BAN.getBankList();
 		}
-			
 
 	}
-
-	
 
 	@ResponseBody
 	@RequestMapping(value = "/bank/getCOAList", method = RequestMethod.GET)
@@ -82,33 +79,70 @@ public class BankController {
 
 	}
 
-
 	@RequestMapping(method = RequestMethod.GET, value = "dialogbank")
 	public String dialogcp(Model model, Locale locale) {
 		return "bank/dialog";
 	}
 
-	   @RequestMapping(value = "/bank/save", method = RequestMethod.POST)
-	    @ResponseBody
-	    public String invoicelockDelete(Bank bank, HttpSession session, Model model, Locale locale) {
-	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-	        MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
-	        if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
-	            throw new ResponseStatusException(
-	                    HttpStatus.FORBIDDEN, "Unauthorized");
-	        }
-	        BankDao dao = new BankDao();
-//	        System.out.println("delete service code==" + SERVICE_CODE);
-	        String msg = null;
-	        try {
-	            msg = dao.saveBank(bank,user.getUSER_ID());
-	        } catch (SQLException e) {
-	            // TODO Auto-generated catch block
-	            e.printStackTrace();
-	        }
-	        return msg;
+	@RequestMapping(value = "/bank/save", method = RequestMethod.POST)
+	@ResponseBody
+	public String Banksave(Bank bank, HttpSession session, Model model, Locale locale) {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		BankDao dao = new BankDao();
+		String msg = null;
+		try {
+			msg = dao.saveBank(bank, user.getUSER_ID());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return msg;
 
-	    }
+	}
 
+	@RequestMapping(value = "/bank/update", method = RequestMethod.POST)
+	@ResponseBody
+	public String BankUpdate(Bank bank, HttpSession session, Model model, Locale locale) {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		BankDao dao = new BankDao();
+		String msg = null;
+		bank.setUSER(user.getUSER_ID());
+		try {
+			msg = dao.updateBank(bank);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return msg;
+
+	}
+
+	@RequestMapping(value = "/bank/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public String BankDelete(String bankcd, HttpSession session) {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		BankDao dao = new BankDao();
+		String msg = null;
+		try {
+			msg = dao.deleteBank(bankcd);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return msg;
+
+	}
 
 }
