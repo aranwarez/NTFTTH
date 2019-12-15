@@ -253,14 +253,9 @@
 
         <jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
-            <script>
-                $(function () {
-
-                    $('#example1').DataTable();
-
-                })
-            </script>
+            
             <script src="<c:url value="/resources/function/payment.js" />"></script>
         <script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
+        <script src="<c:url value="/resources/adminltd/js/currencyFormatter.js" />"></script>
     </body>
 </html>

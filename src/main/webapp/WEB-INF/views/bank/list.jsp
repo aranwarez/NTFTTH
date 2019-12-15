@@ -135,7 +135,7 @@
 												<td>${user.ACCT_NO}</td>
 												<td>${user.ACCT_TYPE}</td>
 												<td>${user.ACT_FLAG}</td>
-												<td>${user.DEACTIVE_DT}</td>
+												<td>${user.NEP_DEACTIVE_DT}</td>
 												
 
 												<td>
@@ -149,10 +149,10 @@
 												</td>
 												<td>
 													<div>
-														<a href="" class="btn btn-default" data-toggle="modal"
+														<a href="" class="btn bg-red" data-toggle="modal"
 															data-target="#deleteModal"
 															onclick="return deleteStream('${user.BANK_CD}')">
-															<i class="fa fa-trash"></i> Delete
+															<i class="fa fa-trash"></i>Delete
 														</a>
 													</div>
 												</td>

@@ -73,7 +73,7 @@
 				<table>
 					<td>Service Provider Services</td>
 					<td><select style="width: 200px;" name="QSERVICE_CODE"
-						id="QSERVICE_CODE">
+						id="QSERVICE_CODE" onchange="getpackagelist(this.value)">
 							<option value=''>Select :</option>
 							<c:forEach var="VASSER" items="${VASSer_list}">
 								<c:choose>

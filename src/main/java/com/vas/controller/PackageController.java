@@ -7,6 +7,8 @@ package com.vas.controller;
 
 
 import com.dao.PackageDao;
+import com.dao.ReceiptDao;
+import com.dao.VASServiceDao;
 import com.model.UserInformationModel;
 import java.sql.SQLException;
 import java.util.List;
@@ -42,7 +44,10 @@ public class PackageController {
         }
         model.addAttribute("fx", "Package List");
         model.addAttribute("data_list", list);
-
+        VASServiceDao VASSER = new VASServiceDao();
+        model.addAttribute("VASSer_list", VASSER.getVasServiceList());
+      
+        
         //COADao COA = new COADao();
         //model.addAttribute("COA_list", COA.getCOAlist());
 
@@ -51,7 +56,7 @@ public class PackageController {
     
     @RequestMapping(value = "/package/saveJS", method = RequestMethod.POST)
     @ResponseBody
-    public String saveJSPackage(String PACKAGE_TYPE, String DESCRIPTION,  HttpSession session, Model model, Locale locale) {
+    public String saveJSPackage(String PACKAGE_TYPE, String DESCRIPTION, String SERVICE_CODE, HttpSession session, Model model, Locale locale) {
         logger.info("Save package {}.", locale);
         PackageDao dao = new PackageDao();
 //        System.out.println("uddate Servce code==" + SERVICE_CODE);
@@ -61,7 +66,7 @@ public class PackageController {
         model.addAttribute("userName", "NEPal");
         String msg = null;
         try {
-            msg = dao.savePackage(PACKAGE_TYPE, DESCRIPTION, USER);
+            msg = dao.savePackage(PACKAGE_TYPE, DESCRIPTION,SERVICE_CODE, USER);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -77,7 +82,7 @@ public class PackageController {
     
     @RequestMapping(value = "/package/update", method = RequestMethod.POST)
     @ResponseBody
-    public String updatePackage(String PACKAGE_TYPE, String DESCRIPTION, HttpSession session, Model model, Locale locale) {
+    public String updatePackage(String PACKAGE_TYPE, String DESCRIPTION,String SERVICE_CODE, HttpSession session, Model model, Locale locale) {
 
         logger.info("Updata Package {}.", locale);
         PackageDao dao = new PackageDao();
@@ -88,7 +93,7 @@ public class PackageController {
         model.addAttribute("userName", "NEPal");
         String msg = null;
         try {
-            msg = dao.updatePackage(PACKAGE_TYPE, DESCRIPTION, USER);
+            msg = dao.updatePackage(PACKAGE_TYPE, DESCRIPTION,SERVICE_CODE, USER);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -112,5 +117,16 @@ public class PackageController {
         return msg;
 
     }
+    
+    
+ // getting list of all SP wise Service List
+    @ResponseBody
+    @RequestMapping(value = "/package/getlist", method = RequestMethod.GET)
+    public List<Map<String,Object>> getSpdue(HttpSession session)
+            throws SQLException {
+    	 PackageDao dao = new PackageDao();
+        return dao.getPackageList();
+    }
+
     
 }

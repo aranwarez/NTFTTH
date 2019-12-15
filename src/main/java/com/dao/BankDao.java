@@ -29,7 +29,7 @@ public class BankDao {
 		Connection con = DbCon.getConnection();
 
 		try {
-			PreparedStatement pst = con.prepareStatement("select * from M_BANK ORDER BY BANK_CD");
+			PreparedStatement pst = con.prepareStatement("select a.*,common.to_bs(a.deactive_dt) as NEP_DEACTIVE_DT from M_BANK a ORDER BY bank_name");
 			ResultSet rs = pst.executeQuery();
 
 			List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
@@ -89,8 +89,7 @@ public class BankDao {
 
 	            PreparedStatement pst = con.prepareStatement("insert into M_BANK(CC_CODE,BANK_CD,BANK_NAME,BANK_ADDRESS,ACCT_NO,ACCT_TYPE,ACT_FLAG,DEACTIVE_DT,CREATE_BY,CREATE_DT)values(?,?,?,?,?,?,?,COMMON.TO_AD(?),?,sysdate)");
 	            //pst.setString(1, m.getCC_CODE());
-	            pst.setString(1, "VAS");
-	            System.out.println(m.getBANK_CD());
+	            pst.setString(1, "CC040501");
 	            pst.setString(2, m.getBANK_CD());
 	            pst.setString(3, m.getBANK_NAME());
 	            pst.setString(4, m.getBANK_ADDRESS());
@@ -113,7 +112,7 @@ public class BankDao {
 	    public String updateBank(Bank m) throws SQLException {
 	        Connection con = DbCon.getConnection();
 	        try {
-	            PreparedStatement pst = con.prepareStatement("update m_bank set BANK_NAME=?,BANK_ADDRESS=?,ACCT_NO=?,ACCT_TYPE=?,ACT_FLAG=?,DEACTIVE_DT=COMMON.TO_AD(?),UPDATE_BY=?,UPDATE_DT=sysdate where cc_code=? and bank_cd=?");
+	            PreparedStatement pst = con.prepareStatement("update m_bank set BANK_NAME=?,BANK_ADDRESS=?,ACCT_NO=?,ACCT_TYPE=?,ACT_FLAG=?,DEACTIVE_DT=COMMON.TO_AD(?),UPDATE_BY=?,UPDATE_DT=sysdate where bank_cd=?");
 	            pst.setString(1, m.getBANK_NAME());
 	            pst.setString(2, m.getBANK_ADDRESS());
 	            pst.setString(3, m.getACCT_NO());
@@ -121,8 +120,7 @@ public class BankDao {
 	            pst.setString(5, m.getACT_FLAG());
 	            pst.setString(6, m.getDEACTIVE_DT());
 	            pst.setString(7, m.getUSER());
-	            pst.setString(8, m.getCC_CODE());
-	            pst.setString(9, m.getBANK_CD());
+	            pst.setString(8, m.getBANK_CD());
 
 	            pst.executeUpdate();
 
@@ -133,16 +131,16 @@ public class BankDao {
 	            con.close();
 
 	        }
-	        return "Data has been saved successfully ";
+	        return "Successfully updated Bank Record ";
 	    }
 
-	    public String deleteBank(String cc_code, String bankcd) throws SQLException {
+	    public String deleteBank(String bankcd) throws SQLException {
 	        Connection con = DbCon.getConnection();
 	        try {
 
-	            PreparedStatement pst = con.prepareStatement("delete from M_BANK where CC_CODE=? and BANK_CD=?");
-	            pst.setString(1, cc_code);
-	            pst.setString(2, bankcd);
+	            PreparedStatement pst = con.prepareStatement("delete from M_BANK where BANK_CD=?");
+	           
+	            pst.setString(1, bankcd);
 	            pst.executeUpdate();
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -150,7 +148,7 @@ public class BankDao {
 	        } finally {
 	            con.close();
 	        }
-	        return "Data has been saved successfully ";
+	        return "Successfully record has been deleted ";
 	    }
 
 	  

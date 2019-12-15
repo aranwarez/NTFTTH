@@ -77,19 +77,19 @@
                         </tr>
                         <tr>
                             <td>
-                                <label for="balamt">Bal Without Tax</label> 
-                                <label style="font-size: 30px"id="BALAMT"> </label>
+                                <label for="balamt">Bal Without Tax</label> <br>
+                                <label class="text-right" style="font-size: 25px"id="BALAMT"> </label>
                             </td>
                             <td>
-                                <label for="balamt">Bal With Tax</label> 
-                                <label style="font-size: 30px"id="BALAMTTAX"> </label>
+                                <label for="balamt">Bal With Tax</label> <br>
+                                <label class="text-right" style="font-size: 25px"id="BALAMTTAX"> </label>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <label for="amt">Amount.</label> 
-                                <input style="width: 380px;" class="form-control" type="number" name="AMT" id="AMT"
-                                       placeholder="Enter Amount"> 
+                                <input style="width: 380px;" class="form-control" type="text" name="AMT" id="AMT"
+                                      readonly="readonly" placeholder="Enter Amount"> 
                             </td>
                             <td>
                                 <label for="Createby">Create by</label> 
@@ -190,12 +190,12 @@
                             <tr>
                                 <td>
                                     <label for="amt">Payable Amount.</label> 
-                                    <input style="width: 380px;" class="form-control" type="number" name="AMT" id="EDITAMT" readonly="true"
+                                    <input style="width: 380px;" class="form-control editmoney text-right" type="text" name="AMT" id="EDITAMT" readonly="true"
                                            placeholder="Enter Amount" readonly="true"> 
                                 </td>
                                 <td>
                                     <label for="Royalty">Royalty.</label> 
-                                    <input style="width: 380px;" class="form-control" type="number" name="EDITROYALTY" id="EDITROYALTY" readonly="true"
+                                    <input style="width: 380px;" class="form-control editmoney text-right" type="text" name="EDITROYALTY" id="EDITROYALTY" readonly="true"
                                            placeholder="Enter Royalty" readonly="true"> 
                                 </td>
 
@@ -203,12 +203,12 @@
                             <tr>
                                 <td>
                                     <label for="vat">VAT</label> 
-                                    <input style="width: 380px;" class="form-control" type="number" name="EDITVAT" id="EDITVAT" readonly="true"
+                                    <input style="width: 380px;" class="form-control editmoney text-right" type="text" name="EDITVAT" id="EDITVAT" readonly="true"
                                            placeholder="Enter VAT" readonly="true"> 
                                 </td>
                                 <td>
                                     <label for="Total">Total</label> 
-                                    <input style="width: 380px;" class="form-control" type="number" name="EDITTotal" id="EDITTOTAL" readonly="true"
+                                    <input style="width: 380px;" class="form-control editmoney text-right" type="text" name="EDITTotal" id="EDITTOTAL" readonly="true"
                                            placeholder="Enter VAT" readonly="true"> 
                                 </td>
 

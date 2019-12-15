@@ -1,6 +1,15 @@
 var CODE;
+var packagelist;
+
 
 $(document).ready(function () {
+	//get package list
+	  $.get('../package/getlist', {}, function (response) {
+	       packagelist=response;
+	    });
+	
+	
+	
     //$(".js-example-basic-single").select2();
     $('.nepali-calendar').nepaliDatePicker();
     $.fn.dataTable.ext.errMode = 'none';
@@ -25,6 +34,21 @@ $(document).ready(function () {
     getWapapptariffFilterList();
 
 });
+
+function getpackagelist(service_code){
+	  //filling package list according to service selected
+    var select = $('#QPACKAGE_TYPE,#EDITPACKAGE_TYPE,#PACKAGE_TYPE');
+    select.find('option').remove();
+    $('<option>').val("").text("SELECT").appendTo(select);
+    $.each(packagelist, function (index, value) {
+    	if(value.SERVICE_CODE===service_code){
+    	
+        $('<option>').val(value.PACKAGE_TYPE).text(value.DESCRIPTION).appendTo(
+                select);
+    }
+    });
+	
+}
 
 function saveWapapptariff() {
     // debugger;
@@ -69,7 +93,10 @@ function editWapapptariff(code) {
     for (var i = 0; i < l; i++) {
         if (row[i][0] == code) {
             jQuery.ajaxSetup({async: false});
-
+            
+            //getting package list from service code
+            getpackagelist(row[i][1]);
+            
             //getSPServiceList(row[i][1]);
 
             $("#EDITTRANS_ID").val(row[i][0]);

@@ -51,23 +51,23 @@ public class PackageDao {
         return null;
     }
     
-    public String savePackage(String PACKAGE_TYPE, String DESCRIPTION, String USER) throws SQLException {
+    public String savePackage(String PACKAGE_TYPE, String DESCRIPTION,String SERVICE_CODE, String USER) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
 
-            String qry = "insert into M_PACKAGE_TYPE(PACKAGE_TYPE, DESCRIPTION, CREATED_BY, CREATED_DATE ) values(?,?,?,sysdate)";
+            String qry = "insert into M_PACKAGE_TYPE(PACKAGE_TYPE, DESCRIPTION,SERVICE_CODE, CREATED_BY, CREATED_DATE ) values(?,?,?,?,sysdate)";
 
             PreparedStatement pst = con.prepareStatement(qry);
             pst.setString(1, PACKAGE_TYPE);
             pst.setString(2, DESCRIPTION);
-            pst.setString(3, USER);
+            pst.setString(3, SERVICE_CODE);
+            pst.setString(4, USER);
 
             pst.executeUpdate();
 
             return "Succesfully Saved Package Type";
 
         } catch (Exception e) {
-            con.rollback();
             e.printStackTrace();
             return "Failed to Save : " + e.getMessage();
         } finally {
@@ -75,24 +75,23 @@ public class PackageDao {
         }
     }
 
-    public String updatePackage(String PACKAGE_TYPE, String DESCRIPTION, String user) throws SQLException {
+    public String updatePackage(String PACKAGE_TYPE, String DESCRIPTION,String SERVICE_CODE, String user) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
 
-            String qry = "update M_PACKAGE_TYPE set description=?, UPDATED_BY=?, UPDATED_DATE=sysdate WHERE PACKAGE_TYPE=? ";
+            String qry = "update M_PACKAGE_TYPE set description=?,service_code=?, UPDATED_BY=?, UPDATED_DATE=sysdate WHERE PACKAGE_TYPE=? ";
 
             PreparedStatement pst = con.prepareStatement(qry);
 
             pst.setString(1, DESCRIPTION);
-            pst.setString(2, user);
-            pst.setString(3, PACKAGE_TYPE);
-
+            pst.setString(2,SERVICE_CODE);
+            pst.setString(3, user);
+            pst.setString(4, PACKAGE_TYPE);
             pst.executeUpdate();
 
             return "Succesfully Updated";
 
         } catch (Exception e) {
-            con.rollback();
             e.printStackTrace();
             return "Failed to update : " + e.getMessage();
         } finally {

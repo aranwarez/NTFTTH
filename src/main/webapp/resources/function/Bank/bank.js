@@ -34,6 +34,32 @@ function addbank() {
 
 }
 
+
+function editbank() {
+    //debugger;
+
+    $.post('../bank/update', {
+    	BANK_CD: CODE,
+    	BANK_NAME: $("#EDITDESCRIPTION").val(),
+    	BANK_ADDRESS: $('#EDITADDRESS').val(),
+    	ACCT_NO :  $('#EDITACCTNO').val(),
+    	ACCT_TYPE : $('#EDITACCTYPE').val(),
+        ACT_FLAG :  $('#EDITACCTFLAG').val(),
+        DEACTIVE_DT  : $('#EDITDEACTIVE_DT').val()
+        
+    }, function (data) {
+        alert(data);
+        if (data.substring(0, 6) === "Succes") {
+            location.reload();
+        }
+
+
+    });
+
+
+
+}
+
 var CODE;
 function editStream(code) {
     CODE = code;
@@ -41,32 +67,20 @@ function editStream(code) {
     var l = row.length;
     for (var i = 0; i < l; i++) {
         if (row[i][0] == code) {
-
-            $("#EDITSTREAM_TYPE").val(row[i][0]);
-            $("#EDITDESCRIPTION").val(row[i][1]);
+        	
+        	$("#EDITBANK_CD").val(row[i][0]);
+        	
+        	$("#EDITDESCRIPTION").val(row[i][1]);
+        	 $('#EDITADDRESS').val(row[i][2]),
+        	 $('#EDITACCTNO').val(row[i][3]),
+        	 $('#EDITACCTYPE').val(row[i][4]),
+             $('#EDITACCTFLAG').val(row[i][5]),
+             $('#EDITDEACTIVE_DT').val(row[i][6])
+        	
         }
     }
 }
 
-function updateStream() {
-
-    var DESCRIPTION = $("#EDITDESCRIPTION").val();
-    
-    $.post('../stream/update', {
-        STREAM_TYPE: CODE,
-        DESCRIPTION: DESCRIPTION
-    }, function (data) {
-        // location.reload();
-        alert(data);
-//        temp = $('#example1').DataTable();
-//        temp.clear().draw();
-        if (data.substring(0, 6) === "Succes") {
-            location.reload();
-        }
-
-
-    });
-}
 
 var CODE;
 
@@ -75,8 +89,8 @@ function deleteStream(code) {
 }
 function del() {
 
-    $.post('../stream/delete', {
-        STREAM_TYPE: CODE
+    $.post('../bank/delete', {
+    	bankcd: CODE
     }, function (data) {
         location.reload();
         alert(data);
