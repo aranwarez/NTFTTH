@@ -67,7 +67,7 @@
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                         <li><a href="#">Report</a></li>
-                        <li class="active">VAS Provider Invoice</li>
+                        <li class="active">VAS Revenue</li>
                     </ol>
 
                 </section>
@@ -151,10 +151,12 @@
                                             </tr>
                                             <tr><td>Report Name</td>
                                                 <td>
-                                                    <select name="reportname"><option value="SpInvoiceRep">VAS Provider Invoice</option>
-                                                        <option value="SpPayableRep">Detail Payable Statement</option>
-                                                        <option value="SpPayableSummaryRep">Service wise Payable Statement</option>
-                                                        <option value="SpRevenueSummaryRep">Partner wise Payable Statement</option>
+                                                    <select name="reportname">
+                                                        <option value="VasRevenueRep">Overall VAS Revenue</option>
+                                                        <option value="VasRevenueExceptCSIRep">Overall Revenue Except Cash Sale Items</option>
+                                                        <option value="RevenueCSIRep">Cash Sales Revenue</option>
+                                                        <option value="SPwiseVasRevenueRep">Service Provider wise Overall VAS Revenue</option>
+                                                        <option value="ServicewiseSPVasRevenueRep">Service wise Revenue Report</option>
                                                     </select>
                                                 </td>
                                             </tr>

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SPwiseVasRevenueRep" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="13a36392-f148-43c4-8b24-e189d16e7ff9">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="81"/>
+	<property name="ireport.y" value="106"/>
 	<parameter name="pm_to_dt" class="java.util.Date">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -391,7 +391,7 @@ order by imp_year, imp_month, sp_name, service_code, item_code, sharing_type des
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
-				<text><![CDATA[VAS Service Provider wise Overall VAS Revenue]]></text>
+				<text><![CDATA[Service Provider wise Overall VAS Revenue]]></text>
 			</staticText>
 		</band>
 	</pageHeader>

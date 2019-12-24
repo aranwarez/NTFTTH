@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SpPayableSummaryRep" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="13a36392-f148-43c4-8b24-e189d16e7ff9">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="41"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="42"/>
 	<parameter name="pm_to_dt" class="java.util.Date">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -360,7 +360,7 @@ order by  imp_year, imp_month, service_code, s_no]]>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Partner wise Payable Statement]]></text>
+				<text><![CDATA[Service wise Payable Statement]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
