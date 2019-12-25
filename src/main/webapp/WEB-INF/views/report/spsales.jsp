@@ -67,7 +67,7 @@
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                         <li><a href="#">Report</a></li>
-                        <li class="active">VAS Provider Invoice</li>
+                        <li class="active">VAS Provider Sales Report</li>
                     </ol>
 
                 </section>
@@ -93,52 +93,6 @@
                                     <form method="post">
                                         <table class="table-condensed">
                                             <tr>
-                                                <c:forEach var="DAT" items="${Date_list}">
-                                                    <td>From Year</td>
-                                                    <td><input style="width: 80px;" class="form-control"
-                                                               value="${DAT.CUR_YEAR}" type="number" name="FRM_YEAR"
-                                                               id="FRM_YEAR" placeholder="Enter from Year"></td>
-                                                    <td>
-                                                        <select style="width: 100px;" name="FRM_MONTH"
-                                                                id="FRM_MONTH">
-                                                            <option value=''>Select :</option>
-                                                            <c:forEach var="MONTH" items="${Mon_list}">
-                                                                <c:if test="${DAT.CUR_MONTH==MONTH.MONTH_CD}">
-                                                                    <option selected value="${MONTH.MONTH_CD}">
-                                                                        ${MONTH.NEP_MONTH}</option>
-                                                                    </c:if>
-                                                                    <c:if test="${DAT.CUR_MONTH!=MONTH.MONTH_CD}">
-                                                                    <option value="${MONTH.MONTH_CD}">
-                                                                        ${MONTH.NEP_MONTH}</option>
-                                                                    </c:if>
-                                                                </c:forEach>
-                                                        </select>
-                                                    </td>
-                                                </c:forEach>
-                                                <c:forEach var="DAT" items="${Date_list}">
-                                                    <td>To Year</td>
-                                                    <td><input style="width: 80px;" class="form-control"
-                                                               value="${DAT.CUR_YEAR}" type="number" name="TO_YEAR"
-                                                               id="FRM_YEAR" placeholder="Enter to Year"></td>
-                                                    <td>
-                                                        <select style="width: 100px;" name="TO_MONTH"
-                                                                id="TO_MONTH">
-                                                            <option value=''>Select :</option>
-                                                            <c:forEach var="MONTH" items="${Mon_list}">
-                                                                <c:if test="${DAT.CUR_MONTH==MONTH.MONTH_CD}">
-                                                                    <option selected value="${MONTH.MONTH_CD}">
-                                                                        ${MONTH.NEP_MONTH}</option>
-                                                                    </c:if>
-                                                                    <c:if test="${DAT.CUR_MONTH!=MONTH.MONTH_CD}">
-                                                                    <option value="${MONTH.MONTH_CD}">
-                                                                        ${MONTH.NEP_MONTH}</option>
-                                                                    </c:if>
-                                                                </c:forEach>
-                                                        </select>
-                                                    </td>
-                                                </c:forEach>
-                                            </tr>
-                                            <tr>
                                                 <td>Service Provider</td>
                                                 <td><select style="width: 400px;" name="SP_CODE"
                                                             id="SP_CODE">
@@ -147,14 +101,50 @@
                                                             <option value="${SP.SP_CODE}">${SP.SP_NAME}
                                                                 ${SP.SP_CODE}</option>
                                                             </c:forEach>
-                                                    </select></td>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>VAS Service</td>
+                                                <td><select style="width: 400px;" name="SERVICE_CODE"
+                                                            id="SERVICE_CODE">
+                                                        <option value=''>Select :</option>
+                                                        <c:forEach var="SER" items="${VASSer_list}">
+                                                            <option value="${SER.SERVICE_CODE}">${SER.DESCRIPTION}
+                                                                ${SER.SERVICE_CODE}</option>
+                                                            </c:forEach>
+                                                    </select>
+                                                </td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <c:forEach var="DAT" items="${Date_list}">
+                                                    <td>FromDt</td>
+                                                    <td><input type="text" style="width: 150px;"
+                                                               value="${DAT.NEP_FROM_DATE}"
+                                                               class="nepali-calendar form-control" name="QFROM_DT"
+                                                               id="QFROM_DT" placeholder="Enter Transaction from dt.">
+                                                    </td>
+                                                    <td>To Dt</td>
+                                                    <td><input type="text" style="width: 150px;"
+                                                               value="${DAT.NEP_TODAY_DATE}"
+                                                               class="nepali-calendar form-control" name="QTO_DT"
+                                                               id="QTO_DT" placeholder="Enter Transaction to dt.">
+                                                    </td>
+
+
+                                                </c:forEach>
                                             </tr>
                                             <tr><td>Report Name</td>
                                                 <td>
-                                                    <select name="reportname"><option value="SpInvoiceRep">VAS Provider Invoice</option>
-                                                        <option value="SpPayableRep">Detail Payable Statement</option>
-                                                        <option value="SpPayableSummaryRep">Service wise Payable Statement</option>
-                                                        <option value="SpRevenueSummaryRep">Partner wise Payable Statement</option>
+                                                    <select name="reportname">
+                                                        <option value="SalesConsolidateRep">Daily Sales Consolidated Report</option>
+                                                        <option value="PartySalesSumConsolidateRep">Party wise Consolidated Report</option>
+                                                        <option value="PartySalesDetConsolidateRep">Party/Invoice No. wise Detail Consolidated Report</option>
+                                                        <option value="PartySalesItemRep">Item wise Party Sales Report</option>
+                                                        <option value="ItemSalesRep">Item wise Sales Report</option>
                                                     </select>
                                                 </td>
                                             </tr>
