@@ -306,6 +306,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
 
             <script src="<c:url value="/resources/function/Netting/Netting.js" />"></script>
+         	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
     </body>
 </html>

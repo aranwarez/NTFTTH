@@ -272,7 +272,7 @@ public class NettingDao {
 		try {
 
 			PreparedStatement pst = con.prepareStatement(
-					"select * from sms_netting WHERE imp_year=? AND imp_period=? AND imp_month=NVL(?,imp_month) AND service_code=? AND SHARING_TYPE=? AND post_flag=NVL(?,post_flag) ORDER BY trans_id");
+					"select sn.*,common.to_bs(sn.START_DT) START_DT from sms_netting sn WHERE imp_year=? AND imp_period=? AND imp_month=NVL(?,imp_month) AND service_code=? AND SHARING_TYPE=? AND post_flag=NVL(?,post_flag) ORDER BY trans_id");
 
 			pst.setString(1, IMP_YEAR);
 			pst.setString(2, IMP_PERIOD);
