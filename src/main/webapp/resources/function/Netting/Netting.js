@@ -276,8 +276,10 @@ function sharingnetting(a) {
     var table = '<table id="jstable" class="table table-bordered table-striped">';
     table = table + '<thead>'
     table = table + '<td>Month</td><td>ESME_CODE</td>';
-    table = table
-            + "<td>Tolerance</td><td>SHARE_NT%</td>	<td>RATE</td>	<td>START_DT</td>	<td>MO1NT</td>	<td>MT1NT</td>	<td>MO1SP</td>	<td>MT1SP</td>	<td>MO1FINAL</td>	<td>MT1FINAL</td>	<td>REDUCE1</td>	<td>MO_MT_RATIO</td>	<td>BILL_MT</td>	<td>ROYALTY%</td>	<td>VAT%</td>	<td>POST_FLAG</td>	";
+//    table = table
+//            + "<td>Tolerance</td><td>SHARE_NT%</td>	<td>RATE</td>	<td>START_DT</td>	<td>MO1NT</td>	<td>MT1NT</td>	<td>MO1SP</td>	<td>MT1SP</td>	<td>MO1FINAL</td>	<td>MT1FINAL</td>	<td>REDUCE1</td>	<td>MO_MT_RATIO</td>	<td>BILL_MT</td>	<td>ROYALTY%</td>	<td>VAT%</td>	<td>POST_FLAG</td>	";
+   
+    table=table+ "<td>Tolerance</td><td>SHARE_NT%</td>	<td>RATE</td>	<td>START_DT</td>	<td>MONT</td>	<td>MTNT</td>	<td>MOSP</td>	<td>MTSP</td>	<td>MOFINAL</td> <td>EXTRA_MTNT</td><td>EXTRA_MTSP</td> <td>FINAL_EXTRA_MT</td>	<td>MTFINAL</td>	<td>REDUCE</td>	<td>MO_MT_RATIO</td>	<td>BILL_MT</td>	<td>ROYALTY%</td>	<td>VAT%</td>	<td>POST_FLAG</td>	";
     table = table + '</thead></table>';
     $('#jsdiv').append(table);
 
@@ -319,7 +321,7 @@ function sharingnetting(a) {
                         [value.IMP_MONTH, value.ESME_CODE, tolerance.toFixed(2),
                             value.SHARE_NT_PER, value.RATE, value.START_DT,
                             value.MO1NT, value.MT1NT, value.MO1SP,
-                            value.MT1SP, value.MO1FINAL, value.MT1FINAL,
+                            value.MT1SP, value.MO1FINAL,value.EXTRA_MT_NT,value.EXTRA_MT_SP,value.FINAL_EXTRA_MT, value.MT1FINAL,
                             value.REDUCE1, value.MO_MT_RATIO,
                              value.BILL_MT,
                             value.ROYALTY_PER, value.VAT_PER, value.POST_FLAG]);

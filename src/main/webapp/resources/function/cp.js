@@ -123,6 +123,20 @@ function editCp(code) {
             $("#EDITCATEGORY_MAP").val(row[i][6]);
             $("#EDITESME_CODE_MAP").val(row[i][7]);
             $("#EDITSRV_FOR").val(row[i][8]);
+          
+          //filling package list according to service selected
+            var select = $('#EDITPACKAGE_TYPE');
+            select.find('option').remove();
+            $('<option>').val("").text("SELECT").appendTo(select);
+            $.each(packagelist, function (index, value) {
+            	if(value.SERVICE_CODE===$('#EDITSERVICE_CODE').val()){
+            	
+                $('<option>').val(value.PACKAGE_TYPE).text(value.DESCRIPTION).appendTo(
+                        select);
+            }
+            });
+          
+            
             $("#EDITPACKAGE_TYPE").val(row[i][9]);
             $("#EDITSTREAM_TYPE").val(row[i][10]);
             $("#EDITSTART_DT").val(row[i][11]);
@@ -234,7 +248,6 @@ function getItemTariffList() {
 
 }
 function getItemTariffListRental(SERVICE_CODE, ITEM_CODE) {
-
     var servicecode;
     var itemcode;
     if (SERVICE_CODE != null) {
@@ -243,9 +256,9 @@ function getItemTariffListRental(SERVICE_CODE, ITEM_CODE) {
         servicecode = $('#SERVICE_CODE').val();
     }
     if (ITEM_CODE != null) {
-        itemcode = "RENTAL";
+        itemcode = "SCRENTAL";
     } else {
-        itemcode = "RENTAL";
+        itemcode = "SCRENTAL";
     }
     //alert ("nabin"+servicecode+itemcode);
     $.get('../cp/getItemTariffList', {SERVICE_CODE: servicecode, ITEM_CODE: itemcode
@@ -271,9 +284,9 @@ function getItemTariffListVpn(SERVICE_CODE, ITEM_CODE) {
         servicecode = $('#SERVICE_CODE').val();
     }
     if (ITEM_CODE != null) {
-        itemcode = "VPN";
+        itemcode = "SCVPN";
     } else {
-        itemcode = "VPN";
+        itemcode = "SCVPN";
     }
     //alert ("nabin"+servicecode+itemcode);
     $.get('../cp/getItemTariffList', {SERVICE_CODE: servicecode, ITEM_CODE: itemcode
@@ -297,9 +310,9 @@ function getItemTariffListSpace(SERVICE_CODE, ITEM_CODE) {
         servicecode = $('#SERVICE_CODE').val();
     }
     if (ITEM_CODE != null) {
-        itemcode = "SPACE";
+        itemcode = "SCSPACE";
     } else {
-        itemcode = "SPACE";
+        itemcode = "SCSPACE";
     }
     //alert ("nabin"+servicecode+itemcode);
     $.get('../cp/getItemTariffList', {SERVICE_CODE: servicecode, ITEM_CODE: itemcode
