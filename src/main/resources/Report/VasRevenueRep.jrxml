@@ -50,11 +50,12 @@ group by to_number(substr(nep_date,1,4)), substr(nep_date,6,2),
 substr(nep_date,1,8)||'01', customer_code, sp_name, category_code, item_code, post_flag
 UNION ALL
 SELECT imp_year, imp_month, nep_inv_dt, s_no, sp_name, service_code, item_code,
-sharing_type, sharing_desc,rev_amt, tsc_amt, decode(vat_flag,0,0, (rev_amt+tsc_amt)/13) vat_amt, post_flag
+sharing_type, sharing_desc,rev_amt, tsc_amt,
+round((rev_amt+nvl(tsc_amt,0)*13/100),2) vat_amt, post_flag
 FROM
 (SELECT imp_year, imp_month, nep_inv_dt, s_no, sp_name, service_code,item_code,sharing_type,
 DECODE(sharing_type,'Y', 'Sharing','Non Sharing') sharing_desc,
-sum(rev_amt) rev_amt, sum((rev_amt*tsc_per)/100) tsc_amt, decode(vat_amt,0,0,1) vat_flag, post_flag
+sum(rev_amt) rev_amt, round(sum((rev_amt*13)/100),2) tsc_amt, decode(vat_amt,0,0,1) vat_flag, post_flag
 FROM vw_bill
 group by imp_year, imp_month, nep_inv_dt, s_no, sp_name, service_code, item_code,
 sharing_type, DECODE(sharing_type,'Y', 'Sharing','Non Sharing'), decode(vat_amt,0,0,1), post_flag)
