@@ -63,7 +63,7 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<h1>FTTH Service Entry</h1>
+				<h1>FTTH Service type Entry</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li><a href="#">Tables</a></li>
@@ -113,6 +113,7 @@
 									<thead>
 										<tr>
 											<th></th>
+											<th>Service Desc</th>
 											<th>Description</th>
 											<th>SHORT_CODE</th>
 											<th>ACTIVE_DT</th>
@@ -128,7 +129,8 @@
 
 											<tr>
 											
-												<td>${user.SERVICE_ID}</td>												
+												<td>${user.SERVICE_TYPE_ID}</td>	
+												<td>${user.SERVICE_DESC}</td>																							
 												<td>${user.DESCRIPTION}</td>
 												<td>${user.SHORT_CODE}</td>
 												<td>${user.ACTIVE_DT}</td>
@@ -138,7 +140,7 @@
 													<div class="btn-group">
 														<a href="#" class="btn btn-info" data-toggle="modal"
 															data-target="#editModal"
-															onclick="return editService('${user.SERVICE_ID}')">
+															onclick="editService('${user.SERVICE_TYPE_ID}','${user.SERVICE_ID}')">
 															<i class="fa fa-edit"></i> Edit
 														</a>
 													</div>
@@ -147,7 +149,7 @@
 													<div>
 														<a href="" class="btn btn-default" data-toggle="modal"
 															data-target="#deleteModal"
-															onclick="return deleteService('${user.SERVICE_ID}')">
+															onclick="return deleteService('${user.SERVICE_TYPE_ID}')">
 															<i class="fa fa-trash"></i> Delete
 														</a>
 													</div>
@@ -190,7 +192,7 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialogservice"></jsp:include>
+	<jsp:include page="${request.contextPath}/dialogservicetype"></jsp:include>
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
 	<script>
@@ -200,7 +202,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/mservice.js" />"></script>
+	<script src="<c:url value="/resources/function/mservicetype.js" />"></script>
 
 
 </body>
