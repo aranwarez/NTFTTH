@@ -13,11 +13,22 @@
                         aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">New FTTH Service Define</h4>
+                <h4 class="modal-title" id="myModalLabel">New FTTH Service Type Define</h4>
             </div>
 
                <div class="modal-body">
-                    
+               
+                     <div class="form-group">
+                        <label for="jsonlist">SERVICE</label> 
+                        <select  name="SERVICE_ID" id="SERVICE_ID" class="form-control chosen-select" style="width:350px;">
+                        
+                        <c:forEach var="user" items="${service_list}">                        
+                            <option value='${user.SERVICE_ID}'>${user.DESCRIPTION}</option>
+                          
+                            
+                            </c:forEach>
+                        </select>        
+                    </div>
                     <div class="form-group">
                         <label for="name">DESCRIPTION</label> <input type="text"
                                                                      class="form-control" name="DESCRIPTION" id="DESCRIPTION" placeholder="Enter description">
@@ -51,7 +62,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" onclick="return saveService()">Save changes</button>
+                    <button type="submit" class="btn btn-primary" onclick="return saveServiceType()">Save changes</button>
                 </div>
            
         </div>
@@ -68,10 +79,22 @@
                 <h4 class="modal-title" id="myModalLabel">Edit Service</h4>
             </div>
 
-            <form action="<c:url value="/service/update" />" method="post"
+            <form action="#" method="post"
                   acceptCharset="UTF-8">
 
                  <div class="modal-body">
+                 
+                   <div class="form-group">
+                        <label for="jsonlist">SERVICE</label> 
+                        <select  name="EDITSERVICE_ID" id="EDITSERVICE_ID" class="form-control chosen-select" style="width:350px;">
+                        
+                        <c:forEach var="user" items="${service_list}">                        
+                            <option value='${user.SERVICE_ID}'>${user.DESCRIPTION}</option>
+                          
+                            
+                            </c:forEach>
+                        </select>        
+                    </div>
                     
                     <div class="form-group">
                         <label for="name">DESCRIPTION</label> <input type="text"
@@ -106,7 +129,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" onclick="return updateService();" class="btn btn-primary">Update</button>
+                    <button type="button" onclick="return updateServiceType();" class="btn btn-primary">Update</button>
                 </div>
 
             </form>
@@ -129,7 +152,7 @@
                         aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Ftth service delete</h4>
+                <h4 class="modal-title" id="myModalLabel">Ftth service Type delete</h4>
             </div>
 
             <div class="modal-body">

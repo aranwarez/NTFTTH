@@ -1,6 +1,9 @@
 package com.vas.controller;
 
 import com.dao.COADao;
+import com.dao.MServiceDao;
+import com.dao.SpServiceDao;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
@@ -33,10 +36,10 @@ public class ServiceController {
     public String servicelist(Locale locale, Model model) throws SQLException {
 
         logger.info("Getting Services List", locale);
-        VASServiceDao dao = new VASServiceDao();
+        MServiceDao dao = new MServiceDao();
         List<Map<String, Object>> list = null;
         try {
-            list = dao.getVasServiceList();
+            list = dao.getServiceList();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -44,26 +47,34 @@ public class ServiceController {
         model.addAttribute("fx", "Service List");
         model.addAttribute("data_list", list);
 
-        COADao COA = new COADao();
-        model.addAttribute("COA_list", COA.getCOAlist());
+        
 
         return "service/list";
+    }
+    // getting list of all SP wise Service List
+    @ResponseBody
+    @RequestMapping(value = "/service/jsonlist", method = RequestMethod.GET)
+    public List<Map<String, Object>> getSPtargetist(Locale locale, Model model, HttpSession session)
+            throws SQLException {
+    	MServiceDao dao = new MServiceDao();
+        return dao.getServiceList();
+        
     }
 
     @RequestMapping(value = "/service/saveJS", method = RequestMethod.POST)
     @ResponseBody
-    public String saveJSService(String SERVICE_CODE, String DESCRIPTION, String SLDG_CODE, String DATA_IMPORT, String ACTIVE_FLAG, HttpSession session, Model model, Locale locale) {
+    public String saveJSService(String DESCRIPTION, String SHORT_CODE, String ACTIVE_DT,String DEACTIVE_DT, String ACTIVE_STATUS, HttpSession session, Model model, Locale locale) {
 
         logger.info("Save Service {}.", locale);
-        VASServiceDao dao = new VASServiceDao();
-//        System.out.println("uddate Servce code==" + SERVICE_CODE);
+        MServiceDao dao = new MServiceDao();
+
         UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
         String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Service controller list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;
         try {
-            msg = dao.saveVasService(SERVICE_CODE, DESCRIPTION, SLDG_CODE, DATA_IMPORT, ACTIVE_FLAG, USER);
+            msg = dao.saveService(DESCRIPTION, SHORT_CODE, ACTIVE_DT, DEACTIVE_DT, ACTIVE_STATUS, USER);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -71,23 +82,6 @@ public class ServiceController {
         return msg;
     }
 
-    @RequestMapping(value = "/service/save", method = RequestMethod.POST)
-    public String saveVasService(@Validated Service service, HttpSession session, Model model, Locale locale) {
-        logger.info("Trying to save new vas service by user id:", locale);
-        VASServiceDao dao = new VASServiceDao();
-        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
-        service.setUSER(userinfo.getUSER_ID());
-        model.addAttribute("ServiceCode", service.getSERVICE_CODE());
-        String msg = null;
-        //            msg = dao.saveVasService(service);
-
-        if (msg.toUpperCase().substring(0, 3).equals("SUC")) {
-            model.addAttribute("sucess", msg);
-        } else {
-            model.addAttribute("error", msg);
-        }
-        return "redirect:/service/list";
-    }
 
     @RequestMapping(method = RequestMethod.GET, value = "dialogservice")
     public String dialogservice(Model model, Locale locale) {
@@ -97,18 +91,18 @@ public class ServiceController {
 
     @RequestMapping(value = "/service/update", method = RequestMethod.POST)
     @ResponseBody
-    public String updateService(String SERVICE_CODE, String DESCRIPTION, String SLDG_CODE, String DATA_IMPORT, String ACTIVE_FLAG, HttpSession session, Model model, Locale locale) {
+    public String updateService(String SERVICE_ID,String DESCRIPTION, String SHORT_CODE, String ACTIVE_DT,String DEACTIVE_DT, String ACTIVE_STATUS, HttpSession session, Model model, Locale locale) {
 
         logger.info("Updata Service {}.", locale);
-        VASServiceDao dao = new VASServiceDao();
-//        System.out.println("uddate Servce code==" + SERVICE_CODE);
+        MServiceDao dao = new MServiceDao();
+
         UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
         String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Service controller list ");
         model.addAttribute("userName", "NEPal");
         String msg = null;
         try {
-            msg = dao.updateVasService(SERVICE_CODE, DESCRIPTION, SLDG_CODE, DATA_IMPORT, ACTIVE_FLAG, USER);
+            msg = dao.updateService(SERVICE_ID, DESCRIPTION, SHORT_CODE, ACTIVE_DT, DEACTIVE_DT,ACTIVE_STATUS, USER);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -118,13 +112,13 @@ public class ServiceController {
 
     @RequestMapping(value = "/service/delete", method = RequestMethod.POST)
     @ResponseBody
-    public String serviceDelete(String SERVICE_CODE, Model model, Locale locale) {
+    public String serviceDelete(String SERVICE_ID, Model model, Locale locale) {
         logger.info("delete service", locale);
-        VASServiceDao dao = new VASServiceDao();
-//        System.out.println("delete service code==" + SERVICE_CODE);
+        MServiceDao dao = new MServiceDao();
+
         String msg = null;
         try {
-            msg = dao.DeleteService(SERVICE_CODE);
+            msg = dao.DeleteService(SERVICE_ID);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
