@@ -84,8 +84,8 @@ public class CommonDateDao {
     
     public static Date convertDateAD(String date) throws SQLException {
 
-        try (Connection con = DbCon.getConnection() //  System.out.println("date= "+date);
-                ) {
+        try  {
+        	Connection con = DbCon.getConnection();
             PreparedStatement pst = con.prepareStatement("select common.to_ad(?)from dual");
             pst.setString(1, date);
             ResultSet rs = pst.executeQuery();
