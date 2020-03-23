@@ -1,4 +1,4 @@
-package com.vas.controller;
+package com.ftth.controller;
 
 public class User {
 	private String userName;

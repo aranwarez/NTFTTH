@@ -1,4 +1,4 @@
-package com.vas.controller;
+package com.ftth.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;

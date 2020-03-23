@@ -37,13 +37,9 @@ public class UserDao {
 				level.setCREATED_BY(rs.getString("CREATED_BY"));
 				level.setCREATED_DATE(rs.getString("CREATED_DATE"));
 				level.setDISABLE_FLAG(rs.getString("DISABLE_FLAG"));
-				level.setREGION_CODE(rs.getString("REGION_CODE"));
-				level.setCC_CODE(rs.getString("CC_CODE"));
 				level.setUSER_LEVEL(rs.getString("USER_LEVEL"));
 				level.setROLE_CODE(rs.getString("ROLE_CODE"));
-				level.setACC_CEN_CODE(rs.getString("ACC_CEN_CODE"));
-				level.setMODULE_ACCESS(rs.getString("MODULE_ACCESS"));
-
+				level.setOFFICE_CODE("OFFICE_CODE");
 				return level;
 			}
 
@@ -55,24 +51,14 @@ public class UserDao {
 		return null;
 	}
 
-	public List<UserInformationModel> getList(String module_access) throws SQLException {
+	public List<UserInformationModel> getList() throws SQLException {
 		// String enc_code=(getEncrCode(password));
 		Connection con = DbCon.getConnection();
 		UserInformationModel level = null;
 		List<UserInformationModel> list = new ArrayList<UserInformationModel>();
 		try {
-			String qry = null;
-			// user list as per module access
-			if (module_access.substring(0, 1).equals("B")) {
-				qry = "select USER_ID,FULL_NAME,PASSWORD,EMPLOYEE_CODE,LOCK_FLAG,SUPER_FLAG,CREATED_BY,CREATED_DATE,DISABLE_FLAG,REGION_CODE,USER_LEVEL,ROLE_CODE,CC_CODE,ACC_CEN_CODE, nvl(MODULE_ACCESS,'.') MODULE_ACCESS from WEB_USER";
-			} else if (module_access.substring(0, 1).equals("C")) {
-				qry = "select USER_ID,FULL_NAME,PASSWORD,EMPLOYEE_CODE,LOCK_FLAG,SUPER_FLAG,CREATED_BY,CREATED_DATE,DISABLE_FLAG,REGION_CODE,USER_LEVEL,ROLE_CODE,CC_CODE,ACC_CEN_CODE, nvl(MODULE_ACCESS,'.') MODULE_ACCESS from WEB_USER WHERE module_access='C'";
-			} else {
-				qry = "select USER_ID,FULL_NAME,PASSWORD,EMPLOYEE_CODE,LOCK_FLAG,SUPER_FLAG,CREATED_BY,CREATED_DATE,DISABLE_FLAG,REGION_CODE,USER_LEVEL,ROLE_CODE,CC_CODE,ACC_CEN_CODE, nvl(MODULE_ACCESS,'.') MODULE_ACCESS from WEB_USER WHERE module_access='P'";
-			}
-			// String qry = "select
-			// USER_ID,FULL_NAME,PASSWORD,EMPLOYEE_CODE,LOCK_FLAG,SUPER_FLAG,CREATED_BY,CREATED_DATE,DISABLE_FLAG,REGION_CODE,USER_LEVEL,ROLE_CODE,CC_CODE,ACC_CEN_CODE,
-			// nvl(MODULE_ACCESS,'.') MODULE_ACCESS from WEB_USER";
+		
+			 String qry = "select USER_ID,FULL_NAME,PASSWORD,EMPLOYEE_CODE,LOCK_FLAG,SUPER_FLAG,CREATED_BY,CREATED_DATE,DISABLE_FLAG,USER_LEVEL,ROLE_CODE,OFFICE_CODE from WEB_USER";
 			PreparedStatement pst = con.prepareStatement(qry);
 
 			ResultSet rs = pst.executeQuery();
@@ -82,24 +68,18 @@ public class UserDao {
 				level.setSN(i);
 
 				level.setUSER_ID(rs.getString("USER_ID"));
-
 				level.setFULL_NAME(rs.getString("FULL_NAME"));
 				level.setPASSWORD(rs.getString("PASSWORD"));
 				level.setEMPLOYEE_CODE(rs.getString("EMPLOYEE_CODE"));
 				level.setLOCK_FLAG(rs.getString("LOCK_FLAG"));
 				level.setSUPER_FLAG(rs.getString("SUPER_FLAG"));
-
+				level.setOFFICE_CODE("OFFICE_CODE");
 				level.setCREATED_BY(rs.getString("CREATED_BY"));
 				level.setCREATED_DATE(rs.getString("CREATED_DATE"));
 				level.setDISABLE_FLAG(rs.getString("DISABLE_FLAG"));
-
-				level.setREGION_CODE(rs.getString("REGION_CODE"));
-				level.setCC_CODE(rs.getString("CC_CODE"));
-				level.setACC_CEN_CODE(rs.getString("ACC_CEN_CODE"));
 				level.setUSER_LEVEL(rs.getString("USER_LEVEL"));
 				level.setROLE_CODE(rs.getString("ROLE_CODE"));
-				level.setMODULE_ACCESS(rs.getString("MODULE_ACCESS"));
-
+		
 				list.add(level);
 
 				i = i + 1;
@@ -118,8 +98,8 @@ public class UserDao {
 		try {
 			PreparedStatement pst = con.prepareStatement("insert into WEB_USER" + "(USER_ID,FULL_NAME,PASSWORD,"
 					+ "EMPLOYEE_CODE,LOCK_FLAG,SUPER_FLAG," + "CREATED_BY,CREATED_DATE,DISABLE_FLAG,"
-					+ "REGION_CODE,USER_LEVEL,ROLE_CODE,CC_CODE,ACC_CEN_CODE,MODULE_ACCESS)"
-					+ "values(?,?,app_user_security.get_hash(upper(?),?),?,?,?,?,sysdate,?,?,?,?,?,?,?)");
+					+ "USER_LEVEL,ROLE_CODE,OFFICE_CODE)"
+					+ "values(?,?,app_user_security.get_hash(upper(?),?),?,?,?,?,sysdate,?,?,?,?)");
 			pst.setString(1, m.getUSER_ID().toUpperCase());
 			pst.setString(2, m.getFULL_NAME());
 			pst.setString(3, m.getUSER_ID().toUpperCase());
@@ -130,12 +110,9 @@ public class UserDao {
 			pst.setString(7, m.getSUPER_FLAG());
 			pst.setString(8, m.getUSER());
 			pst.setString(9, m.getDISABLE_FLAG());
-			pst.setString(10, m.getREGION_CODE());
-			pst.setString(11, m.getUSER_LEVEL());
-			pst.setString(12, m.getROLE_CODE());
-			pst.setString(13, m.getCC_CODE());
-			pst.setString(14, m.getACC_CEN_CODE());
-			pst.setString(15, m.getMODULE_ACCESS());
+			pst.setString(10, m.getUSER_LEVEL());
+			pst.setString(11, m.getROLE_CODE());
+			pst.setString(12, m.getOFFICE_CODE());
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -196,16 +173,13 @@ public class UserDao {
 				level.setCREATED_BY(rs.getString("CREATED_BY"));
 				level.setCREATED_DATE(rs.getString("CREATED_DATE"));
 				level.setDISABLE_FLAG(rs.getString("DISABLE_FLAG"));
-				level.setREGION_CODE(rs.getString("REGION_CODE"));
 				level.setUSER_LEVEL(rs.getString("USER_LEVEL"));
-				level.setMODULE_ACCESS(rs.getString("MODULE_ACCESS"));
 				level.setROLE_CODE(rs.getString("ROLE_CODE"));
 
 				level.setEMPLOYEE_NAME(rs.getString("EMPLOYEE_NAME"));
 
-				level.setCC_CODE(rs.getString("CC_CODE"));
-				level.setACC_CEN_CODE(rs.getString("ACC_CEN_CODE"));
-
+				level.setOFFICE_CODE(rs.getString("OFFICE_CODE"));
+				
 				level.setROLE_DESCRIPTION(rs.getString("ROLE_DESCRIPTION"));
 
 			}
@@ -222,22 +196,20 @@ public class UserDao {
 		Connection con = DbCon.getConnection();
 		try {
 			PreparedStatement pst = con.prepareStatement("update WEB_USER " + "set FULL_NAME=?,EMPLOYEE_CODE=?,"
-					+ "LOCK_FLAG=?,SUPER_FLAG=?,DISABLE_FLAG=?," + "REGION_CODE=?,USER_LEVEL=?,"
-					+ "ROLE_CODE=?,CC_CODE=?,ACC_CEN_CODE=?, module_access=? where USER_ID=?");
+					+ "LOCK_FLAG=?,SUPER_FLAG=?,DISABLE_FLAG=?," + "USER_LEVEL=?,"
+					+ "ROLE_CODE=?,OFFICE_CODE=? where USER_ID=?");
 
 			pst.setString(1, m.getFULL_NAME());
 			pst.setString(2, m.getEMPLOYEE_CODE());
 			pst.setString(3, m.getLOCK_FLAG());
 			pst.setString(4, m.getSUPER_FLAG());
 			pst.setString(5, m.getDISABLE_FLAG());
-			pst.setString(6, m.getREGION_CODE());
+			
 
-			pst.setString(7, m.getUSER_LEVEL());
-			pst.setString(8, m.getROLE_CODE());
-			pst.setString(9, m.getCC_CODE());
-			pst.setString(10, m.getACC_CEN_CODE());
-			pst.setString(11, m.getMODULE_ACCESS());
-			pst.setString(12, m.getUSER_ID());
+			pst.setString(6, m.getUSER_LEVEL());
+			pst.setString(7, m.getROLE_CODE());
+			pst.setString(8, m.getOFFICE_CODE());
+			pst.setString(9, m.getUSER_ID());
 
 			pst.executeUpdate();
 		} catch (Exception e) {
