@@ -136,10 +136,9 @@
 											<th>Delete</th>
 											<th>SUPER</th>
 											<th>DISABLE</th>
-											<th>CC</th>
+											<th>OFFICE</th>
 											<th>USER</th>
 											<th>ROLE</th>
-											<th>Module</th>
 											<th>Edit</th>
 											<th>Delete</th>
 
@@ -159,12 +158,11 @@
 												<td>${user.getSUPER_FLAG()}</td>
 
 												<td>${user.getDISABLE_FLAG()}</td>
-												<td>${user.getCC_CODE()}</td>
+												<td>${user.getOFFICE_CODE()}</td>
 
 												<td>${user.getUSER_LEVEL()}</td>
 												<td>${user.getROLE_CODE()}</td>
-												<td>${user.getMODULE_ACCESS()}</td>
-
+											
 												<td>
 
 													<div class="btn-group">

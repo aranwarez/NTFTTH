@@ -1,4 +1,4 @@
-package com.vas.controller;
+package com.ftth.controller;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -51,7 +51,7 @@ public class UserController {
 		List<Role> rolelist = null;
 
 		try {
-			list = dao.getList(user.getMODULE_ACCESS());
+			list = dao.getList();
 			empList = EmployeeDao.getEmpList();
 
 			regionlist = regiondao.getlist();
@@ -104,15 +104,11 @@ public class UserController {
 
 		m.setDISABLE_FLAG(request.getParameter("DISABLE_FLAG"));
 
-		m.setREGION_CODE(request.getParameter("REGION_CODE"));
-		m.setACC_CEN_CODE(request.getParameter("ACC_CEN_CODE"));
-		m.setCC_CODE(request.getParameter("CC_CODE"));
+		m.setOFFICE_CODE(request.getParameter("OFFICE_CODE"));
 
 		m.setUSER_LEVEL(request.getParameter("USER_LEVEL"));
 		m.setROLE_CODE(request.getParameter("ROLE_CODE"));
-		m.setUSER_FROM(request.getParameter("USER_FROM"));
-		m.setMODULE_ACCESS(request.getParameter("MODULE_CODE"));
-
+	
 		String msg = null;
 		try {
 			msg = userdao.saveUser(m);
@@ -182,14 +178,10 @@ public class UserController {
 
 		m.setDISABLE_FLAG(request.getParameter("DISABLE_FLAG"));
 
-		m.setREGION_CODE(request.getParameter("REGION_CODE"));
-		m.setACC_CEN_CODE(request.getParameter("ACC_CEN_CODE"));
-		m.setCC_CODE(request.getParameter("CC_CODE"));
+		m.setOFFICE_CODE(request.getParameter("OFFICE_CODE"));
 
 		m.setUSER_LEVEL(request.getParameter("USER_LEVEL"));
 		m.setROLE_CODE(request.getParameter("ROLE_CODE"));
-		m.setUSER_FROM(request.getParameter("USER_FROM"));
-		m.setMODULE_ACCESS(request.getParameter("MODULE_ACCESS"));
 		String msg = null;
 
 		try {

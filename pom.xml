@@ -3,9 +3,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.vas.controller</groupId>
-	<artifactId>VAST</artifactId>
-	<name>VAST</name>
+	<groupId>com.ftth.controller</groupId>
+	<artifactId>FTTH</artifactId>
+	<name>FTTH</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>

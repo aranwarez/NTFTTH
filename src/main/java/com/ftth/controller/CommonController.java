@@ -1,4 +1,4 @@
-package com.vas.controller;
+package com.ftth.controller;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -28,10 +28,10 @@ public class CommonController {
 		MenuDao leftmenudao = new MenuDao();
 
 		String leftmenurole_code = leftmenuuser.getROLE_CODE();
-		String leftmenuMODULE_ACCESS = leftmenuuser.getMODULE_ACCESS();
+	//	String leftmenuMODULE_ACCESS = leftmenuuser.getMODULE_ACCESS();
 		String leftmenuRoleCode = leftmenuuser.getROLE_CODE();
 		model.addAttribute("leftmenurole_code", leftmenurole_code);
-		model.addAttribute("leftmenuMODULE_ACCESS", leftmenuMODULE_ACCESS);
+	//	model.addAttribute("leftmenuMODULE_ACCESS", leftmenuMODULE_ACCESS);
 		model.addAttribute("leftmenuRoleCode", leftmenuRoleCode);
 		try {
 			List<Menu> menulist = leftmenudao.getMenuDisplay(leftmenurole_code);
