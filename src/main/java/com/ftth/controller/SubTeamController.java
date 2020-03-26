@@ -1,0 +1,128 @@
+package com.ftth.controller;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.dao.MServiceDao;
+import com.dao.SubTeamDao;
+import com.dao.TeamDao;
+import com.model.UserInformationModel;
+@Controller
+public class SubTeamController {
+	
+    private static final Logger logger = LoggerFactory.getLogger(ServiceController.class);
+	    
+	 
+	@RequestMapping(value = "/subTeam/list", method = RequestMethod.GET)
+    public String servicelist(Locale locale, Model model) throws SQLException {
+
+        logger.info("Getting Services List", locale);
+        SubTeamDao dao = new SubTeamDao();
+        List<Map<String, Object>> list = null;
+        try {
+            list = dao.getSubTeamList();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        model.addAttribute("fx", "Service List");
+        model.addAttribute("data_list", list);
+
+        
+
+        return "subteam/list";
+    }
+	
+	
+	@ResponseBody
+    @RequestMapping(value = "/subteam/jsonlist", method = RequestMethod.GET)
+    public List<Map<String, Object>> getSPtargetist(Locale locale, Model model, HttpSession session)
+            throws SQLException {
+		SubTeamDao dao = new SubTeamDao();
+        return dao.getSubTeamList();
+        
+    }
+	
+	
+	 @RequestMapping(method = RequestMethod.GET, value = "dialogsubteam")
+	    public String dialogservice(Model model, Locale locale) {
+	        return "subteam/subteamdialog";
+
+	    }
+	 
+	 
+
+	    @RequestMapping(value = "/subteam/saveJS", method = RequestMethod.POST)
+	    @ResponseBody
+	    public String saveJSService(String SUB_TEAM_CODE, String DESCRIPTION,String TEAM_CODE, HttpSession session, Model model, Locale locale) {
+
+	        logger.info("Save Service {}.", locale);
+	        SubTeamDao dao = new SubTeamDao();
+
+	        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+	        String USER = userinfo.getUSER_ID();
+	        model.addAttribute("fx", "Team controller list ");
+	        model.addAttribute("userName", "NEPal");
+	        String msg = null;
+	        try {
+	            msg = dao.saveSubTeam(SUB_TEAM_CODE,DESCRIPTION,TEAM_CODE,USER);
+	        } catch (SQLException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+	        return msg;
+	    }
+	    
+	    
+	    @RequestMapping(value = "/subteam/update", method = RequestMethod.POST)
+	    @ResponseBody
+	    public String updateService(String SUB_TEAM_CODE,String DESCRIPTION,String TEAM_CODE, HttpSession session, Model model, Locale locale) {
+
+	        logger.info("Updata Service {}.", locale);
+	        SubTeamDao dao = new SubTeamDao();
+
+	        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+	        String USER = userinfo.getUSER_ID();
+	        model.addAttribute("fx", "team controller list ");
+	        model.addAttribute("userName", "NEPal");
+	        String msg = null;
+	        try {
+	            msg = dao.updateSubTeam(SUB_TEAM_CODE, DESCRIPTION,TEAM_CODE, USER);
+	        } catch (SQLException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+	        return msg;
+	    }
+	    @RequestMapping(value = "/subteam/delete", method = RequestMethod.POST)
+	    @ResponseBody
+	    public String serviceDelete(String SUB_TEAM_CODE, Model model, Locale locale) {
+	        logger.info("delete service", locale);
+	        SubTeamDao dao = new SubTeamDao();
+
+	        String msg = null;
+	        try {
+	            msg = dao.DeleteSubTeam(SUB_TEAM_CODE);
+	        } catch (SQLException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+	        return msg;
+
+	    }
+	    
+	    
+	 
+}

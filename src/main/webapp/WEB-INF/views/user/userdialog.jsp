@@ -22,10 +22,7 @@
 						class="form-control" id="USER_ID" placeholder="Enter user id">
 				</div>
 
-				<div class="form-group">
-					<label for="name">FULL_NAME</label> <input type="text"
-						class="form-control" id="FULL_NAME" placeholder="Enter full name">
-				</div>
+
 				<div class="form-group">
 					<label for="name">PASSWORD</label> <input type="password"
 						class="form-control" id="PASSWORD" placeholder="Enter password">
@@ -38,7 +35,11 @@
 					<span class="matchpass"></span>
 
 				</div>
-
+				
+				<div class="form-group">
+					<label for="name">FULL_NAME</label> <input type="text"
+						class="form-control" id="FULL_NAME" placeholder="Enter full name">
+				</div>			
 				<div class="form-group">
 					<label>EMPLOYEE_CODE</label> <select
 						class="form-control modal-combobox" name="EMPLOYEE_CODE"
@@ -48,29 +49,8 @@
 						</c:forEach>
 					</select>
 				</div>
-				<div class="form-group">
-					<label>REGION_CODE</label> <select class="form-control"
-						name="REGION_CODE" id="REGION_CODE"
-						onchange="return getAccountCenter()">
-						<option value="">Select Region</option>
-
-						<c:forEach var="region" items="${regionlist}">
-							<option value="${region.REGION_CODE}">${region.DESCRIPTION}(${region.REGION_CODE})</option>
-						</c:forEach>
-					</select>
-				</div>
-				<div class="form-group">
-					<label>ACC_CEN_CODE</label> <select class="form-control"
-						name="ACC_CEN_CODE" id="ACC_CEN_CODE" onchange="return getCC()">
-
-					</select>
-				</div>
-				<div class="form-group">
-					<label>CC_CODE</label> <select class="form-control" name="CC_CODE"
-						id="CC_CODE">
-
-					</select>
-				</div>
+				
+				
 				<div class="form-group">
 					<label>LOCK_FLAG</label> <input type="radio" name="LOCK_FLAG"
 						value="Y" class="LOCK_FLAG"> Yes <input type="radio"
@@ -92,8 +72,20 @@
 					No
 
 				</div>
+				
+				
+			<div class="form-group">
+					<label>USER_LEVEL</label> <select class="form-control"
+						name="USER_LEVEL" id="USER_LEVEL">
 
+						<option value="1">SUPER</option>
+						<option value="2">Region</option>
+						<option value="3">ACCOUNT</option>
+						<option value="4">CC</option>
 
+					</select>
+				</div>
+				
 				<div class="form-group">
 					<label>ROLE_CODE</label> <select class="form-control"
 						name="ROLE_CODE" id="ROLE_CODE">
@@ -105,21 +97,17 @@
 					</select>
 				</div>
 
+				
 				<div class="form-group">
-					<label>USER_LEVEL</label> <select class="form-control"
-						name="USER_LEVEL" id="USER_LEVEL">
-
-						<option value="1">SUPER</option>
-						<option value="2">Region</option>
-						<option value="3">ACCOUNT</option>
-						<option value="4">CC</option>
-
-					</select>
-				</div>
-				<div class="form-group">
-					<label>Module</label> <select class="form-control" name="MODULE"
-						id="MODULE">
-						<option value="B">Both</option>
+					<label>OFFICE</label> <select class="form-control" name="OFFICE_CODE"
+						id="OFFICE_CODE">
+						
+						<c:forEach var="role" items="${officeList}">
+							<option value="${role.OFFICE_CODE}">${role.DESCRIPTION}
+								(${role.OFFICE_CODE})</option>
+						</c:forEach>
+						
+						
 					</select>
 				</div>
 
@@ -150,89 +138,49 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<label for="EDITUSER_ID">USER_ID</label> <input type="text"
-						class="form-control" id="EDITUSER_ID" disabled="disabled">
+					<label for="name">USER_ID</label> <input type="text"
+						class="form-control" id="EDITUSER_ID" disabled="disabled" placeholder="Enter user id">
 				</div>
-
+				
 				<div class="form-group">
 					<label for="name">FULL_NAME</label> <input type="text"
-						class="form-control" id="EDITFULL_NAME">
-				</div>
-
-
-
+						class="form-control" id="EDITFULL_NAME" placeholder="Enter full name">
+				</div>			
 				<div class="form-group">
 					<label>EMPLOYEE_CODE</label> <select
 						class="form-control modal-combobox" name="EDITEMPLOYEE_CODE"
 						id="EDITEMPLOYEE_CODE">
 						<c:forEach var="COA" items="${empList}">
-							<option value="${COA.EMPLOYEE_CODE}">${COA.EMPLOYEE_NAME}
-								(${COA.EMPLOYEE_CODE})</option>
+							<option value="${COA.EMPLOYEE_CODE}">${COA.EMPLOYEE_NAME}(${COA.EMPLOYEE_CODE})</option>
 						</c:forEach>
-
 					</select>
 				</div>
+				
+				
 				<div class="form-group">
-					<label>REGION_CODE</label> <select class="form-control"
-						name="EDITREGION_CODE" id="EDITREGION_CODE"
-						onchange="return getEditAccountCenter()">
-
-						<c:forEach var="region" items="${regionlist}">
-							<option value="${region.REGION_CODE}">${region.DESCRIPTION}(${region.REGION_CODE})</option>
-						</c:forEach>
-
-					</select>
-				</div>
-				<div class="form-group">
-					<label>ACC_CEN_CODE</label> <select class="form-control"
-						name="EDITACC_CEN_CODE" id="EDITACC_CEN_CODE"
-						onchange="return getEditCC()">
-
-					</select>
-				</div>
-				<div class="form-group">
-					<label>CC_CODE</label> <select class="form-control"
-						name="EDITCC_CODE" id="EDITCC_CODE">
-
-					</select>
-				</div>
-				<div class="form-group">
-					<label>LOCK_FLAG</label> <input type="radio" name="EDITLOCK_FLAG"
+					<label>LOCK_FLAG</label> <input type="radio" name="LOCK_FLAG"
 						value="Y" class="EDITLOCK_FLAG"> Yes <input type="radio"
-						name="EDITLOCK_FLAG" value="N" class="EDITLOCK_FLAG"
-						checked="checked"> No
+						name="LOCK_FLAG" value="N" class="EDITLOCK_FLAG" checked="checked">
+					No
 
 				</div>
 
 				<div class="form-group">
 					<label>SUPER_FLAG</label> <input type="radio" name="EDITSUPER_FLAG"
 						value="Y" class="EDITSUPER_FLAG"> Yes <input type="radio"
-						name="EDITSUPER_FLAG" value="N" class="EDITSUPER_FLAG" checked>
+						name="SUPER_FLAG" value="N" class="EDITSUPER_FLAG" checked> No
+
+				</div>
+				<div class="form-group">
+					<label>DISABLE_FLAG</label> <input type="radio" name="EDITDISABLE_FLAG"
+						value="Y" class="DISABLE_FLAG"> Yes <input type="radio"
+						name="EDITDISABLE_FLAG" value="N" class="EDITDISABLE_FLAG" checked>
 					No
 
 				</div>
-				<div class="form-group">
-					<label>DISABLE_FLAG</label> <input type="radio"
-						name="EDITDISABLE_FLAG" value="Y" class="EDITDISABLE_FLAG">
-					Yes <input type="radio" name="EDITDISABLE_FLAG" value="N"
-						class="EDITDISABLE_FLAG" checked> No
-
-				</div>
-
-
-				<div class="form-group">
-					<label>ROLE_CODE</label> <select class="form-control"
-						name="EDITROLE_CODE" id="EDITROLE_CODE">
-						<c:forEach var="role" items="${rolelist}">
-							<option value="${role.ROLE_CODE}">${role.DESCRIPTION}
-								(${role.ROLE_CODE})</option>
-						</c:forEach>
-
-					</select>
-				</div>
-
-
-				<div class="form-group">
+				
+				
+			<div class="form-group">
 					<label>USER_LEVEL</label> <select class="form-control"
 						name="EDITUSER_LEVEL" id="EDITUSER_LEVEL">
 
@@ -243,15 +191,31 @@
 
 					</select>
 				</div>
-
+				
 				<div class="form-group">
-					<label>Module</label> <select class="form-control"
-						name="EDITMODULE" id="EDITMODULE">
-						<option value="B">Both</option>
+					<label>ROLE_CODE</label> <select class="form-control"
+						name="EDITROLE_CODE" id="EDITROLE_CODE">
+
+						<c:forEach var="role" items="${rolelist}">
+							<option value="${role.ROLE_CODE}">${role.DESCRIPTION}
+								(${role.ROLE_CODE})</option>
+						</c:forEach>
 					</select>
 				</div>
 
-			</div>
+				
+				<div class="form-group">
+					<label>OFFICE</label> <select class="form-control" name="EDITOFFICE_CODE"
+						id="EDITOFFICE_CODE">
+						
+						<c:forEach var="role" items="${officeList}">
+							<option value="${role.OFFICE_CODE}">${role.DESCRIPTION}
+								(${role.OFFICE_CODE})</option>
+						</c:forEach>
+						
+						
+					</select>
+				</div>
 
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dao.EmployeeDao;
+import com.dao.OfficeDao;
 import com.dao.RegionDao;
 import com.dao.RoleDao;
 import com.dao.UserDao;
@@ -44,17 +45,19 @@ public class UserController {
 
 		List<UserInformationModel> list = null;
 		List<Map<String, Object>> empList = null;
-		RegionDao regiondao = new RegionDao();
+		
+		List<Map<String, Object>> officeList = null;	
+
 		RoleDao roledao = new RoleDao();
 
 		List<Region> regionlist = null;
 		List<Role> rolelist = null;
-
+			
 		try {
 			list = dao.getList();
 			empList = EmployeeDao.getEmpList();
+			officeList=OfficeDao.getOfficeList();
 
-			regionlist = regiondao.getlist();
 			rolelist = roledao.getlist();
 
 		} catch (SQLException e) {
@@ -63,11 +66,12 @@ public class UserController {
 		}
 
 		model.addAttribute("fx", "User Information List");
+		
 		model.addAttribute("data_list", list);
 
 		model.addAttribute("empList", empList);
 
-		model.addAttribute("regionlist", regionlist);
+		model.addAttribute("officeList", officeList);
 		model.addAttribute("rolelist", rolelist);
 		return "user/list";
 	}
@@ -93,9 +97,13 @@ public class UserController {
 		UserInformationModel m = new UserInformationModel();
 
 		m.setUSER_ID(request.getParameter("USER_ID"));
-		m.setFULL_NAME(request.getParameter("FULL_NAME"));
-		m.setUSER(user.getUSER_ID());
 		m.setPASSWORD(request.getParameter("PASSWORD"));
+		
+		m.setFULL_NAME(request.getParameter("FULL_NAME"));
+		
+		m.setUSER(user.getUSER_ID());
+		
+		
 		m.setEMPLOYEE_CODE(request.getParameter("EMPLOYEE_CODE"));
 
 		m.setLOCK_FLAG(request.getParameter("LOCK_FLAG"));
@@ -103,12 +111,21 @@ public class UserController {
 		m.setSUPER_FLAG(request.getParameter("SUPER_FLAG"));
 
 		m.setDISABLE_FLAG(request.getParameter("DISABLE_FLAG"));
-
-		m.setOFFICE_CODE(request.getParameter("OFFICE_CODE"));
+		
+		m.setLOCATION_CODE(request.getParameter("LOCATION_CODE"));
+		
+		
+		
 
 		m.setUSER_LEVEL(request.getParameter("USER_LEVEL"));
+		
 		m.setROLE_CODE(request.getParameter("ROLE_CODE"));
-	
+			
+		
+		m.setOFFICE_CODE(request.getParameter("OFFICE_CODE"));
+		
+		m.setMOBILE_NO(request.getParameter("MOBILE_NO"));
+		
 		String msg = null;
 		try {
 			msg = userdao.saveUser(m);
