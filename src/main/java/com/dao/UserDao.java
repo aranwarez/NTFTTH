@@ -40,6 +40,8 @@ public class UserDao {
 				level.setUSER_LEVEL(rs.getString("USER_LEVEL"));
 				level.setROLE_CODE(rs.getString("ROLE_CODE"));
 				level.setOFFICE_CODE("OFFICE_CODE");
+				
+				
 				return level;
 			}
 
@@ -58,7 +60,15 @@ public class UserDao {
 		List<UserInformationModel> list = new ArrayList<UserInformationModel>();
 		try {
 		
-			 String qry = "select USER_ID,FULL_NAME,PASSWORD,EMPLOYEE_CODE,LOCK_FLAG,SUPER_FLAG,CREATED_BY,CREATED_DATE,DISABLE_FLAG,USER_LEVEL,ROLE_CODE,OFFICE_CODE from WEB_USER";
+			 String qry = "select user_id,full_name,\r\n" + 
+			 		"password,employee_code,lock_flag,\r\n" + 
+			 		"super_flag,disable_flag,\r\n" + 
+			 		"location_code,user_level,\r\n" + 
+			 		"role_code,office_code,\r\n" + 
+			 		"mobile_no,created_by,\r\n" + 
+			 		"created_Date,UPDATE_BY,\r\n" + 
+			 		"update_Dt\r\n" + 
+			 		"from web_user order by user_id";
 			PreparedStatement pst = con.prepareStatement(qry);
 
 			ResultSet rs = pst.executeQuery();
@@ -96,23 +106,31 @@ public class UserDao {
 	public String saveUser(UserInformationModel m) throws SQLException {
 		Connection con = DbCon.getConnection();
 		try {
-			PreparedStatement pst = con.prepareStatement("insert into WEB_USER" + "(USER_ID,FULL_NAME,PASSWORD,"
-					+ "EMPLOYEE_CODE,LOCK_FLAG,SUPER_FLAG," + "CREATED_BY,CREATED_DATE,DISABLE_FLAG,"
-					+ "USER_LEVEL,ROLE_CODE,OFFICE_CODE)"
-					+ "values(?,?,app_user_security.get_hash(upper(?),?),?,?,?,?,sysdate,?,?,?,?)");
+			PreparedStatement pst = con.prepareStatement("insert into web_user(USER_ID,FULL_NAME,PASSWORD,\r\n" + 
+					"EMPLOYEE_CODE,LOCK_FLAG,SUPER_FLAG,DISABLE_FLAG,\r\n" + 
+					"LOCATION_CODE,USER_LEVEL,ROLE_CODE,OFFICE_CODE,\r\n" + 
+					"MOBILE_NO,CREATED_BY,CREATED_DATE)\r\n" + 
+					"values(?,?,app_user_security.get_hash(upper(?),?),?,?,?,?,?,?,?,?,?,?,sysdate)");
 			pst.setString(1, m.getUSER_ID().toUpperCase());
-			pst.setString(2, m.getFULL_NAME());
-			pst.setString(3, m.getUSER_ID().toUpperCase());
+			pst.setString(2, m.getFULL_NAME());			
+			pst.setString(3, m.getPASSWORD());
 			pst.setString(4, m.getPASSWORD());
-
 			pst.setString(5, m.getEMPLOYEE_CODE());
 			pst.setString(6, "N");
 			pst.setString(7, m.getSUPER_FLAG());
-			pst.setString(8, m.getUSER());
-			pst.setString(9, m.getDISABLE_FLAG());
+			
+			pst.setString(8, m.getDISABLE_FLAG());
+			pst.setString(9,m.getLOCATION_CODE());
+			
+			
 			pst.setString(10, m.getUSER_LEVEL());
+			
 			pst.setString(11, m.getROLE_CODE());
+			
 			pst.setString(12, m.getOFFICE_CODE());
+			pst.setString(13, m.getMOBILE_NO());
+			pst.setString(14, m.getUSER());
+			
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,16 +187,22 @@ public class UserDao {
 				level.setPASSWORD(rs.getString("PASSWORD"));
 				level.setEMPLOYEE_CODE(rs.getString("EMPLOYEE_CODE"));
 				level.setLOCK_FLAG(rs.getString("LOCK_FLAG"));
+				
+				
 				level.setSUPER_FLAG(rs.getString("SUPER_FLAG"));
-				level.setCREATED_BY(rs.getString("CREATED_BY"));
-				level.setCREATED_DATE(rs.getString("CREATED_DATE"));
 				level.setDISABLE_FLAG(rs.getString("DISABLE_FLAG"));
+				level.setLOCATION_CODE(rs.getString("LOCATION_CODE"));
+				
 				level.setUSER_LEVEL(rs.getString("USER_LEVEL"));
 				level.setROLE_CODE(rs.getString("ROLE_CODE"));
 
-				level.setEMPLOYEE_NAME(rs.getString("EMPLOYEE_NAME"));
-
 				level.setOFFICE_CODE(rs.getString("OFFICE_CODE"));
+				level.setMOBILE_NO(rs.getString("MOBILE_NO"));
+				
+				level.setCREATED_BY(rs.getString("CREATED_BY"));
+				level.setCREATED_DATE(rs.getString("CREATED_DATE"));
+				
+				
 				
 				level.setROLE_DESCRIPTION(rs.getString("ROLE_DESCRIPTION"));
 
@@ -195,21 +219,26 @@ public class UserDao {
 	public String updateUser(UserInformationModel m) throws SQLException {
 		Connection con = DbCon.getConnection();
 		try {
-			PreparedStatement pst = con.prepareStatement("update WEB_USER " + "set FULL_NAME=?,EMPLOYEE_CODE=?,"
-					+ "LOCK_FLAG=?,SUPER_FLAG=?,DISABLE_FLAG=?," + "USER_LEVEL=?,"
-					+ "ROLE_CODE=?,OFFICE_CODE=? where USER_ID=?");
+			PreparedStatement pst = con.prepareStatement("update web_user set FULL_NAME=?,\r\n" + 
+					"EMPLOYEE_CODE=?,LOCK_FLAG=?,SUPER_FLAG=?,DISABLE_FLAG=?,\r\n" + 
+					"LOCATION_CODE=?,USER_LEVEL=?,ROLE_CODE=?,OFFICE_CODE=?,\r\n" + 
+					"MOBILE_NO=?,UPDATE_BY=?,UPDATE_DT=sysdate\r\n" + 
+					"where USER_ID=?");
 
 			pst.setString(1, m.getFULL_NAME());
 			pst.setString(2, m.getEMPLOYEE_CODE());
 			pst.setString(3, m.getLOCK_FLAG());
 			pst.setString(4, m.getSUPER_FLAG());
 			pst.setString(5, m.getDISABLE_FLAG());
+			pst.setString(6, m.getLOCATION_CODE());			
+			pst.setString(7, m.getUSER_LEVEL());			
+			pst.setString(8, m.getROLE_CODE());
 			
-
-			pst.setString(6, m.getUSER_LEVEL());
-			pst.setString(7, m.getROLE_CODE());
-			pst.setString(8, m.getOFFICE_CODE());
-			pst.setString(9, m.getUSER_ID());
+			pst.setString(9, m.getOFFICE_CODE());			
+			pst.setString(10, m.getMOBILE_NO());	
+			
+			pst.setString(11, m.getUSER());	
+			pst.setString(12, m.getUSER_ID());
 
 			pst.executeUpdate();
 		} catch (Exception e) {

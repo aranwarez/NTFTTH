@@ -4,8 +4,6 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <c:url var="home" value="/" scope="request" />
 
-
-
 <html>
 <head>
 <meta charset="utf-8">
@@ -31,6 +29,7 @@
 	background: transparent !important;
 }
 </style>
+	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -80,22 +79,30 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<h1>User Management</h1>
+				<h1>Service Team - Map List</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li><a href="#">Tables</a></li>
 					<li class="active">Data tables</li>
 
 				</ol>
-				<a href="#" class="btn btn-primary pull-right" data-toggle="modal"
-					data-target="#myModal"> <i class="fa fa-plus"></i> Add
-				</a>
+
 			</section>
 
 			<!-- Main content -->
 			<section class="content">
 				<div class="row">
 					<div class="col-xs-12">
+						<select id="SERVICE_TYPE_ID" onchange="return getEditMode()" class="form-control">
+							
+						<c:forEach var="user3" items="${servicetypelist}">
+	
+						 <option value="${user3.SERVICE_TYPE_ID}">${user3.SHORT_CODE}-${user3.ACTIVE_DT}-${user3.DEACTIVE_DT}</option>
+						
+						</c:forEach>								
+							
+						</select>
+
 
 						<!-- /.box -->
 
@@ -125,93 +132,18 @@
 								}
 							%>
 
+<div class="overlay">
+  <i class="fa fa-refresh fa-spin"></i>
+</div>
+
+
 							<!-- /.box-header -->
-							<div class="box-body">
-								<table id="userlist" class="table table-bordered table-striped">
-									<thead>
-										<tr>
-											<th>USER_ID</th>
-											<th>FULL_NAME</th>
-											<th>EMP_CODE</th>										
-											<th>Delete</th>
-											<th>SUPER</th>
-											<th>DISABLE</th>
-											
-											<th>LOCATION</th>
-											
-											<th>USER</th>
-											
-											<th>ROLE</th>
-											<th>OFFICE</th>
-											
-											<th>MOBILE</th>
-											<th>Edit</th>
-											<th>Delete</th>
-
-										</tr>
-									</thead>
-									<tbody>
-										<c:forEach var="user" items="${data_list}">
-
-											<tr>
-												
-												<td>${user.getUSER_ID()}</td>
-
-												<td>${user.getFULL_NAME()}</td>
-												<td>${user.getEMPLOYEE_CODE()}</td>
-
-												<td>${user.getLOCK_FLAG()}</td>
-												<td>${user.getSUPER_FLAG()}</td>
-
-												<td>${user.getDISABLE_FLAG()}</td>
-												
-												<td>${user.getLOCATION_CODE()}</td>
-												
-												<td>${user.getUSER_LEVEL()}</td>
-												
-												<td>${user.getROLE_CODE()}</td>
-												
-												
-												<td>${user.getOFFICE_CODE()}</td>
-
-												<td>${user.getMOBILE_NO()}</td>
-												
-											
-												<td>
-
-													<div class="btn-group">
-
-														<a href="#" class="btn btn-info" data-toggle="modal"
-															data-target="#changePassModal"
-															onclick="return getHold('${user.getUSER_ID()}')">
-															Pass Change </a> <a href="#" class="btn btn-info"
-															data-toggle="modal" data-target="#editModal"
-															onclick="return editUser('${user.getUSER_ID()}')"> <i
-															class="fa fa-edit"></i> Edit
-														</a>
-													</div>
-												</td>
-
-
-												<td>
-
-													<div>
-														<a href="#" class="btn btn-default" data-toggle="modal"
-															data-target="#deleteModal"
-															onclick="return deleteUser('${user.getUSER_ID()}')">
-															<i class="fa fa-trash"></i> Delete
-														</a>
-													</div>
-
-
-												</td>
-
-											</tr>
-										</c:forEach>
-
-									</tbody>
-
-								</table>
+							<div class="box-body ">
+							
+							<jsp:include page="${request.contextPath}/serviceteambody"></jsp:include>
+							
+							
+							
 							</div>
 							<!-- /.box-body -->
 						</div>
@@ -246,19 +178,18 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialoguser"></jsp:include>
-	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
+	<jsp:include page="${request.contextPath}/dialogmenuaccess"></jsp:include>
+
 
 	<script>
 		$(function() {
 
-			$('#userlist').dataTable({
-				"autoWidth" : true
-			});
+			$('#example1').DataTable()
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/user.js" />"></script>
+	<script src="<c:url value="/resources/function/serviceteam.js?a=54545" />"></script>
+	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 
 </body>

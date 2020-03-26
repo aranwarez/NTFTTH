@@ -14,18 +14,17 @@ function saveUser() {
 
 	$.post('../save/user', {
 		USER_ID : $("#USER_ID").val(),
-		FULL_NAME : $("#FULL_NAME").val(),
-		PASSWORD : $("#PASSWORD").val(),
+		PASSWORD: $("#PASSWORD").val(),
+		FULL_NAME : $("#FULL_NAME").val(),		
 		EMPLOYEE_CODE : $("#EMPLOYEE_CODE").val(),
 		LOCK_FLAG : $('.LOCK_FLAG:checked').val(),
 		SUPER_FLAG : $('.SUPER_FLAG:checked').val(),
 		DISABLE_FLAG : $('.SUPER_FLAG:checked').val(),
-		CC_CODE : $("#CC_CODE").val(),
-		REGION_CODE : $("#REGION_CODE").val(),
+		LOCATION_CODE : $("#LOCATION_CODE").val(),
 		USER_LEVEL : $("#USER_LEVEL").val(),
-		ROLE_CODE : $("#ROLE_CODE").val(),
-		ACC_CEN_CODE : $("#ACC_CEN_CODE").val(),
-		MODULE_CODE : $("#MODULE").val()
+		ROLE_CODE : $("#ROLE_CODE").val(),		
+		OFFICE_CODE : $("#OFFICE_CODE").val(),	
+		MOBILE_NO : $("#MOBILE_NO").val()
 	}, function(data) {
 		alert(data);
 
@@ -117,7 +116,8 @@ function editUser(code) {
         $("#EDITUSER_ID").val(response.user_ID);
         $("#EDITFULL_NAME").val(response.full_NAME);
         $("#EDITEMPLOYEE_CODE").val(response.employee_CODE);
-
+//    	alert(response.employee_CODE);
+    	
         if (response.lock_FLAG == 'Y') {
             $('input:radio[name="EDITLOCK_FLAG"][value=Y]').attr('checked', true);
         } else if (response.lock_FLAG == 'N') {
@@ -136,18 +136,28 @@ function editUser(code) {
             $('input:radio[name="EDITDISABLE_FLAG"][value=N]').attr('checked', true);
         }
 
-        $("#EDITREGION_CODE").val(response.region_CODE);
+//        $("#EDITREGION_CODE").val(response.region_CODE);
+//
+//        getEditAccountCenter();
 
-        getEditAccountCenter();
-
-        $("#EDITACC_CEN_CODE").val(response.acc_CEN_CODE);
-        getEditCC();
-        $("#EDITCC_CODE").val(response.cc_CODE);
-
+//        $("#EDITACC_CEN_CODE").val(response.acc_CEN_CODE);
+//        getEditCC();
+//        $("#EDITCC_CODE").val(response.cc_CODE);
+//
+        
+        $("#EDITLOCATION_CODE").val(response.location_CODE);
+        
+        
 
         $("#EDITUSER_LEVEL").val(response.user_LEVEL);
+        
+        
         $("#EDITROLE_CODE").val(response.role_CODE);
-        $("#EDITMODULE").val(response.module_ACCESS);
+        $("#EDITOFFICE_CODE").val(response.office_CODE);
+        $("#EDITMOBILE_NO").val(response.mobile_NO);
+        
+        
+   
 
     });
 }
@@ -176,11 +186,23 @@ function getEditAccountCenter() {
 
 function updateUser() {
 
-    $.post('../update/user', { USER_ID: CODE, FULL_NAME: $("#EDITFULL_NAME").val(), EMPLOYEE_CODE: $("#EDITEMPLOYEE_CODE").val(), LOCK_FLAG: $('.EDITLOCK_FLAG:checked').val(),
-        SUPER_FLAG: $('.EDITSUPER_FLAG:checked').val(), DISABLE_FLAG: $('.EDITDISABLE_FLAG:checked').val(), REGION_CODE: $("#EDITREGION_CODE").val(), ACC_CEN_CODE: $("#EDITACC_CEN_CODE").val(), CC_CODE: $("#EDITCC_CODE").val(),
-        USER_LEVEL: $("#EDITUSER_LEVEL").val(),
-        ROLE_CODE: $("#EDITROLE_CODE").val(),
-        MODULE_ACCESS: $("#EDITMODULE").val()}, function (data) {
+
+	
+	
+    $.post('../update/user', {
+    	USER_ID : CODE,		
+		FULL_NAME : $("#EDITFULL_NAME").val(),		
+		EMPLOYEE_CODE : $("#EDITEMPLOYEE_CODE").val(),
+		LOCK_FLAG : $('.EDITLOCK_FLAG:checked').val(),
+		SUPER_FLAG : $('.EDITSUPER_FLAG:checked').val(),
+		DISABLE_FLAG : $('.EDITSUPER_FLAG:checked').val(),
+		LOCATION_CODE : $("#EDITLOCATION_CODE").val(),
+		USER_LEVEL : $("#EDITUSER_LEVEL").val(),
+		ROLE_CODE : $("#EDITROLE_CODE").val(),		
+		OFFICE_CODE : $("#EDITOFFICE_CODE").val(),	
+		MOBILE_NO : $("#EDITMOBILE_NO").val()
+		
+    }, function (data) {
         	alert(data);
         	
 //        location.reload();
