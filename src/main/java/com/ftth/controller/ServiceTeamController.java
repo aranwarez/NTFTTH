@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +39,7 @@ public class ServiceTeamController {
 	
 	
 
-	@RequestMapping(value = "/service/team/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/service/team", method = RequestMethod.GET)
 	public String menuacesslistlist(Locale locale, Model model, HttpSession session)  {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
@@ -88,7 +89,7 @@ public class ServiceTeamController {
 	
 	
 	@ResponseBody
-	@RequestMapping(method = RequestMethod.GET, value = "/service/getServiceAccess")
+	@RequestMapping(method = RequestMethod.GET, value = "/service/getServiceAccess",produces=MediaType.APPLICATION_JSON_VALUE)
 
 	public List<ServiceTeamModel> getEditMode(HttpServletRequest request, HttpServletResponse response) {
 		

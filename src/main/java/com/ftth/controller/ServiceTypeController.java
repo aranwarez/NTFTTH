@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +47,7 @@ public class ServiceTypeController {
 	        return "servicetype/list";
 	    }
 	  	@ResponseBody
-	    @RequestMapping(value = "/serviceType/jsonlist", method = RequestMethod.GET)
+	    @RequestMapping(value = "/serviceType/jsonlist", method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
 	    public List<Map<String, Object>> getSPtargetist(Locale locale, Model model, HttpSession session)
 	            throws SQLException {
 		  MServiceTypeDao dao = new MServiceTypeDao();

@@ -18,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.dao.CommonDateDao;
 import com.dao.CommonMenuDao;
-
+import com.dao.MServiceDao;
 import com.dao.VASCommonDao;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,6 +47,10 @@ public class ComplainController {
 		CommonDateDao DAT = new CommonDateDao();
 		model.addAttribute("Date_list", DAT.getDateList());
 
+		MServiceDao services=new MServiceDao();
+		model.addAttribute("Services", services.getServiceList());
+		
+		
 		return "/complain/list";
 
 	}
@@ -69,6 +73,12 @@ public class ComplainController {
 			e.printStackTrace();
 			return e.getMessage();
 		}
+
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/complain/dialog")
+	public String dialogrole(Model model, Locale locale) {
+		return "complain/dialog";
 
 	}
 

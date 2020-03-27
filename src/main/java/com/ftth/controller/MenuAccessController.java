@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,7 +82,7 @@ public class MenuAccessController {
 	}
 
 	@ResponseBody
-	@RequestMapping(method = RequestMethod.GET, value = "getEditMode")
+	@RequestMapping(method = RequestMethod.GET, value = "getEditMode",produces = MediaType.APPLICATION_JSON_VALUE)
 
 	public List<MenuAccess> getEditMode(HttpServletRequest request, HttpServletResponse response) {
 		
