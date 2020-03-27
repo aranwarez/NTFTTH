@@ -165,7 +165,8 @@
 											id="customerlabel">Address :</label> <span id="Address"></span>
 									</div>
 									<div class="col-md-2">
-										<button type="button" class="btn btn-block btn-primary btn-lg">
+									
+										<button type="button" class="btn btn-block btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
 											<i class="fa fa-edit"></i>Register Complain
 										</button>
 
@@ -398,7 +399,7 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialoguser"></jsp:include>
+	<jsp:include page="${request.contextPath}/complain/dialog"></jsp:include>
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 	<script
 		src="<c:url value="/resources/function/Complain/NewComplain.js" />"></script>

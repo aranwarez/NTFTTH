@@ -1,3 +1,19 @@
+var problemlist;
+$(document).ready(function() {
+
+	$.get('../problem/JSlist', {
+		
+	}, function(response) {
+		problemlist=response;
+			getProblemlist($('#serviceid').val());
+	});
+
+	
+
+});
+
+
+
 function getCustomerInfo() {
 
 	$.get('../complain/getCustomerInfo', {
@@ -19,7 +35,7 @@ function getCustomerInfo() {
 			$('#fapPortName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapPortInfo.fapPortName);
 			$('#fapPortSpec').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapPortInfo.portSpec);
 			$('#fapSerialNumber').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapPortInfo.serialNumber);
-			//OLT
+			// OLT
 			$('#distribCblName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.distribCblName);
 			$('#distribCoreNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.distribCoreNo);
 			$('#distribPortNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.distribPortNo);
@@ -36,16 +52,16 @@ function getCustomerInfo() {
 			$('#oltInfo').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltInfo);
 			$('#oltName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltName);
 			$('#oltType').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltType);
-			//subscriber info
+			// subscriber info
 			
 			$('#balanceOfCreditLimit').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.balanceOfCreditLimit);
 			$('#offerName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.offerName);
 			$('#serviceNumber').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.serviceNumber);
 			$('#status').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.status);
 			$('#vasName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.vasName);
-			//$('#').html(TEST.);
+			// $('#').html(TEST.);
 			
-		//	getCustomerInfo(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.cpeInfo.cpeSN);
+		// getCustomerInfo(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.cpeInfo.cpeSN);
 		}catch (e) {
 			alert(response);
 			}
@@ -54,11 +70,21 @@ function getCustomerInfo() {
 
 	}); // closing function(responseJson)
 
-
-
-
 }
 
+function getProblemlist(serviceid){
+// alert(serviceid);
+	var select = $('#problemid');
+    select.find('option').remove();
+ // $('<option>').val("").text("Select").appendTo(select);
+    $.each(problemlist, function (index, value) {
+    	// alert(value.SERVICE_TYPE_ID);
+    	if(value.SERVICE_TYPE_ID==serviceid){
+        $('<option>').val(value.PROBLEM_ID).text(value.DESCRIPTION).appendTo(select);
+    	}
+    });
+	
+}
 
 
 
