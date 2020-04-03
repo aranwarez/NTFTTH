@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -48,7 +47,7 @@ public class ServiceController {
     }
     // getting list of all SP wise Service List
     @ResponseBody
-    @RequestMapping(value = "/service/jsonlist", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/service/jsonlist", method = RequestMethod.GET)
     public List<Map<String, Object>> getSPtargetist(Locale locale, Model model, HttpSession session)
             throws SQLException {
     	MServiceDao dao = new MServiceDao();

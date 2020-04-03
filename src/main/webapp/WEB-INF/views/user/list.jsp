@@ -246,7 +246,7 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialoguser"></jsp:include>
+	<jsp:include page="${request.contextPath}/dialoguser?a=1"></jsp:include>
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
 	<script>
@@ -258,7 +258,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/user.js" />"></script>
+	<script src="<c:url value="/resources/function/user.js?a=156" />"></script>
 
 
 </body>

@@ -177,7 +177,7 @@
 														<div>
 															<a href="" class="btn btn-default" data-toggle="modal"
 																data-target="#deleteModal"
-																onclick="return deleteRole('${user.getMENU_CODE()}')">
+																onclick="return deleteMenu('${user.getMENU_CODE()}')">
 																<i class="fa fa-trash"></i> Delete
 															</a>
 														</div>

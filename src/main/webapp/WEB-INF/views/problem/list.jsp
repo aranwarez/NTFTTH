@@ -200,7 +200,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/problem.js?a=1235" />"></script>
+	<script src="<c:url value="/resources/function/problem.js?a=12" />"></script>
 
 
 </body>

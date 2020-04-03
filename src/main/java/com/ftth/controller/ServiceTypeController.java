@@ -47,7 +47,7 @@ public class ServiceTypeController {
 	        return "servicetype/list";
 	    }
 	  	@ResponseBody
-	    @RequestMapping(value = "/serviceType/jsonlist", method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	    @RequestMapping(value = "/serviceType/jsonlist", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
 	    public List<Map<String, Object>> getSPtargetist(Locale locale, Model model, HttpSession session)
 	            throws SQLException {
 		  MServiceTypeDao dao = new MServiceTypeDao();

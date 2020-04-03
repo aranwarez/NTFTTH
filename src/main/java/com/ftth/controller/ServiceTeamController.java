@@ -39,7 +39,7 @@ public class ServiceTeamController {
 	
 	
 
-	@RequestMapping(value = "/service/team", method = RequestMethod.GET)
+	@RequestMapping(value = "/service-team/list", method = RequestMethod.GET)
 	public String menuacesslistlist(Locale locale, Model model, HttpSession session)  {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
@@ -89,7 +89,7 @@ public class ServiceTeamController {
 	
 	
 	@ResponseBody
-	@RequestMapping(method = RequestMethod.GET, value = "/service/getServiceAccess",produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.GET, value = "/getServiceAccess",produces = MediaType.APPLICATION_JSON_VALUE)
 
 	public List<ServiceTeamModel> getEditMode(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -110,7 +110,7 @@ public class ServiceTeamController {
 	}
 	
 	
-	@RequestMapping(value = "/service/saveServiceTeam", method = RequestMethod.POST)
+	@RequestMapping(value = "/saveServiceTeam", method = RequestMethod.POST)
 	@ResponseBody
 
 	public String saveModeList(String SERVICE_TYPE_ID, String menu_mode,  Model model, Locale locale,HttpSession session)

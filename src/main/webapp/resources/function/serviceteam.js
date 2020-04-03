@@ -34,30 +34,47 @@ function getEditMode() {
 		SERVICE_TYPE_ID : SERVICE_TYPE_ID
 	}, function(data) {
 
-		if (data.length == 0) {
+//		console.log(data.length);
+		
+		if (data.length == 0 ||data.length == undefined) {
 			
 			clearDataTable();
+			return;
+		}	
+		
+
+
+	
+//		for (i = 1; i <= table.fnGetData().length; i++) {
 			
-		}
-
-		i = 1;
-		$.each(data, function(index, value) {
-			// Get the total rows
-
-			console.log($('.mastersetup' + i).val());
-
-			if (value.sub_TEAM_CODE == $('.mastersetup' + i).val()) {
-				$(".list" + i).val('Y');
-				
-				console.log(value.SUB_TEAM_CODE);
-				console.log('YES= '+i);
-				
-			}
 			
-			i = i + 1;
+			$.each(data, function(index, value) {
+				// Get the total rows
+				
+//				alert(value.sub_TEAM_CODE);
+				
+				console.log(value.sub_TEAM_CODE);
+				
+				checkDropDown(value.sub_TEAM_CODE);
 
-		});
+//				if ($('.mastersetup' + i).val() == value.sub_TEAM_CODE) {
+//					
+//					$(".list" + i).val('Y');
+//					
+//					console.log(value.sub_TEAM_CODE);
+//					console.log('YES= '+i);
+//					
+//				}
+							
+				
 
+			});
+					
+			
+//	}
+		
+		
+		
 		// console.log(JSON.stringify(data));
 
 	});
@@ -108,15 +125,34 @@ function clearDataTable() {
 	var table = $('#checkDatatable').dataTable();
 	
 	for (i = 1; i <= table.fnGetData().length; i++) {
-		if ($('#ROLE_CODE').val() != null) {
-			
-			$('.add' + i).val('N');
+
+		if ($('#SERVICE_TYPE_ID').val() != null) {
+
 			$('.list' + i).val('N');
-			$('.editing' + i).val('N');
-			$('.deleting' + i).val('N');
-			$('.posting' + i).val('N');
-			$('.cancel' + i).val('N');
+
 
 		}
 	}
+}
+function checkDropDown(subteamcode){
+	
+//	mastersetup1
+	
+var table = $('#checkDatatable').dataTable();
+	
+	for (i = 1; i <= table.fnGetData().length; i++) {
+		
+		
+		if($('.mastersetup' + i).val()===subteamcode){
+			
+			$('.list' + i).val('Y');
+			
+		}
+			
+		
+		
+		
+	}
+	
+	
 }
