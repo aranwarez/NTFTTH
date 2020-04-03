@@ -44,7 +44,7 @@ public class TeamController {
        return "team/list";
     }
     @ResponseBody
-    @RequestMapping(value = "/team/jsonlist", method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/team/jsonlist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Map<String, Object>> getSPtargetist(Locale locale, Model model, HttpSession session)
             throws SQLException {
     	TeamDao dao = new TeamDao();

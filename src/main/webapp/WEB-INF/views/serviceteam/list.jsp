@@ -94,8 +94,9 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<select id="SERVICE_TYPE_ID" onchange="return getEditMode()" class="form-control">
-							
+							<option>Select Service Type</option>
 						<c:forEach var="user3" items="${servicetypelist}">
+						
 	
 						 <option value="${user3.SERVICE_TYPE_ID}">${user3.SHORT_CODE}-${user3.ACTIVE_DT}-${user3.DEACTIVE_DT}</option>
 						
@@ -188,7 +189,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/serviceteam.js?a=54545" />"></script>
+	<script src="<c:url value="/resources/function/serviceteam.js?a=185" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 

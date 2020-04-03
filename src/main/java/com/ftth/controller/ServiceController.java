@@ -48,7 +48,7 @@ public class ServiceController {
     }
     // getting list of all SP wise Service List
     @ResponseBody
-    @RequestMapping(value = "/service/jsonlist", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/service/jsonlist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Map<String, Object>> getSPtargetist(Locale locale, Model model, HttpSession session)
             throws SQLException {
     	MServiceDao dao = new MServiceDao();

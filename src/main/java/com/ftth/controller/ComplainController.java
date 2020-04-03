@@ -82,35 +82,6 @@ public class ComplainController {
 
 	}
 
-	@ResponseBody
-	@RequestMapping(value = "/cashsale/savebill", method = RequestMethod.POST)
-	public String saveBill(String SP_CODE, String nepdate, String BANK_CODE, String REMARKS, String AMT, String DATA,
-			Locale locale, Model model, HttpSession session) throws SQLException {
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
-		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
-
-			// throw new ForbiddenException();
-			// model.addAttribute("fx", "Unauthorized Action for this role!!");
-			// return "/home";
-		}
-
-		ObjectMapper mapper = new ObjectMapper();
-
-		try {
-			List<Map<String, Object>> myarray = mapper.readValue(DATA, new TypeReference<List<Map<String, Object>>>() {
-			});
-//			CashSaleDao dao=new CashSaleDao();
-//		return 	dao.SaveBill(myarray, SP_CODE, nepdate, BANK_CODE, REMARKS, AMT, user.getUSER_ID(), user.getCC_CODE());
-//			
-			return null;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return e.getMessage();
-		}
-
-	}
+	
 
 }

@@ -48,7 +48,7 @@ public class SubTeamController {
 	
 	
 	@ResponseBody
-    @RequestMapping(value = "/subteam/jsonlist", method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/subteam/jsonlist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Map<String, Object>> getSPtargetist(Locale locale, Model model, HttpSession session)
             throws SQLException {
 		SubTeamDao dao = new SubTeamDao();

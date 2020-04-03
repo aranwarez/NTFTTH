@@ -1,5 +1,11 @@
 var CODE;
 
+
+$(document).ready(function() {
+	$('#userlist').dataTable( {
+	    "scrollX": true
+	} );
+});
 function saveUser() {
 
 	var pass = $("#PASSWORD").val();
@@ -110,10 +116,11 @@ function changePassword() {
 }
 function editUser(code) {
     CODE = code;
+   
     jQuery.ajaxSetup({async: false});
-    $.get('../user/edit', {getEdit: "getEdit", code: code}, function (response) {
+    $.get('../user/edit', {code: code}, function (response) {
     	
-        $("#EDITUSER_ID").val(response.user_ID);
+        $("#EDITUSER_ID").val(CODE);
         $("#EDITFULL_NAME").val(response.full_NAME);
         $("#EDITEMPLOYEE_CODE").val(response.employee_CODE);
 //    	alert(response.employee_CODE);
