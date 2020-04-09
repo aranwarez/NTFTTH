@@ -79,7 +79,7 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<h1>Service Team - Map List</h1>
+				<h1>${fx}</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li><a href="#">Tables</a></li>
@@ -91,20 +91,77 @@
 
 			<!-- Main content -->
 			<section class="content">
+					
+					
+		
 				<div class="row">
-					<div class="col-xs-12">
-						<select id="SERVICE_TYPE_ID" onchange="return getEditMode()" class="form-control">
-							<option>Select Service Type</option>
-						<c:forEach var="user3" items="${servicetypelist}">
-						
-	
-						 <option value="${user3.SERVICE_TYPE_ID}">${user3.DESCRIPTION}-${user3.ACTIVE_DT}-${user3.DEACTIVE_DT}</option>
-						
-						</c:forEach>								
+					
+					
+			<div class="col-xs-3">
+						<select id="REGION_CODE" onchange="return getZone()" class="form-control">
+							<option value="">Select Region</option>
+						<c:forEach var="user3" items="${regionlist}">					
+	 					<c:if test = "${user3.ACTIVE_STATUS == 'Y'}">	
+						 <option value="${user3.REGION_CODE}">${user3.DESCRIPTION}</option>
+						</c:if>
+						</c:forEach>							
 							
 						</select>
 
+ 				</div>
+ 				
+ 				
+ 				<div class="col-xs-3">
+						<select id="ZONE_CODE" onchange="return getDistrict()" class="form-control">
+							<option value="">Select Zone </option>
+												
+							
+						</select>
 
+ 				</div>
+ 				
+ 				<div class="col-xs-3">
+						<select id="DISTRICT_CODE" onchange="return getOffice()" class="form-control">
+							<option value="">Select District </option>
+						
+									
+							
+						</select>
+
+ 				</div>
+ 				
+ 				  
+ 				  <div class="col-xs-3">
+						<select id="OFFICE_CODE" onchange="return getOLT()" class="form-control">
+							<option value="">Select Office </option>
+												
+							
+						</select>
+
+ 				</div>
+ 				
+ 				
+ 				  
+ 				  <div class="col-xs-3">
+						<select id="OLT_CODE" onchange="return getEditMode()" class="form-control">
+							<option value="">Select Olt </option>											
+					    </select>
+
+ 				</div>
+ 				<div class="col-xs-3">				
+					<div class="align-middle">
+                		<button type="submit" class="btn btn-primary" onclick="return fetchView()">View</button>
+              		</div>
+ 				</div>
+ 				
+ 					<div class="col-xs-3">
+						
+
+ 				</div>
+ 						
+ 					
+ 				  
+				<div class="col-xs-12">
 						<!-- /.box -->
 
 						<div class="box">
@@ -141,7 +198,7 @@
 							<!-- /.box-header -->
 							<div class="box-body ">
 							
-							<jsp:include page="${request.contextPath}/serviceteambody"></jsp:include>
+							<jsp:include page="${request.contextPath}/userfdcbody"></jsp:include>
 							
 							
 							
@@ -183,13 +240,15 @@
 
 
 	<script>
+	
+	
 		$(function() {
 
 			$('#example1').DataTable()
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/serviceteam.js?a=185" />"></script>
+	<script src="<c:url value="/resources/function/userfdc.js?a=90052662" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 

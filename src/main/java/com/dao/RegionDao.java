@@ -25,7 +25,8 @@ public class RegionDao {
 				m.setSN(i);
 				m.setREGION_CODE(rs.getString("REGION_CODE"));
 				m.setDESCRIPTION(rs.getString("DESCRIPTION"));
-
+				m.setACTIVE_STATUS(rs.getString("ACTIVE_STATUS"));
+			
 				list.add(m);
 				i += 1;
 			}

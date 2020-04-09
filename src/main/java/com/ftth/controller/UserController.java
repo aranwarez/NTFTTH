@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dao.EmployeeDao;
+import com.dao.FDCDao;
 import com.dao.OfficeDao;
 import com.dao.RegionDao;
 import com.dao.RoleDao;
@@ -230,4 +231,37 @@ public class UserController {
 		}
 		return msg;
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET, value = "getUserByALL",produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Map<String, Object>> getViewFDC(HttpServletRequest request, HttpServletResponse response) {
+		
+		String WORKING_REGION_CODE = request.getParameter("WORKING_REGION_CODE");
+		String WORKING_ZONE_CODE = request.getParameter("WORKING_ZONE_CODE");
+		String WORKING_DIS_CODE = request.getParameter("WORKING_DIS_CODE");
+		String WORKING_OFFICE_CODE = request.getParameter("WORKING_OFFICE_CODE");
+	
+		
+		
+		
+//		String REGION_CODE = request.getParameter("REGION_CODE");
+		
+		
+		List<Map<String, Object>> list = null;
+		
+		try {
+			
+			list = UserDao.getUserListByALL(WORKING_REGION_CODE,WORKING_ZONE_CODE,WORKING_DIS_CODE,WORKING_OFFICE_CODE);
+					
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+	
 }

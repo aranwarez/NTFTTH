@@ -3,9 +3,12 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.model.UserInformationModel;
 
@@ -269,5 +272,42 @@ public class UserDao {
 		}
 		return "Successfully deleted!";
 	}
+	
+	public static List<Map<String, Object>> getUserListByALL(String WORKING_REGION_CODE,String WORKING_ZONE_CODE,String WORKING_DIS_CODE,String WORKING_OFFICE_CODE) throws SQLException {
+        Connection con = DbCon.getConnection();
+
+
+        try {
+            PreparedStatement pst = con.prepareStatement("select * from vw_user_information where WORKING_REGION_CODE=nvl(?, WORKING_REGION_CODE)  and \r\n" + 
+            		"WORKING_ZONE_CODE=nvl(?, WORKING_ZONE_CODE) and WORKING_DIS_CODE=nvl(?, WORKING_DIS_CODE) and WORKING_OFFICE_CODE=nvl(?, WORKING_OFFICE_CODE)");
+            
+            pst.setString(1, WORKING_REGION_CODE);
+            pst.setString(2, WORKING_ZONE_CODE);
+            pst.setString(3, WORKING_DIS_CODE);
+          pst.setString(4, WORKING_OFFICE_CODE);
+           
+            ResultSet rs = pst.executeQuery();
+
+            List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+            Map<String, Object> row = null;
+
+            ResultSetMetaData metaData = rs.getMetaData();
+            Integer columnCount = metaData.getColumnCount();
+
+            while (rs.next()) {
+                row = new HashMap<String, Object>();
+                for (int i = 1; i <= columnCount; i++) {
+                    row.put(metaData.getColumnName(i), rs.getObject(i));
+                }
+                resultList.add(row);
+            }
+            return resultList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            con.close();
+        }
+        return null;
+    }
 
 }

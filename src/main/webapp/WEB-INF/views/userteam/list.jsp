@@ -79,7 +79,7 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<h1>Service Team - Map List</h1>
+				<h1>User Team - Map List</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li><a href="#">Tables</a></li>
@@ -94,12 +94,13 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<select id="SERVICE_TYPE_ID" onchange="return getEditMode()" class="form-control">
-							<option>Select Service Type</option>
-						<c:forEach var="user3" items="${servicetypelist}">
-						
+							<option>Select User</option>
+						<c:forEach var="user3" items="${userteam_list}">
+												
+						   <c:if test = "${user3.LOCK_FLAG == 'N'}">				
 	
-						 <option value="${user3.SERVICE_TYPE_ID}">${user3.DESCRIPTION}-${user3.ACTIVE_DT}-${user3.DEACTIVE_DT}</option>
-						
+						 <option value="${user3.USER_ID}">${user3.FULL_NAME}-${user3.EMPLOYEE_CODE}-${user3.ROLE_CODE}-${user3.OFFICE_CODE}-${user3.MOBILE_NO}</option>
+						</c:if>
 						</c:forEach>								
 							
 						</select>
@@ -133,15 +134,15 @@
 								}
 							%>
 
-<div class="overlay">
-  <i class="fa fa-refresh fa-spin"></i>
-</div>
+		<div class="overlay">
+  			<i class="fa fa-refresh fa-spin"></i>
+		</div>
 
 
 							<!-- /.box-header -->
 							<div class="box-body ">
 							
-							<jsp:include page="${request.contextPath}/serviceteambody"></jsp:include>
+							<jsp:include page="${request.contextPath}/userteambody"></jsp:include>
 							
 							
 							
@@ -189,7 +190,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/serviceteam.js?a=185" />"></script>
+	<script src="<c:url value="/resources/function/userteam.js?a=185" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 
