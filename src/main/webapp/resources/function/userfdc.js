@@ -271,7 +271,7 @@ function viewUser(WORKING_REGION_CODE,WORKING_ZONE_CODE,WORKING_DIS_CODE,WORKING
 		        $.each(data, function (index, value) {
 //		        	if(value.LOCK_FLAG=='N'){	        		
 		        	
-		            $('<option>').val(value.USER_ID).text(value.FULL_NAME+"-"+value.WORKING_DISTRICT+"-"+value.MOBILE_NO).appendTo(
+		            $('<option>').val(value.USER_ID).text(value.FULL_NAME+"-"+value.USER_ID+"-"+value.WORKING_DISTRICT+"-"+value.MOBILE_NO).appendTo(
 		                    select);
 
 //		        	}
