@@ -72,21 +72,9 @@ public class UserFDCController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "userfdcbody")
-	public String serviceteambody(Model model, Locale locale) {
+	public String userfdcbody(Model model, Locale locale) {
 
 
-		
-		SubTeamDao dao = new SubTeamDao();
-	        List<Map<String, Object>> subteamlist = null;
-	        try {
-	        	subteamlist = dao.getSubTeamList();
-	        } catch (SQLException e) {
-	            // TODO Auto-generated catch block
-	            e.printStackTrace();
-	        }
-	        model.addAttribute("fx", "Service List");
-//	        model.addAttribute("subteamlist", subteamlist);
-	        
 		
 	        return "userfdc/userfdcbody";
 
