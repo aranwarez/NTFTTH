@@ -12,31 +12,34 @@ import java.util.Map;
 
 import com.model.MenuAccess;
 import com.model.ServiceTeamModel;
+import com.model.UserFdcModel;
 
 import util.DbCon;
 
-public class ServiceTeamDao {
+public class UserFdcDao {
 	
-	public static List<ServiceTeamModel> getModeList(String SERVICE_TYPE_ID) throws Exception {
+	public static List<UserFdcModel> getModeList(String USER_ID) throws Exception {
 		Connection con = DbCon.getConnection();
 
-		List<ServiceTeamModel> modelist = new ArrayList<ServiceTeamModel>();
-		ServiceTeamModel m = null;
+		List<UserFdcModel> modelist = new ArrayList<UserFdcModel>();
+		UserFdcModel m = null;
 		try {
 
 			PreparedStatement pst = con.prepareStatement(
-					"select * from M_SERVICE_TEAM_MAP where SERVICE_TYPE_ID=?");
-			pst.setString(1, SERVICE_TYPE_ID);
+					"select WUTM_ID,USER_ID,FDC_CODE,common.to_BS(ACTIVE_DT) as ACTIVE_DT,common.to_BS(DEACTIVE_DT) as DEACTIVE_DT\r\n" + 
+					" from WEB_USER_FDC_MAP\r\n" + 
+					"where USER_ID=?");
+			pst.setString(1, USER_ID);
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				
-				m = new ServiceTeamModel();
-				m.setMSTM_ID(rs.getString("MSTM_ID"));
+				m = new UserFdcModel();
+				m.setWUTM_ID(rs.getString("WUTM_ID"));				
+				m.setUSER_ID(rs.getString("USER_ID"));			
+				m.setFDC_CODE(rs.getString("FDC_CODE"));				
+				m.setACTIVE_DT(rs.getString("ACTIVE_DT"));
+				m.setDEACTIVE_DT(rs.getString("DEACTIVE_DT"));
 				
-				m.setSERVICE_TYPE_ID(rs.getString("SERVICE_TYPE_ID"));			
-				m.setSUB_TEAM_CODE(rs.getString("SUB_TEAM_CODE"));
-				
-
 				modelist.add(m);
 
 			}
@@ -48,11 +51,11 @@ public class ServiceTeamDao {
 		return modelist;
 	}
 	
-//  menu-access role define
-	public String SaveMenuAccess(String SERVICE_TYPE_ID, List<Map<String, Object>> editmodelist, String USER)
+//  
+	public String SaveUserFDC(String USER_ID, List<Map<String, Object>> editmodelist, String USER)
 			throws SQLException {
 		Connection con = DbCon.getConnection();
-
+		
 		try {
 			con.setAutoCommit(false);
 
@@ -64,18 +67,22 @@ public class ServiceTeamDao {
 			 */
 
 			PreparedStatement pst1 = con.prepareStatement(
-					"delete from M_SERVICE_TEAM_MAP where SERVICE_TYPE_ID=?");
+					"delete from WEB_USER_FDC_MAP where USER_ID=?");
 
-			pst1.setString(1, SERVICE_TYPE_ID);
+			pst1.setString(1, USER_ID);
 			pst1.executeUpdate();
 
 			for (Map<String, Object> obj : editmodelist) {
-				PreparedStatement pst4 = con.prepareStatement("insert into M_SERVICE_TEAM_MAP(MSTM_ID,SERVICE_TYPE_ID,SUB_TEAM_CODE,CREATE_BY,CREATE_DT)\r\n" + 
-						"values((MSTM_ID.nextval),?,?,?,sysdate)");
+				PreparedStatement pst4 = con.prepareStatement("insert into WEB_USER_FDC_MAP\r\n" + 
+						"(WUTM_ID,USER_ID,FDC_CODE,ACTIVE_DT,DEACTIVE_DT,CREATE_BY,CREATE_DT)\r\n" + 
+						"values((WUTM_ID.nextval),?,?,common.to_ad(?),common.to_ad(?),?,sysdate)");
 
-				pst4.setString(1, (String) obj.get("SERVICE_TYPE_ID"));
-				pst4.setString(2, (String) obj.get("SUB_TEAM_CODE"));
-				pst4.setString(3, USER);
+				pst4.setString(1, (String) obj.get("USER_ID"));
+				pst4.setString(2, (String) obj.get("FDC_CODE"));
+				
+				pst4.setString(3, (String) obj.get("ACTIVE_DT"));
+				pst4.setString(4, (String) obj.get("DEACTIVE_DT"));
+				pst4.setString(5, USER);
 				
 				pst4.executeUpdate();
 			}

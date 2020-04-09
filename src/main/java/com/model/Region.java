@@ -8,6 +8,15 @@ public class Region {
 	
 	private String USER;
 	
+	public String getACTIVE_STATUS() {
+		return ACTIVE_STATUS;
+	}
+
+	public void setACTIVE_STATUS(String aCTIVE_STATUS) {
+		ACTIVE_STATUS = aCTIVE_STATUS;
+	}
+
+	private String ACTIVE_STATUS;
 	
 	public String getUSER() {
 		return USER;
