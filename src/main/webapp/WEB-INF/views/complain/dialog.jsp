@@ -16,36 +16,22 @@
 				</button>
 				<h4 class="modal-title" id="myModalLabel">Register New Complain</h4>
 			</div>
-			<div class="modal-body">
-				<div class="form-group">
-					<label for="name">Service</label> <select id="serviceid" onchange="getProblemlist(this.value)">
-					<c:forEach var="list" items="${Services}">
-					<option value="${list.SERVICE_ID}">${list.DESCRIPTION}</option>
-					
-					</c:forEach>
-					</select>
-				</div>
-				<div class="form-group">
-					<label for="name">Problem</label> <select id="problemid"></select>
-				</div>
-				
-				<div class="form-group">
-					<label for="name">Remark</label> <input type="text"
-						class="form-control" id="DESCRIPTION">
-				</div>
-				<div class="form-group">
-					<label for="name">DESCRIPTION</label> <input type="text"
-						class="form-control" id="DESCRIPTION">
-				</div>
-				
+			<div id="complainservcies" class="modal-body">
 				
 
 			</div>
+			<div  class="modal-body">
+				<input class="form-control" id="contatper" placeholder="Enter Contact Person Name">
+				<input class="form-control" id="contactperno" placeholder="Enter Contact Number">
+						<input class="form-control" id="userremark" placeholder="Enter User Remark">
+
+			</div>
+						
 
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				<button type="submit" class="btn btn-primary"
-					onclick="return saveRegion()">Save changes</button>
+					onclick="PostRegister()">Register</button>
 			</div>
 		</div>
 	</div>
