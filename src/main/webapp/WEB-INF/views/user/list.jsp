@@ -252,10 +252,10 @@
 	<script>
 		$(function() {
 
-			$('#userlist').dataTable({
-				"autoWidth" : true
-			});
-
+		
+			 $('#userlist').DataTable( {
+			        "scrollX": true
+			    } );
 		})
 	</script>
 	<script src="<c:url value="/resources/function/user.js?a=156" />"></script>
