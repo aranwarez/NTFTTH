@@ -17,13 +17,42 @@ public class dashboardquery {
 		Connection con = DbCon.getConnection();
 
 		try {
-			PreparedStatement pst = con.prepareStatement("select service_code, sum(amt) sum \r\n" + 
-					"FROM vw_bill\r\n" + 
-					"WHERE imp_year=2076\r\n" + 
-					"AND imp_month='04'\r\n" + 
-					"AND sharing_type='N'\r\n" + 
-					"\r\n" + 
-					"group by service_code");
+			PreparedStatement pst = con.prepareStatement("SELECT count(TOKENS.SUB_TEAM_CODE) SCOUNT,\r\n" + 
+					"         (SELECT DESCRIPTION\r\n" + 
+					"            FROM M_SUB_TEAM\r\n" + 
+					"           WHERE SUB_TEAM_CODE = TOKENS.SUB_TEAM_CODE)    SERVICE_DESC\r\n" + 
+					"        \r\n" + 
+					"    FROM (SELECT TM.TOKEN_ID,\r\n" + 
+					"                 SUB_TOKEN_ID,\r\n" + 
+					"                 SERVICE_ID,\r\n" + 
+					"                 SRV_NO,\r\n" + 
+					"                 COMPLAIN_NO,\r\n" + 
+					"                 CONTACT_NAME,\r\n" + 
+					"                 TM.PROBLEM_ID,\r\n" + 
+					"                 TM.REMARKS,\r\n" + 
+					"                 FDC_CODE,\r\n" + 
+					"                 TM.SUB_TEAM_CODE,\r\n" + 
+					"                 TM.SOLVE_FLAG,\r\n" + 
+					"                 SERVICE_TYPE_ID,\r\n" + 
+					"                 TM.CREATE_DT\r\n" + 
+					"            FROM MAIN_TOKEN_MASTER MTM, TOKEN_MASTER TM\r\n" + 
+					"           WHERE     MTM.TOKEN_ID = TM.TOKEN_ID\r\n" + 
+					"                 AND EXISTS\r\n" + 
+					"                         (SELECT fdc_code\r\n" + 
+					"                            FROM WEB_USER_FDC_MAP\r\n" + 
+					"                           WHERE user_id = 'ARAN')) TOKENS\r\n" + 
+					"   WHERE     EXISTS\r\n" + 
+					"                 (SELECT *\r\n" + 
+					"                    FROM WEB_USER_TEAM_MAP\r\n" + 
+					"                   WHERE     USER_ID = 'ARAN'\r\n" + 
+					"                         AND TOKENS.SUB_TEAM_CODE =\r\n" + 
+					"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
+					"        \r\n" + 
+					"                         AND TOKENS.SUB_TEAM_CODE=NVL (null, SUB_TEAM_CODE)\r\n" + 
+					"                         and TOKENS.SERVICE_TYPE_ID=NVL (null, SERVICE_TYPE_ID)\r\n" + 
+					"                         and TOKENS.CREATE_DT between nvl(null,sysdate-30) and nvl(null,sysdate) \r\n" + 
+					"                         group by TOKENS.SUB_TEAM_CODE" + 
+					"");
 			ResultSet rs = pst.executeQuery();
 
 			List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
@@ -53,13 +82,42 @@ public class dashboardquery {
 		Connection con = DbCon.getConnection();
 
 		try {
-			PreparedStatement pst = con.prepareStatement("select service_code, abs(sum(amt)) sum \r\n" + 
-					"FROM vw_bill\r\n" + 
-					"WHERE imp_year=2076\r\n" + 
-					"AND imp_month='04'\r\n" + 
-					"AND sharing_type='Y'\r\n" + 
-					"\r\n" + 
-					"group by service_code");
+			PreparedStatement pst = con.prepareStatement("SELECT count(TOKENS.SERVICE_TYPE_ID) SCOUNT,\r\n" + 
+					"         (SELECT DESCRIPTION\r\n" + 
+					"            FROM M_SERVICE_TYPE\r\n" + 
+					"           WHERE SERVICE_TYPE_ID = TOKENS.SERVICE_TYPE_ID)    SERVICE_DESC\r\n" + 
+					"        \r\n" + 
+					"    FROM (SELECT TM.TOKEN_ID,\r\n" + 
+					"                 SUB_TOKEN_ID,\r\n" + 
+					"                 SERVICE_ID,\r\n" + 
+					"                 SRV_NO,\r\n" + 
+					"                 COMPLAIN_NO,\r\n" + 
+					"                 CONTACT_NAME,\r\n" + 
+					"                 TM.PROBLEM_ID,\r\n" + 
+					"                 TM.REMARKS,\r\n" + 
+					"                 FDC_CODE,\r\n" + 
+					"                 TM.SUB_TEAM_CODE,\r\n" + 
+					"                 TM.SOLVE_FLAG,\r\n" + 
+					"                 SERVICE_TYPE_ID,\r\n" + 
+					"                 TM.CREATE_DT\r\n" + 
+					"            FROM MAIN_TOKEN_MASTER MTM, TOKEN_MASTER TM\r\n" + 
+					"           WHERE     MTM.TOKEN_ID = TM.TOKEN_ID\r\n" + 
+					"                 AND EXISTS\r\n" + 
+					"                         (SELECT fdc_code\r\n" + 
+					"                            FROM WEB_USER_FDC_MAP\r\n" + 
+					"                           WHERE user_id = 'ARAN')) TOKENS\r\n" + 
+					"   WHERE     EXISTS\r\n" + 
+					"                 (SELECT *\r\n" + 
+					"                    FROM WEB_USER_TEAM_MAP\r\n" + 
+					"                   WHERE     USER_ID = 'ARAN'\r\n" + 
+					"                         AND TOKENS.SUB_TEAM_CODE =\r\n" + 
+					"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
+					"        \r\n" + 
+					"                         AND TOKENS.SUB_TEAM_CODE=NVL (null, SUB_TEAM_CODE)\r\n" + 
+					"                         and TOKENS.SERVICE_TYPE_ID=NVL (null, SERVICE_TYPE_ID)\r\n" + 
+					"                         and TOKENS.CREATE_DT between nvl(null,sysdate-30) and nvl(null,sysdate) \r\n" + 
+					"                         group by TOKENS.SERVICE_TYPE_ID\r\n" + 
+					"");
 			ResultSet rs = pst.executeQuery();
 
 			List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
@@ -88,13 +146,42 @@ public class dashboardquery {
 		Connection con = DbCon.getConnection();
 
 		try {
-			PreparedStatement pst = con.prepareStatement("select service_code, abs(sum(amt)) sum,imp_month\r\n" + 
-					"FROM vw_bill\r\n" + 
-					"WHERE imp_year=2076\r\n" + 
-					"\r\n" + 
-					"AND sharing_type='N'\r\n" + 
-					"\r\n" + 
-					"group by service_code,imp_month");
+			PreparedStatement pst = con.prepareStatement("SELECT count(TOKENS.SERVICE_TYPE_ID) SCOUNT,\r\n" + 
+					"         (SELECT DESCRIPTION\r\n" + 
+					"            FROM M_SERVICE_TYPE\r\n" + 
+					"           WHERE SERVICE_TYPE_ID = TOKENS.SERVICE_TYPE_ID)    SERVICE_DESC\r\n" + 
+					"        \r\n" + 
+					"    FROM (SELECT TM.TOKEN_ID,\r\n" + 
+					"                 SUB_TOKEN_ID,\r\n" + 
+					"                 SERVICE_ID,\r\n" + 
+					"                 SRV_NO,\r\n" + 
+					"                 COMPLAIN_NO,\r\n" + 
+					"                 CONTACT_NAME,\r\n" + 
+					"                 TM.PROBLEM_ID,\r\n" + 
+					"                 TM.REMARKS,\r\n" + 
+					"                 FDC_CODE,\r\n" + 
+					"                 TM.SUB_TEAM_CODE,\r\n" + 
+					"                 TM.SOLVE_FLAG,\r\n" + 
+					"                 SERVICE_TYPE_ID,\r\n" + 
+					"                 TM.CREATE_DT\r\n" + 
+					"            FROM MAIN_TOKEN_MASTER MTM, TOKEN_MASTER TM\r\n" + 
+					"           WHERE     MTM.TOKEN_ID = TM.TOKEN_ID\r\n" + 
+					"                 AND EXISTS\r\n" + 
+					"                         (SELECT fdc_code\r\n" + 
+					"                            FROM WEB_USER_FDC_MAP\r\n" + 
+					"                           WHERE user_id = 'ARAN')) TOKENS\r\n" + 
+					"   WHERE     EXISTS\r\n" + 
+					"                 (SELECT *\r\n" + 
+					"                    FROM WEB_USER_TEAM_MAP\r\n" + 
+					"                   WHERE     USER_ID = 'ARAN'\r\n" + 
+					"                         AND TOKENS.SUB_TEAM_CODE =\r\n" + 
+					"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
+					"        \r\n" + 
+					"                         AND TOKENS.SUB_TEAM_CODE=NVL (null, SUB_TEAM_CODE)\r\n" + 
+					"                         and TOKENS.SERVICE_TYPE_ID=NVL (null, SERVICE_TYPE_ID)\r\n" + 
+					"                         and TOKENS.CREATE_DT between nvl(null,sysdate-30) and nvl(null,sysdate) \r\n" + 
+					"                         group by TOKENS.SERVICE_TYPE_ID\r\n" + 
+					"");
 			ResultSet rs = pst.executeQuery();
 
 			List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();

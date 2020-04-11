@@ -3,7 +3,10 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,7 +83,8 @@ public class ComplainDao {
 		"                               SUB_TEAM_CODE,\r\n" + 
 		"                               SOLVE_FLAG,\r\n" + 
 		"                               PROBLEM_ID,\r\n" + 
-		"                               REMARKS,\r\n" + 
+		"                               REMARKS,\r\n" +
+		"                               SERVICE_TYPE_ID,\r\n" +
 		"                               CREATE_BY,\r\n" + 
 		"                               CREATE_DT)\r\n" + 
 		"     VALUES (?,\r\n" + 
@@ -89,6 +93,7 @@ public class ComplainDao {
 		"                FROM m_problem\r\n" + 
 		"               WHERE problem_id = ?),\r\n" + 
 		"             'N',\r\n" + 
+		"             ?,\r\n" + 
 		"             ?,\r\n" + 
 		"             ?,\r\n" + 
 		"             ?,\r\n" + 
@@ -107,7 +112,9 @@ if(servicestypelist.size()>0) {
                      pst.setString(3, (String) obj.get("PROBLEM_ID"));
                      pst.setString(4, (String) obj.get("PROBLEM_ID"));
                      pst.setString(5, (String) obj.get("REMARKS"));
-                     pst.setString(6, USER);
+                     pst.setString(6, (String) obj.get("SERVICE_ID"));
+                     
+                     pst.setString(7, USER);
                      pst.executeUpdate();
             
             	
@@ -161,6 +168,100 @@ if(servicestypelist.size()>0) {
         }
     }
 
+	
+	
+	public  List<Map<String, Object>> getComplainList(String User,String Region,String Zone,String District,String Office,String Olt,String Subteam,String Service_type,String Frm_dt,String To_dt) throws SQLException {
+        Connection con = DbCon.getConnection();
+
+        try {
+        	String qry="SELECT TOKENS.*,\r\n" + 
+        			"         (SELECT DESCRIPTION\r\n" + 
+        			"            FROM M_SERVICE_TYPE\r\n" + 
+        			"           WHERE SERVICE_TYPE_ID = TOKENS.SERVICE_TYPE_ID)    SERVICE_DESC,\r\n" + 
+        			"         (SELECT DESCRIPTION\r\n" + 
+        			"            FROM M_PROBLEM\r\n" + 
+        			"           WHERE PROBLEM_ID = TOKENS.PROBLEM_ID)              PROBLEM_DESC,\r\n" + 
+        			"           (SELECT DESCRIPTION||' '||FDC_LOCATION\r\n" + 
+        			"            FROM M_FDC \r\n" + 
+        			"           WHERE FDC_CODE  = TOKENS.FDC_CODE )              FDC_DESC\r\n" + 
+        			"    FROM (SELECT TM.TOKEN_ID,\r\n" + 
+        			"                 SUB_TOKEN_ID,\r\n" + 
+        			"                 SERVICE_ID,\r\n" + 
+        			"                 SRV_NO,\r\n" + 
+        			"                 COMPLAIN_NO,\r\n" + 
+        			"                 CONTACT_NAME,\r\n" + 
+        			"                 TM.PROBLEM_ID,\r\n" + 
+        			"                 TM.REMARKS,\r\n" + 
+        			"                 FDC_CODE,\r\n" + 
+        			"                 TM.SUB_TEAM_CODE,\r\n" + 
+        			"                 TM.SOLVE_FLAG,\r\n" + 
+        			"                 SERVICE_TYPE_ID,\r\n" + 
+        			"                 TM.CREATE_DT\r\n" + 
+        			"            FROM MAIN_TOKEN_MASTER MTM, TOKEN_MASTER TM\r\n" + 
+        			"           WHERE     MTM.TOKEN_ID = TM.TOKEN_ID\r\n" + 
+        			"                 AND EXISTS\r\n" + 
+        			"                         (SELECT fdc_code\r\n" + 
+        			"                            FROM WEB_USER_FDC_MAP\r\n" + 
+        			"                           WHERE user_id = ?)) TOKENS\r\n" + 
+        			"   WHERE     EXISTS\r\n" + 
+        			"                 (SELECT *\r\n" + 
+        			"                    FROM WEB_USER_TEAM_MAP\r\n" + 
+        			"                   WHERE     USER_ID = ?\r\n" + 
+        			"                         AND TOKENS.SUB_TEAM_CODE =\r\n" + 
+        			"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
+        			"         AND EXISTS\r\n" + 
+        			"                 (SELECT FDC_CODE\r\n" + 
+        			"                    FROM VW_FTTH_ALL_FDC\r\n" + 
+        			"                   WHERE     TOKENS.fdc_code = VW_FTTH_ALL_FDC.fdc_code\r\n" + 
+        			"                         AND REGION_CODE = NVL (?, REGION_CODE)\r\n" + 
+        			"                         AND ZONE_CODE = NVL (?, ZONE_CODE)\r\n" + 
+        			"                         AND DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
+        			"                         AND OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
+        			"                         AND OLT_CODE = NVL (?, OLT_CODE))\r\n" + 
+        			"         AND TOKENS.SUB_TEAM_CODE = NVL (?, SUB_TEAM_CODE)\r\n" + 
+        			"         AND TOKENS.SERVICE_TYPE_ID = NVL (?, SERVICE_TYPE_ID)\r\n" + 
+        			"         AND TOKENS.CREATE_DT BETWEEN NVL (common.TO_AD (?), SYSDATE - 30)\r\n" + 
+        			"                                  AND NVL (common.TO_AD (?), SYSDATE)\r\n" + 
+        			"ORDER BY token_ID, create_dt DESC";
+        	
+            PreparedStatement pst = con.prepareStatement(qry);            
+            pst.setString(1, User);
+            pst.setString(2, User);
+            pst.setString(3, Region);
+            pst.setString(4, Zone);
+            pst.setString(5, District);
+            pst.setString(6, Office);
+            pst.setString(7, Olt);
+            pst.setString(8, Subteam);
+            pst.setString(9, Service_type);
+            pst.setString(10, Frm_dt);
+            pst.setString(11, To_dt);
+            
+             
+            
+            ResultSet rs = pst.executeQuery();
+
+            List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+            Map<String, Object> row = null;
+
+            ResultSetMetaData metaData = rs.getMetaData();
+            Integer columnCount = metaData.getColumnCount();
+
+            while (rs.next()) {
+                row = new HashMap<String, Object>();
+                for (int i = 1; i <= columnCount; i++) {
+                    row.put(metaData.getColumnName(i), rs.getObject(i));
+                }
+                resultList.add(row);
+            }
+            return resultList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            con.close();
+        }
+        return null;
+    }
 	
 	
 }
