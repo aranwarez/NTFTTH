@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,8 +20,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.dao.CommonDateDao;
 import com.dao.CommonMenuDao;
+import com.dao.ComplainDao;
 import com.dao.MServiceDao;
-import com.dao.VASCommonDao;
+import com.dao.SubTeamDao;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.MenuAccess;
@@ -28,6 +31,8 @@ import com.soap.dao.CrmDao;
 
 @Controller
 public class ComplainController {
+	 private static final Logger logger = LoggerFactory.getLogger(ComplainController.class);
+		
 	private static final String classname = "../complain/list";
 
 	@RequestMapping(value = "/complain/list", method = RequestMethod.GET)
@@ -81,6 +86,34 @@ public class ComplainController {
 		return "complain/dialog";
 
 	}
+	
+	  @RequestMapping(value = "/complain/Register", method = RequestMethod.POST)
+	    @ResponseBody
+	    public String serviceDelete(String JSON,String Complain_no,String Remarks,String SRV_NO, String contactName,String fdcname,Model model, Locale locale,HttpSession session) {
+	        logger.info("Registering new service for", locale);
+	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+			if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+			}
+
+	        ComplainDao dao = new ComplainDao();
+	    	ObjectMapper mapper = new ObjectMapper();
+			
+	        String msg = null;
+	        try {
+	        	List<Map<String, Object>> myObjects = mapper.readValue(JSON,
+				        new TypeReference<List<Map<String, Object>>>() {
+				});
+				            msg = dao.saveProblem(myObjects,"1", SRV_NO, Complain_no, contactName, Remarks, user.getUSER_ID(),fdcname);
+	        } catch (Exception e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+	        return msg;
+
+	    }
+
 
 	
 
