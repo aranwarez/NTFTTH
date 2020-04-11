@@ -1,14 +1,15 @@
 var problemlist;
 $(document).ready(function() {
-
-	$.get('../problem/JSlist', {
-		
-	}, function(response) {
-		problemlist=response;
-			getProblemlist($('#serviceid').val());
-	});
-
 	
+	 $.get('../problem/JSlist', {
+		
+ }, function(response) {
+ problemlist=response;
+ // getProblemlist($('#serviceid').val());
+ });
+
+	 getservicetypes();
+		
 
 });
 
@@ -21,7 +22,6 @@ function getCustomerInfo() {
 		infotype : $('#infotype').val(),
 		info : $('#info').val()
 	}, function(response) {
-		console.log(response);
 		try{
 			TEST = JSON.parse(response);
 			$('#divcustomerinfo').fadeIn();
@@ -74,9 +74,10 @@ function getCustomerInfo() {
 
 function getProblemlist(serviceid){
 // alert(serviceid);
-	var select = $('#problemid');
-    select.find('option').remove();
- // $('<option>').val("").text("Select").appendTo(select);
+	var select = $('#servicetypeid'+serviceid);
+ 
+	select.find('option').remove();
+  $('<option>').val("").text("Select").appendTo(select);
     $.each(problemlist, function (index, value) {
     	// alert(value.SERVICE_TYPE_ID);
     	if(value.SERVICE_TYPE_ID==serviceid){
@@ -84,6 +85,89 @@ function getProblemlist(serviceid){
     	}
     });
 	
+}
+
+function getservicetypes(){
+	$.get('../serviceType/jsonlist', {
+		
+	}, function(response) {
+	// debugger;
+		 $.each(response, function (index, value) {
+			 
+			 var appenddiv="<input class='cproblemid' id='cproblemid"+value.SERVICE_TYPE_ID+"' type='checkbox'>"+":"+value.DESCRIPTION+"-"+"<select id='servicetypeid"+value.SERVICE_TYPE_ID+"'></select><input type='text' id='remarksid"+value.SERVICE_TYPE_ID+"' class='form-control' placeholder='Remarks for "+value.DESCRIPTION+"'></BR>";
+			 $('#complainservcies').append(appenddiv);	 
+				
+			 getProblemlist(value.SERVICE_TYPE_ID);
+	
+				
+				
+			
+		 
+		    });
+		 
+		
+	});
+
+	
+}
+
+function PostRegister(){
+	if($('#cpeSN').html()==""){
+		alert("Please enter customer infomation first!!!");
+				return false;
+		
+	}
+	
+	var contactname=$('#customerName').html();
+	var contactperno=$('#ContantNum').html();
+	if($('#contactperno').val()!=""){
+		contactperno=$('#contactperno').val();
+	}
+	
+	if($('#contatper').val()!=""){
+		contactname=$('#contatper').val();
+	}
+	
+	if ($('.cproblemid:checked').length == 0) {
+		if (confirm("No service has been checked!!! This will halted for FLMT!")) {
+		} else {
+			  return false;
+			}
+	}
+	
+			// generate arraylist for multiple services type
+		
+			var transnop = [];
+			$(".cproblemid:checked").each(function() {
+				var myobject = new Object();
+				myobject.SERVICE_ID=$(this).attr('id').substring(10);
+				myobject.PROBLEM_ID=$('#servicetypeid'+myobject.SERVICE_ID).val();
+				myobject.REMARKS=$('#remarksid'+myobject.SERVICE_ID).val();
+				
+				transnop.push(myobject);
+			});
+			
+			
+			
+			
+			
+			// arraylist generation till here-----------------------
+			$.post('../complain/Register', {
+				 Complain_no:contactperno,
+				 SRV_NO : $('#cpeSN').html(),
+				 Remarks: $('#userremark').val(),
+				 contactName : contactname,
+				 JSON:JSON.stringify(transnop),
+				 fdcname:$('#fdcName').html()
+				 	 }, function(response) {
+			alert(response);
+			 });
+		
+	// alert("No service has been checked!!! This will be");
+		
+	
+
+// console.log(trasnop);
 }
 
 
