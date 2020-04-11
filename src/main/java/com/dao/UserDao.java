@@ -278,13 +278,13 @@ public class UserDao {
 
 
         try {
-            PreparedStatement pst = con.prepareStatement("select * from vw_user_information where WORKING_REGION_CODE=nvl(?, WORKING_REGION_CODE)  and \r\n" + 
-            		"WORKING_ZONE_CODE=nvl(?, WORKING_ZONE_CODE) and WORKING_DIS_CODE=nvl(?, WORKING_DIS_CODE) and WORKING_OFFICE_CODE=nvl(?, WORKING_OFFICE_CODE)");
+            PreparedStatement pst = con.prepareStatement("select * from vw_user_information where WORKING_REGION_CODE=nvl(null, WORKING_REGION_CODE)  and \r\n" + 
+            		"WORKING_ZONE_CODE=nvl(null, WORKING_ZONE_CODE) and WORKING_DIS_CODE=nvl(null, WORKING_DIS_CODE) and WORKING_OFFICE_CODE=nvl(null, WORKING_OFFICE_CODE)");
             
-            pst.setString(1, WORKING_REGION_CODE);
-            pst.setString(2, WORKING_ZONE_CODE);
-            pst.setString(3, WORKING_DIS_CODE);
-          pst.setString(4, WORKING_OFFICE_CODE);
+//            pst.setString(1, WORKING_REGION_CODE);
+//            pst.setString(2, WORKING_ZONE_CODE);
+//            pst.setString(3, WORKING_DIS_CODE);
+//            pst.setString(4, WORKING_OFFICE_CODE);
            
             ResultSet rs = pst.executeQuery();
 

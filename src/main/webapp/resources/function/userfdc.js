@@ -10,23 +10,12 @@ $(document).ready(function() {
 		"fixedHeader": true,
 	});
 	
-	$("#ROLE_CODE").val('');
-
+	
 	$.fn.dataTable.ext.errMode = 'none';
-	
+	viewUser(null,null,null,null);
 	
 	
 });
-
-
-var getCurrentNepaliDate = function(){ var ddt='';
-$.get('../currentNepaliDate', {getRegionList: "getlist"}, function (response) {
-    
-	ddt= response;
-	return ddt;
-});
- }
-
 
 
 function getEditMode() {
@@ -60,15 +49,20 @@ function getZone(){
 	$.get("../getZoneByRegion", {
 		REGION_CODE : REGION_CODE
 	}, function(data) {
-	
+		
+		 var select = $('#ZONE_CODE');
+	        select.find('option').remove();
+	        $('<option>').val("").text("SELECT Zone").appendTo(select);	        
+	        $('#DISTRICT_CODE').find('option:not(:first)').remove();	        
+	        $('#OFFICE_CODE').find('option:not(:first)').remove();	        
+	        $('#OLT_CODE').find('option:not(:first)').remove();
+	        
 		if (data.length == 0 ||data.length == undefined) {
 			
 			clearDataTable();
 			return;
 		}	
-        var select = $('#ZONE_CODE');
-		        select.find('option').remove();
-		        $('<option>').val("").text("SELECT Zone").appendTo(select);
+       
 		        $.each(data, function (index, value) {
 		            $('<option>').val(value.ZONE_CODE).text(value.DESCRIPTION).appendTo(
 		                    select);
@@ -88,14 +82,21 @@ function getDistrict(){
 		ZONE_CODE : ZONE_CODE
 	}, function(data) {
 		
+		 var select = $('#DISTRICT_CODE');
+	        select.find('option').remove();
+	        $('<option>').val("").text("SELECT District").appendTo(select);
+	        
+	         
+	        $('#OFFICE_CODE').find('option:not(:first)').remove();	        
+	        $('#OLT_CODE').find('option:not(:first)').remove();
+	        
+	        
 		if (data.length == 0 ||data.length == undefined) {
 			
 			clearDataTable();
 			return;
 		}	
-        var select = $('#DISTRICT_CODE');
-		        select.find('option').remove();
-		        $('<option>').val("").text("SELECT District").appendTo(select);
+       
 		        $.each(data, function (index, value) {
 		            $('<option>').val(value.DISTRICT_CODE).text(value.DESCRIPTION).appendTo(
 		                    select);
@@ -104,6 +105,8 @@ function getDistrict(){
 					
 		        
 	});
+
+
 }
 
 
@@ -115,14 +118,17 @@ function getOffice(){
 		DISTRICT_CODE : DISTRICT_CODE
 	}, function(data) {
 		
+		var select = $('#OFFICE_CODE');
+        select.find('option').remove();
+        $('<option>').val("").text("SELECT Office").appendTo(select);
+     	        
+        $('#OLT_CODE').find('option:not(:first)').remove();
 		if (data.length == 0 ||data.length == undefined) {
 			
 			clearDataTable();
 			return;
 		}	
-        var select = $('#OFFICE_CODE');
-		        select.find('option').remove();
-		        $('<option>').val("").text("SELECT Office").appendTo(select);
+        
 		        $.each(data, function (index, value) {
 		            $('<option>').val(value.OFFICE_CODE).text(value.DESCRIPTION).appendTo(
 		                    select);
@@ -131,6 +137,8 @@ function getOffice(){
 					
 		        
 	});
+	
+	
 }
 
 
@@ -142,14 +150,18 @@ function getOLT(){
 		OFFICE_CODE : OFFICE_CODE
 	}, function(data) {
 		
+		
+		  var select = $('#OLT_CODE');
+	        select.find('option').remove();
+	        $('<option>').val("").text("SELECT OLT").appendTo(select);
+	              
+	        $('#OLT_CODE').find('option:not(:first)').remove();
 		if (data.length == 0 ||data.length == undefined) {
 			
 			clearDataTable();
 			return;
 		}	
-        var select = $('#OLT_CODE');
-		        select.find('option').remove();
-		        $('<option>').val("").text("SELECT OLT").appendTo(select);
+      
 		        $.each(data, function (index, value) {
 		            $('<option>').val(value.OLT_CODE).text(value.DESCRIPTION+"-"+value.OLT_CODE).appendTo(
 		                    select);
@@ -161,7 +173,6 @@ function getOLT(){
 	
 }
 function fetchView(){
-	glbUser=$("#USER_ID").val();
 	
 	
 //	var FDC_CODE=$("#FDC_CODE").val();	
@@ -172,17 +183,6 @@ function fetchView(){
 	var OLT_CODE=$("#OLT_CODE").val();	
 	var USER_ID=$("#USER_ID").val();
 	
-	viewUser(REGION_CODE,ZONE_CODE,DISTRICT_CODE,OFFICE_CODE);	
-	
-	viewFDC(REGION_CODE,ZONE_CODE,DISTRICT_CODE,OFFICE_CODE,OLT_CODE);
-	$("#USER_ID").val(glbUser);
-	
-	getEditMode();
-}
-
-
-
-function viewFDC(REGION_CODE,ZONE_CODE,DISTRICT_CODE,OFFICE_CODE,OLT_CODE){
 	var currentdate='';
 	$.get('../currentNepaliDate', {getRegionList: "getlist"}, function (response) {
 	    
@@ -190,6 +190,21 @@ function viewFDC(REGION_CODE,ZONE_CODE,DISTRICT_CODE,OFFICE_CODE,OLT_CODE){
 		
 	});
 	
+	setTimeout(function () {
+		viewFDC(currentdate,REGION_CODE,ZONE_CODE,DISTRICT_CODE,OFFICE_CODE,OLT_CODE);
+		}, 1000);
+	
+
+	
+	getEditMode();
+	
+}
+
+
+
+function viewFDC(currentdate1,REGION_CODE,ZONE_CODE,DISTRICT_CODE,OFFICE_CODE,OLT_CODE){
+	
+
 	$.get("../getFDCByALL", {
 		REGION_CODE : REGION_CODE,
 		ZONE_CODE:ZONE_CODE,
@@ -235,8 +250,8 @@ function viewFDC(REGION_CODE,ZONE_CODE,DISTRICT_CODE,OFFICE_CODE,OLT_CODE){
 		                $('#DEACTIVE_DT'+counter).nepaliDatePicker();
 		           
 		                
-		                $('#ACTIVE_DT'+counter).val(currentdate.toString());
-		                $('#DEACTIVE_DT'+counter).val(currentdate.toString());
+		                $('#ACTIVE_DT'+counter).val(currentdate1);
+		                $('#DEACTIVE_DT'+counter).val(currentdate1);
 		                
 		                counter++;
 
