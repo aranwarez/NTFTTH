@@ -352,6 +352,7 @@ function clearDataTable() {
 		currentdate= response;
 		
 	});
+	setTimeout(function () {
 	for (i = 1; i <= table.fnGetData().length; i++) {
 
 		if ($('#USER_ID').val() != null) {
@@ -363,6 +364,7 @@ function clearDataTable() {
 
 		}
 	}
+	});
 }
 function checkDropDown(fdcCode,activeDt,deactiveDt){
 	
