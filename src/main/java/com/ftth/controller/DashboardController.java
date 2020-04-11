@@ -7,8 +7,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.sl.usermodel.ObjectMetaData.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,21 +41,21 @@ public class DashboardController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/charts/srvreveneue", method = RequestMethod.GET)
+	@RequestMapping(value = "/charts/srvreveneue", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Map<String, Object>> srvwiserevenue(Locale locale, Model model, HttpSession session) throws SQLException {
 		dashboardquery dao=new dashboardquery();
 		return dao.getSRVwiseRevenue();
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/charts/srvpayable", method = RequestMethod.GET)
+	@RequestMapping(value = "/charts/srvpayable", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Map<String, Object>> srvwisepayable(Locale locale, Model model, HttpSession session) throws SQLException {
 		dashboardquery dao=new dashboardquery();
 		return dao.getSRVwisepayable();
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/charts/srvmonthly", method = RequestMethod.GET)
+	@RequestMapping(value = "/charts/srvmonthly", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Map<String, Object>> srvwisemonthly(Locale locale, Model model, HttpSession session) throws SQLException {
 		dashboardquery dao=new dashboardquery();
 		return dao.test();
