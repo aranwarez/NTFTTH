@@ -4,7 +4,11 @@ $(document).ready(function() {
 	});
 	
 	 
-	
+	setTimeout(function(){
+		
+		firstTimeLoad();
+		
+		}, 0000);
 	    
 	$('#checkDatatable').dataTable({
 		"paging" : false,
@@ -14,8 +18,7 @@ $(document).ready(function() {
 		"fixedHeader": true,
 	});
 	
-	$("#ROLE_CODE").val('');
-
+	
 	$.fn.dataTable.ext.errMode = 'none';
 	
 	
@@ -28,77 +31,47 @@ $(document).ready(function() {
 
 function getEditMode() {
 
-	var SERVICE_TYPE_ID = $("#SERVICE_TYPE_ID").val();
+	var USER_ID = $("#USER_ID").val();
 
-	$.get("../getServiceAccess", {
-		SERVICE_TYPE_ID : SERVICE_TYPE_ID
+	$.get("../getuserteam", {
+		USER_ID : USER_ID
 	}, function(data) {
 
-//		console.log(data.length);
-		
 		if (data.length == 0 ||data.length == undefined) {
 			
 			clearDataTable();
 			return;
 		}	
-		
-
-
-	
-//		for (i = 1; i <= table.fnGetData().length; i++) {
 			
 			
 			$.each(data, function(index, value) {
-				// Get the total rows
-				
-//				alert(value.sub_TEAM_CODE);
-				
-				console.log(value.sub_TEAM_CODE);
-				
-				checkDropDown(value.sub_TEAM_CODE);
-
-//				if ($('.mastersetup' + i).val() == value.sub_TEAM_CODE) {
-//					
-//					$(".list" + i).val('Y');
-//					
-//					console.log(value.sub_TEAM_CODE);
-//					console.log('YES= '+i);
-//					
-//				}
-							
-				
+				// Get the total rows		
+				checkDropDown(value.sub_TEAM_CODE,value.active_DT,value.deactive_DT);
 
 			});
 					
-			
-//	}
-		
-		
-		
-		// console.log(JSON.stringify(data));
 
 	});
 }
 
-function saveServiceTeam() {
+function saveUserTeam () {
 
 	var table = $('#checkDatatable').dataTable();
-	
-//	alert(table.fnGetData().length);
-	
+
 	
 	// Get the total rows
 	var inserteditdeletepost = [];
 	for (i = 1; i <= table.fnGetData().length; i++) {
 		var myobj = new Object();		
-		if ($('#SERVICE_TYPE_ID').val() != null) {			
+		if ($('#USER_ID').val() != null) {			
 //			console.log($('.list' + i).val());
 			
 			if($('.list' + i).val()=='Y'){
 
-			myobj.SERVICE_TYPE_ID = $("#SERVICE_TYPE_ID").val();
+			myobj.USER_ID = $("#USER_ID").val();
 			myobj.SUB_TEAM_CODE = $('.mastersetup' + i).val();
-			
+			myobj.ACTIVE_DT = $('#ACTIVE_DT' + i).val();
+			myobj.DEACTIVE_DT = $('#DEACTIVE_DT' + i).val();
 		
 			myobj.LIST_FLAG = $('.list' + i).val();
 			
@@ -111,8 +84,8 @@ function saveServiceTeam() {
 //		console.log(JSON.stringify(inserteditdeletepost));
 
 	
-	$.post("../saveServiceTeam", {
-		SERVICE_TYPE_ID : $("#SERVICE_TYPE_ID").val(),
+	$.post("../saveUserTeam", {
+		USER_ID : $("#USER_ID").val(),
 		menu_mode : JSON.stringify(inserteditdeletepost)
 	}, function(data) {
 		alert(data);
@@ -124,17 +97,27 @@ function saveServiceTeam() {
 function clearDataTable() {
 	var table = $('#checkDatatable').dataTable();
 	
+	var currentdate='';
+	$.get('../currentNepaliDate', {getRegionList: "getlist"}, function (response) {
+	    
+		currentdate= response;
+		
+	});
+	
+	
 	for (i = 1; i <= table.fnGetData().length; i++) {
 
-		if ($('#SERVICE_TYPE_ID').val() != null) {
+		if ($('#USER_ID').val() != null) {
 
+			$('#ACTIVE_DT' + i).val(currentdate);
+			$('#DEACTIVE_DT' + i).val(currentdate);
 			$('.list' + i).val('N');
 
 
 		}
 	}
 }
-function checkDropDown(subteamcode){
+function checkDropDown(subteamcode,activedt,deactivedt){
 	
 //	mastersetup1
 	
@@ -145,10 +128,12 @@ var table = $('#checkDatatable').dataTable();
 		
 		if($('.mastersetup' + i).val()===subteamcode){
 			
+			$('#ACTIVE_DT' + i).val(activedt);
+			$('#DEACTIVE_DT' + i).val(deactivedt);
+			
 			$('.list' + i).val('Y');
 			
-		}
-			
+		}	
 		
 		
 		
@@ -156,3 +141,37 @@ var table = $('#checkDatatable').dataTable();
 	
 	
 }
+
+function firstTimeLoad(){
+	
+//	mastersetup1
+	
+	var currentdate='';
+	$.get('../currentNepaliDate', {getRegionList: "getlist"}, function (response) {
+	    
+		currentdate= response;
+		
+	});
+	
+	var table = $('#checkDatatable').dataTable();
+		
+		for (i = 1; i <= table.fnGetData().length; i++) {				
+		
+			  $('#ACTIVE_DT'+i).nepaliDatePicker();
+               $('#DEACTIVE_DT'+i).nepaliDatePicker();          
+			
+			$('#ACTIVE_DT'+i).val(currentdate.toString());
+	       $('#DEACTIVE_DT'+i).val(currentdate.toString());
+	       	
+		}
+	
+}
+function checkFlag(flag){
+	
+	var table = $('#checkDatatable').dataTable();
+		
+		for (i = 1; i <= table.fnGetData().length; i++) {
+			$('.list' + i).val(flag);
+				
+		}
+	}

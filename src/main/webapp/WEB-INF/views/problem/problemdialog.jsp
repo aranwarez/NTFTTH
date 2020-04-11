@@ -31,7 +31,27 @@
                       
                         </select>        
                     </div>
-                   
+                    
+                    <div class="form-group">
+                        <label for="jsonlist">Team</label> 
+                        <select  name="TEAM_CODE" id="TEAM_CODE"  onchange="return getSubTeamList('Y')" class="form-control chosen-select" style="width:350px;">
+                        <option value="">Select Team</option>
+                         <c:forEach var="user" items="${teamlist}">                        
+                            <option value='${user.TEAM_CODE}'>${user.DESCRIPTION}</option>
+                          
+                            
+                            </c:forEach>
+                            
+                        </select>        
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="jsonlist">Sub Team</label> 
+                        <select  name="SUB_TEAM_CODE" id="SUB_TEAM_CODE" class="form-control chosen-select" style="width:350px;">
+                        
+                       <option value="">Select Sub-Team</option>
+                        </select>        
+                    </div>
                     
                     
                     <div class="form-group">
@@ -90,7 +110,25 @@
                       
                         </select>        
                     </div>
-                   
+                   <div class="form-group">
+                        <label for="jsonlist">Team</label> 
+                        <select  name="EDITTEAM_CODE" id="EDITTEAM_CODE" onchange="return getSubTeamList('N')" class="form-control chosen-select" style="width:350px;">
+                        <option value="">Select Team</option>
+                         <c:forEach var="user" items="${teamlist}">                        
+                            <option value='${user.TEAM_CODE}'>${user.DESCRIPTION}</option>
+                          
+                            
+                            </c:forEach>
+                            
+                        </select>        
+                    </div>
+                    <div class="form-group">
+                        <label for="jsonlist">Sub Team</label> 
+                        <select  name="EDITSUB_TEAM_CODE" id="EDITSUB_TEAM_CODE" class="form-control chosen-select" style="width:350px;">
+                        
+                       <option value="">Select Sub-Team</option>
+                        </select>        
+                    </div>
                     
                     
                     <div class="form-group">

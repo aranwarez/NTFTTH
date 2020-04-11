@@ -93,7 +93,7 @@
 			<section class="content">
 				<div class="row">
 					<div class="col-xs-12">
-						<select id="SERVICE_TYPE_ID" onchange="return getEditMode()" class="form-control">
+						<select id="USER_ID" onchange="return getEditMode()" class="form-control">
 							<option>Select User</option>
 						<c:forEach var="user3" items="${userteam_list}">
 												
@@ -190,7 +190,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/userteam.js?a=185" />"></script>
+	<script src="<c:url value="/resources/function/userteam.js?a=1585" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 

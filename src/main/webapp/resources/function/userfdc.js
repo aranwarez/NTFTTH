@@ -331,11 +331,18 @@ function saveUserFDC() {
 }
 function clearDataTable() {
 	var table = $('#checkDatatable').dataTable();
-	
+	var currentdate='';
+	$.get('../currentNepaliDate', {getRegionList: "getlist"}, function (response) {
+	    
+		currentdate= response;
+		
+	});
 	for (i = 1; i <= table.fnGetData().length; i++) {
 
 		if ($('#USER_ID').val() != null) {
 
+			$('#ACTIVE_DT' + i).val(currentdate);
+			$('#DEACTIVE_DT' + i).val(currentdate);
 			$('.list' + i).val('N');
 
 

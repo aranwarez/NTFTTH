@@ -1,12 +1,8 @@
 package com.model;
 
 public class UserTeamModel {
-	private String WUTM_ID;
-	private String USER_ID;
-	private String MSTM_ID;
-	private String ACTIVE_DT;
-	private String DEACTIVE_DT;
 	
+	private String WUTM_ID;
 	public String getWUTM_ID() {
 		return WUTM_ID;
 	}
@@ -19,11 +15,11 @@ public class UserTeamModel {
 	public void setUSER_ID(String uSER_ID) {
 		USER_ID = uSER_ID;
 	}
-	public String getMSTM_ID() {
-		return MSTM_ID;
+	public String getSUB_TEAM_CODE() {
+		return SUB_TEAM_CODE;
 	}
-	public void setMSTM_ID(String mSTM_ID) {
-		MSTM_ID = mSTM_ID;
+	public void setSUB_TEAM_CODE(String sUB_TEAM_CODE) {
+		SUB_TEAM_CODE = sUB_TEAM_CODE;
 	}
 	public String getACTIVE_DT() {
 		return ACTIVE_DT;
@@ -37,5 +33,10 @@ public class UserTeamModel {
 	public void setDEACTIVE_DT(String dEACTIVE_DT) {
 		DEACTIVE_DT = dEACTIVE_DT;
 	}
-
+	private String USER_ID;	
+	private String SUB_TEAM_CODE;
+	private String ACTIVE_DT;
+	private String DEACTIVE_DT;
+	
+	
 }

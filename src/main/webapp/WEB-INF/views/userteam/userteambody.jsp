@@ -6,22 +6,28 @@
 <c:set var="count" value="0" scope="page" />
 
 <div class="col-xs-12 table-responsive">
-
+ 
+                
+                  <input type="radio" name="IS_ACCESS_ALL" class="flat-red" onclick="checkFlag('Y');"> Access All               
+                  <input type="radio" name="IS_ACCESS_ALL" class="flat-red" onclick="checkFlag('N');" > Disable ALL
+                
+               
+                 
+             
 	<table id="checkDatatable" class="table table-striped example1">
 		<thead>
 			<tr>
 				<th></th>
-				<th>Service Team</th>
+				<th>Sub Team</th>
 				<th>Active Date</th>
 				<th>DeActive Date</th>
-				
+				<td>Access</td>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var="pmanu" items="${serviceteamlist}">
+			<c:forEach var="pmanu" items="${subteamlist}">
 			
-			<c:set var="count" value="${count + 1}" scope="page"/>
-			
+			<c:set var="count" value="${count + 1}" scope="page"/>			
 				<tr>
 					<td>${count}</td>
 					<td>
@@ -32,6 +38,16 @@
 							</label>
 						</div>
 					</td>
+					
+					<td>
+					<input type="text" class="nepali-calender from-control" id="ACTIVE_DT${count}">
+					</td>
+						
+					<td>
+					<input type="text" class="nepali-calender from-control" id="DEACTIVE_DT${count}">
+					</td>
+						
+		        
 					<td>
 					<select class="list${count}">
 							<option value="Y">Y</option>
@@ -49,6 +65,6 @@
 
 
 <input type="submit" name="save" value="save"
-	onclick="return saveServiceTeam()" class="btn btn-success">
+	onclick="return saveUserTeam()" class="btn btn-success">
 
 

@@ -16,9 +16,9 @@ public class ProblemDao {
 	
 	public List<Map<String, Object>> getProblemList() throws SQLException {
         Connection con = DbCon.getConnection();
-System.out.println("sg");
+
         try {
-            PreparedStatement pst = con.prepareStatement("SELECT\r\n" + 
+            PreparedStatement pst = con.prepareStatement("SELECT SUB_TEAM_CODE,\r\n" + 
             		"PROBLEM_ID,DESCRIPTION,(SELECT M_SERVICE_TYPE.DESCRIPTION from M_SERVICE_TYPE \r\n" + 
             		"WHERE M_SERVICE_TYPE.SERVICE_TYPE_ID=M_PROBLEM.SERVICE_TYPE_ID) AS SERVICE_TYPE_DESC,\r\n" + 
             		"SERVICE_TYPE_ID,common.to_BS(ACTIVE_DT) AS ACTIVE_DT,\r\n" + 
@@ -50,13 +50,13 @@ System.out.println("sg");
     }
 	
 	public String saveProblem(String DESCRIPTION, String SERVICE_TYPE_ID, String ACTIVE_DT,
-            String DEACTIVE_DT, String ACTIVE_STATUS, String USER) throws SQLException {
+            String DEACTIVE_DT, String ACTIVE_STATUS, String USER,String SUB_TEAM_CODE) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
 
             String qry = "INSERT INTO M_PROBLEM\r\n" + 
-            		"(PROBLEM_ID,DESCRIPTION,SERVICE_TYPE_ID,ACTIVE_DT,DEACTIVE_DT,ACTIVE_STATUS,CREATE_BY,CREATE_DT)\r\n" + 
-            		"VALUES((PROBLEM_ID.nextval),?,?,(common.to_ad(?)),(common.to_ad(?)),?,?,SYSDATE)";
+            		"(PROBLEM_ID,DESCRIPTION,SERVICE_TYPE_ID,ACTIVE_DT,DEACTIVE_DT,ACTIVE_STATUS,CREATE_BY,CREATE_DT,SUB_TEAM_CODE)\r\n" + 
+            		"VALUES((PROBLEM_ID.nextval),?,?,(common.to_ad(?)),(common.to_ad(?)),?,?,SYSDATE,?)";
 
             PreparedStatement pst = con.prepareStatement(qry);
             pst.setString(1, DESCRIPTION);
@@ -64,9 +64,9 @@ System.out.println("sg");
             pst.setString(3, ACTIVE_DT);
             pst.setString(4, DEACTIVE_DT);
             pst.setString(5, ACTIVE_STATUS);
-            pst.setString(6, USER);
-           
-
+            pst.setString(6, USER);           
+            pst.setString(7, SUB_TEAM_CODE);
+            
             pst.executeUpdate();
 
             return "Succesfully Saved Item";
@@ -81,14 +81,14 @@ System.out.println("sg");
     }
 	
 	public String updateProblem(String PROBLEM_ID,String DESCRIPTION, String SERVICE_TYPE_ID, String ACTIVE_DT,
-            String DEACTIVE_DT, String ACTIVE_STATUS, String USER) throws SQLException {
+            String DEACTIVE_DT, String ACTIVE_STATUS, String USER,String SUB_TEAM_CODE) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
 
             String qry ="update  M_PROBLEM\r\n" + 
             		" set DESCRIPTION=?,SERVICE_TYPE_ID=?,\r\n" + 
             		"ACTIVE_DT=common.to_ad(?),DEACTIVE_DT=common.to_ad(?),ACTIVE_STATUS=?,\r\n" + 
-            		"UPDATE_BY=?,UPDATE_DT=sysdate \r\n" + 
+            		"UPDATE_BY=?,SUB_TEAM_CODE=?,UPDATE_DT=sysdate \r\n" + 
             		"where  PROBLEM_ID=?";
 
             PreparedStatement pst = con.prepareStatement(qry);
@@ -98,8 +98,9 @@ System.out.println("sg");
             pst.setString(3, ACTIVE_DT);
             pst.setString(4, DEACTIVE_DT);
             pst.setString(5, ACTIVE_STATUS);
-            pst.setString(6, USER);
-            pst.setString(7, PROBLEM_ID);
+            pst.setString(6, USER);            
+            pst.setString(7, SUB_TEAM_CODE);
+            pst.setString(8, PROBLEM_ID);
            
 
             pst.executeUpdate();
