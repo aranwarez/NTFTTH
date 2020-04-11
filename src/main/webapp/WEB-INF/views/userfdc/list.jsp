@@ -143,7 +143,7 @@
  				
  				  
  				  <div class="col-xs-3">
-						<select id="OLT_CODE" onchange="return getEditMode()" class="form-control">
+						<select id="OLT_CODE"  class="form-control">
 							<option value="">Select Olt </option>											
 					    </select>
 
@@ -248,7 +248,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/userfdc.js?a=90052662" />"></script>
+	<script src="<c:url value="/resources/function/userfdc.js?a=85" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 
