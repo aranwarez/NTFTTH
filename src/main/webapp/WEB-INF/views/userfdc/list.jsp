@@ -245,10 +245,11 @@
 		$(function() {
 
 			$('#example1').DataTable()
+			$("#REGION_CODE,#ZONE_CODE,#DISTRICT_CODE,#OFFICE_CODE,#USER_ID").select2();
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/userfdc.js?a=85" />"></script>
+	<script src="<c:url value="/resources/function/userfdc.js?a=885" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 

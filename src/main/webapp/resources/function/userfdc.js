@@ -352,19 +352,19 @@ function clearDataTable() {
 		currentdate= response;
 		
 	});
-	setTimeout(function () {
+	setTimeout(function(){
 	for (i = 1; i <= table.fnGetData().length; i++) {
 
-		if ($('#USER_ID').val() != null) {
+//		if ($('#USER_ID').val() != null) {
 
 			$('#ACTIVE_DT' + i).val(currentdate);
 			$('#DEACTIVE_DT' + i).val(currentdate);
 			$('.list' + i).val('N');
 
 
-		}
+//		}
 	}
-	});
+	 }, 2000);
 }
 function checkDropDown(fdcCode,activeDt,deactiveDt){
 	
