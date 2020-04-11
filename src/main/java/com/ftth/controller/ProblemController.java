@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dao.MServiceTypeDao;
 import com.dao.ProblemDao;
+import com.dao.TeamDao;
 import com.model.UserInformationModel;
 
 @Controller
@@ -26,18 +27,26 @@ public class ProblemController {
 
 	@RequestMapping(value = "/problem/list", method = RequestMethod.GET)
 	public String serviceTypelist(Locale locale, Model model) throws SQLException {
-
-		logger.info("Getting Problem List", locale);
+		logger.info("Getting Problem List", locale);		
 		ProblemDao dao = new ProblemDao();
+		TeamDao teamdao=new TeamDao();
+		
 		List<Map<String, Object>> list = null;
+		
+		List<Map<String, Object>> teamlist = null;
+		
 		try {
 			list = dao.getProblemList();
+			teamlist=teamdao.getTeamList();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		model.addAttribute("fx", "Problem List");
 		model.addAttribute("data_list", list);
+		model.addAttribute("teamlist", teamlist);
+		
 //	        MServiceDao servicedao=new MServiceDao();
 //	        List<Map<String, Object>> service_list = servicedao.getServiceList();
 
@@ -71,7 +80,7 @@ public class ProblemController {
 	@RequestMapping(value = "/problem/saveJS", method = RequestMethod.POST)
 	@ResponseBody
 	public String saveJSService(String DESCRIPTION, String SERVICE_TYPE_ID, String ACTIVE_DT, String DEACTIVE_DT,
-			String ACTIVE_STATUS, HttpSession session, Model model, Locale locale) {
+			String ACTIVE_STATUS,String SUB_TEAM_CODE, HttpSession session, Model model, Locale locale) {
 
 		logger.info("Save Service {}.", locale);
 		ProblemDao dao = new ProblemDao();
@@ -83,7 +92,7 @@ public class ProblemController {
 		model.addAttribute("userName", "NEPal");
 		String msg = null;
 		try {
-			msg = dao.saveProblem(DESCRIPTION, SERVICE_TYPE_ID, ACTIVE_DT, DEACTIVE_DT, ACTIVE_STATUS, USER);
+			msg = dao.saveProblem(DESCRIPTION, SERVICE_TYPE_ID, ACTIVE_DT, DEACTIVE_DT, ACTIVE_STATUS, USER,SUB_TEAM_CODE);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -94,7 +103,7 @@ public class ProblemController {
 	@RequestMapping(value = "/problem/update", method = RequestMethod.POST)
 	@ResponseBody
 	public String updateService(String PROBLEM_ID, String DESCRIPTION, String SERVICE_TYPE_ID, String ACTIVE_DT,
-			String DEACTIVE_DT, String ACTIVE_STATUS, HttpSession session, Model model, Locale locale) {
+			String DEACTIVE_DT, String ACTIVE_STATUS,String SUB_TEAM_CODE, HttpSession session, Model model, Locale locale) {
 
 		logger.info("Updata Service {}.", locale);
 		ProblemDao dao = new ProblemDao();
@@ -106,7 +115,7 @@ public class ProblemController {
 		String msg = null;
 		try {
 			msg = dao.updateProblem(PROBLEM_ID, DESCRIPTION, SERVICE_TYPE_ID, ACTIVE_DT, DEACTIVE_DT, ACTIVE_STATUS,
-					USER);
+					USER,SUB_TEAM_CODE);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

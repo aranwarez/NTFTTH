@@ -114,7 +114,8 @@
 										<tr>
 											<th></th>
 											<th>DESCRIPTION</th>
-											<th>Service Type</th>											
+											<th>Service Type</th>
+											<th>SubTeam</th>											
 											<th>ACTIVE_DT</th>
 											<th>DEACTIVE_DT</th>
 											<th>ACTIVE_STATUS</th>
@@ -130,7 +131,7 @@
 												<td>${user.PROBLEM_ID}</td>
 												<td>${user.DESCRIPTION}</td>
 												<td>${user.SERVICE_TYPE_DESC}</td>	
-											
+												<td>${user.SUB_TEAM_CODE}</td>	
 												<td>${user.ACTIVE_DT}</td>
 												<td>${user.DEACTIVE_DT}</td>
 												<td>${user.ACTIVE_STATUS}</td>
@@ -200,7 +201,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/problem.js?a=12" />"></script>
+	<script src="<c:url value="/resources/function/problem.js?a=132" />"></script>
 
 
 </body>

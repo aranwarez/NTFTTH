@@ -271,7 +271,7 @@ function viewUser(WORKING_REGION_CODE,WORKING_ZONE_CODE,WORKING_DIS_CODE,WORKING
 		        $.each(data, function (index, value) {
 //		        	if(value.LOCK_FLAG=='N'){	        		
 		        	
-		            $('<option>').val(value.USER_ID).text(value.FULL_NAME+"-"+value.WORKING_DISTRICT+"-"+value.MOBILE_NO).appendTo(
+		            $('<option>').val(value.USER_ID).text(value.FULL_NAME+"-"+value.USER_ID+"-"+value.WORKING_DISTRICT+"-"+value.MOBILE_NO).appendTo(
 		                    select);
 
 //		        	}
@@ -331,11 +331,18 @@ function saveUserFDC() {
 }
 function clearDataTable() {
 	var table = $('#checkDatatable').dataTable();
-	
+	var currentdate='';
+	$.get('../currentNepaliDate', {getRegionList: "getlist"}, function (response) {
+	    
+		currentdate= response;
+		
+	});
 	for (i = 1; i <= table.fnGetData().length; i++) {
 
 		if ($('#USER_ID').val() != null) {
 
+			$('#ACTIVE_DT' + i).val(currentdate);
+			$('#DEACTIVE_DT' + i).val(currentdate);
 			$('.list' + i).val('N');
 
 

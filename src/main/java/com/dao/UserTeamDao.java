@@ -23,7 +23,9 @@ public class UserTeamDao {
 		try {
 
 			PreparedStatement pst = con.prepareStatement(
-					"select  *  from WEB_USER_TEAM_MAP where USER_ID=?");
+					"select WUTM_ID,USER_ID, SUB_TEAM_CODE,common.to_bs(ACTIVE_DT) as ACTIVE_DT, common.to_bs(DEACTIVE_DT) as DEACTIVE_DT\r\n" + 
+					"from WEB_USER_TEAM_MAP\r\n" + 
+					"where   USER_ID =?");
 			pst.setString(1, USER_ID);
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
@@ -33,7 +35,7 @@ public class UserTeamDao {
 				m.setWUTM_ID(rs.getString("WUTM_ID"));
 				m.setUSER_ID(rs.getString("USER_ID"));
 				
-				m.setMSTM_ID(rs.getString("MSTM_ID"));			
+				m.setSUB_TEAM_CODE(rs.getString("SUB_TEAM_CODE"));			
 				m.setACTIVE_DT(rs.getString("ACTIVE_DT"));
 				m.setDEACTIVE_DT(rs.getString("DEACTIVE_DT"));
 
@@ -70,11 +72,11 @@ public class UserTeamDao {
 			pst1.executeUpdate();
 
 			for (Map<String, Object> obj : editmodelist) {
-				PreparedStatement pst4 = con.prepareStatement("insert into WEB_USER_TEAM_MAP(WUTM_ID,USER_ID,MSTM_ID,ACTIVE_DT,DEACTIVE_DT,CREATE_BY,CREATE_DT)\r\n" + 
-						"values((WUTM_ID.nextval),?,?,?,?,?,sysdate)");
+				PreparedStatement pst4 = con.prepareStatement("insert into WEB_USER_TEAM_MAP(WUTM_ID,USER_ID,SUB_TEAM_CODE,ACTIVE_DT,DEACTIVE_DT,CREATE_BY,CREATE_DT)\r\n" + 
+						"values((WUTM_ID.nextval),?,?,common.to_ad(?),common.to_ad(?),?,sysdate)");
 
 				pst4.setString(1, (String) obj.get("USER_ID"));
-				pst4.setString(2, (String) obj.get("MSTM_ID"));
+				pst4.setString(2, (String) obj.get("SUB_TEAM_CODE"));
 				pst4.setString(3, (String) obj.get("ACTIVE_DT"));
 				pst4.setString(4, (String) obj.get("DEACTIVE_DT"));
 				

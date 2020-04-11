@@ -56,6 +56,17 @@ public class SubTeamController {
         
     }
 	
+	@ResponseBody
+    @RequestMapping(value = "/subteamByTeam/jsonlist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Map<String, Object>> getSubTeamList(String TEAM_CODE,Locale locale, Model model, HttpSession session)
+            throws SQLException {
+	
+		SubTeamDao dao = new SubTeamDao();
+        return dao.getSubTeamByTeam(TEAM_CODE);
+        
+    }
+	
+	
 	
 	 @RequestMapping(method = RequestMethod.GET, value = "dialogsubteam")
 	    public String dialogservice(Model model, Locale locale) {

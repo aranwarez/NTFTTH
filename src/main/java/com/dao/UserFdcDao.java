@@ -71,11 +71,12 @@ public class UserFdcDao {
 
 			pst1.setString(1, USER_ID);
 			pst1.executeUpdate();
-
+			PreparedStatement pst4 = con.prepareStatement("insert into WEB_USER_FDC_MAP\r\n" + 
+					"(WUTM_ID,USER_ID,FDC_CODE,ACTIVE_DT,DEACTIVE_DT,CREATE_BY,CREATE_DT)\r\n" + 
+					"values((WUTM_ID.nextval),?,?,common.to_ad(?),common.to_ad(?),?,sysdate)");
+			
 			for (Map<String, Object> obj : editmodelist) {
-				PreparedStatement pst4 = con.prepareStatement("insert into WEB_USER_FDC_MAP\r\n" + 
-						"(WUTM_ID,USER_ID,FDC_CODE,ACTIVE_DT,DEACTIVE_DT,CREATE_BY,CREATE_DT)\r\n" + 
-						"values((WUTM_ID.nextval),?,?,common.to_ad(?),common.to_ad(?),?,sysdate)");
+				
 
 				pst4.setString(1, (String) obj.get("USER_ID"));
 				pst4.setString(2, (String) obj.get("FDC_CODE"));
