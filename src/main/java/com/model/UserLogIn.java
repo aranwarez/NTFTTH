@@ -1,6 +1,6 @@
 package com.model;
 
-public class UserLogIn implements java.io.Serializable {
+public class UserLogIn{
 
 	private String USER_ID;
 
