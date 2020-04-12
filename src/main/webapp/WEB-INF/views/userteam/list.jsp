@@ -187,10 +187,10 @@
 		$(function() {
 
 			$('#example1').DataTable()
-
+			$("#USER_ID").select2();
 		})
 	</script>
-	<script src="<c:url value="/resources/function/userteam.js?a=1585" />"></script>
+	<script src="<c:url value="/resources/function/userteam.js?a=15" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 
