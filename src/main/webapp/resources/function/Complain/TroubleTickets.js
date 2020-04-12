@@ -1,5 +1,7 @@
 var currentdate;
 var glbUser;
+var token_id;
+
 $(document).ready(function() {
 
 });
@@ -130,6 +132,7 @@ function fetchView() {
 	var SERVICE_TYPE = $('#SERVICE_TYPE').val();
 	var FRM_DT = $('#QFROM_DT').val();
 	var TO_DT = $('#QTO_DT').val();
+	var Statusflag = $('#Statusflag').val();
 
 	$
 			.get(
@@ -143,7 +146,8 @@ function fetchView() {
 						SERVICE_TYPE : SERVICE_TYPE,
 						SUB_TEAM : SUBTEAMCODE,
 						FRM_DT : FRM_DT,
-						TO_DT : TO_DT
+						TO_DT : TO_DT,
+						Statusflag:Statusflag
 
 					},
 					function(data) {
@@ -171,12 +175,12 @@ function fetchView() {
 																	value.FDC_DESC,
 																	value.COMPLAIN_NO,
 																	value.CONTACT_NAME,
-																	'<a href="#" class="btn bg-purple" data-toggle="modal" data-target="#editModal" onclick="return editReceipt(\''
-																			+ value.TOKEN_ID
+																	'<a href="#" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
+																			+ value.SUB_TOKEN_ID
 																			+ '\')"> <i class="fa fa-mail-forward"></i> Forward </a>',
-																	'<a href="#" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="return deleteReceipt(\''
-																			+ value.TOKEN_ID
-																			+ '\')"> <i class="fa fa-trash"></i> Resolved </a>',
+																	'<a href="#" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
+																			+ value.SUB_TOKEN_ID
+																			+ '\')"> <i class="fa fa-trash"></i> Close Ticket</a>',
 																	'<a href="#" class="btn bg-purple" data-toggle="modal" data-target="#editModal" onclick="return editReceipt(\''
 																			+ value.TOKEN_ID
 																			+ '\')"> <i class="fa fa-edit"></i> View Detail </a>' ]);
@@ -231,4 +235,58 @@ function saveUserFDC() {
 
 	});
 
+}
+
+
+function getSubTeamList(){
+	
+		var TEAM_CODE=$("#TEAM_CODE").val();
+		
+		 $.get('../subteamByTeam/jsonlist', {TEAM_CODE: TEAM_CODE
+		    }, function (response) {
+		        var select = $('#SUB_TEAM_CODE');
+		        select.find('option').remove();
+		        $('<option>').val("").text("SELECT Sub Team ").appendTo(select);
+		        $.each(response, function (index, value) {
+		            $('<option>').val(value.SUB_TEAM_CODE).text(value.DESCRIPTION+'-'+value.SUB_TEAM_CODE).appendTo(
+		                    select);
+
+		        });
+
+		    });
+}
+
+function ForwardTeam(){
+	if($('#remarks').val().length>250 || $('#SUB_TEAM_CODE').val()===""){
+		alert('Warning Sub team is invalid or remark length exceeded!!!');
+		return false;
+	}
+
+	$.post('../troubleticket/Forward', {Remarks: $('#remarks').val(),
+		 token:token_id,
+		 toteam:$('#SUB_TEAM_CODE').val()
+	    }, function (response) {
+	    	alert(response);
+	    	$('#myModal').modal('hide');
+	    	fetchView();
+	    	
+	    	
+	    });
+}
+
+function CloseTicket(){
+	if($('#remarks').val().length>250){
+		alert('Warning remark length exceeded!!!');
+		return false;
+	}
+
+	$.post('../troubleticket/Close', {Remarks: $('#closeremarks').val(),
+		 token:token_id
+	    }, function (response) {
+	    	alert(response);
+	    	$('#deleteModal').modal('hide');
+	    	fetchView();
+	    	
+	    	
+	    });
 }
