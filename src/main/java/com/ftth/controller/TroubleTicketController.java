@@ -169,6 +169,35 @@ public class TroubleTicketController {
 	        return msg;
 
 	    }
+	 
+	 
+	 @ResponseBody
+		@RequestMapping(method = RequestMethod.GET, value = "/troubleticket/gettokenhistory",produces = MediaType.APPLICATION_JSON_VALUE)
+		public List<Map<String, Object>> getTroubleTicketHistory(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
+		    UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+					MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+					if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+						throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+					}
+
+			
+			String SUBTOKEN = request.getParameter("SUBTOKEN");
+			List<Map<String, Object>> list = null;
+			ComplainDao dao=new ComplainDao();
+			
+			try {
+				list = dao.getTokenDetail(SUBTOKEN);
+						
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return list;
+
+		}
+
 
 
 	 

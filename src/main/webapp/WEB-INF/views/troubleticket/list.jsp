@@ -259,6 +259,7 @@
 											<th>Customer</th>
 											<th>Forward</th>
 											<th>Resolved</th>
+											<th>History</th>
 											<th>Info</th>
 											
 	

@@ -18,7 +18,7 @@ $.ajax({
 		};
 
 		for ( var i in data) {
-			ict_unit.push(data[i].SERVICE_DESC);
+			ict_unit.push(data[i].SERVICE_DESC+':'+data[i].SCOUNT);
 			efficiency.push(data[i].SCOUNT);
 			coloR.push(dynamicColors());
 		}
@@ -68,7 +68,7 @@ $.ajax({
 		};
 
 		for ( var i in data) {
-			ict_unit.push(data[i].SERVICE_DESC);
+			ict_unit.push(data[i].SERVICE_DESC+":"+data[i].SCOUNT);
 			efficiency.push(data[i].SCOUNT);
 			coloR.push(dynamicColors());
 		}
@@ -317,7 +317,7 @@ $.ajax({
 		};
 
 		for ( var i in data) {
-			ict_unit.push(data[i].SOLVE_FLAG);
+			ict_unit.push(data[i].SOLVE_FLAG+':'+data[i].SCOUNT);
 			efficiency.push(data[i].SCOUNT);
 			coloR.push(dynamicColors());
 		}

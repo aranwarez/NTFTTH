@@ -95,3 +95,57 @@
         </div>
     </div>
 </div>
+
+
+
+<!-- View Detail  modal -->
+<div class="modal fade" id="viewModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Trouble Ticket History</h4>
+            </div>
+
+               <div class="modal-body">
+               
+               
+              <div class="table">
+              	<table id="viewdetailtable" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>From Team</th>
+											<th>To Team</th>											
+											<th>Solve Flag</th>
+											<th>Remarks</th>
+											<th>Create BY</th>
+											<th>Create DT</th>
+											
+	
+										</tr>
+									</thead>
+									<tbody>
+								</tbody>
+								</table>
+              
+              </div>
+                
+                   
+                    
+              
+                    
+                  
+                    
+                     
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+           
+        </div>
+    </div>
+</div>

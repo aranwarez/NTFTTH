@@ -10,10 +10,20 @@ $(document).ready(function() {
 
 	 getservicetypes();
 		
+	
+	 // if url parameter present
+	 if(getURLParameter('CPE').length>0){
+	$('#infotype').val('cpeSN');
+	$('#info').val(getURLParameter('CPE'));
+	
+	getCustomerInfo();
+	 }
 
 });
 
-
+function getURLParameter(name) {
+	  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+	}
 
 function getCustomerInfo() {
 

@@ -180,10 +180,14 @@ function fetchView() {
 																			+ '\')"> <i class="fa fa-mail-forward"></i> Forward </a>',
 																	'<a href="#" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
 																			+ value.SUB_TOKEN_ID
-																			+ '\')"> <i class="fa fa-trash"></i> Close Ticket</a>',
-																	'<a href="#" class="btn bg-purple" data-toggle="modal" data-target="#editModal" onclick="return editReceipt(\''
-																			+ value.TOKEN_ID
-																			+ '\')"> <i class="fa fa-edit"></i> View Detail </a>' ]);
+																			+ '\')"> <i class="fa fa-trash"></i> Close</a>',
+																	'<a href="#" class="btn bg-blue" data-toggle="modal" data-target="#viewModal" onclick="return viewdetail(\''
+																			+ value.SUB_TOKEN_ID
+																			+ '\')"> <i class="fa fa-edit"></i> History </a>',
+																			'<a target="_blank" href="../complain/list?CPE='+value.SRV_NO+'" class="btn bg-green"> <i class="fa fa-edit"></i> Detail </a>'				
+																			
+																			
+																			]);
 										});
 
 					});
@@ -289,4 +293,44 @@ function CloseTicket(){
 	    	
 	    	
 	    });
+}
+
+function viewdetail(subtokenid){
+	$
+	.get(
+			"../troubleticket/gettokenhistory",
+			{
+				SUBTOKEN:subtokenid
+
+			},
+			function(data) {
+				console.log(data);
+			//	$('#example1').DataTable();
+				var table = $('#viewdetailtable').DataTable();
+				 
+				table
+				    .clear()
+				    .draw();
+				
+
+				$
+						.each(
+								data,
+								function(key, value) {
+									var date=new Date(value.CREATE_DT);
+									$("#viewdetailtable")
+											.dataTable()
+											.fnAddData(
+													[value.FROM_SUB_TEAM_CODE,
+														value.TO_SUB_TEAM_CODE,
+														value.SOLVE_FLAG,
+														value.REMARKS,
+														value.CREATE_BY,
+														date
+														 ]);
+								});
+
+			});
+
+
 }
