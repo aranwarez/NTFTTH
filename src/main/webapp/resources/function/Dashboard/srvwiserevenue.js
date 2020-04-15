@@ -18,7 +18,7 @@ $.ajax({
 		};
 
 		for ( var i in data) {
-			ict_unit.push(data[i].SERVICE_DESC);
+			ict_unit.push(data[i].SERVICE_DESC+':'+data[i].SCOUNT);
 			efficiency.push(data[i].SCOUNT);
 			coloR.push(dynamicColors());
 		}
@@ -68,7 +68,7 @@ $.ajax({
 		};
 
 		for ( var i in data) {
-			ict_unit.push(data[i].SERVICE_DESC);
+			ict_unit.push(data[i].SERVICE_DESC+":"+data[i].SCOUNT);
 			efficiency.push(data[i].SCOUNT);
 			coloR.push(dynamicColors());
 		}
@@ -295,3 +295,67 @@ $.ajax({
 //		console.log(data);
 //	},
 //});
+
+
+//---solve flag report
+
+//sevice wise payable
+$.ajax({
+	url : "../charts/srvmonthly",
+	method : "GET",
+	success : function(data) {
+		console.log(data);
+		var ict_unit = [];
+		var efficiency = [];
+		var coloR = [];
+
+		var dynamicColors = function() {
+			var r = Math.floor(Math.random() * 255);
+			var g = Math.floor(Math.random() * 255);
+			var b = Math.floor(Math.random() * 255);
+			return "rgb(" + r + "," + g + "," + b + ")";
+		};
+
+		for ( var i in data) {
+			ict_unit.push(data[i].SOLVE_FLAG+':'+data[i].SCOUNT);
+			efficiency.push(data[i].SCOUNT);
+			coloR.push(dynamicColors());
+		}
+		var chartData = {
+
+			labels : ict_unit,
+			datasets : [ {
+				label : 'Revenue Sum ',
+				// strokeColor:backGround,
+
+				backgroundColor : coloR,
+
+				borderColor : 'rgba(200, 200, 200, 0.75)',
+				// hoverBackgroundColor: 'rgba(200, 200, 200, 1)',
+				hoverBorderColor : 'rgba(200, 200, 200, 1)',
+				data : efficiency
+			} ]
+		};
+
+		var ctx = $("#barmonthly");
+		var barGraph = new Chart(ctx, {
+			type : 'pie',
+			data : chartData,
+			options : {
+				legend : {
+					display : true,
+					position : 'right',
+					labels : {
+						fontColor : 'rgb(255, 99, 132)'
+					}
+				}
+			}
+		})
+	},
+	error : function(data) {
+
+		console.log(data);
+	},
+});
+
+

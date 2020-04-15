@@ -22,7 +22,7 @@
 			</div>
 			<div  class="modal-body">
 				<input class="form-control" id="contatper" placeholder="Enter Contact Person Name">
-				<input class="form-control" id="contactperno" placeholder="Enter Contact Number">
+				<input class="form-control" id="contactperno" maxlength="10" placeholder="Enter Contact Number">
 						<input class="form-control" id="userremark" placeholder="Enter User Remark">
 
 			</div>
