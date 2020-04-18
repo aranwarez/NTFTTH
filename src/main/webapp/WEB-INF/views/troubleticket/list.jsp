@@ -14,21 +14,7 @@
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
 	name="viewport">
 <jsp:include page="${request.contextPath}/headCss"></jsp:include>
-<style>
-.example-modal .modal {
-	position: relative;
-	top: auto;
-	bottom: auto;
-	right: auto;
-	left: auto;
-	display: block;
-	z-index: 1;
-}
 
-.example-modal .modal {
-	background: transparent !important;
-}
-</style>
 <jsp:include page="${request.contextPath}/footJS"></jsp:include>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -173,13 +159,13 @@
 
 							<input type="text" value="${DAT.NEP_FROM_DATE}"
 								class="nepali-calendar form-control" name="QFROM_DT"
-								id="QFROM_DT" placeholder="Enter Transaction from dt.">
+								id="QFROM_DT" placeholder="From Date">
 						</div>
 						<div class="col-xs-2">
 
 							<input type="text" value="${DAT.NEP_TODAY_DATE}"
 								class="nepali-calendar form-control" name="QTO_DT" id="QTO_DT"
-								placeholder="Enter Transaction to dt.">
+								placeholder="To Date">
 
 						</div>
 
@@ -198,7 +184,17 @@
 						</select>
 
 					</div>
-					
+		<div class="col-xs-2">
+						<select id="Statusflag"
+							class="form-control">
+									<option value="N">Unsolved</option>
+									<option value="Y">Solved</option>
+									<option value="">ALL</option>
+							
+						</select>
+
+					</div>
+						
 
 
 
@@ -263,6 +259,7 @@
 											<th>Customer</th>
 											<th>Forward</th>
 											<th>Resolved</th>
+											<th>History</th>
 											<th>Info</th>
 											
 	
@@ -312,7 +309,7 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialogmenuaccess"></jsp:include>
+	<jsp:include page="${request.contextPath}/troubleticket/dialog"></jsp:include>
 
 
 	<script
