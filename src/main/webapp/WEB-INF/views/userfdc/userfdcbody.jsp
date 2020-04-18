@@ -6,7 +6,7 @@
 <c:set var="count" value="0" scope="page" />
 
 <div class="col-xs-12 table-responsive">
-				<select id="USER_ID" class="form-control" style="overflow:auto;width: 260px;important!" onchange="return getEditMode()">					
+				<select id="USER_ID" class="form-control" style="overflow:auto;height: 50px; width: 360px;important!" onchange="return getEditMode()">					
 						
 						 <option value="">Select User</option>				
 						
