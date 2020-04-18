@@ -20,21 +20,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dao.FDCDao;
-import com.dao.MServiceTypeDao;
-import com.dao.MenuAccessDao;
 import com.dao.RegionDao;
-import com.dao.ServiceTeamDao;
-import com.dao.SubTeamDao;
+import com.dao.UserDao;
 import com.dao.UserFdcDao;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.model.Menu;
-import com.model.MenuAccess;
 import com.model.Region;
-import com.model.Role;
-import com.model.ServiceTeamModel;
 import com.model.UserFdcModel;
 import com.model.UserInformationModel;
 
@@ -48,26 +41,32 @@ public class UserFDCController {
 	public String menuacesslistlist(Locale locale, Model model, HttpSession session)  {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+	
 		if (user == null) {
 			return "redirect:/login";
 		}
 		
 		RegionDao dao = new RegionDao();
 		List<Region> regionlist = null;
-        
-        
+       List<Map<String, Object>> levelcontrollist=null;
+//        System.out.println("");
+       
         try {
         	regionlist = dao.getlist();
-            
+        	levelcontrollist=UserDao.getUserDetailByOfficeCode(user.getOFFICE_CODE());
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         model.addAttribute("fx", "User FDC Map List");
-        model.addAttribute("regionlist", regionlist);
-		
-
+        model.addAttribute("regionlist", regionlist);	        
+        model.addAttribute("USER_LEVEL", user.getUSER_LEVEL());        
+        model.addAttribute("levelcontrollist", levelcontrollist);
+        
 		return "userfdc/list";
+		
+		
+		
 
 	}
 	

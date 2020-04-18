@@ -80,8 +80,10 @@
 
 						<option value="1">SUPER</option>
 						<option value="2">Region</option>
-						<option value="3">ACCOUNT</option>
-						<option value="4">CC</option>
+						<option value="3">Zone</option>
+						<option value="4">District</option>
+						<option value="4">Office</option>
+
 
 					</select>
 				</div>
@@ -186,8 +188,9 @@
 
 						<option value="1">SUPER</option>
 						<option value="2">Region</option>
-						<option value="3">ACCOUNT</option>
-						<option value="4">CC</option>
+						<option value="3">Zone</option>
+						<option value="4">District</option>
+						<option value="4">Office</option>
 
 					</select>
 				</div>
