@@ -134,7 +134,7 @@
  				
  				<c:when test="${USER_LEVEL=='3'}">
     
-      					<select id="ZONE_CODE" class="form-control" onchange = "getDistrict()" onmouseout = "getDistrict()">
+      					<select id="ZONE_CODE" class="form-control" onchange = "getDistrict()">
       											
 						 	  <c:if test="${USER_LEVEL=='3'}"> <option value="">Select Zone</option> </c:if>     
 						<c:forEach var="user3" items="${levelcontrollist}" begin="1" end="1">					
@@ -149,7 +149,7 @@
     		
     			<c:when test="${USER_LEVEL=='4'}">
     
-      					<select id="ZONE_CODE" class="form-control" onchange = "getDistrict()" onmouseout = "getDistrict()">						
+      					<select id="ZONE_CODE" class="form-control" onchange = "getDistrict()" >						
 						 	 
 						<c:forEach var="user3" items="${levelcontrollist}" begin="1" end="1">					
 	 				
@@ -164,7 +164,7 @@
     		</c:when> 
     			<c:when test="${USER_LEVEL=='5'}">
     
-      					<select id="ZONE_CODE" class="form-control" onchange = "getDistrict()" onmouseout = "getDistrict()">						
+      					<select id="ZONE_CODE" class="form-control" onchange = "getDistrict()" >						
 						 	 
 						<c:forEach var="user3" items="${levelcontrollist}" begin="1" end="1">					
 	 				

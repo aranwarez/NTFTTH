@@ -84,56 +84,183 @@
 
 
 					<div class="col-xs-2">
-						<select id="REGION_CODE" onchange="return getZone()"
-							class="form-control">
+						<c:choose>
+    	<c:when test="${USER_LEVEL=='1'}">
+    
+      					<select id="REGION_CODE" onchange="return getZone()" class="form-control">
 							<option value="">Select Region</option>
-							<c:forEach var="user3" items="${regionlist}">
-								<c:if test="${user3.ACTIVE_STATUS == 'Y'}">
-									<option value="${user3.REGION_CODE}">${user3.DESCRIPTION}</option>
-								</c:if>
-							</c:forEach>
-
-						</select>
-
-					</div>
-
-
-					<div class="col-xs-2">
-						<select id="ZONE_CODE" onchange="return getDistrict()"
-							class="form-control">
-							<option value="">Select Zone</option>
-
-
-						</select>
-
-					</div>
-
-					<div class="col-xs-2">
-						<select id="DISTRICT_CODE" onchange="return getOffice()"
-							class="form-control">
-							<option value="">Select District</option>
-
-
-
-						</select>
+							
+						<c:forEach var="user3" items="${regionlist}">					
+	 					<c:if test = "${user3.ACTIVE_STATUS == 'Y'}">	
+						 <option value="${user3.REGION_CODE}">${user3.DESCRIPTION}</option>
+						</c:if>
+						</c:forEach>
+		</select>     
+    	</c:when>  		  
+<c:otherwise>
+    <select id="REGION_CODE" class="form-control"  onchange="return getZone()">
+    
+   	 <c:if test="${USER_LEVEL=='2'}"> <option value="">Select Region</option> </c:if>     
+							<c:forEach var="user3" items="${levelcontrollist}" begin="1" end="1">
+										
+	 				
+						 <option value="${user3.REGION_CODE}" selected="selected" >${user3.REGION}</option>
+						
+						</c:forEach>							
+							
+				</select>
+     
+    </c:otherwise>
+</c:choose>
 
 					</div>
 
 
 					<div class="col-xs-2">
-						<select id="OFFICE_CODE" onchange="return getOLT()"
-							class="form-control">
-							<option value="">Select Office</option>
-
-
+					
+					
+					<c:choose>
+ 				
+ 				<c:when test="${USER_LEVEL=='3'}">
+    
+      					<select id="ZONE_CODE" class="form-control" onchange = "getDistrict()" >
+      											
+						 	  <c:if test="${USER_LEVEL=='3'}"> <option value="">Select Zone</option> </c:if>     
+						<c:forEach var="user3" items="${levelcontrollist}" begin="1" end="1">					
+	 				
+						 <option value="${user3.ZONE_CODE}" selected="selected"  >${user3.ZONE}</option>					
+						
+						</c:forEach>											
+							
 						</select>
+     
+    		</c:when>  
+    		
+    			<c:when test="${USER_LEVEL=='4'}">
+    
+      					<select id="ZONE_CODE" class="form-control" onchange = "getDistrict()" >						
+						 	 
+						<c:forEach var="user3" items="${levelcontrollist}" begin="1" end="1">					
+	 				
+						 <option value="${user3.ZONE_CODE}" selected="selected"  >${user3.ZONE}</option>
+					
+						
+						</c:forEach>
+												
+							
+						</select>
+     
+    		</c:when> 
+    			<c:when test="${USER_LEVEL=='5'}">
+    
+      					<select id="ZONE_CODE" class="form-control" onchange = "getDistrict()" >						
+						 	 
+						<c:forEach var="user3" items="${levelcontrollist}" begin="1" end="1">					
+	 				
+						 <option value="${user3.ZONE_CODE}" selected="selected"  >${user3.ZONE}</option>
+					
+						
+						</c:forEach>
+												
+							
+						</select>
+     
+    		</c:when>   
+   		 <c:otherwise>
+   	 		<select id="ZONE_CODE" onchange="return getDistrict()" class="form-control">
+   	 		
+   	 		 	  <option value="">Select Zone</option>  
+   	 		 	 
+						</select>
+   	    </c:otherwise>
+		</c:choose>
+						
+						
+						
+
+					</div>
+
+					<div class="col-xs-2">
+							<c:choose>
+    			<c:when test="${USER_LEVEL=='4'}">
+    			
+  					  <select id="DISTRICT_CODE" onchange="return getOffice()" class="form-control">
+							<option value="">Select District </option>						
+									<c:forEach var="user3" items="${levelcontrollist}" begin="1" end="1">				
+	 				
+						 <option value="${user3.DISTRICT_CODE}" selected="selected">${user3.DISTRICT}</option>
+						
+						</c:forEach>
+							
+						</select>
+      				
+     
+    		</c:when>   
+    		
+    			<c:when test="${USER_LEVEL=='5'}">
+    			
+  					  <select id="DISTRICT_CODE" onchange="return getOffice()" class="form-control">						
+						
+									<c:forEach var="user3" items="${levelcontrollist}" begin="1" end="1">					
+	 				
+						 <option value="${user3.DISTRICT_CODE}" selected="selected">${user3.DISTRICT}</option>
+						
+						</c:forEach>
+							
+						</select>
+      				
+     
+    		</c:when> 
+    		 
+   		 <c:otherwise>
+   	 	<select id="DISTRICT_CODE" onchange="return getOffice()" class="form-control">
+							<option value="">Select District </option>
+						</select>
+						
+   	    </c:otherwise>
+		</c:choose>
+		
+ 				
+
+					</div>
+
+
+					<div class="col-xs-2">
+						  
+ 				  <c:choose>
+    			<c:when test="${USER_LEVEL=='5'}">
+    
+      				<select id="OFFICE_CODE" onchange="return getOLT()" class="form-control">
+							<option value="">Select Office </option>
+												
+						<c:forEach var="user3" items="${levelcontrollist}" begin="1" end="1">					
+	 				
+						 <option value="${user3.OFFICE_CODE}"  selected="selected">${user3.OFFICE}</option>
+						
+						</c:forEach>
+							
+							
+						</select>
+      				
+     
+    		</c:when>    
+   		 <c:otherwise>
+   	 	<select id="OFFICE_CODE" onchange="return getOLT()" class="form-control">
+							<option value="">Select Office </option>
+												
+							
+						</select>
+   	 	
+   	    </c:otherwise>
+		</c:choose>
+ 				  
 
 					</div>
 
 
 
 					<div class="col-xs-2">
-						<select id="OLT_CODE" onchange="return getEditMode()"
+						<select id="OLT_CODE"
 							class="form-control">
 							<option value="">Select Olt</option>
 						</select>
@@ -313,9 +440,24 @@
 
 
 	<script
-		src="<c:url value="/resources/function/Complain/TroubleTickets.js" />"></script>
+		src="<c:url value="/resources/function/Complain/TroubleTickets.js?a=12" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
+	<script>
+	
+	
+		$(function() {
 
+			$('#example1').DataTable()
+			$("#REGION_CODE,#ZONE_CODE,#DISTRICT_CODE,#OFFICE_CODE,#USER_ID").select2();			
+			
+			 var level = '<c:out value="${USER_LEVEL}"/>';			 
+			 loadLevelWise(level);
+			 
+			  $('#QFROM_DT').nepaliDatePicker();
+			  $('#QTO_DT').nepaliDatePicker();
+		})
+		
+	</script>
 </body>
 </html>
