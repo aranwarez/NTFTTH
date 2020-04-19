@@ -9,10 +9,9 @@ $(document).ready(function() {
  });
 
 	 getservicetypes();
-		
-	
 	 // if url parameter present
-	 if(getURLParameter('CPE').length>0){
+	 
+	 if(getURLParameter('CPE')!=null && getURLParameter('CPE').length>0){
 	$('#infotype').val('cpeSN');
 	$('#info').val(getURLParameter('CPE'));
 	
@@ -34,6 +33,39 @@ function getCustomerInfo() {
 	}, function(response) {
 		try{
 			TEST = JSON.parse(response);
+			if($('#infotype').val()=="custId"){
+				
+			 	$('#serviceModal').modal('show');
+				
+				var table = $('#listservice').DataTable();
+				 
+				table
+				    .clear()
+				    .draw();
+				
+
+				$
+						.each(
+								TEST,
+								function(key, value) {
+									var anchor='<a target="_blank" href="../complain/list?CPE='+value.cpeSn+'" class="btn bg-green"> <i class="fa fa-edit"></i> '+value.cpeSn+' </a>'
+									$("#listservice")
+											.dataTable()
+											.fnAddData(
+													[anchor,
+														value.customerName,
+														value.serviceNumber
+														 ]);
+								});
+			 	
+			return;
+			}
+			
+			
+			
+			
+			
+			
 			$('#divcustomerinfo').fadeIn();
 			
 			$('#customerName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.customerName);
@@ -62,17 +94,32 @@ function getCustomerInfo() {
 			$('#oltInfo').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltInfo);
 			$('#oltName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltName);
 			$('#oltType').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltType);
+	
+			//team info
+			
+			$('#teamName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamName);
+			$('#teamSupervisorContactNumber').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamSupervisorContactNumber);
+			$('#teamSupervisorName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamSupervisorName);
+			$('#teamleaderContactNumber').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamleaderContactNumber);
+			$('#teamleaderName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamleaderName);
+			
 			// subscriber info
 			
-			$('#balanceOfCreditLimit').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.balanceOfCreditLimit);
-			$('#offerName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.offerName);
-			$('#serviceNumber').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.serviceNumber);
-			$('#status').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.status);
-			$('#vasName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.vasName);
+	//		$('#balanceOfCreditLimit').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.balanceOfCreditLimit);
+	//		$('#offerName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.offerName);
+	//		$('#serviceNumber').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.serviceNumber);
+	//		$('#status').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.status);
+	//		$('#vasName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.vasName);
 			// $('#').html(TEST.);
 			
 		// getCustomerInfo(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.cpeInfo.cpeSN);
+			//get AAA data
+			getstatusInfo(); 
+			
+			getSubsInfo();
+		
 		}catch (e) {
+			console.log(e);
 			alert(response);
 			}
 		
@@ -81,6 +128,80 @@ function getCustomerInfo() {
 	}); // closing function(responseJson)
 
 }
+
+function getSubsInfo() {
+
+	$.get('../complain/getSubsInfo', {
+		cpeSn:$('#cpeSN').html()
+	}, function(response) {
+		try{
+			TEST2 = JSON.parse(response);
+			$('#divforsubsinfo').empty();
+			
+			$.each(TEST2, function (index, value) {
+				
+				var div='<div class="col-md-6"><table id="subsinfotable'+index+'" class="table table-condensed"><tbody><tr><td><label>balanceOfCreditLimit</label></td>		<td><span id="balanceOfCreditLimit'+index+'"></span></td>			</tr>				<tr>				<td><label>offerName </label></td><td><span id="offerName'+index+'"></span></td>		</tr>					<tr>						<td><label>serviceNumber </label></td>						<td><span id="serviceNumber'+index+'"></span></td>					</tr>					<tr>						<td><label>status</label></td>						<td><span id="status'+index+'"></span></td>					</tr>													</tbody>			</table>		</div>';				
+			$('#divforsubsinfo').append(div);	
+			$('#balanceOfCreditLimit'+index).html(value.balanceOfCreditLimit);
+			$('#offerName'+index).html(value.offerName);
+			$('#serviceNumber'+index).html(value.serviceNumber);
+			$('#status'+index).html(value.status);
+
+			$.each(value.vasName, function (indexvas, valuevas) {
+				$('#subsinfotable'+index+' tr:last').after('<tr><td><label>VasName</label></td><td>'+valuevas+'</td></tr>');
+			});	 
+			
+			
+			 });	
+			
+			
+					}catch (e) {
+			alert(response);
+			}
+		
+		
+
+	}); // closing function(responseJson)
+
+}
+
+function getstatusInfo() {
+
+	$.get('../complain/getStatusInfo', {
+		cpeSn:$('#cpeSN').html()
+	}, function(response) {
+		try{
+			TEST3 = JSON.parse(response);
+			
+			 
+				
+	$('#onuStatus').html(TEST3.onuStatus);
+	$('#onuRxPower').html(TEST3.onuRxPower);
+	$('#onuOltRxPower').html(TEST3.onuOltRxPower);
+	$('#onuDistance').html(TEST3.onuDistance);
+	$('#onuTemprature').html(TEST3.onuTemprature);
+	//$('#').val(value.);
+	
+	if(TEST3.onuRxPower>=-25){
+	 $('#onuRxPower').css('background-color', '#9FF781');
+	}
+	else if(TEST3.onuRxPower<-25 && TEST3.onuRxPower>=-28 ){
+		$('#onuRxPower').css('background-color', '#FACC2E');		
+		
+	}
+	else 	$('#onuRxPower').css('background-color', '#FE2E2E');
+		
+					}catch (e) {
+			alert(response);
+			}
+		
+		
+
+	}); // closing function(responseJson)
+
+}
+
+
 
 function getProblemlist(serviceid){
 // alert(serviceid);

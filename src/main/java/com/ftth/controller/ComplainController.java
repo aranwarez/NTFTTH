@@ -1,7 +1,5 @@
 package com.ftth.controller;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -22,11 +20,11 @@ import com.dao.CommonDateDao;
 import com.dao.CommonMenuDao;
 import com.dao.ComplainDao;
 import com.dao.MServiceDao;
-import com.dao.SubTeamDao;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.MenuAccess;
 import com.model.UserInformationModel;
+import com.soap.dao.AAADao;
 import com.soap.dao.CrmDao;
 
 @Controller
@@ -39,7 +37,7 @@ public class ComplainController {
 	public String menuList(Locale locale, Model model, HttpSession session) throws Exception {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
-		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
 			model.addAttribute("fx", "Unauthorized Page for this role!!");
 			return "/home";
 		}
@@ -65,7 +63,7 @@ public class ComplainController {
 	public String getItemTariff(String info, String infotype, Locale locale, Model model, HttpSession session) {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
-		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 		}
 
@@ -80,6 +78,52 @@ public class ComplainController {
 		}
 
 	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/complain/getSubsInfo", method = RequestMethod.GET)
+	public String getSubsinfo(String cpeSn, String SubsInfo, Locale locale, Model model, HttpSession session) {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+
+		CrmDao dao = new CrmDao();
+		try {
+			String msg = dao.getCPEINFO(cpeSn, "", true);
+			return msg;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return e.getMessage();
+		}
+
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/complain/getStatusInfo", method = RequestMethod.GET)
+	public String getStatussinfo(String cpeSn, Locale locale, Model model, HttpSession session) {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+
+		AAADao dao = new AAADao();
+		try {
+			String msg = dao.getCPEINFO(cpeSn);
+			return msg;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return e.getMessage();
+		}
+
+	}
+
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/complain/dialog")
 	public String dialogrole(Model model, Locale locale) {
