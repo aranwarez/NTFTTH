@@ -185,16 +185,106 @@
 
 								<!--           second row -->
 								<div id="divcustomerinfo" hidden="true">
-									<div class="row">
+								
+								
+								
+								
+									<!-- opening of new row -->
+									<div class="col-md-12">
+						<!-- AREA CHART -->
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<h3 class="box-title"><i
+												class="fa fa-list-alt"></i>Status Information</h3>
 
-										<div class="box-header">
-											<span class="input-group-addon"><i
-												class="fa fa-ambulance"></i>CPE / FAP Information</span>
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+										<i class="fa fa-minus"></i>
+									</button>
+									<button type="button" class="btn btn-box-tool" data-widget="remove">
+										<i class="fa fa-times"></i>
+									</button>
+								</div>
+							</div>
+							<div   class="box-body">
+							<label>onuStatus:</label>  <span id="onuStatus"></span>
+							<label>onuRxPower:</label>  <span id="onuRxPower"></span>
+							<label>onuOltRxPower:</label><span id="onuOltRxPower"></span>
+							<label>onuDistance:</label><span id="onuDistance"></span>
+							<label>onuTemprature:</label><span id="onuTemprature"></span>
+							
+							
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
 
-										</div>
+						
+					</div>								
 
-										<div class="col-md-6">
-											<table class="table table-condensed">
+
+
+								</div>
+								<!-- 							div	customer info -->
+
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+					</div>
+					<!-- /.col -->
+			<div class="col-md-12">
+						<!-- AREA CHART -->
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<h3 class="box-title"><i
+												class="fa fa-list-alt"></i>Subscription Information</h3>
+
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+										<i class="fa fa-minus"></i>
+									</button>
+									<button type="button" class="btn btn-box-tool" data-widget="remove">
+										<i class="fa fa-times"></i>
+									</button>
+								</div>
+							</div>
+							<div id="divforsubsinfo"  class="box-body">
+							
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+
+						
+					</div>
+			
+					
+					
+					
+			
+			<div class="col-md-12">
+						<!-- AREA CHART -->
+						<div class="box box-primary collapsed-box">
+							<div class="box-header with-border">
+								<h3 class="box-title"><i
+												class="fa fa-ambulance"></i>CPE / FAP Information</h3>
+
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+										<i class="fa fa-plus"></i>
+									</button>
+									<button type="button" class="btn btn-box-tool" data-widget="remove">
+										<i class="fa fa-times"></i>
+									</button>
+								</div>
+							</div>
+							<div class="box-body">
+							    <div class="col-md-6">
+     		
+						
+						
+						 <table class="table table-condensed">
 												<tbody>
 													<tr>
 														<td><label>cpeMac </label></td>
@@ -223,10 +313,11 @@
 
 												</tbody>
 											</table>
-										</div>
-
-										<div class="col-md-6">
-											<label id="customerlabel">distribCblName</label> <span
+						
+												
+							</div>
+							<div class="col-md-6">
+							<label id="customerlabel">distribCblName</label> <span
 												id="distribCblName"></span> <BR> <label
 												id="customerlabel">distribCoreNo</label> <span
 												id="distribCoreNo"></span> <BR> <label
@@ -237,24 +328,39 @@
 												id="feederCblName"></span> <BR> <label
 												id="customerlabel">feederCoreNo</label> <span
 												id="feederCoreNo"></span>
+							
+							</div>
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
 
+						
+					</div>
+					
+					
+					
+<!-- 					cols -->
 
+	<div class="col-md-12">
+						<!-- AREA CHART -->
+						<div class="box box-primary collapsed-box">
+							<div class="box-header with-border">
+								<h3 class="box-title"><i
+												class="fa fa-ambulance"></i>OLT/OLE Information</h3>
 
-										</div>
-
-
-									</div>
-
-
-									<!-- 									4th row -->
-									<div class="row">
-										<div class="box-header with-border">
-											<span class="input-group-addon"><i
-												class="fa fa-ambulance"></i>OLT/OLE Information</span>
-										</div>
-
-										<div class="col-md-6">
-											<table class="table table-condensed">
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+										<i class="fa fa-plus"></i>
+									</button>
+									<button type="button" class="btn btn-box-tool" data-widget="remove">
+										<i class="fa fa-times"></i>
+									</button>
+								</div>
+							</div>
+							<div class="box-body">
+							    <div class="col-md-6">
+							     <table class="table table-condensed">
 												<tbody>
 													<tr>
 														<td><label>feederPortNo</label></td>
@@ -283,11 +389,10 @@
 
 												</tbody>
 											</table>
-										</div>
-
-
-										<div class="col-md-6">
-											<table class="table table-condensed">
+       					
+							</div>
+							<div class="col-md-6">
+							<table class="table table-condensed">
 												<tbody>
 													<tr>
 														<td><label>oltId</label></td>
@@ -308,71 +413,98 @@
 
 												</tbody>
 											</table>
-										</div>
-
-
-
-
-
-
-
-
-
-									</div>
-
-									<!-- 									closing of row -->
-
-									<!-- opening of new row -->
-									<div class="row">
-										<div class="box-header with-border">
-											<span class="input-group-addon"><i
-												class="fa fa-ambulance"></i>Subscription Information</span>
-										</div>
-									<div class="col-md-6">
-											<table class="table table-condensed">
-												<tbody>
-													<tr>
-														<td><label>balanceOfCreditLimit</label></td>
-														<td><span id="balanceOfCreditLimit"></span></td>
-													</tr>
-													<tr>
-														<td><label>offerName </label></td>
-														<td><span id="offerName"></span></td>
-													</tr>
-													<tr>
-														<td><label>serviceNumber </label></td>
-														<td><span id="serviceNumber"></span></td>
-													</tr>
-													<tr>
-														<td><label>status</label></td>
-														<td><span id="status"></span></td>
-													</tr>
-													<tr>
-														<td><label>vasName</label></td>
-														<td><span id="vasName"></span></td>
-													</tr>
-													
-												</tbody>
-											</table>
-										</div>
-									
-									
-									
-									</div>
-
-
-
-								</div>
-								<!-- 							div	customer info -->
-
+							
+							</div>
 							</div>
 							<!-- /.box-body -->
 						</div>
 						<!-- /.box -->
+
+						
 					</div>
-					<!-- /.col -->
+					
+					
+<!-- 					team row -->
+
+
+	<div class="col-md-12">
+						<!-- AREA CHART -->
+						<div class="box box-primary collapsed-box">
+							<div class="box-header with-border">
+								<h3 class="box-title"><i
+												class="fa fa-ambulance"></i>Team Information</h3>
+
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+										<i class="fa fa-plus"></i>
+									</button>
+									<button type="button" class="btn btn-box-tool" data-widget="remove">
+										<i class="fa fa-times"></i>
+									</button>
+								</div>
+							</div>
+							<div class="box-body">
+							    <div class="col-md-6">
+							     <table class="table table-condensed">
+												<tbody>
+													<tr>
+														<td><label>Team Name</label></td>
+														<td><span id="teamName"></span></td>
+													</tr>
+													<tr>
+														<td><label>Team SuperVisor Name </label></td>
+														<td><span id="teamSupervisorName"></span></td>
+													</tr>
+													<tr>
+														<td><label>Team SuperVisor Contact Number </label></td>
+														<td><span id="teamSupervisorContactNumber"></span></td>
+													</tr>
+													
+													
+
+												</tbody>
+											</table>
+       					
+							</div>
+							<div class="col-md-6">
+							<table class="table table-condensed">
+												<tbody>
+													<tr>
+														<td><label>Team Leader </label></td>
+														<td><span id="teamleaderName"></span></td>
+													</tr>
+													<tr>
+														<td><label>Team Leader Contact Number </label></td>
+														<td><span id="teamleaderContactNumber"></span></td>
+													</tr>
+
+												</tbody>
+											</table>
+							
+							</div>
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+
+						
+					</div>
+
+			
+<!-- 	  end				team row -->
+			
+			
+			
+			
+			
 				</div>
 				<!-- /.row -->
+		
+		
+		
+		
+		
+		
 			</section>
 			<!-- /.content -->
 		</div>
