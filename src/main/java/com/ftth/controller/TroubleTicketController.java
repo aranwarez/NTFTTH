@@ -25,6 +25,7 @@ import com.dao.ComplainDao;
 import com.dao.MServiceTypeDao;
 import com.dao.RegionDao;
 import com.dao.TeamDao;
+import com.dao.UserDao;
 import com.dao.UserTeamDao;
 import com.model.MenuAccess;
 import com.model.Region;
@@ -53,7 +54,7 @@ public class TroubleTicketController {
 		CommonDateDao DAT = new CommonDateDao();
 		TeamDao teamdao=new TeamDao();
 		List<Map<String, Object>> teamlist = null;
-		
+		List<Map<String, Object>> levelcontrollist=null;
 		
 		try {
 			regionlist = dao.getlist();
@@ -65,16 +66,21 @@ public class TroubleTicketController {
 			model.addAttribute("teamlist", teamlist);
 			
 			
-
+			levelcontrollist=UserDao.getUserDetailByOfficeCode(user.getOFFICE_CODE());
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		model.addAttribute("fx", "Trouble Tickets");
 		model.addAttribute("regionlist", regionlist);
+		
 		model.addAttribute("servicetypelist", servicetypelist);
+		model.addAttribute("USER_LEVEL", user.getUSER_LEVEL());        
+        model.addAttribute("levelcontrollist", levelcontrollist);
 		
-		
+        System.out.println(user.getUSER_LEVEL());
+        
 		return "troubleticket/list";
 
 	}

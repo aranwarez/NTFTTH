@@ -334,3 +334,31 @@ function viewdetail(subtokenid){
 
 
 }
+
+
+function loadLevelWise(level){
+	if(level=='1'){
+	return;
+	}
+	else if(level=='2'){
+		getZone();
+		return;
+	}
+	else if(level=='3'){
+	getDistrict();
+	return;
+	
+	}
+	else if(level=='4'){
+	getOffice();
+	return;
+}
+else {
+	getOLT();
+	return;
+}
+	
+}
+function clearDataTable(){
+	
+}
