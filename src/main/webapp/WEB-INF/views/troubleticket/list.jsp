@@ -311,11 +311,25 @@
 						</select>
 
 					</div>
+					
+						<div class="col-xs-2">
+						<select id="WEBTEAMCODE"
+							class="form-control">
+							<option value="">Select Team</option>
+							<c:forEach var="user3" items="${webteamlist}">
+									<option value="${user3.TEAM_ID}">${user3.TEAMNAME}-${user3.DESCRIPTION}</option>
+							</c:forEach>
+
+						</select>
+
+					</div>
+					
 		<div class="col-xs-2">
 						<select id="Statusflag"
 							class="form-control">
 									<option value="N">Unsolved</option>
 									<option value="Y">Solved</option>
+									<option value="C">Closed</option>
 									<option value="">ALL</option>
 							
 						</select>
