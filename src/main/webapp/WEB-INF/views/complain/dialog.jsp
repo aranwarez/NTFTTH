@@ -29,9 +29,12 @@
 
 
 			<div class="modal-footer">
+			<button type="submit" class="btn btn-success pull-left"
+					onclick="PostRegister(true)">Solved</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				<button type="submit" class="btn btn-primary"
-					onclick="PostRegister()">Register</button>
+					onclick="PostRegister(false)">Register</button>
+					
 			</div>
 		</div>
 	</div>
@@ -67,8 +70,7 @@
 
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary"
-					onclick="PostRegister()">Register</button>
+				
 			</div>
 		</div>
 	</div>

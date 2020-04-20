@@ -54,16 +54,20 @@ public class TroubleTicketController {
 		CommonDateDao DAT = new CommonDateDao();
 		TeamDao teamdao=new TeamDao();
 		List<Map<String, Object>> teamlist = null;
+		
+		List<Map<String, Object>> webteamlist = null;
 		List<Map<String, Object>> levelcontrollist=null;
 		
 		try {
 			regionlist = dao.getlist();
 			servicetypelist=ServiceTypedao.getServiceTypeList();
 			teamlist=teamdao.getTeamList();
+			webteamlist=teamdao.getWebTeamList();
 			
 			model.addAttribute("Date_list", DAT.getDateList());
 			model.addAttribute("userteamlist", UserTeamDao.getModeList(user.getUSER_ID()));
 			model.addAttribute("teamlist", teamlist);
+			model.addAttribute("webteamlist", webteamlist);
 			
 			
 			levelcontrollist=UserDao.getUserDetailByOfficeCode(user.getOFFICE_CODE());

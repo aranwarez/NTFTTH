@@ -238,7 +238,7 @@
 						<div class="box box-primary">
 							<div class="box-header with-border">
 								<h3 class="box-title"><i
-												class="fa fa-list-alt"></i>Subscription Information</h3>
+												class="fa fa-calendar"></i>Subscription Information</h3>
 
 								<div class="box-tools pull-right">
 									<button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -268,7 +268,7 @@
 						<div class="box box-primary collapsed-box">
 							<div class="box-header with-border">
 								<h3 class="box-title"><i
-												class="fa fa-ambulance"></i>CPE / FAP Information</h3>
+												class="fa fa-info-circle"></i>CPE / FAP Information</h3>
 
 								<div class="box-tools pull-right">
 									<button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -347,7 +347,7 @@
 						<div class="box box-primary collapsed-box">
 							<div class="box-header with-border">
 								<h3 class="box-title"><i
-												class="fa fa-ambulance"></i>OLT/OLE Information</h3>
+												class="fa fa-exchange"></i>OLT/OLE Information</h3>
 
 								<div class="box-tools pull-right">
 									<button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -432,7 +432,7 @@
 						<div class="box box-primary collapsed-box">
 							<div class="box-header with-border">
 								<h3 class="box-title"><i
-												class="fa fa-ambulance"></i>Team Information</h3>
+												class="fa fa-users"></i>Team Information</h3>
 
 								<div class="box-tools pull-right">
 									<button type="button" class="btn btn-box-tool" data-widget="collapse">
