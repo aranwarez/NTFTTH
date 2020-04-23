@@ -252,7 +252,8 @@
 	<script>
 		$(function() {
 
-		
+			$("#EMPLOYEE_CODE,#EDITEMPLOYEE_CODE").select2();
+			
 			 $('#userlist').DataTable( {
 			        "scrollX": true
 			    } );

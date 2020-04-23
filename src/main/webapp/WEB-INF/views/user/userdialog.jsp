@@ -43,7 +43,7 @@
 				<div class="form-group">
 					<label>EMPLOYEE_CODE</label> <select
 						class="form-control modal-combobox" name="EMPLOYEE_CODE"
-						id="EMPLOYEE_CODE">
+						id="EMPLOYEE_CODE" style="width:270px;">
 						<c:forEach var="COA" items="${empList}">
 							<option value="${COA.EMPLOYEE_CODE}">${COA.EMPLOYEE_NAME}(${COA.EMPLOYEE_CODE})</option>
 						</c:forEach>
