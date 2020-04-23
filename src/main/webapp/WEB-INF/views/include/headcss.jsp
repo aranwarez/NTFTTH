@@ -23,9 +23,17 @@
 	rel="stylesheet">
 
 <!-- DataTables -->
+
 <link
-	href="<c:url value="/resources/adminltd/css/dataTables.bootstrap.min.css" />"
+	href="<c:url value="/resources/adminltd/css/jquery.dataTables.min.css" />"
 	rel="stylesheet">
+
+
+
+<link
+	href="<c:url value="/resources/adminltd/css/scroller.dataTables.min.css" />"
+	rel="stylesheet">
+
 
 
 <!-- Theme style -->

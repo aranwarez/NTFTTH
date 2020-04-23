@@ -1,11 +1,4 @@
 var CODE;
-
-
-$(document).ready(function() {
-	$('#userlist').dataTable( {
-	    "scrollX": true
-	} );
-});
 function saveUser() {
 
 	var pass = $("#PASSWORD").val();
