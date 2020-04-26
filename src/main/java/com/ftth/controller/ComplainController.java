@@ -1,5 +1,6 @@
 package com.ftth.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -60,7 +61,7 @@ public class ComplainController {
 
 	@ResponseBody
 	@RequestMapping(value = "/complain/getCustomerInfo", method = RequestMethod.GET)
-	public String getItemTariff(String info, String infotype, Locale locale, Model model, HttpSession session) {
+	public String getItemTariff(String info, String infotype, Locale locale, Model model, HttpSession session) throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
@@ -83,7 +84,7 @@ public class ComplainController {
 
 	@ResponseBody
 	@RequestMapping(value = "/complain/getStatusInfo", method = RequestMethod.GET)
-	public String getStatussinfo(String cpeSn, Locale locale, Model model, HttpSession session) {
+	public String getStatussinfo(String cpeSn, Locale locale, Model model, HttpSession session) throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
@@ -105,7 +106,7 @@ public class ComplainController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/complain/getComplainServiceInfo", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-	public  List<Map<String, Object>> getComplainServiceInfo(String cpeSn, Locale locale, Model model, HttpSession session) {
+	public  List<Map<String, Object>> getComplainServiceInfo(String cpeSn, Locale locale, Model model, HttpSession session) throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
@@ -136,7 +137,7 @@ public class ComplainController {
 	@ResponseBody
 	public String Complainregister(String JSON, String Complain_no, String Remarks, String SRV_NO, String contactName,
 			String fdcname, String teamname, String Supervisorname, String SupervisorContno, String Teamleader,
-			String TeamleaderNo, Boolean solved, String CUSTOMER_NAME,String CONTACT_NO,String OLT_PORT,String FAP_LOCATION,String FAP_PORT,String CPE_RX_LVL,Model model, Locale locale, HttpSession session) {
+			String TeamleaderNo, Boolean solved, String CUSTOMER_NAME,String CONTACT_NO,String OLT_PORT,String FAP_LOCATION,String FAP_PORT,String CPE_RX_LVL,Model model, Locale locale, HttpSession session) throws SQLException {
 		logger.info("Registering new service for", locale);
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);

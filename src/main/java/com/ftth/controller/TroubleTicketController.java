@@ -1,5 +1,6 @@
 package com.ftth.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class TroubleTicketController {
 	private static final String classname = "../troubleticket/list";
 
 	@RequestMapping(value = "/troubleticket/list", method = RequestMethod.GET)
-	public String menuacesslistlist(Locale locale, Model model, HttpSession session) {
+	public String menuacesslistlist(Locale locale, Model model, HttpSession session) throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		logger.info("/troubleticket/list by user"+user.getUSER_ID(), locale);
 		
@@ -142,7 +143,7 @@ public class TroubleTicketController {
 	
 	 @RequestMapping(value = "/troubleticket/Forward", method = RequestMethod.POST)
 	    @ResponseBody
-	    public String Teamforward(String Remarks,String token,String toteam,Locale locale,HttpSession session) {
+	    public String Teamforward(String Remarks,String token,String toteam,Locale locale,HttpSession session) throws SQLException {
 	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 	        logger.info("Forwarding Ticket by "+user.getUSER_ID(), locale);
 	        
@@ -167,7 +168,7 @@ public class TroubleTicketController {
 
 	 @RequestMapping(value = "/troubleticket/Close", method = RequestMethod.POST)
 	    @ResponseBody
-	    public String CloseTicket(String Remarks,String token,Locale locale,HttpSession session) {
+	    public String CloseTicket(String Remarks,String token,Locale locale,HttpSession session) throws SQLException {
 	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 	        logger.info("Closing Ticket"+token+ "by "+user.getUSER_ID(), locale);
 		       
@@ -192,7 +193,7 @@ public class TroubleTicketController {
 
 	 @RequestMapping(value = "/troubleticket/Resolved", method = RequestMethod.POST)
 	    @ResponseBody
-	    public String Resolved(String Remarks,String token,Locale locale,HttpSession session) {
+	    public String Resolved(String Remarks,String token,Locale locale,HttpSession session) throws SQLException {
 	        logger.info("Resolved Ticket", locale);
 	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
@@ -216,7 +217,7 @@ public class TroubleTicketController {
 	 
 	 @ResponseBody
 		@RequestMapping(method = RequestMethod.GET, value = "/troubleticket/gettokenhistory",produces = MediaType.APPLICATION_JSON_VALUE)
-		public List<Map<String, Object>> getTroubleTicketHistory(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
+		public List<Map<String, Object>> getTroubleTicketHistory(HttpServletRequest request, HttpServletResponse response,HttpSession session) throws SQLException {
 		    UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 					MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 					if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
@@ -245,7 +246,7 @@ public class TroubleTicketController {
 	 
 	 @ResponseBody
 		@RequestMapping(method = RequestMethod.GET, value = "/troubleticket/gettokendetails",produces = MediaType.APPLICATION_JSON_VALUE)
-		public List<Map<String, Object>> getTroubleTicketbyTokenID(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
+		public List<Map<String, Object>> getTroubleTicketbyTokenID(HttpServletRequest request, HttpServletResponse response,HttpSession session) throws SQLException {
 		    UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 					MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 					if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
