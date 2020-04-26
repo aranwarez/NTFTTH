@@ -147,22 +147,45 @@ public class ReportController {
 			filterparam = filterparam + "TRANS_NO : " + request.getParameter("TRANS_NO").toString();
 			parameters.put("pm_trans_no", request.getParameter("TRANS_NO"));
 		}
-		if (request.getParameter("SP_CODE") != null  && !request.getParameter("SP_CODE").isEmpty()) {
-			filterparam = filterparam + "SP_CODE : " + request.getParameter("SP_CODE").toString();
-			parameters.put("pm_sp_code", request.getParameter("SP_CODE"));
-		} else if (request.getParameter("SP_CODE") == null || request.getParameter("SP_CODE").isEmpty()) {
-			filterparam = filterparam + "SP_CODE : All ";
-			parameters.put("pm_sp_code", request.getParameter("SP_CODE"));
+		if (request.getParameter("REGION_CODE") != null && !request.getParameter("REGION_CODE").isEmpty()) {
+			filterparam = filterparam + "REGION_CODE : " + request.getParameter("REGION_CODE").toString();
+			parameters.put("pm_region", request.getParameter("REGION_CODE"));
+		} else if (request.getParameter("REGION_CODE") == null) {
+			filterparam = filterparam + "REGION_CODE : All ";
+			parameters.put("pm_region", request.getParameter("REGION_CODE"));
 		}
-                if (request.getParameter("SERVICE_CODE") != null && !request.getParameter("SERVICE_CODE").isEmpty()) {
-			filterparam = filterparam + "SERVICE_CODE : " + request.getParameter("SERVICE_CODE").toString();
-			parameters.put("pm_service", request.getParameter("SERVICE_CODE"));
-		} else if (request.getParameter("SERVICE_CODE") == null || request.getParameter("SERVICE_CODE").isEmpty()) {
-			filterparam = filterparam + "SERVICE_CODE : All ";
-			parameters.put("pm_service", request.getParameter("SERVICE_CODE"));
+		if (request.getParameter("ZONE_CODE") != null && !request.getParameter("ZONE_CODE").isEmpty()) {
+			filterparam = filterparam + "ZONE_CODE : " + request.getParameter("ZONE_CODE").toString();
+			parameters.put("pm_zone", request.getParameter("ZONE_CODE"));
+		} else if (request.getParameter("ZONE_CODE") == null || request.getParameter("ZONE_CODE").isEmpty()) {
+			filterparam = filterparam + "ZONE_CODE : All ";
+			parameters.put("pm_zone", request.getParameter("ZONE_CODE"));
 		}
-                
-                        
+		if (request.getParameter("DISTRICT_CODE") != null && !request.getParameter("DISTRICT_CODE").isEmpty()) {
+			filterparam = filterparam + "DISTRICT_CODE : " + request.getParameter("DISTRICT_CODE").toString();
+			parameters.put("pm_district", request.getParameter("DISTRICT_CODE"));
+		} else if (request.getParameter("DISTRICT_CODE") == null || request.getParameter("DISTRICT_CODE").isEmpty()) {
+			filterparam = filterparam + "DISTRICT_CODE : All ";
+			parameters.put("pm_district", request.getParameter("DISTRICT_CODE"));
+		}
+		if (request.getParameter("OFFICE_CODE") != null && !request.getParameter("OFFICE_CODE").isEmpty()) {
+			filterparam = filterparam + "OFFICE_CODE : " + request.getParameter("OFFICE_CODE").toString();
+			parameters.put("pm_office", request.getParameter("OFFICE_CODE"));
+		} else if (request.getParameter("OFFICE_CODE") == null || request.getParameter("OFFICE_CODE").isEmpty()) {
+			filterparam = filterparam + "OFFICE_CODE : All ";
+			parameters.put("pm_office", request.getParameter("OFFICE_CODE"));
+		}
+		if (request.getParameter("WEBTEAMCODE") != null && !request.getParameter("WEBTEAMCODE").isEmpty()) {
+			filterparam = filterparam + "WEBTEAMCODE : " + request.getParameter("WEBTEAMCODE").toString();
+			parameters.put("pm_team_id", request.getParameter("WEBTEAMCODE"));
+		} else if (request.getParameter("WEBTEAMCODE") == null || request.getParameter("WEBTEAMCODE").isEmpty()) {
+			filterparam = filterparam + "TEAMCODE : All ";
+			parameters.put("pm_team_id", request.getParameter("WEBTEAMCODE"));
+		}
+		
+		
+		
+
 		if (request.getParameter("FRM_YEAR") != null) {
 			filterparam = filterparam + "FRM_YEAR : " + request.getParameter("FRM_YEAR").toString();
 			parameters.put("pm_frm_year", request.getParameter("FRM_YEAR"));
