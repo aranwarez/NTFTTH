@@ -1,10 +1,88 @@
 var currentdate;
 var glbUser;
 var token_id;
-
+var closeflag;
 $(document).ready(function() {
-
+	 if(getURLParameter('token_id')!=null && getURLParameter('token_id').length>0){
+		 getTokenDetailbyID(getURLParameter('token_id'));
+	 
+	 }
+	
 });
+
+
+function getTokenDetailbyID(token){
+	$.get("../troubleticket/gettokendetails", {
+		token_id : token
+	}, function(data) {
+		var table = $('#example1').DataTable();
+		 
+		table
+		    .clear()
+		    .draw();
+		
+
+		$
+				.each(
+						data,
+						function(key, value) {
+							var solveflag='<a href="#" class="btn bg-purple" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
+								+ value.SUB_TOKEN_ID
+								+ '\');closeflag=(\''
+								+ 'Y'
+								+ '\');"> <i class="fa fa-trash"></i> Resolved</a>';
+							var forwardflag='<a href="#" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
+								+ value.SUB_TOKEN_ID
+								+ '\')"> <i class="fa fa-mail-forward"></i> Forward </a>';
+							if(value.SOLVE_FLAG=='Y'){
+								solveflag='<a href="#" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
+									+ value.SUB_TOKEN_ID
+									+ '\');closeflag=(\''
+									+ 'C'
+									+ '\');"> <i class="fa fa-trash"></i> Close</a>';
+							forwardflag="";
+							}
+							else if(value.SOLVE_FLAG=='C'){
+								solveflag='Closed';
+								forwardflag="";
+							}
+							
+							$("#example1")
+									.dataTable()
+									.fnAddData(
+											[
+													value.TOKEN_ID,
+													value.SERVICE_DESC,
+													value.SUB_TEAM_CODE,
+													value.PROBLEM_DESC,
+													value.FDC_DESC,
+													value.COMPLAIN_NO,
+													value.CONTACT_NAME,
+													forwardflag,
+															solveflag,
+													'<a href="#" class="btn bg-blue" data-toggle="modal" data-target="#viewModal" onclick="return viewdetail(\''
+															+ value.SUB_TOKEN_ID
+															+ '\')"> <i class="fa fa-edit"></i> History </a>',
+															'<a target="_blank" href="../complain/list?CPE='+value.SRV_NO+'" class="btn bg-green"> <i class="fa fa-edit"></i> Detail </a>'				
+															
+															
+															]);
+						});
+
+		
+		
+	});
+
+	
+	
+	
+}
+
+
+function getURLParameter(name) {
+	  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+	}
+
 
 function getZone() {
 
@@ -147,7 +225,8 @@ function fetchView() {
 						SUB_TEAM : SUBTEAMCODE,
 						FRM_DT : FRM_DT,
 						TO_DT : TO_DT,
-						Statusflag:Statusflag
+						Statusflag:Statusflag,
+						WEBTEAMCODE:$('#WEBTEAMCODE').val()
 
 					},
 					function(data) {
@@ -164,6 +243,27 @@ function fetchView() {
 								.each(
 										data,
 										function(key, value) {
+											var solveflag='<a href="#" class="btn bg-purple" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
+												+ value.SUB_TOKEN_ID
+												+ '\');closeflag=(\''
+												+ 'Y'
+												+ '\');"> <i class="fa fa-trash"></i> Resolved</a>';
+											var forwardflag='<a href="#" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
+												+ value.SUB_TOKEN_ID
+												+ '\')"> <i class="fa fa-mail-forward"></i> Forward </a>';
+											if(value.SOLVE_FLAG=='Y'){
+												solveflag='<a href="#" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
+													+ value.SUB_TOKEN_ID
+													+ '\');closeflag=(\''
+													+ 'C'
+													+ '\');"> <i class="fa fa-trash"></i> Close</a>';
+											forwardflag="";
+											}
+											else if(value.SOLVE_FLAG=='C'){
+												solveflag='Closed';
+												forwardflag="";
+											}
+											
 											$("#example1")
 													.dataTable()
 													.fnAddData(
@@ -175,12 +275,8 @@ function fetchView() {
 																	value.FDC_DESC,
 																	value.COMPLAIN_NO,
 																	value.CONTACT_NAME,
-																	'<a href="#" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
-																			+ value.SUB_TOKEN_ID
-																			+ '\')"> <i class="fa fa-mail-forward"></i> Forward </a>',
-																	'<a href="#" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
-																			+ value.SUB_TOKEN_ID
-																			+ '\')"> <i class="fa fa-trash"></i> Close</a>',
+																	forwardflag,
+																			solveflag,
 																	'<a href="#" class="btn bg-blue" data-toggle="modal" data-target="#viewModal" onclick="return viewdetail(\''
 																			+ value.SUB_TOKEN_ID
 																			+ '\')"> <i class="fa fa-edit"></i> History </a>',
@@ -278,21 +374,48 @@ function ForwardTeam(){
 	    });
 }
 
+
+
+
+
 function CloseTicket(){
+	
 	if($('#remarks').val().length>250){
 		alert('Warning remark length exceeded!!!');
 		return false;
 	}
+	
+	if(closeflag=='Y'){
+		$.post('../troubleticket/Resolved', {Remarks: $('#closeremarks').val(),
+			 token:token_id
+		    }, function (response) {
+		    	alert(response);
+		    	$('#deleteModal').modal('hide');
+		    	fetchView();
+		    	
+		    	
+		    });		
+		
+		
+	}
+	else if(closeflag=='C'){
+		$.post('../troubleticket/Close', {Remarks: $('#closeremarks').val(),
+			 token:token_id
+		    }, function (response) {
+		    	alert(response);
+		    	$('#deleteModal').modal('hide');
+		    	fetchView();
+		    	
+		    	
+		    });		
+		
+	}
+	
+	
+	
+	
 
-	$.post('../troubleticket/Close', {Remarks: $('#closeremarks').val(),
-		 token:token_id
-	    }, function (response) {
-	    	alert(response);
-	    	$('#deleteModal').modal('hide');
-	    	fetchView();
-	    	
-	    	
-	    });
+
 }
 
 function viewdetail(subtokenid){

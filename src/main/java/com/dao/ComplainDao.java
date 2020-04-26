@@ -19,8 +19,9 @@ public class ComplainDao {
 
 	public String solveProblem(List<Map<String, Object>> servicestypelist, String serviceID, String SRV_NO,
 			String Complain_no, String contactName, String Remarks, String USER, String FDCName, String teamname,
-			String Supervisorname, String SupervisorContno, String Teamleader, String TeamleaderNo)
-			throws SQLException {
+			String Supervisorname, String SupervisorContno, String Teamleader, String TeamleaderNo,
+			String CUSTOMER_NAME, String CONTACT_NO, String OLT_PORT, String FAP_LOCATION, String FAP_PORT,
+			String CPE_RX_LVL) throws SQLException {
 		Connection con = DbCon.getConnection();
 		con.setAutoCommit(false);
 		try {
@@ -76,6 +77,20 @@ public class ComplainDao {
 			pst.setString(10, team_id);
 
 			pst.setString(11, FDCName);
+			pst.executeUpdate();
+
+			// adding customer infomation
+			qry = "INSERT INTO FTTH.CUSTOMER_INFO (\r\n" + "   TOKEN_ID, CUSTOMER_NAME, CONTACT_NO, \r\n"
+					+ "   OLT_PORT, FAP_LOCATION, FAP_PORT, \r\n" + "   CPE_RX_LVL) \r\n" + "VALUES ( ?,\r\n"
+					+ " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ? )";
+			pst = con.prepareStatement(qry);
+			pst.setString(1, tOKEN_ID);
+			pst.setString(2, CUSTOMER_NAME);
+			pst.setString(3, CONTACT_NO);
+			pst.setString(4, OLT_PORT);
+			pst.setString(5, FAP_LOCATION);
+			pst.setString(6, FAP_PORT);
+			pst.setString(7, CPE_RX_LVL);
 			pst.executeUpdate();
 
 			// for multiple services - token master
@@ -156,8 +171,9 @@ public class ComplainDao {
 
 	public String saveProblem(List<Map<String, Object>> servicestypelist, String serviceID, String SRV_NO,
 			String Complain_no, String contactName, String Remarks, String USER, String FDCName, String teamname,
-			String Supervisorname, String SupervisorContno, String Teamleader, String TeamleaderNo)
-			throws SQLException {
+			String Supervisorname, String SupervisorContno, String Teamleader, String TeamleaderNo,
+			String CUSTOMER_NAME, String CONTACT_NO, String OLT_PORT, String FAP_LOCATION, String FAP_PORT,
+			String CPE_RX_LVL) throws SQLException {
 		Connection con = DbCon.getConnection();
 		con.setAutoCommit(false);
 		try {
@@ -214,6 +230,20 @@ public class ComplainDao {
 
 			pst.setString(11, FDCName);
 			pst.executeUpdate();
+			
+			// adding customer infomation
+						qry = "INSERT INTO FTTH.CUSTOMER_INFO (\r\n" + "   TOKEN_ID, CUSTOMER_NAME, CONTACT_NO, \r\n"
+								+ "   OLT_PORT, FAP_LOCATION, FAP_PORT, \r\n" + "   CPE_RX_LVL) \r\n" + "VALUES ( ?,\r\n"
+								+ " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ? )";
+						pst = con.prepareStatement(qry);
+						pst.setString(1, tOKEN_ID);
+						pst.setString(2, CUSTOMER_NAME);
+						pst.setString(3, CONTACT_NO);
+						pst.setString(4, OLT_PORT);
+						pst.setString(5, FAP_LOCATION);
+						pst.setString(6, FAP_PORT);
+						pst.setString(7, CPE_RX_LVL);
+						pst.executeUpdate();
 
 			// for multiple services - token master
 			cqry = "select TM_SUB_TOKEN_ID.NEXTVAL from dual";
@@ -291,11 +321,10 @@ public class ComplainDao {
 		}
 	}
 
-	public List<Map<String, Object>> getComplainList(String User, String Region, String Zone, String District,
-			String Office, String Olt, String Subteam, String Service_type, String Frm_dt, String To_dt, String Status)
+	public List<Map<String, Object>> getComplainListlowlvl(String User, String Region, String Zone, String District,
+			String Office, String Olt, String Subteam, String Service_type, String Frm_dt, String To_dt, String Status,String Teamid)
 			throws SQLException {
 		Connection con = DbCon.getConnection();
-
 		try {
 			String qry = "SELECT TOKENS.*,\r\n" + "         (SELECT DESCRIPTION\r\n"
 					+ "            FROM M_SERVICE_TYPE\r\n"
@@ -310,7 +339,9 @@ public class ComplainDao {
 					+ "                 TM.PROBLEM_ID,\r\n" + "                 TM.REMARKS,\r\n"
 					+ "                 FDC_CODE,\r\n" + "                 TM.SUB_TEAM_CODE,\r\n"
 					+ "                 TM.SOLVE_FLAG,\r\n" + "                 SERVICE_TYPE_ID,\r\n"
-					+ "                 TM.CREATE_DT\r\n"
+					+ "                 TM.CREATE_DT,\r\n"
+					+ "                 MTM.TEAM_ID\r\n"
+					
 					+ "            FROM MAIN_TOKEN_MASTER MTM, TOKEN_MASTER TM\r\n"
 					+ "           WHERE     MTM.TOKEN_ID = TM.TOKEN_ID\r\n" + "                 AND EXISTS\r\n"
 					+ "                         (SELECT fdc_code\r\n"
@@ -330,11 +361,12 @@ public class ComplainDao {
 					+ "         AND TOKENS.SUB_TEAM_CODE = NVL (?, SUB_TEAM_CODE)\r\n"
 					+ "         AND TOKENS.SERVICE_TYPE_ID = NVL (?, SERVICE_TYPE_ID)\r\n"
 					+ "         AND TOKENS.SOLVE_FLAG = NVL (?, SOLVE_FLAG)\r\n" +
-
-					"         AND TOKENS.CREATE_DT BETWEEN NVL (common.TO_AD (?), SYSDATE - 30)\r\n"
-					+ "                                  AND NVL (common.TO_AD (?), SYSDATE)\r\n"
-					+ "ORDER BY token_ID, create_dt DESC";
-
+					"         AND TOKENS.CREATE_DT BETWEEN NVL (common.TO_AD (?), SYSDATE - 30)\r\n" + 
+					"                                  AND NVL (common.TO_AD (?), SYSDATE)\r\n" + 
+					"          AND TOKENS.TEAM_ID=NVL(?,TEAM_ID)\r\n" +
+				    "ORDER BY token_ID, create_dt DESC";
+			
+		
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, User);
 			pst.setString(2, User);
@@ -349,6 +381,7 @@ public class ComplainDao {
 
 			pst.setString(11, Frm_dt);
 			pst.setString(12, To_dt);
+			pst.setString(13, Teamid);
 
 			ResultSet rs = pst.executeQuery();
 
@@ -374,6 +407,105 @@ public class ComplainDao {
 		return null;
 	}
 
+	
+	public List<Map<String, Object>> getComplainList(String User, String Region, String Zone, String District,
+			String Office, String Olt, String Subteam, String Service_type, String Frm_dt, String To_dt, String Status,String Teamid)
+			throws SQLException {
+		Connection con = DbCon.getConnection();
+
+		try {
+			String qry = "SELECT TOKENS.*,\r\n" + 
+					"         (SELECT DESCRIPTION\r\n" + 
+					"            FROM M_SERVICE_TYPE\r\n" + 
+					"           WHERE SERVICE_TYPE_ID = TOKENS.SERVICE_TYPE_ID)    SERVICE_DESC,\r\n" + 
+					"         (SELECT DESCRIPTION\r\n" + 
+					"            FROM M_PROBLEM\r\n" + 
+					"           WHERE PROBLEM_ID = TOKENS.PROBLEM_ID)              PROBLEM_DESC,\r\n" + 
+					"           (SELECT DESCRIPTION||' '||FDC_LOCATION\r\n" + 
+					"            FROM M_FDC \r\n" + 
+					"           WHERE FDC_CODE  = TOKENS.FDC_CODE )              FDC_DESC\r\n" + 
+					"    FROM (SELECT TM.TOKEN_ID,\r\n" + 
+					"                 SUB_TOKEN_ID,\r\n" + 
+					"                 SERVICE_ID,\r\n" + 
+					"                 SRV_NO,\r\n" + 
+					"                 COMPLAIN_NO,\r\n" + 
+					"                 CONTACT_NAME,\r\n" + 
+					"                 TM.PROBLEM_ID,\r\n" + 
+					"                 TM.REMARKS,\r\n" + 
+					"                 FDC_CODE,\r\n" + 
+					"                 TM.SUB_TEAM_CODE,\r\n" + 
+					"                 TM.SOLVE_FLAG,\r\n" + 
+					"                 SERVICE_TYPE_ID,\r\n" + 
+					"                 TM.CREATE_DT,\r\n" + 
+				    "                 MTM.TEAM_ID\r\n"+
+					"            FROM MAIN_TOKEN_MASTER MTM, TOKEN_MASTER TM\r\n" + 
+					"           WHERE     MTM.TOKEN_ID = TM.TOKEN_ID\r\n" + 
+					"                 ) TOKENS\r\n" + 
+					"   WHERE     EXISTS\r\n" + 
+					"                 (SELECT *\r\n" + 
+					"                    FROM WEB_USER_TEAM_MAP\r\n" + 
+					"                   WHERE     USER_ID = ?\r\n" + 
+					"                         AND TOKENS.SUB_TEAM_CODE =\r\n" + 
+					"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
+					"         AND EXISTS\r\n" + 
+					"                 (SELECT FDC_CODE\r\n" + 
+					"                    FROM VW_FTTH_ALL_FDC\r\n" + 
+					"                   WHERE     TOKENS.fdc_code = VW_FTTH_ALL_FDC.fdc_code\r\n" + 
+					"                         AND REGION_CODE = NVL (?, REGION_CODE)\r\n" + 
+					"                         AND ZONE_CODE = NVL (?, ZONE_CODE)\r\n" + 
+					"                         AND DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
+					"                         AND OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
+					"                         AND OLT_CODE = NVL (?, OLT_CODE))\r\n" + 
+					"         AND TOKENS.SUB_TEAM_CODE = NVL (?, SUB_TEAM_CODE)\r\n" + 
+					"         AND TOKENS.SERVICE_TYPE_ID = NVL (?, SERVICE_TYPE_ID)\r\n" + 
+					"         AND TOKENS.SOLVE_FLAG = NVL (?, SOLVE_FLAG)\r\n" + 
+					"         AND TOKENS.CREATE_DT BETWEEN NVL (common.TO_AD (?), SYSDATE - 30)\r\n" + 
+					"                                  AND NVL (common.TO_AD (?), SYSDATE)\r\n" + 
+					"          AND TOKENS.TEAM_ID=NVL(?,TEAM_ID)\r\n" +
+					"ORDER BY token_ID, create_dt DESC";
+			
+			
+			PreparedStatement pst = con.prepareStatement(qry);
+			pst.setString(1, User);
+			pst.setString(2, Region);
+			pst.setString(3, Zone);
+			pst.setString(4, District);
+			pst.setString(5, Office);
+			pst.setString(6, Olt);
+			pst.setString(7, Subteam);
+			pst.setString(8, Service_type);
+			pst.setString(9, Status);
+
+			pst.setString(10, Frm_dt);
+			pst.setString(11, To_dt);
+			pst.setString(12, Teamid);
+
+			ResultSet rs = pst.executeQuery();
+
+			List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+			Map<String, Object> row = null;
+
+			ResultSetMetaData metaData = rs.getMetaData();
+			Integer columnCount = metaData.getColumnCount();
+
+			while (rs.next()) {
+				row = new HashMap<String, Object>();
+				for (int i = 1; i <= columnCount; i++) {
+					row.put(metaData.getColumnName(i), rs.getObject(i));
+				}
+				resultList.add(row);
+			}
+			return resultList;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			con.close();
+		}
+		return null;
+	}
+
+	
+	
 	// forward dao
 	public String ForwardTeam(String forwardtoken, String toteam, String User, String Remarks) throws SQLException {
 		Connection con = DbCon.getConnection();
@@ -420,6 +552,52 @@ public class ComplainDao {
 		return "Successfully Forwarded Trouble Ticket to another team";
 	}
 
+	// forward dao
+	public String Resolved(String forwardtoken, String User, String Remarks) throws SQLException {
+		Connection con = DbCon.getConnection();
+		con.setAutoCommit(false);
+		PreparedStatement pst = null;
+		try {
+
+			pst = con.prepareStatement("INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n"
+					+ "                               SUB_TOKEN_ID,\r\n"
+					+ "                               FROM_SUB_TEAM_CODE,\r\n"
+					+ "                               TO_SUB_TEAM_CODE,\r\n"
+					+ "                               SOLVE_FLAG,\r\n"
+					+ "                               PROBLEM_ID,\r\n" + "                               REMARKS,\r\n"
+					+ "                               CREATE_BY)\r\n"
+					+ "     VALUES (TM_SUB_TOKEN_DETAIL_ID.NEXTVAL,\r\n" + "             ?,\r\n"
+					+ "             (select sub_team_code from TOKEN_MASTER where SUB_TOKEN_ID=?),\r\n"
+					+ "             ?,\r\n" + "             'Y',\r\n" + "             (SELECT PROBLEM_ID\r\n"
+					+ "                FROM TOKEN_MASTER\r\n" + "               WHERE SUB_TOKEN_ID = ?),\r\n"
+					+ "             ?,\r\n" + "             ?)");
+			pst.setString(1, forwardtoken);
+			pst.setString(2, forwardtoken);
+			pst.setString(3, "FLMTA");
+			pst.setString(4, forwardtoken);
+			pst.setString(5, Remarks);
+			pst.setString(6, User);
+			pst.executeUpdate();
+			// after forwarding team updating subcode in token master
+			pst = con.prepareStatement(
+					"UPDATE TOKEN_MASTER SET SOLVE_FLAG='Y', SUB_TEAM_CODE= ?, UPDATE_BY=?,UPDATE_DT=sysdate WHERE  SUB_TOKEN_ID= ?");
+			pst.setString(1, "FLMTA");
+			pst.setString(3, forwardtoken);
+			pst.setString(2, User);
+			pst.executeUpdate();
+
+			con.commit();
+
+		} catch (Exception e) {
+			con.rollback();
+			e.printStackTrace();
+			return "Failed " + e;
+		} finally {
+			con.close();
+		}
+		return "Successfully Resovled Ticket";
+	}
+
 	// close tickets dao
 	public String Closeticket(String closetoken, String User, String Remarks) throws SQLException {
 		Connection con = DbCon.getConnection();
@@ -438,7 +616,7 @@ public class ComplainDao {
 					+ "             (select sub_team_code from TOKEN_MASTER where SUB_TOKEN_ID=?),\r\n"
 					+ "             (select sub_team_code from TOKEN_MASTER where SUB_TOKEN_ID=?),\r\n" +
 
-					"             'Y',\r\n" + "             (SELECT PROBLEM_ID\r\n"
+					"             'C',\r\n" + "             (SELECT PROBLEM_ID\r\n"
 					+ "                FROM TOKEN_MASTER\r\n" + "               WHERE SUB_TOKEN_ID = ?),\r\n"
 					+ "             ?,\r\n" + "             ?)");
 			pst.setString(1, closetoken);
@@ -451,7 +629,7 @@ public class ComplainDao {
 
 			// after closing ticket updating flag in token master
 			pst = con.prepareStatement(
-					"UPDATE TOKEN_MASTER SET SOLVE_FLAG= 'Y',SOLVE_DT=sysdate,SOLVE_BY=?, UPDATE_BY=?,UPDATE_DT=sysdate WHERE  SUB_TOKEN_ID= ?");
+					"UPDATE TOKEN_MASTER SET SOLVE_FLAG= 'C',SOLVE_DT=sysdate,SOLVE_BY=?, UPDATE_BY=?,UPDATE_DT=sysdate WHERE  SUB_TOKEN_ID= ?");
 			pst.setString(3, closetoken);
 			pst.setString(2, User);
 			pst.setString(1, User);
@@ -461,7 +639,7 @@ public class ComplainDao {
 			// checking if all tickets are resolved
 
 			pst = con.prepareStatement(
-					"select * from token_master where solve_flag='N' and token_id=(select token_id from token_master where sub_token_id=?)");
+					"select * from token_master where solve_flag<>'C' and token_id=(select token_id from token_master where sub_token_id=?)");
 			pst.setString(1, closetoken);
 			ResultSet qsolveflag = pst.executeQuery();
 			if (!qsolveflag.next()) {
@@ -495,6 +673,105 @@ public class ComplainDao {
 			PreparedStatement pst = con
 					.prepareStatement("select * from TOKEN_DETAIL where SUB_TOKEN_ID=? order by td_id");
 			pst.setString(1, SUB_TOKEN_ID);
+
+			ResultSet rs = pst.executeQuery();
+
+			List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+			Map<String, Object> row = null;
+
+			ResultSetMetaData metaData = rs.getMetaData();
+			Integer columnCount = metaData.getColumnCount();
+
+			while (rs.next()) {
+				row = new HashMap<String, Object>();
+				for (int i = 1; i <= columnCount; i++) {
+					row.put(metaData.getColumnName(i), rs.getObject(i));
+				}
+				resultList.add(row);
+			}
+			return resultList;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			con.close();
+		}
+		return null;
+	}
+
+	public List<Map<String, Object>> getComplainbyCPESN(String CPESN) throws SQLException {
+		Connection con = DbCon.getConnection();
+
+		try {
+			PreparedStatement pst = con.prepareStatement(
+					"select * from TOKEN_MASTER where token_id=(select token_id from MAIN_TOKEN_MASTER where SRV_NO=? and solve_flag<>'C')");
+			pst.setString(1, CPESN);
+
+			ResultSet rs = pst.executeQuery();
+
+			List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+			Map<String, Object> row = null;
+
+			ResultSetMetaData metaData = rs.getMetaData();
+			Integer columnCount = metaData.getColumnCount();
+
+			while (rs.next()) {
+				row = new HashMap<String, Object>();
+				for (int i = 1; i <= columnCount; i++) {
+					row.put(metaData.getColumnName(i), rs.getObject(i));
+				}
+				resultList.add(row);
+			}
+			return resultList;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			con.close();
+		}
+		return null;
+	}
+	
+	
+	
+	public List<Map<String, Object>> getComplainListDetailbyToken(String TokenID)
+			throws SQLException {
+		Connection con = DbCon.getConnection();
+
+		try {
+			String qry = "/* Formatted on 4/12/2020 1:09:32 AM (QP5 v5.354) */\r\n" + 
+					"  SELECT TOKENS.*,\r\n" + 
+					"         (SELECT DESCRIPTION\r\n" + 
+					"            FROM M_SERVICE_TYPE\r\n" + 
+					"           WHERE SERVICE_TYPE_ID = TOKENS.SERVICE_TYPE_ID)    SERVICE_DESC,\r\n" + 
+					"         (SELECT DESCRIPTION\r\n" + 
+					"            FROM M_PROBLEM\r\n" + 
+					"           WHERE PROBLEM_ID = TOKENS.PROBLEM_ID)              PROBLEM_DESC,\r\n" + 
+				 "           (SELECT DESCRIPTION||' '||FDC_LOCATION\r\n" + "            FROM M_FDC \r\n"
+					+ "           WHERE FDC_CODE  = TOKENS.FDC_CODE )              FDC_DESC\r\n"+
+					
+					"    FROM (SELECT TM.TOKEN_ID,\r\n" + 
+					"                 SUB_TOKEN_ID,\r\n" + 
+					"                 SERVICE_ID,\r\n" + 
+					"                 SRV_NO,\r\n" + 
+					"                 COMPLAIN_NO,\r\n" + 
+					"                 CONTACT_NAME,\r\n" + 
+					"                 TM.PROBLEM_ID,\r\n" + 
+					"                 TM.REMARKS,\r\n" + 
+					"                 FDC_CODE,\r\n" + 
+					"                 TM.SUB_TEAM_CODE,\r\n" + 
+					"                 TM.SOLVE_FLAG,\r\n" + 
+					"                 SERVICE_TYPE_ID,\r\n" + 
+					"                 TM.CREATE_DT,\r\n" + 
+					"                 MTM.REMARKS MAIN_REMARKS\r\n" + 
+					"            FROM MAIN_TOKEN_MASTER MTM, TOKEN_MASTER TM\r\n" + 
+					"           WHERE     MTM.TOKEN_ID = TM.TOKEN_ID\r\n" + 
+					"           and mtm.token_id=?\r\n" + 
+					"                ) TOKENS\r\n" + 
+					"ORDER BY token_ID, create_dt DESC";
+					
+
+			PreparedStatement pst = con.prepareStatement(qry);
+			pst.setString(1, TokenID);
+			
 
 			ResultSet rs = pst.executeQuery();
 

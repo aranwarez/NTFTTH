@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,26 +79,7 @@ public class ComplainController {
 
 	}
 
-	@ResponseBody
-	@RequestMapping(value = "/complain/getSubsInfo", method = RequestMethod.GET)
-	public String getSubsinfo(String cpeSn, String SubsInfo, Locale locale, Model model, HttpSession session) {
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
-		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
-		}
-
-		CrmDao dao = new CrmDao();
-		try {
-			String msg = dao.getCPEINFO(cpeSn, "", true);
-			return msg;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return e.getMessage();
-		}
-
-	}
+	
 
 	@ResponseBody
 	@RequestMapping(value = "/complain/getStatusInfo", method = RequestMethod.GET)
@@ -119,6 +101,30 @@ public class ComplainController {
 		}
 
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/complain/getComplainServiceInfo", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public  List<Map<String, Object>> getComplainServiceInfo(String cpeSn, Locale locale, Model model, HttpSession session) {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+
+		ComplainDao dao =new ComplainDao();
+		try {
+			 List<Map<String, Object>> msg = dao.getComplainbyCPESN(cpeSn);
+			return msg;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/complain/dialog")
 	public String dialogrole(Model model, Locale locale) {
@@ -130,7 +136,7 @@ public class ComplainController {
 	@ResponseBody
 	public String Complainregister(String JSON, String Complain_no, String Remarks, String SRV_NO, String contactName,
 			String fdcname, String teamname, String Supervisorname, String SupervisorContno, String Teamleader,
-			String TeamleaderNo, Boolean solved, Model model, Locale locale, HttpSession session) {
+			String TeamleaderNo, Boolean solved, String CUSTOMER_NAME,String CONTACT_NO,String OLT_PORT,String FAP_LOCATION,String FAP_PORT,String CPE_RX_LVL,Model model, Locale locale, HttpSession session) {
 		logger.info("Registering new service for", locale);
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
@@ -147,9 +153,9 @@ public class ComplainController {
 					new TypeReference<List<Map<String, Object>>>() {
 					});
 			if(solved) {
-				 msg = dao.solveProblem(myObjects, "1", SRV_NO, Complain_no, contactName, Remarks, user.getUSER_ID(),fdcname,teamname,Supervisorname,SupervisorContno,Teamleader,TeamleaderNo);
+				 msg = dao.solveProblem(myObjects, "1", SRV_NO, Complain_no, contactName, Remarks, user.getUSER_ID(),fdcname,teamname,Supervisorname,SupervisorContno,Teamleader,TeamleaderNo,CUSTOMER_NAME, CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL);
 			}else
-				 msg = dao.saveProblem(myObjects, "1", SRV_NO, Complain_no, contactName, Remarks, user.getUSER_ID(),fdcname,teamname,Supervisorname,SupervisorContno,Teamleader,TeamleaderNo);
+				 msg = dao.saveProblem(myObjects, "1", SRV_NO, Complain_no, contactName, Remarks, user.getUSER_ID(),fdcname,teamname,Supervisorname,SupervisorContno,Teamleader,TeamleaderNo,CUSTOMER_NAME, CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL);
 			
 				} catch (Exception e) {
 			// TODO Auto-generated catch block
