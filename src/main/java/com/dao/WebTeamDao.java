@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class WebTeamDao {
 
 	public String saveWebteam(Connection con, String teamname, String fdc_name, String Supervisorname,
-			String SupervisorContno, String Teamleader, String TeamleaderNo) {
+			String SupervisorContno, String Teamleader, String TeamleaderNo) throws SQLException {
 		try {
 
 			String qry = "select * from WEB_TEAM where TEAMNAME=? and OFFICE_CODE=(select office_code from VW_FTTH_ALL_FDC where fdc=?)";
@@ -91,9 +91,12 @@ public class WebTeamDao {
 
 		} catch (Exception e) {
 
+		} finally {
+			con.close();
 		}
 		return null;
 
 	}
+	
 
 }
