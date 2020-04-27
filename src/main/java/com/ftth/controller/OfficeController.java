@@ -39,4 +39,22 @@ private static final Logger logger = LoggerFactory.getLogger(ZoneController.clas
 		return list;
 
 	}
+	
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET, value = "getOfficeList",produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Map<String, Object>> officeList(HttpServletRequest request, HttpServletResponse response) {
+				
+		List<Map<String, Object>> list = null;
+		
+		try {
+			list = OfficeDao.getOfficeList();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
 }

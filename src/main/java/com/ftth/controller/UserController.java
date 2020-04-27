@@ -163,6 +163,8 @@ public class UserController {
 	public UserInformationModel editUser(String code, Model model, HttpServletRequest request,
 			HttpServletResponse response, HttpSession session, Locale locale) {
 
+		System.out.println("nabin "+code);
+		
 		UserDao userdao = new UserDao();
 		UserInformationModel user = null;
 		try {
@@ -201,6 +203,8 @@ public class UserController {
 
 		m.setUSER_LEVEL(request.getParameter("USER_LEVEL"));
 		m.setROLE_CODE(request.getParameter("ROLE_CODE"));
+		m.setMOBILE_NO(request.getParameter("MOBILE_NO"));
+		
 		String msg = null;
 
 		try {

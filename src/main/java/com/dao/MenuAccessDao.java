@@ -96,7 +96,7 @@ public class MenuAccessDao {
 		} catch (SQLException ex) {
 			con.rollback();
 			ex.printStackTrace();
-			return "Failed " + ex;
+			return "Failed " + ex.getMessage();
 		} finally {
 
 			con.close();

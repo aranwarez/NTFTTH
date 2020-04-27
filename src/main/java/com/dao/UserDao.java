@@ -88,7 +88,7 @@ public class UserDao {
 				level.setEMPLOYEE_CODE(rs.getString("EMPLOYEE_CODE"));
 				level.setLOCK_FLAG(rs.getString("LOCK_FLAG"));
 				level.setSUPER_FLAG(rs.getString("SUPER_FLAG"));
-				level.setOFFICE_CODE("OFFICE_CODE");
+				level.setOFFICE_CODE(rs.getString("OFFICE_CODE"));
 				level.setCREATED_BY(rs.getString("CREATED_BY"));
 				level.setCREATED_DATE(rs.getString("CREATED_DATE"));
 				level.setDISABLE_FLAG(rs.getString("DISABLE_FLAG"));

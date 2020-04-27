@@ -1,11 +1,4 @@
 var CODE;
-
-
-$(document).ready(function() {
-	$('#userlist').dataTable( {
-	    "scrollX": true
-	} );
-});
 function saveUser() {
 
 	var pass = $("#PASSWORD").val();
@@ -122,7 +115,7 @@ function editUser(code) {
     	
         $("#EDITUSER_ID").val(CODE);
         $("#EDITFULL_NAME").val(response.full_NAME);
-        $("#EDITEMPLOYEE_CODE").val(response.employee_CODE);
+        $("#EDITEMPLOYEE_CODE").val(response.employee_CODE).trigger('change');
 //    	alert(response.employee_CODE);
     	
         if (response.lock_FLAG == 'Y') {
@@ -141,29 +134,16 @@ function editUser(code) {
             $('input:radio[name="EDITDISABLE_FLAG"][value=Y]').attr('checked', true);
         } else if (response.disable_FLAG == 'N') {
             $('input:radio[name="EDITDISABLE_FLAG"][value=N]').attr('checked', true);
-        }
-
-//        $("#EDITREGION_CODE").val(response.region_CODE);
-//
-//        getEditAccountCenter();
-
-//        $("#EDITACC_CEN_CODE").val(response.acc_CEN_CODE);
-//        getEditCC();
-//        $("#EDITCC_CODE").val(response.cc_CODE);
-//
-        
+        }        
         $("#EDITLOCATION_CODE").val(response.location_CODE);
-        
-        
+             
 
         $("#EDITUSER_LEVEL").val(response.user_LEVEL);
         
         
         $("#EDITROLE_CODE").val(response.role_CODE);
-        $("#EDITOFFICE_CODE").val(response.office_CODE);
+        $("#EDITOFFICE_CODE").val(response.office_CODE).trigger('change');
         $("#EDITMOBILE_NO").val(response.mobile_NO);
-        
-        
    
 
     });
@@ -193,8 +173,6 @@ function getEditAccountCenter() {
 
 function updateUser() {
 
-
-	
 	
     $.post('../update/user', {
     	USER_ID : CODE,		

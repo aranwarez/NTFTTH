@@ -4,8 +4,6 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <c:url var="home" value="/" scope="request" />
 
-
-
 <html>
 <head>
 <meta charset="utf-8">
@@ -16,21 +14,6 @@
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
 	name="viewport">
 <jsp:include page="${request.contextPath}/headCss"></jsp:include>
-<style>
-.example-modal .modal {
-	position: relative;
-	top: auto;
-	bottom: auto;
-	right: auto;
-	left: auto;
-	display: block;
-	z-index: 1;
-}
-
-.example-modal .modal {
-	background: transparent !important;
-}
-</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -80,12 +63,11 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<h1>User Management</h1>
+				<h1>Employee Entry</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li><a href="#">Tables</a></li>
 					<li class="active">Data tables</li>
-
 				</ol>
 				<a href="#" class="btn btn-primary pull-right" data-toggle="modal"
 					data-target="#myModal"> <i class="fa fa-plus"></i> Add
@@ -127,91 +109,94 @@
 
 							<!-- /.box-header -->
 							<div class="box-body">
-								<table id="userlist" class="table table-bordered table-striped">
+							 <div class="col-xs-12 table-responsive">
+								  <table class="table table-striped example1" id="example1">
 									<thead>
 										<tr>
-											<th>USER_ID</th>
-											<th>FULL_NAME</th>
-											<th>EMP_CODE</th>										
-											<th>Delete</th>
-											<th>SUPER</th>
-											<th>DISABLE</th>
-											
-											<th>LOCATION</th>
-											
-											<th>USER</th>
-											
-											<th>ROLE</th>
-											<th>OFFICE</th>
-											
-											<th>MOBILE</th>
-											<th>Edit</th>
-											<th>Delete</th>
-
+										 <th>EMPLOYEE_CODE </th>
+                                        <th>EMPLOYEE_NAME </th>
+                                        <th>ADDRESS </th>                                    
+                                        <th>SEX </th>
+                                        <th>MARITAL_STATUS </th>
+                                        <th>DOB </th>
+                                        <th>DOJ </th>                                       
+                                        <th>QUALIFICATION </th>
+                                        <th>DISABLE_FLAG </th>
+                                        <th>TEL_NO </th>
+                                        <th>MOBILE_NO </th>
+                                        <th>EMAIL </th>
+                                        <th>EMP_NO </th>
+                                        <th>TTC_NO </th>
+                                        <th>POST_CD </th>
+                                        <th>DEPT_CD </th>
+                                        <th> LOCATION_CD </th>
+                                        <th> EMP_LEVEL</th>
+                                        <th> EMP_TYPE </th>
+                                        <th> EMP_TITLE </th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
 										</tr>
 									</thead>
 									<tbody>
-										<c:forEach var="user" items="${data_list}">
+										<c:forEach var="user" items="${employeelist}">
 
 											<tr>
-												
-												<td>${user.getUSER_ID()}</td>
-
-												<td>${user.getFULL_NAME()}</td>
-												<td>${user.getEMPLOYEE_CODE()}</td>
-
-												<td>${user.getLOCK_FLAG()}</td>
-												<td>${user.getSUPER_FLAG()}</td>
-
-												<td>${user.getDISABLE_FLAG()}</td>
-												
-												<td>${user.getLOCATION_CODE()}</td>
-												
-												<td>${user.getUSER_LEVEL()}</td>
-												
-												<td>${user.getROLE_CODE()}</td>
-												
-												
-												<td>${user.getOFFICE_CODE()}</td>
-
-												<td>${user.getMOBILE_NO()}</td>
-												
 											
+												<td>${user.EMPLOYEE_CODE}</td>												
+												<td>${user.EMPLOYEE_NAME}</td>
+												<td>${user.ADDRESS}</td>
+												<td>${user.SEX}</td>
+												<td>${user.MARITAL_STATUS}</td>
+												<td>${user.DOB}</td>
+												<td>${user.DOJ}</td>
+												<td>${user.QUALIFICATION}</td>
+												<td>${user.DISABLE_FLAG}</td>
+												
+												
+												<td>${user.TEL_NO}</td>
+												
+												
+												<td>${user.MOBILE_NO}</td>
+												
+												
+												
+												<td>${user.EMAIL}</td>
+												
+												<td>${user.EMP_NO}</td>
+												<td>${user.TTC_NO}</td>
+												
+												<td>${user.POST_CD}</td>
+												<td>${user.DEPT_CD}</td>
+												<td>${user.LOCATION_CD}</td>
+												<td>${user.EMP_LEVEL}</td>
+												<td>${user.EMP_TYPE}</td>
+												<td>${user.EMP_TITLE}</td>
+												<td>${user.DOB}</td>
+												<td>${user.DOB}</td>
+												
 												<td>
-
 													<div class="btn-group">
-
 														<a href="#" class="btn btn-info" data-toggle="modal"
-															data-target="#changePassModal"
-															onclick="return getHold('${user.getUSER_ID()}')">
-															Pass Change </a> <a href="#" class="btn btn-info"
-															data-toggle="modal" data-target="#editModal"
-															onclick="return editUser('${user.getUSER_ID()}')"> <i
-															class="fa fa-edit"></i> Edit
+															data-target="#editModal"
+															onclick="return editEmployee'${user.EMPLOYEE_CODE}')">
+															<i class="fa fa-edit"></i> Edit
 														</a>
 													</div>
 												</td>
-
-
 												<td>
-
 													<div>
-														<a href="#" class="btn btn-default" data-toggle="modal"
+														<a href="" class="btn btn-default" data-toggle="modal"
 															data-target="#deleteModal"
-															onclick="return deleteUser('${user.getUSER_ID()}')">
+															onclick="return delAccCenter'${user.EMPLOYEE_CODE}')">
 															<i class="fa fa-trash"></i> Delete
 														</a>
 													</div>
-
-
 												</td>
-
 											</tr>
 										</c:forEach>
-
 									</tbody>
-
 								</table>
+								</div>
 							</div>
 							<!-- /.box-body -->
 						</div>
@@ -246,20 +231,25 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialoguser?a=1"></jsp:include>
+	<jsp:include page="${request.contextPath}/dialogemployee"></jsp:include>
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
 	<script>
 		$(function() {
 
-			$("#EMPLOYEE_CODE,#EDITEMPLOYEE_CODE,#EDITOFFICE_CODE,#OFFICE_CODE").select2();
-			
-			 $('#userlist').DataTable( {
-			        "scrollX": true
-			    } );
+			   $.fn.dataTable.ext.errMode = 'none';
+		        jQuery.ajaxSetup({async: false});
+		        officelist();
+		        getlist();
+		  
+		        var table = $('#example1').DataTable();
+		        table.clear().draw();
+
+		     
+
 		})
 	</script>
-	<script src="<c:url value="/resources/function/user.js?a=156" />"></script>
+	<script src="<c:url value="/resources/function/employee.js" />"></script>
 
 
 </body>

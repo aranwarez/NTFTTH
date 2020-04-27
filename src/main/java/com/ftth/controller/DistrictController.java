@@ -20,7 +20,7 @@ import com.dao.ZoneDao;
 @Controller
 public class DistrictController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ZoneController.class);
+	private static final Logger logger = LoggerFactory.getLogger(DistrictController.class);
 	
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET, value = "getDistrictByZone",produces = MediaType.APPLICATION_JSON_VALUE)

@@ -101,7 +101,7 @@
                                         <h3 class="box-title">${fx} </h3>
                                 </div>
 
-                                <%if (request.getParameter("sucess") != null) {%>>
+                                <%if (request.getParameter("sucess") != null) {%>
                                 <div class="alert alert-success">
                                     <strong> <%=request.getParameter("sucess")%> </strong>
                                 </div>
