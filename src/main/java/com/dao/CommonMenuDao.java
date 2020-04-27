@@ -3,13 +3,15 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import com.model.MenuAccess;
 
 import util.DbCon;
 
 public class CommonMenuDao {
 
-	public static MenuAccess checkAccess(String ROLE_CODE, String MENU_URL) {
+	public static MenuAccess checkAccess(String ROLE_CODE, String MENU_URL) throws SQLException {
 		Connection con = DbCon.getConnection();
 
 		try {
@@ -18,7 +20,7 @@ public class CommonMenuDao {
 			PreparedStatement pst = con.prepareStatement(
 					"select * from edit_mode where ROLE_CODE=? and menu_code=(select menu_code FROM WEB_MENU_ENTRY WHERE menu_url= ?)");
 			pst.setString(1, ROLE_CODE);
-			pst.setString(2,  MENU_URL);
+			pst.setString(2, MENU_URL);
 			ResultSet rs = pst.executeQuery();
 			if (rs.next()) {
 				m.setLIST_FLAG(rs.getString("LIST_FLAG"));
@@ -33,6 +35,9 @@ public class CommonMenuDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+
+		} finally {
+			con.close();
 		}
 		return null;
 

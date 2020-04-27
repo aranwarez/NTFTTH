@@ -280,7 +280,7 @@
 								</div>
 							</div>
 							<div class="box-body">
-							    <div class="col-md-6">
+							    <div class="col-md-4">
      		
 						
 						
@@ -316,20 +316,63 @@
 						
 												
 							</div>
-							<div class="col-md-6">
-							<label id="customerlabel">distribCblName</label> <span
-												id="distribCblName"></span> <BR> <label
-												id="customerlabel">distribCoreNo</label> <span
-												id="distribCoreNo"></span> <BR> <label
-												id="customerlabel">distribPortNo</label> <span
-												id="distribPortNo"></span> <BR> <label
-												id="customerlabel">fdcName</label> <span id="fdcName"></span>
-											<BR> <label id="customerlabel">feederCblName</label> <span
-												id="feederCblName"></span> <BR> <label
-												id="customerlabel">feederCoreNo</label> <span
-												id="feederCoreNo"></span>
+							<div class="col-md-4">
+													
+						 <table class="table table-condensed">
+												<tbody>
+													<tr>
+														<td><label>distribCblName </label></td>
+														<td><span id="distribCblName"></span></td>
+													</tr>
+													<tr>
+														<td><label>distribCoreNo </label></td>
+														<td><span id="distribCoreNo"></span></td>
+													</tr>
+													<tr>
+														<td><label>distribPortNo </label></td>
+														<td><span id="distribPortNo"></span></td>
+													</tr>
+													<tr>
+														<td><label>fdcName</label></td>
+														<td><span id="fdcName"></span></td>
+													</tr>
+													<tr>
+														<td><label>feederCblName </label></td>
+														<td><span id="feederCblName"></span></td>
+													</tr>
+													<tr>
+														<td><label>feederCoreNo </label></td>
+														<td><span id="feederCoreNo"></span></td>
+													</tr>
+
+												</tbody>
+											</table>
 							
 							</div>
+							
+							<div class="col-md-4">
+													
+						 <table class="table table-condensed">
+												<tbody>
+													<tr>
+														<td><label>Fap Location </label></td>
+														<td><span id="faplocation"></span></td>
+													</tr>
+													<tr>
+														<td><label>Longitude </label></td>
+														<td><span id="Longitude"></span></td>
+													</tr>
+														<tr>
+														<td><label>Latitude </label></td>
+														<td><span id="Latitude"></span></td>
+													</tr>	
+
+												</tbody>
+											</table>
+							
+							</div>
+							
+							
 							</div>
 							<!-- /.box-body -->
 						</div>

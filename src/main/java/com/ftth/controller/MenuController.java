@@ -33,7 +33,7 @@ public class MenuController {
 
     @RequestMapping(value = "/menu/list", method = RequestMethod.GET)
     public String menuList(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response,
-            HttpSession session) {
+            HttpSession session) throws SQLException {
         logger.info("Welcome home! The client locale is {}.", locale);
 
         UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");

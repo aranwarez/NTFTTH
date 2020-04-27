@@ -15,7 +15,6 @@
 	name="viewport">
 <jsp:include page="${request.contextPath}/headCss"></jsp:include>
 
-<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -396,7 +395,7 @@
 											<th>SubTeam</th>											
 											<th>Problem</th>
 											<th>FDC</th>
-											<th>Complain No</th>
+											<th>ContactNo</th>
 											<th>Customer</th>
 											<th>Forward</th>
 											<th>Resolved</th>
@@ -451,6 +450,8 @@
 	<!-- ./wrapper -->
 
 	<jsp:include page="${request.contextPath}/troubleticket/dialog"></jsp:include>
+	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
+	
 
 
 	<script

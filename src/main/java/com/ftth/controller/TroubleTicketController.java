@@ -1,5 +1,6 @@
 package com.ftth.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -38,9 +39,10 @@ public class TroubleTicketController {
 	private static final String classname = "../troubleticket/list";
 
 	@RequestMapping(value = "/troubleticket/list", method = RequestMethod.GET)
-	public String menuacesslistlist(Locale locale, Model model, HttpSession session) {
-		logger.info("Welcome home! The client locale is {}.", locale);
+	public String menuacesslistlist(Locale locale, Model model, HttpSession session) throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		logger.info("/troubleticket/list by user"+user.getUSER_ID(), locale);
+		
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
 			model.addAttribute("fx", "Unauthorized Page for this role!!");
@@ -91,9 +93,9 @@ public class TroubleTicketController {
 	
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET, value = "/troubleticket/getfilterlist",produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Map<String, Object>> getTroubleTicketList(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
+	public List<Map<String, Object>> getTroubleTicketList(HttpServletRequest request, HttpServletResponse response,HttpSession session,Locale locale) {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		
+		logger.info("/troubleticket/getfilterlist"+user.getUSER_ID(), locale);
 		String REGION_CODE = request.getParameter("REGION_CODE");
 		String ZONE_CODE = request.getParameter("ZONE_CODE");
 		String DISTRICT_CODE = request.getParameter("DISTRICT_CODE");
@@ -104,7 +106,7 @@ public class TroubleTicketController {
 		String FRM_DT = request.getParameter("FRM_DT");
 		String TO_DT = request.getParameter("TO_DT");
 		String Statusflag = request.getParameter("Statusflag");
-		
+		String Teamid = request.getParameter("WEBTEAMCODE");
 		
 //		String REGION_CODE = request.getParameter("REGION_CODE");
 		
@@ -113,8 +115,14 @@ public class TroubleTicketController {
 		ComplainDao dao=new ComplainDao();
 		
 		try {
-			list = dao.getComplainList(user.getUSER_ID(), REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE, Sub_Team, Service_Type, FRM_DT, TO_DT,Statusflag);
+			if(user.getUSER_LEVEL().equals("5")) {
+			list = dao.getComplainListlowlvl(user.getUSER_ID(), REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE, Sub_Team, Service_Type, FRM_DT, TO_DT,Statusflag,Teamid);
+			}
+			else {
+				list = dao.getComplainList(user.getUSER_ID(), REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE, Sub_Team, Service_Type, FRM_DT, TO_DT,Statusflag,Teamid);
 					
+				
+			}
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -135,10 +143,11 @@ public class TroubleTicketController {
 	
 	 @RequestMapping(value = "/troubleticket/Forward", method = RequestMethod.POST)
 	    @ResponseBody
-	    public String Teamforward(String Remarks,String token,String toteam,Locale locale,HttpSession session) {
-	        logger.info("Forwarding Ticket", locale);
+	    public String Teamforward(String Remarks,String token,String toteam,Locale locale,HttpSession session) throws SQLException {
 	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+	        logger.info("Forwarding Ticket by "+user.getUSER_ID(), locale);
+	        
+	        MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 			if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
 				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 			}
@@ -159,10 +168,11 @@ public class TroubleTicketController {
 
 	 @RequestMapping(value = "/troubleticket/Close", method = RequestMethod.POST)
 	    @ResponseBody
-	    public String CloseTicket(String Remarks,String token,Locale locale,HttpSession session) {
-	        logger.info("Forwarding Ticket", locale);
+	    public String CloseTicket(String Remarks,String token,Locale locale,HttpSession session) throws SQLException {
 	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+	        logger.info("Closing Ticket"+token+ "by "+user.getUSER_ID(), locale);
+		       
+	        MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 			if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
 				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 			}
@@ -180,10 +190,34 @@ public class TroubleTicketController {
 
 	    }
 	 
+
+	 @RequestMapping(value = "/troubleticket/Resolved", method = RequestMethod.POST)
+	    @ResponseBody
+	    public String Resolved(String Remarks,String token,Locale locale,HttpSession session) throws SQLException {
+	        logger.info("Resolved Ticket", locale);
+	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+			if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+			}
+
+	        ComplainDao dao = new ComplainDao();
+	    	
+	        String msg = null;
+	        try {
+	        msg=	dao.Resolved(token, user.getUSER_ID(), Remarks);
+	         } catch (Exception e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+	        return msg;
+
+	    }
+	 
 	 
 	 @ResponseBody
 		@RequestMapping(method = RequestMethod.GET, value = "/troubleticket/gettokenhistory",produces = MediaType.APPLICATION_JSON_VALUE)
-		public List<Map<String, Object>> getTroubleTicketHistory(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
+		public List<Map<String, Object>> getTroubleTicketHistory(HttpServletRequest request, HttpServletResponse response,HttpSession session) throws SQLException {
 		    UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 					MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 					if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
@@ -209,6 +243,33 @@ public class TroubleTicketController {
 		}
 
 
+	 
+	 @ResponseBody
+		@RequestMapping(method = RequestMethod.GET, value = "/troubleticket/gettokendetails",produces = MediaType.APPLICATION_JSON_VALUE)
+		public List<Map<String, Object>> getTroubleTicketbyTokenID(HttpServletRequest request, HttpServletResponse response,HttpSession session) throws SQLException {
+		    UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+					MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+					if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+						throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+					}
+
+			
+			String TOKEN = request.getParameter("token_id");
+			List<Map<String, Object>> list = null;
+			ComplainDao dao=new ComplainDao();
+			
+			try {
+				list = dao.getComplainListDetailbyToken(TOKEN);
+						
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return list;
+
+		}
 
 	 
 	 

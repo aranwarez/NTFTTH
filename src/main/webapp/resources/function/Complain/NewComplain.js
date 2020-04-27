@@ -27,6 +27,8 @@ function getCustomerInfo() {
 	}, function(response) {
 		try{
 			TEST = JSON.parse(response);
+		
+			
 			if($('#infotype').val()=="custId"){
 				
 			 	$('#serviceModal').modal('show');
@@ -54,10 +56,6 @@ function getCustomerInfo() {
 			 	
 			return;
 			}
-			
-			
-			
-			
 			
 			
 			$('#divcustomerinfo').fadeIn();
@@ -89,6 +87,13 @@ function getCustomerInfo() {
 			$('#oltName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltName);
 			$('#oltType').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltType);
 	
+			//fap info
+			$('#faplocation').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapInfo.location);
+			$('#Longitude').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapInfo.longitude);
+			$('#Latitude').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapInfo.latitude);
+			
+			
+			
 			// team info
 			
 			$('#teamName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamName);
@@ -98,8 +103,10 @@ function getCustomerInfo() {
 			$('#teamleaderName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamleaderName);
 			
 			// subscriber info
+			getSubsInfo(TEST.subsinfo);
+	
 			
-	// $('#balanceOfCreditLimit').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.balanceOfCreditLimit);
+			// $('#balanceOfCreditLimit').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.balanceOfCreditLimit);
 	// $('#offerName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.offerName);
 	// $('#serviceNumber').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.serviceNumber);
 	// $('#status').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.subsInfo.status);
@@ -110,7 +117,7 @@ function getCustomerInfo() {
 			// get AAA data
 			getstatusInfo(); 
 			
-			getSubsInfo();
+			
 		
 		}catch (e) {
 			console.log(e);
@@ -123,16 +130,14 @@ function getCustomerInfo() {
 
 }
 
-function getSubsInfo() {
+function getSubsInfo(subsinfo) {
 
-	$.get('../complain/getSubsInfo', {
-		cpeSn:$('#cpeSN').html()
-	}, function(response) {
+
 		try{
-			TEST2 = JSON.parse(response);
+			
 			$('#divforsubsinfo').empty();
 			
-			$.each(TEST2, function (index, value) {
+			$.each(subsinfo, function (index, value) {
 				
 				var div='<div class="col-md-6"><table id="subsinfotable'+index+'" class="table table-condensed"><tbody><tr><td><label>balanceOfCreditLimit</label></td>		<td><span id="balanceOfCreditLimit'+index+'"></span></td>			</tr>				<tr>				<td><label>offerName </label></td><td><span id="offerName'+index+'"></span></td>		</tr>					<tr>						<td><label>serviceNumber </label></td>						<td><span id="serviceNumber'+index+'"></span></td>					</tr>					<tr>						<td><label>status</label></td>						<td><span id="status'+index+'"></span></td>					</tr>													</tbody>			</table>		</div>';				
 			if((index+1)%2==0){
@@ -142,7 +147,7 @@ function getSubsInfo() {
 			}
 				
 				$('#divforsubsinfo').append(div);	
-				var button=': <div class="btn-group"><button onclick="addservicecomplain(\''+value.serviceNumber+'\')" type="button" class="btn btn-box-tool"><i class="fa fa-plus"></i></button><button onclick="removeservicecomplain(\''+value.serviceNumber+'\')" type="button" class="btn btn-box-tool"><i class="fa fa-minus"></i></button></div>';
+				var button=': <div class="btn-group complain'+value.serviceNumber+'"><button onclick="addservicecomplain(\''+value.serviceNumber+'\')" type="button" class="btn btn-box-tool"><i class="fa fa-plus"></i></button><button onclick="removeservicecomplain(\''+value.serviceNumber+'\')" type="button" class="btn btn-box-tool"><i class="fa fa-minus"></i></button></div>';
 			$('#balanceOfCreditLimit'+index).html(value.balanceOfCreditLimit);
 			$('#offerName'+index).html(value.offerName);
 			$('#serviceNumber'+index).html(value.serviceNumber+button);
@@ -156,14 +161,43 @@ function getSubsInfo() {
 			 });	
 			
 			
+			// check if complain already exist
+			
+			$.get('../complain/getComplainServiceInfo', {
+				cpeSn:$('#cpeSN').html()
+			}, function(response) {
+			console.log(response);
+			if(response.length>0){
+				if(getURLParameter('CPE')==null){
+				alert('Complain Already exist.');
+				}
+				$.each(response, function (index, value) {
+					
+				var remark='<span>'+value.REMARKS+'</span>';
+				$('.complain'+value.SERVICE_NO).empty();
+				$('.complain'+value.SERVICE_NO).append(remark);
+				$('.complain'+value.SERVICE_NO).css('background-color', '#FACC2E');
+				});
+				
+				var detaillink='<a target="_blank" href="../troubleticket/list?token_id='+response[0].TOKEN_ID+'" class="btn bg-green"> <i class="fa fa-info-circle"></i> View All In Detail </a>';
+				
+				
+				$("#divforsubsinfo").append(detaillink);
+			
+			
+			}
+				
+			});
+			
+			
+			
 					}catch (e) {
 			alert(response);
 			}
 		
 		
 
-	}); // closing function(responseJson)
-
+	
 }
 
 function getstatusInfo() {
@@ -209,7 +243,7 @@ function getProblemlist(serviceid,serno){
 	var select = $('#servicetypeid'+serno);
  
 	select.find('option').remove();
-  //$('<option>').val("").text("Select").appendTo(select);
+  // $('<option>').val("").text("Select").appendTo(select);
     $.each(problemlist, function (index, value) {
     	// alert(value.SERVICE_TYPE_ID);
     	if(value.SERVICE_TYPE_ID==serviceid){
@@ -320,7 +354,7 @@ function PostRegister(solved){
 			
 			console.log(transnop)
 			
-			//return false;
+			// return false;
 			var	urlpath='../complain/Register';
 			// arraylist generation till here-----------------------
 			$.post('../complain/Register', {
@@ -335,7 +369,14 @@ function PostRegister(solved){
 				 SupervisorContno:$('#teamSupervisorContactNumber').html(),
 				 Teamleader:$('#teamleaderName').html(),
 				 TeamleaderNo:$('#teamleaderContactNumber').html(),
-				 solved:solved
+				 solved:solved,
+				 // info customer for report
+				 CUSTOMER_NAME : $('#customerName').html(),
+				 CONTACT_NO:$('#ContantNum').html(),
+				 OLT_PORT:$('#oltInfo').html(),
+				 FAP_LOCATION:$('#faplocation').html(),
+				 FAP_PORT:$('#fapPortName').html(),
+				 CPE_RX_LVL:$('#onuRxPower').html()
 					 	 }, function(response) {
 			alert(response);
 			 });
