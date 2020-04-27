@@ -186,9 +186,15 @@
 
 	<script>
 		$(function() {
-
-			$('#example1').DataTable()
-
+		
+			table = $('#checkDatatable').DataTable( {
+				destroy: true,
+			    paging: false
+			} );
+			//clearDataTable();
+			table.destroy();
+		
+		//	$('#example1').DataTable()
 		})
 	</script>
 	<script src="<c:url value="/resources/function/menuaccess.js" />"></script>

@@ -4,8 +4,6 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <c:url var="home" value="/" scope="request" />
 
-
-
 <html>
 <head>
 <meta charset="utf-8">
@@ -31,6 +29,7 @@
 	background: transparent !important;
 }
 </style>
+	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -80,22 +79,40 @@
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<h1>User Management</h1>
+				<h1>Import Excel  - Map List</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li><a href="#">Tables</a></li>
 					<li class="active">Data tables</li>
 
 				</ol>
-				<a href="#" class="btn btn-primary pull-right" data-toggle="modal"
-					data-target="#myModal"> <i class="fa fa-plus"></i> Add
-				</a>
+
 			</section>
 
 			<!-- Main content -->
 			<section class="content">
 				<div class="row">
 					<div class="col-xs-12">
+						 <div class="table-responsive" >
+						 
+						     <table>
+						     
+                                               
+                                <tr> <td><input type="file" id="my_file_input"
+                                           accept="application/vnd.ms-excel" /></td>
+                            </tr>
+                            <tr>
+                              
+                                <td><input data-toggle="modal" data-target="#importdialog"
+                                           type="button" value="Import Data"></td>
+                                
+
+                                
+                            </tr>
+                        </table>
+                   
+						 </div>
+
 
 						<!-- /.box -->
 
@@ -125,93 +142,54 @@
 								}
 							%>
 
+		<div class="overlay">
+  			<i class="fa fa-refresh fa-spin"></i>
+		</div>
+
+
 							<!-- /.box-header -->
-							<div class="box-body">
-								<table id="userlist" class="table table-bordered table-striped">
-									<thead>
-										<tr>
-											<th>USER_ID</th>
-											<th>FULL_NAME</th>
-											<th>EMP_CODE</th>										
-											<th>Delete</th>
-											<th>SUPER</th>
-											<th>DISABLE</th>
-											
-											<th>LOCATION</th>
-											
-											<th>USER</th>
-											
-											<th>ROLE</th>
-											<th>OFFICE</th>
-											
-											<th>MOBILE</th>
-											<th>Edit</th>
-											<th>Delete</th>
-
-										</tr>
-									</thead>
-									<tbody>
-										<c:forEach var="user" items="${data_list}">
-
-											<tr>
-												
-												<td>${user.getUSER_ID()}</td>
-
-												<td>${user.getFULL_NAME()}</td>
-												<td>${user.getEMPLOYEE_CODE()}</td>
-
-												<td>${user.getLOCK_FLAG()}</td>
-												<td>${user.getSUPER_FLAG()}</td>
-
-												<td>${user.getDISABLE_FLAG()}</td>
-												
-												<td>${user.getLOCATION_CODE()}</td>
-												
-												<td>${user.getUSER_LEVEL()}</td>
-												
-												<td>${user.getROLE_CODE()}</td>
-												
-												
-												<td>${user.getOFFICE_CODE()}</td>
-
-												<td>${user.getMOBILE_NO()}</td>
-												
-											
-												<td>
-
-													<div class="btn-group">
-
-														<a href="#" class="btn btn-info" data-toggle="modal"
-															data-target="#changePassModal"
-															onclick="return getHold('${user.getUSER_ID()}')">
-															Pass Change </a> <a href="#" class="btn btn-info"
-															data-toggle="modal" data-target="#editModal"
-															onclick="return editUser('${user.getUSER_ID()}')"> <i
-															class="fa fa-edit"></i> Edit
-														</a>
-													</div>
-												</td>
+							<div class="box-body ">
+							
+							<!-- /.box-header -->
+                                <div class="box-body table-responsive">
+                                 
 
 
-												<td>
-
-													<div>
-														<a href="#" class="btn btn-default" data-toggle="modal"
-															data-target="#deleteModal"
-															onclick="return deleteUser('${user.getUSER_ID()}')">
-															<i class="fa fa-trash"></i> Delete
-														</a>
-													</div>
-
-
-												</td>
-
-											</tr>
-										</c:forEach>
-
-									</tbody>
-
-								</table>
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>DISTRICT_NAME</th>
+                                                <th>DISTRICT_ID</th>
+                                                <th>AREANAME</th>
+                                                <th>AREA_ID</th>
+                                                <th>OLT_NAME</th>
+                                                <th>OLT_ID</th>
+                                                <th>FDC_NAME</th>
+                                                <th>FDC_ID</th>
+                                                <th>FDC_LOCATION</th>
+                                                 </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="user" items="${excel2list}">
+                                                <tr>
+                                                    <td>${user.DISTRICT_NAME}</td>
+                                                    <td>${user.DISTRICT_ID}</td>
+                                                    <td>${user.AREANAME}</td>
+                                                    <td>${user.AREA_ID}</td>
+                                                    <td>${user.OLT_NAME}</td>
+                                                    <td>${user.OLT_ID}</td>
+                                                    <td>${user.FDC_NAME}</td>
+                                                    <td>${user.FDC_ID}</td>
+                                                    <td>${user.FDC_LOCATION}</td>
+                                                    
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+							
+							
+							
 							</div>
 							<!-- /.box-body -->
 						</div>
@@ -246,20 +224,25 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialoguser?a=1"></jsp:include>
-	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
+	 <jsp:include page="${request.contextPath}/dialogexcelImport"></jsp:include>
+
+<jsp:include page="${request.contextPath}/footJS"></jsp:include>
+
+<script src="<c:url value="/resources/adminltd/js/xlsx.js" />"></script>
 
 	<script>
 		$(function() {
 
-			$("#EMPLOYEE_CODE,#EDITEMPLOYEE_CODE,#EDITOFFICE_CODE,#OFFICE_CODE").select2();
-			
-			 $('#userlist').DataTable( {
-			        "scrollX": true
-			    } );
+		
+			$('#example1').DataTable({
+                "iDisplayLength": 100
+            });
 		})
 	</script>
-	<script src="<c:url value="/resources/function/user.js?a=156" />"></script>
+	
+        <script src="<c:url value="/resources/function/impntsp.js?v=1.1" />"></script>
+	
+	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 
 </body>

@@ -34,29 +34,29 @@
 					</td>
 					<td><select class="list${pmanu.getSN()}">
 							<option value="Y">Y</option>
-							<option value="N">N</option>
+							<option value="N" selected>N</option>
 					</select></td>
 					<td><select class="add${pmanu.getSN()}">
 							<option value="Y">Y</option>
-							<option value="N">N</option>
+							<option value="N" selected>N</option>
 					</select></td>
 
 					<td><select class="editing${pmanu.getSN()}">
 							<option value="Y">Y</option>
-							<option value="N">N</option>
+							<option value="N" selected>N</option>
 					</select></td>
 					<td><select class="deleting${pmanu.getSN()}">
 							<option value="Y">Y</option>
-							<option value="N">N</option>
+							<option value="N" selected>N</option>
 					</select></td>
 					
 					<td><select class="posting${pmanu.getSN()}">
 							<option value="Y">Y</option>
-							<option value="N">N</option>
+							<option value="N" selected>N</option>
 					</select></td>
 					<td><select class="cancel${pmanu.getSN()}">
 							<option value="Y">Y</option>
-							<option value="N">N</option>
+							<option value="N" selected>N</option>
 					</select></td>
 				</tr>
 				

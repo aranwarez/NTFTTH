@@ -19,19 +19,19 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="name">USER_ID</label> <input type="text"
-						class="form-control" id="USER_ID" placeholder="Enter user id">
+						class="form-control" id="USER_ID" autocomplete="off" placeholder="Enter user id">
 				</div>
 
 
 				<div class="form-group">
 					<label for="name">PASSWORD</label> <input type="password"
-						class="form-control" id="PASSWORD" placeholder="Enter password">
+						class="form-control" id="PASSWORD" autocomplete="off"  placeholder="Enter password">
 					<span class="matchpass"></span>
 				</div>
 
 				<div class="form-group">
 					<label>Re- Password </label> <input type="password"
-						class="form-control" id="passmatch" onchange="checkPass()">
+						class="form-control" id="passmatch" autocomplete="off" onchange="checkPass()">
 					<span class="matchpass"></span>
 
 				</div>
@@ -39,7 +39,13 @@
 				<div class="form-group">
 					<label for="name">FULL_NAME</label> <input type="text"
 						class="form-control" id="FULL_NAME" placeholder="Enter full name">
-				</div>			
+				</div>	
+				
+				<div class="form-group">
+					<label for="MOBILE_NO">MOBILE_NO</label> <input type="text"
+						class="form-control" id="MOBILE_NO" placeholder="Enter Mobile No. ">
+				</div>	
+						
 				<div class="form-group">
 					<label>EMPLOYEE_CODE</label> <select
 						class="form-control modal-combobox" name="EMPLOYEE_CODE"
@@ -102,7 +108,7 @@
 				
 				<div class="form-group">
 					<label>OFFICE</label> <select class="form-control" name="OFFICE_CODE"
-						id="OFFICE_CODE">
+						id="OFFICE_CODE" style="width:270px;">
 						
 						<c:forEach var="role" items="${officeList}">
 							<option value="${role.OFFICE_CODE}">${role.DESCRIPTION}
@@ -147,7 +153,13 @@
 				<div class="form-group">
 					<label for="name">FULL_NAME</label> <input type="text"
 						class="form-control" id="EDITFULL_NAME" placeholder="Enter full name">
-				</div>			
+				</div>	
+				
+				<div class="form-group">
+					<label for="MOBILE_NO">MOBILE_NO</label> <input type="text"
+						class="form-control" id="EDITMOBILE_NO" placeholder="Enter Mobile No. ">
+				</div>	
+						
 				<div class="form-group">
 					<label>EMPLOYEE_CODE</label> <select
 						class="form-control modal-combobox" name="EDITEMPLOYEE_CODE"
@@ -209,7 +221,7 @@
 				
 				<div class="form-group">
 					<label>OFFICE</label> <select class="form-control" name="EDITOFFICE_CODE"
-						id="EDITOFFICE_CODE">
+						id="EDITOFFICE_CODE" style="width:270px;">
 						
 						<c:forEach var="role" items="${officeList}">
 							<option value="${role.OFFICE_CODE}">${role.DESCRIPTION}

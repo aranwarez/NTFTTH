@@ -31,24 +31,16 @@ function getEditMode() {
 			
 			clearDataTable();
 			
+			return;
 		}
-
+		//console.log(JSON.stringify(data));
 		i = 1;
 		$.each(data, function(index, value) {
 			// Get the total rows
 
-			console.log($('.mastersetup' + i).val());
-
-			if (value.menu_CODE == $('.mastersetup' + i).val()) {
-				$(".list" + i).val(value.list_FLAG);
-				$(".editing" + i).val(value.edit_FLAG);
-				$(".deleting" + i).val(value.delete_FLAG);
-				$(".posting" + i).val(value.post_FLAG);
-				$(".add" + i).val(value.add_FLAG);
-				$(".cancel" + i).val(value.cancel_FLAG);
-			}
-			i = i + 1;
-
+			checkDropDown(value.menu_CODE,value.list_FLAG,value.add_FLAG,value.edit_FLAG,value.delete_FLAG,value.post_FLAG,value.cancel_FLAG)
+			
+			
 		});
 
 		// console.log(JSON.stringify(data));
@@ -94,11 +86,41 @@ function saveMenuAccess() {
 	});
 
 }
-function clearDataTable() {
-	var table = $('#checkDatatable').dataTable();
+
+
+function checkDropDown(menu_CODE,list_FLAG,add_FLAG,edit_FLAG,delete_FLAG,post_FLAG,cancel_FLAG){
+	
+//	mastersetup1
+
+var table = $('#checkDatatable').dataTable();
 	
 	for (i = 1; i <= table.fnGetData().length; i++) {
-		if ($('#ROLE_CODE').val() != null) {
+				
+		if($('.mastersetup' + i).val()===menu_CODE){
+			
+			$('.list' + i).val(list_FLAG);
+			$('.add' + i).val(add_FLAG);	
+			
+			$('.editing' + i).val(edit_FLAG);
+			$('.deleting' + i).val(delete_FLAG);
+			$('.posting' + i).val(post_FLAG);
+			$('.cancel' + i).val(cancel_FLAG);
+			
+			
+			
+		}
+			
+		
+	}
+	
+	
+}
+
+function clearDataTable() {
+	var table = $('#checkDatatable').dataTable();
+	setTimeout(function(){
+	for (i = 1; i <= table.fnGetData().length; i++) {
+		
 			
 			$('.add' + i).val('N');
 			$('.list' + i).val('N');
@@ -107,6 +129,8 @@ function clearDataTable() {
 			$('.posting' + i).val('N');
 			$('.cancel' + i).val('N');
 
-		}
+
 	}
+	
+}, 2000);
 }
