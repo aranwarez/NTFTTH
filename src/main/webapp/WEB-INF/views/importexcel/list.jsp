@@ -76,7 +76,7 @@
 		</aside>
 
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper">
+		<div class="content-wrapper" style="min-height: auto !important;">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>Import Excel  - Map List</h1>
@@ -98,12 +98,11 @@
 						     <table>
 						     
                                                
-                                <tr> <td><input type="file" id="my_file_input"
+                                <tr> <td><input type="file" class="form-control-file" id="my_file_input"
                                            accept="application/vnd.ms-excel" /></td>
-                            </tr>
-                            <tr>
+                           
                               
-                                <td><input data-toggle="modal" data-target="#importdialog"
+                                <td><input class="btn btn-info" data-toggle="modal" data-target="#importdialog"
                                            type="button" value="Import Data"></td>
                                 
 
@@ -117,11 +116,7 @@
 						<!-- /.box -->
 
 						<div class="box">
-							<div class="box-header">
-								<h3 class="box-title">${fx}</h3>
-							</div>
-
-							<%
+														<%
 								if (request.getParameter("sucess") != null) {
 							%>>
 							<div class="alert alert-success">
@@ -233,10 +228,7 @@
 	<script>
 		$(function() {
 
-		
-			$('#example1').DataTable({
-                "iDisplayLength": 100
-            });
+			$('#example1').DataTable()
 		})
 	</script>
 	

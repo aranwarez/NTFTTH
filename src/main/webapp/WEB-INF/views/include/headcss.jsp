@@ -6,7 +6,7 @@
 
 <!-- Bootstrap 3.3.7 -->
 
-
+<link rel="icon" href="<c:url value="/resources/adminltd/images/favicon.ico" />" type="image/x-icon">
 <link href="<c:url value="/resources/adminltd/css/bootstrap.min.css" />"
 	rel="stylesheet">
 
@@ -27,8 +27,6 @@
 <link
 	href="<c:url value="/resources/adminltd/css/jquery.dataTables.min.css" />"
 	rel="stylesheet">
-
-
 
 <link
 	href="<c:url value="/resources/adminltd/css/scroller.dataTables.min.css" />"

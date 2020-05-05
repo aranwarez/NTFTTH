@@ -11,3 +11,7 @@ example-modal .modal {
 .example-modal .modal {
 	background: transparent !important;
 }
+body {
+  margin: 0;
+  background-color: white;
+}
