@@ -33,12 +33,11 @@ public class ExcelImportController {
 	    private static final String classname = "../import-excel/list";
 	   @RequestMapping(value = "/import-excel/list", method = RequestMethod.GET)
 	    public String menuList(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response,
-	            HttpSession session) {
+	            HttpSession session) throws SQLException {
 	        logger.info("Welcome home! The client locale is {}.", locale);
 
 	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 
-	        String url = request.getServletPath();
 	       
 	//menu code should know before validate
 
@@ -57,7 +56,7 @@ public class ExcelImportController {
 //			model.addAttribute("CANCEL_FLAG", menuaccess.getCANCEL_FLAG());
 	        model.addAttribute("fx", "Menu List");
 	    	
-			List<Map<String, Object>> employeelist = null;     
+		//	List<Map<String, Object>> employeelist = null;     
 			 try {
 				 ExcelImportDao dao=new ExcelImportDao();
 				 

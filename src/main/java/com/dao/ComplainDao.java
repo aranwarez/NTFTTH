@@ -38,12 +38,16 @@ public class ComplainDao {
 			WebTeamDao teammdao = new WebTeamDao();
 			String team_id = teammdao.saveWebteam(con, teamname, FDCName, Supervisorname, SupervisorContno, Teamleader,
 					TeamleaderNo);
-			System.err.println(team_id);
+			System.err.println("web team"+team_id);
 			cqry = "select MTM_Token_ID.NEXTVAL from dual";
 			ResultSet tokenrs = con.prepareStatement(cqry).executeQuery();
 			while (tokenrs.next()) {
 				tOKEN_ID = tokenrs.getString(1);
 			}
+			
+			
+			System.err.println("exception");
+			
 
 			String qry = "INSERT INTO MAIN_TOKEN_MASTER (TOKEN_ID,\n"
 					+ "                                    SERVICE_ID,\n"
@@ -522,7 +526,7 @@ public class ComplainDao {
 					+ "                               CREATE_BY)\r\n"
 					+ "     VALUES (TM_SUB_TOKEN_DETAIL_ID.NEXTVAL,\r\n" + "             ?,\r\n"
 					+ "             (select sub_team_code from TOKEN_MASTER where SUB_TOKEN_ID=?),\r\n"
-					+ "             ?,\r\n" + "             'N',\r\n" + "             (SELECT PROBLEM_ID\r\n"
+					+ "             ?,\r\n" + "             'F',\r\n" + "             (SELECT PROBLEM_ID\r\n"
 					+ "                FROM TOKEN_MASTER\r\n" + "               WHERE SUB_TOKEN_ID = ?),\r\n"
 					+ "             ?,\r\n" + "             ?)");
 			pst.setString(1, forwardtoken);
@@ -534,7 +538,7 @@ public class ComplainDao {
 			pst.executeUpdate();
 //after forwarding team updating subcode in token master
 			pst = con.prepareStatement(
-					"UPDATE TOKEN_MASTER SET SUB_TEAM_CODE= ?, UPDATE_BY=?,UPDATE_DT=sysdate WHERE  SUB_TOKEN_ID= ?");
+					"UPDATE TOKEN_MASTER SET SOLVE_FLAG='F', SUB_TEAM_CODE= ?, UPDATE_BY=?,UPDATE_DT=sysdate WHERE  SUB_TOKEN_ID= ?");
 			pst.setString(1, toteam);
 			pst.setString(3, forwardtoken);
 			pst.setString(2, User);
@@ -643,7 +647,7 @@ public class ComplainDao {
 			pst.setString(1, closetoken);
 			ResultSet qsolveflag = pst.executeQuery();
 			if (!qsolveflag.next()) {
-				pst = con.prepareStatement("UPDATE MAIN_TOKEN_MASTER\r\n" + "   SET SOLVE_FLAG = 'Y',\r\n"
+				pst = con.prepareStatement("UPDATE MAIN_TOKEN_MASTER\r\n" + "   SET SOLVE_FLAG = 'C',\r\n"
 						+ "       SOLVE_DT = SYSDATE,\r\n" + "       SOLVE_BY = ?,\r\n" +
 
 						"       UPDATE_BY = ?,\r\n" + "       UPDATE_DT = SYSDATE\r\n"

@@ -136,11 +136,12 @@
 										<div class="form-group">
 											<label>Select Your Information</label> <select id="infotype"
 												class="form-control " style="width: 100%;">
-												<option value="contactNum">Contact No.</option>
 												<option value="cpeSN">CPE Serial No.</option>
-												<option value="custId">Customer ID</option>
 												<option value="ftthDataNum">FTTH Data No.</option>
 												<option value="ftthVoiceNum">FTTH Voice No.</option>
+												<option value="custId">Customer ID</option>
+												<option value="contactNum">Contact No.</option>
+											
 											</select>
 										</div>
 
@@ -195,14 +196,14 @@
 						<div class="box box-primary">
 							<div class="box-header with-border">
 								<h3 class="box-title"><i
-												class="fa fa-list-alt"></i>Status Information</h3>
+												class="fa fa-signal"></i>CPE OLT STATUS</h3>
 
 								<div class="box-tools pull-right">
 									<button type="button" class="btn btn-box-tool" data-widget="collapse">
 										<i class="fa fa-minus"></i>
 									</button>
-									<button type="button" class="btn btn-box-tool" data-widget="remove">
-										<i class="fa fa-times"></i>
+									<button type="button" class="btn btn-box-tool" onclick="getstatusInfo()">
+										<i class="fa fa-refresh"></i>
 									</button>
 								</div>
 							</div>
@@ -232,7 +233,44 @@
 						</div>
 						<!-- /.box -->
 					</div>
+			
+			<div class="col-md-12">
+			
+						<!-- AREA CHART -->
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<h3 class="box-title"><i
+												class="fa fa-tachometer"></i>CPE TMS STATUS</h3>
+
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+										<i class="fa fa-minus"></i>
+									</button>
+									<button type="button" class="btn btn-box-tool" onclick="refreshtmsstatus()">
+										<i class="fa fa-refresh"></i>
+									</button>
+								</div>
+							</div>
+							<div class="overlay" id="tmsstatusoverlay">
+								<i class="fa fa-refresh fa-spin"></i>
+							</div>
+							<div id="divforCPEinfo"  class="box-body">
+							
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+
+						
+					</div>
+			
+			
+			
+			
 					<!-- /.col -->
+			
+			
+			
 			<div class="col-md-12">
 						<!-- AREA CHART -->
 						<div class="box box-primary">

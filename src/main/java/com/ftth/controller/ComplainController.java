@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.MenuAccess;
 import com.model.UserInformationModel;
 import com.soap.dao.AAADao;
+import com.soap.dao.CPEAPI;
+import com.soap.dao.CRMSBalanceDao;
 import com.soap.dao.CrmDao;
 
 @Controller
@@ -61,7 +63,8 @@ public class ComplainController {
 
 	@ResponseBody
 	@RequestMapping(value = "/complain/getCustomerInfo", method = RequestMethod.GET)
-	public String getItemTariff(String info, String infotype, Locale locale, Model model, HttpSession session) throws SQLException {
+	public String getItemTariff(String info, String infotype, Locale locale, Model model, HttpSession session)
+			throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
@@ -79,8 +82,6 @@ public class ComplainController {
 		}
 
 	}
-
-	
 
 	@ResponseBody
 	@RequestMapping(value = "/complain/getStatusInfo", method = RequestMethod.GET)
@@ -102,20 +103,20 @@ public class ComplainController {
 		}
 
 	}
-	
-	
+
 	@ResponseBody
-	@RequestMapping(value = "/complain/getComplainServiceInfo", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-	public  List<Map<String, Object>> getComplainServiceInfo(String cpeSn, Locale locale, Model model, HttpSession session) throws SQLException {
+	@RequestMapping(value = "/complain/getComplainServiceInfo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Map<String, Object>> getComplainServiceInfo(String cpeSn, Locale locale, Model model,
+			HttpSession session) throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 		}
 
-		ComplainDao dao =new ComplainDao();
+		ComplainDao dao = new ComplainDao();
 		try {
-			 List<Map<String, Object>> msg = dao.getComplainbyCPESN(cpeSn);
+			List<Map<String, Object>> msg = dao.getComplainbyCPESN(cpeSn);
 			return msg;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -124,8 +125,6 @@ public class ComplainController {
 		}
 
 	}
-
-	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/complain/dialog")
 	public String dialogrole(Model model, Locale locale) {
@@ -137,7 +136,9 @@ public class ComplainController {
 	@ResponseBody
 	public String Complainregister(String JSON, String Complain_no, String Remarks, String SRV_NO, String contactName,
 			String fdcname, String teamname, String Supervisorname, String SupervisorContno, String Teamleader,
-			String TeamleaderNo, Boolean solved, String CUSTOMER_NAME,String CONTACT_NO,String OLT_PORT,String FAP_LOCATION,String FAP_PORT,String CPE_RX_LVL,Model model, Locale locale, HttpSession session) throws SQLException {
+			String TeamleaderNo, Boolean solved, String CUSTOMER_NAME, String CONTACT_NO, String OLT_PORT,
+			String FAP_LOCATION, String FAP_PORT, String CPE_RX_LVL, Model model, Locale locale, HttpSession session)
+			throws SQLException {
 		logger.info("Registering new service for", locale);
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
@@ -153,12 +154,16 @@ public class ComplainController {
 			List<Map<String, Object>> myObjects = mapper.readValue(JSON,
 					new TypeReference<List<Map<String, Object>>>() {
 					});
-			if(solved) {
-				 msg = dao.solveProblem(myObjects, "1", SRV_NO, Complain_no, contactName, Remarks, user.getUSER_ID(),fdcname,teamname,Supervisorname,SupervisorContno,Teamleader,TeamleaderNo,CUSTOMER_NAME, CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL);
-			}else
-				 msg = dao.saveProblem(myObjects, "1", SRV_NO, Complain_no, contactName, Remarks, user.getUSER_ID(),fdcname,teamname,Supervisorname,SupervisorContno,Teamleader,TeamleaderNo,CUSTOMER_NAME, CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL);
-			
-				} catch (Exception e) {
+			if (solved) {
+				msg = dao.solveProblem(myObjects, "1", SRV_NO, Complain_no, contactName, Remarks, user.getUSER_ID(),
+						fdcname, teamname, Supervisorname, SupervisorContno, Teamleader, TeamleaderNo, CUSTOMER_NAME,
+						CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL);
+			} else
+				msg = dao.saveProblem(myObjects, "1", SRV_NO, Complain_no, contactName, Remarks, user.getUSER_ID(),
+						fdcname, teamname, Supervisorname, SupervisorContno, Teamleader, TeamleaderNo, CUSTOMER_NAME,
+						CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL);
+
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -166,4 +171,116 @@ public class ComplainController {
 
 	}
 
+	// CPE detial information
+	@ResponseBody
+	@RequestMapping(value = "/complain/getCPETMSStatus", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String getCPETMSStatus(String cpeSn, Locale locale, Model model, HttpSession session) throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+
+//	<---	session validation for TMS status username password --->
+
+//		if((!username.isEmpty()) || !password.isEmpty()) {
+//		
+//			System.err.println("username not empty");
+//			
+//			session.setAttribute("TMSusername", username);
+//			session.setAttribute("TMSpassword", password);
+//		}
+//		if(session.getAttribute("TMSusername")==null || session.getAttribute("TMSusername").toString().isEmpty()) {
+//			return "{\"Error\":\"Enter Credentials\"}";
+//		}
+//		
+//		else if(session.getAttribute("TMSusername")!=null && session.getAttribute("TMSpassword")!=null) {
+//			System.err.println("getting password from session");
+//			username=session.getAttribute("TMSusername").toString();
+//			password=session.getAttribute("TMSpassword").toString();
+//		}
+//		
+//		
+
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		CPEAPI ddd = new CPEAPI();
+
+		try {
+			String msg = ddd.getCPEINFO(cpeSn);
+			return msg;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/complain/getCRMSServiceStatus", method = RequestMethod.GET)
+	public String getCRMSServiceStatus(String MDN, Locale locale, Model model, HttpSession session)
+			throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		CRMSBalanceDao cbd = new CRMSBalanceDao();
+
+		try {
+			String msg = cbd.getMDNState(MDN);
+			return msg;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/complain/getCRMSServiceBalance", method = RequestMethod.GET)
+	public String getCRMSServiceBalance(String MDN, Locale locale, Model model, HttpSession session)
+			throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		CRMSBalanceDao cbd = new CRMSBalanceDao();
+
+		try {
+			String msg = cbd.getMDNBalance(MDN);
+			return msg;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/complain/getCRMSQueryFreeResource", method = RequestMethod.GET)
+	public String getCRMSQueryFreeResource(String MDN, Locale locale, Model model, HttpSession session)
+			throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		CRMSBalanceDao cbd = new CRMSBalanceDao();
+
+		try {
+			String msg = cbd.getMDNQueryFreeResource(MDN);
+			return msg;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	
+	
 }
