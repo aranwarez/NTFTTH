@@ -309,8 +309,12 @@
  
                                        
 <!--                                        to here -->
+<div class='table'>
                                        <input type="hidden" name="reportname" value="FTTHDispatch">
                                         <table class="table-condensed">
+                                         <tr><td>Export Type</td><td><select name="reporttype"><option value="XLS">XLS</option>
+                                                        <option value="pdf">PDF</option>
+                                                    </select></td><td></td></tr>
                                         
                                            <tr>
                                                 <td><button class="btn btn-default" type="submit" formaction="../ReportView" formtarget="_blank">View
@@ -319,6 +323,7 @@
                                                     </button></td>
                                             </tr>
                                         </table>
+                                        </div>
                                     </form>
                                 </div>
                                 <!-- /.box-body -->

@@ -91,9 +91,7 @@ public class WebTeamDao {
 
 		} catch (Exception e) {
 
-		} finally {
-			con.close();
-		}
+		} 
 		return null;
 
 	}
