@@ -1,11 +1,5 @@
 $(document).ready(function() {
-	jQuery.ajaxSetup({
-		async : false
-	});
-	
-	 
-	
-	    
+	   
 	$('#checkDatatable').dataTable({
 		"paging" : false,
 		"searching" : false,

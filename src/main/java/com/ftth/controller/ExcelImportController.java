@@ -54,7 +54,7 @@ public class ExcelImportController {
 //			model.addAttribute("DELETE_FLAG", menuaccess.getDELETE_FLAG());
 //			model.addAttribute("POST_FLAG", menuaccess.getPOST_FLAG());
 //			model.addAttribute("CANCEL_FLAG", menuaccess.getCANCEL_FLAG());
-	        model.addAttribute("fx", "Menu List");
+	        model.addAttribute("fx", "Import Excel");
 	    	
 		//	List<Map<String, Object>> employeelist = null;     
 			 try {
@@ -68,7 +68,7 @@ public class ExcelImportController {
 			}
 	        return "importexcel/list";
 
-	    }
+	    }	   
 	   
 	   @RequestMapping(method = RequestMethod.GET, value = "dialogexcelImport")
 	    public String dialogcp(Model model, Locale locale) {

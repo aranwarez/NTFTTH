@@ -35,7 +35,7 @@ public class CommonController {
 		model.addAttribute("leftmenuRoleCode", leftmenuRoleCode);
 		try {
 			List<Menu> menulist = leftmenudao.getMenuDisplay(leftmenurole_code);
-
+			model.addAttribute("UserList", leftmenuuser);
 			model.addAttribute("leftmenuheadlist", menulist);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

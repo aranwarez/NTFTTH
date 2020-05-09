@@ -39,44 +39,13 @@
 		</header>
 		<!-- Left side column. contains the logo and sidebar -->
 		<aside class="main-sidebar">
-			<!-- sidebar: style can be found in sidebar.less -->
-			<section class="sidebar">
-				<!-- Sidebar user panel -->
-				<div class="user-panel">
-					<div class="pull-left image">
-						<img
-							src="<c:url value="/resources/adminltd/dist/img/user2-160x160.jpg" />"
-							class="img-circle" alt="User Image">
-					</div>
-					<div class="pull-left info">
-						<p>NABIN</p>
-						<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-					</div>
-				</div>
-				<!-- search form -->
-				<form action="#" method="get" class="sidebar-form">
-					<div class="input-group">
-						<input type="text" name="q" class="form-control"
-							placeholder="Search..."> <span class="input-group-btn">
-							<button type="submit" name="search" id="search-btn"
-								class="btn btn-flat">
-								<i class="fa fa-search"></i>
-							</button>
-						</span>
-					</div>
-				</form>
-				<!-- /.search form -->
-				<!-- sidebar menu: : style can be found in sidebar.less -->
-				<ul class="sidebar-menu" data-widget="tree">
-					<li class="header">MAIN NAVIGATION</li>
+			
 					<jsp:include page="${request.contextPath}/leftmenu"></jsp:include>
-				</ul>
-			</section>
-			<!-- /.sidebar -->
+				
 		</aside>
 
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper">
+		<div class="content-wrapper" style="min-height: auto !important;">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>Import Excel  - Map List</h1>
@@ -98,12 +67,11 @@
 						     <table>
 						     
                                                
-                                <tr> <td><input type="file" id="my_file_input"
+                                <tr> <td><input type="file" class="form-control-file" id="my_file_input"
                                            accept="application/vnd.ms-excel" /></td>
-                            </tr>
-                            <tr>
+                           
                               
-                                <td><input data-toggle="modal" data-target="#importdialog"
+                                <td><input class="btn btn-info" data-toggle="modal" data-target="#importdialog"
                                            type="button" value="Import Data"></td>
                                 
 
@@ -117,11 +85,7 @@
 						<!-- /.box -->
 
 						<div class="box">
-							<div class="box-header">
-								<h3 class="box-title">${fx}</h3>
-							</div>
-
-							<%
+														<%
 								if (request.getParameter("sucess") != null) {
 							%>>
 							<div class="alert alert-success">
@@ -233,10 +197,7 @@
 	<script>
 		$(function() {
 
-		
-			$('#example1').DataTable({
-                "iDisplayLength": 100
-            });
+			$('#example1').DataTable()
 		})
 	</script>
 	
