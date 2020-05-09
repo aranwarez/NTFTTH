@@ -27,7 +27,7 @@ import com.model.UserInformationModel;
 
 @Controller
 public class ComplainReportController {
-	private static final Logger logger = LoggerFactory.getLogger(TroubleTicketController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ComplainReportController.class);
 
 	private static final String classname = "../complain-summary/report";
 
