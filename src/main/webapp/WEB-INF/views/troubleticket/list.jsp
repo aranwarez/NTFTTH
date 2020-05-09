@@ -326,7 +326,8 @@
 		<div class="col-xs-2">
 						<select id="Statusflag"
 							class="form-control">
-									<option value="N">Unsolved</option>
+									<option value="N">New Unsolved</option>
+									<option value="F">Forwarded</option>
 									<option value="Y">Solved</option>
 									<option value="C">Closed</option>
 									<option value="">ALL</option>
@@ -390,16 +391,17 @@
 								<table id="example1" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-											<th>TOKEN</th>
+											<th>ID</th>
+											<th>CPESN</th>
 											<th>Type</th>
-											<th>SubTeam</th>											
+									
+											<th>RegDT</th>
+											<th>Team</th>											
 											<th>Problem</th>
 											<th>FDC</th>
-											<th>ContactNo</th>
+											<th>No.</th>
 											<th>Customer</th>
-											<th>Forward</th>
-											<th>Resolved</th>
-											<th>History</th>
+											<th>Action</th>
 											<th>Info</th>
 											
 	

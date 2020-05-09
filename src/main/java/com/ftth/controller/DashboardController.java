@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dashboard.dao.dashboardquery;
+import com.model.UserInformationModel;
 
 /**
  * Handles requests for the application home page.
@@ -35,7 +36,7 @@ public class DashboardController {
 	@RequestMapping(value = "/dashboard/{id}", method = RequestMethod.GET)
 	public String dashboard(Locale locale, Model model, @PathVariable String id) {
 		model.addAttribute("fx", "");
-		System.out.println(id);
+		//System.out.println(id);
 		// return "NTC/dashboard/index";
 		return "dashboard/" + id;
 	}
@@ -43,22 +44,28 @@ public class DashboardController {
 	@ResponseBody
 	@RequestMapping(value = "/charts/srvreveneue", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Map<String, Object>> srvwiserevenue(Locale locale, Model model, HttpSession session) throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		
 		dashboardquery dao=new dashboardquery();
-		return dao.getSRVwiseRevenue();
+		return dao.getSRVwiseRevenue(user.getUSER_ID());
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/charts/srvpayable", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Map<String, Object>> srvwisepayable(Locale locale, Model model, HttpSession session) throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		
 		dashboardquery dao=new dashboardquery();
-		return dao.getSRVwisepayable();
+		return dao.getSRVwisepayable(user.getUSER_ID());
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/charts/srvmonthly", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Map<String, Object>> srvwisemonthly(Locale locale, Model model, HttpSession session) throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		
 		dashboardquery dao=new dashboardquery();
-		return dao.test();
+		return dao.getSolvedvsUnsovled(user.getUSER_ID());
 	}
 	
 

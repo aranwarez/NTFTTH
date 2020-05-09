@@ -38,7 +38,6 @@ public class ExcelImportController {
 
 	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 
-	        String url = request.getServletPath();
 	       
 	//menu code should know before validate
 
@@ -57,7 +56,7 @@ public class ExcelImportController {
 //			model.addAttribute("CANCEL_FLAG", menuaccess.getCANCEL_FLAG());
 	        model.addAttribute("fx", "Import Excel");
 	    	
-			List<Map<String, Object>> employeelist = null;     
+		//	List<Map<String, Object>> employeelist = null;     
 			 try {
 				 ExcelImportDao dao=new ExcelImportDao();
 				 

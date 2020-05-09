@@ -31,7 +31,7 @@
        Result.CPE_RX_LVL,
        Result.CUSTOMER_NAME,
        Result.FAP_LOCATION,
-       Result.FAP_PORT,
+       replace(Result.FAP_PORT,'SPLITTER-1','') FAP_PORT,
        Result.OLT_PORT,
        Result.REMARKS,
        Result.SRV_NO,

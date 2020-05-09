@@ -28,9 +28,9 @@ public class HomeController {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		System.out.println("hello ");
 
-		model.addAttribute("fx", "HomeController : home()");
+		model.addAttribute("fx", "Do not use URL to define path!!!");
 
-		return "dashboard";
+		return "NTC/common/login";
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
