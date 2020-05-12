@@ -82,7 +82,7 @@
 				
 			<div class="form-group">
 					<label>USER_LEVEL</label> <select class="form-control"
-						name="USER_LEVEL" id="USER_LEVEL">
+						name="USER_LEVEL" id="USER_LEVEL" style="width:270px;">
 
 						<option value="1">SUPER</option>
 						<option value="2">Region</option>
@@ -96,7 +96,7 @@
 				
 				<div class="form-group">
 					<label>ROLE_CODE</label> <select class="form-control"
-						name="ROLE_CODE" id="ROLE_CODE">
+						name="ROLE_CODE" id="ROLE_CODE" style="width:270px;">
 
 						<c:forEach var="role" items="${rolelist}">
 							<option value="${role.ROLE_CODE}">${role.DESCRIPTION}
@@ -162,8 +162,8 @@
 						
 				<div class="form-group">
 					<label>EMPLOYEE_CODE</label> <select
-						class="form-control modal-combobox" name="EDITEMPLOYEE_CODE"
-						id="EDITEMPLOYEE_CODE">
+						class="form-control" name="EDITEMPLOYEE_CODE"
+						id="EDITEMPLOYEE_CODE" style="width:270px;">
 						<c:forEach var="COA" items="${empList}">
 							<option value="${COA.EMPLOYEE_CODE}">${COA.EMPLOYEE_NAME}(${COA.EMPLOYEE_CODE})</option>
 						</c:forEach>
@@ -196,7 +196,7 @@
 				
 			<div class="form-group">
 					<label>USER_LEVEL</label> <select class="form-control"
-						name="EDITUSER_LEVEL" id="EDITUSER_LEVEL">
+						name="EDITUSER_LEVEL" id="EDITUSER_LEVEL" style="width:270px;">
 
 						<option value="1">SUPER</option>
 						<option value="2">Region</option>
@@ -209,7 +209,7 @@
 				
 				<div class="form-group">
 					<label>ROLE_CODE</label> <select class="form-control"
-						name="EDITROLE_CODE" id="EDITROLE_CODE">
+						name="EDITROLE_CODE" id="EDITROLE_CODE" style="width:270px;">
 
 						<c:forEach var="role" items="${rolelist}">
 							<option value="${role.ROLE_CODE}">${role.DESCRIPTION}

@@ -227,10 +227,18 @@
 			 $('#userlist').DataTable( {
 			        "scrollX": true
 			    } );
+			 
+			 $('select:not(.normal)').each(function () {
+	                $(this).select2({
+	                    dropdownParent: $(this).parent()
+	                });
+	            });
 		})
 	</script>
 	<script src="<c:url value="/resources/function/user.js?a=156" />"></script>
+<style>
 
+</style>
 
 </body>
 </html>

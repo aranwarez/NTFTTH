@@ -79,6 +79,23 @@ public class UserOfficeDao {
 				
 				pst4.executeUpdate();
 			}
+			
+			PreparedStatement pst6 = con.prepareStatement(
+					"delete from WEB_USER_FDC_MAP where USER_ID=?");
+
+			pst6.setString(1, USER_ID);
+			pst6.executeUpdate();
+			
+			PreparedStatement pst7 = con.prepareStatement(
+					"insert into WEB_USER_FDC_MAP (WUTM_ID, USER_ID, FDC_CODE, ACTIVE_DT, DEACTIVE_DT, CREATE_BY, CREATE_DT) (\r\n" + 
+					"select WUTM_ID.nextval WUTM_ID,? USER_ID ,FDC_CODE,sysdate ACTIVE_DT,sysdate DEACTIVE_DT ,'SYSTEM' CREATE_BY ,sysdate CREATE_DT  from VW_FTTH_ALL_FDC vfaf  where EXISTS  (select office_code from WEB_USER_OFFICE_MAP where vfaf.office_code=WEB_USER_OFFICE_MAP.office_code and WEB_USER_OFFICE_MAP.user_id=?))");
+
+			pst7.setString(1, USER_ID);
+			pst7.setString(2, USER_ID);
+			pst7.executeUpdate();
+			
+			
+			
 
 			con.commit();
 
