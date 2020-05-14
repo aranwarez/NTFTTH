@@ -36,7 +36,7 @@ public class HomeController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginPage(Locale locale, Model model, HttpSession session) {
 		logger.info("Welcome home! The client locale is {}.", locale);
-		model.addAttribute("fx", "Nepal Telecom - Login ");
+		model.addAttribute("fx", "Nepal Telecom FTTH CMS Complain Management System ");
 		return "NTC/common/login";
 	}
 

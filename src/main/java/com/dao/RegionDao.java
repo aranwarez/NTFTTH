@@ -37,6 +37,41 @@ public class RegionDao {
 		}
 		return list;
 	}
+	
+	public List<Region> getlistByUserFDC(String USER,String level) throws SQLException {
+		 
+		Connection con = DbCon.getConnection();
+		List<Region> list = new ArrayList<Region>();
+		Region m = null;
+		PreparedStatement pst=null;
+		try {
+			if(level.contains("6")) {		
+				System.out.println("size = 6");
+				pst = con.prepareStatement("select distinct(REGION_CODE),REGION DESCRIPTION,'Y' ACTIVE_STATUS from VW_FTTH_ALL_FDC VFAF where exists (select FDC_CODE  from WEB_USER_FDC_MAP where VFAF.FDC_CODE=WEB_USER_FDC_MAP.FDC_CODE and user_id=?)");
+				pst.setString(1, USER);
+			}else {
+				System.out.println("size = other");
+				  pst = con.prepareStatement("select * from M_REGION order by REGION_CODE");
+			}
+			ResultSet rs = pst.executeQuery();
+			int i = 1;
+			while (rs.next()) {
+				m = new Region();
+				m.setSN(i);
+				m.setREGION_CODE(rs.getString("REGION_CODE"));
+				m.setDESCRIPTION(rs.getString("DESCRIPTION"));				
+				m.setACTIVE_STATUS(rs.getString("ACTIVE_STATUS"));
+				
+				list.add(m);
+				i += 1;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			con.close();
+		}
+		return list;
+	}
 
 	public String saveRegion(Region abc) throws SQLException {
 		Connection con = DbCon.getConnection();

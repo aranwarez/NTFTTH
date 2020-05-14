@@ -147,7 +147,7 @@ public class MenuDao {
 			PreparedStatement pst = con.prepareStatement(
 					"select a.menu_code,a.menu_desc,a.parent_menu,a.module_type,a.menu_url,a.icon from web_menu_entry a left join \r\n" + 
 					"						EDIT_MODE b on b.menu_code=a.menu_code\r\n" + 
-					"							where  a.status_type='Y' and b.LIST_FLAG='Y'and b.role_code=? order by a.menu_code");
+					"							where  a.status_type='Y' and b.LIST_FLAG='Y'and b.role_code=? order by a.MENU_ORDER");
 			pst.setString(1, ROLE_CODE);
 			ResultSet rs = pst.executeQuery();
 			int i = 1;

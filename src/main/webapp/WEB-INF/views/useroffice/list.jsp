@@ -75,9 +75,8 @@
 						</c:if>
 						</c:forEach>
 		</select>     
-    	</c:when> 
-    	
-    	<c:when test="${USER_LEVEL=='6'}">
+    	</c:when>  
+    		<c:when test="${USER_LEVEL=='6'}">
     
       					<select id="REGION_CODE" onchange="return getZone()" class="form-control">
 							<option value="">Select Region</option>
@@ -88,14 +87,15 @@
 						</c:if>
 						</c:forEach>
 		</select>     
-    	</c:when> 
-    	 		  
+    	</c:when> 		  
 <c:otherwise>
     <select id="REGION_CODE" class="form-control"  onchange="return getZone()">
-        
+    
    	 <c:if test="${USER_LEVEL=='2'}"> <option value="">Select Region</option> </c:if>     
 							<c:forEach var="user3" items="${levelcontrollist}" begin="1" end="1">
-										  <option value="${user3.REGION_CODE}" selected="selected" >${user3.REGION}</option>
+										
+	 				
+						 <option value="${user3.REGION_CODE}" selected="selected" >${user3.REGION}</option>
 						
 						</c:forEach>							
 							
@@ -103,8 +103,10 @@
      
     </c:otherwise>
 </c:choose>
-   
-   </div>
+
+						
+
+ 				</div>
  				
  				
  				<div class="col-xs-3">
@@ -201,7 +203,7 @@
     		</c:when> 
     		 
    		 <c:otherwise>
-   	 	<select id="DISTRICT_CODE" onchange="return getOffice()" class="form-control">
+   	 	<select id="DISTRICT_CODE" onchange="return fetchView()" class="form-control">
 							<option value="">Select District </option>
 						</select>
 						
@@ -214,49 +216,11 @@
  				</div>
  				
  				  
- 				  <div class="col-xs-3">
  				  
- 				  
- 				  <c:choose>
-    			<c:when test="${USER_LEVEL=='5'}">
-    
-      				<select id="OFFICE_CODE" onchange="return getOLT()" class="form-control">
-							<option value="">Select Office </option>
-												
-						<c:forEach var="user3" items="${levelcontrollist}" begin="1" end="1">					
-	 				
-						 <option value="${user3.OFFICE_CODE}"  selected="selected">${user3.OFFICE}</option>
-						
-						</c:forEach>
-							
-							
-						</select>
-      				
-     
-    		</c:when>    
-   		 <c:otherwise>
-   	 	<select id="OFFICE_CODE" onchange="return getOLT()" class="form-control">
-							<option value="">Select Office </option>
-												
-							
-						</select>
-   	 	
-   	    </c:otherwise>
-		</c:choose>
- 				  
- 				  
- 				  
-						
- 				</div>
  				
  				
  				  
- 				  <div class="col-xs-3">
-						<select id="OLT_CODE"  class="form-control">
-							<option value="">Select Olt </option>											
-					    </select>
-
- 				</div>
+ 				  
  				<div class="col-xs-3">				
 					<div class="align-middle">
                 		<button type="submit" class="btn btn-primary" onclick="return fetchView()">View</button>
@@ -307,7 +271,7 @@
 							<!-- /.box-header -->
 							<div class="box-body ">
 							
-							<jsp:include page="${request.contextPath}/userfdcbody"></jsp:include>
+							<jsp:include page="${request.contextPath}/userofficebody"></jsp:include>
 							
 							
 							
@@ -361,7 +325,7 @@
 		})
 		
 	</script>
-	<script src="<c:url value="/resources/function/userfdc.js?a=88" />"></script>
+	<script src="<c:url value="/resources/function/useroffice.js?a=88" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 

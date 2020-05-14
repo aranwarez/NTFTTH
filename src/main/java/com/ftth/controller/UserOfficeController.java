@@ -19,25 +19,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dao.FDCDao;
 import com.dao.RegionDao;
 import com.dao.UserDao;
-import com.dao.UserFdcDao;
+import com.dao.UserOfficeDao;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.Region;
-import com.model.UserFdcModel;
 import com.model.UserInformationModel;
+import com.model.UserOfficeModel;
 
 @Controller
-public class UserFDCController {
-	private static final Logger logger = LoggerFactory.getLogger(UserFDCController.class);
-	
-	
-
-	@RequestMapping(value = "/user-fdc/list", method = RequestMethod.GET)
+public class UserOfficeController {
+	private static final Logger logger = LoggerFactory.getLogger(UserOfficeController.class);
+	@RequestMapping(value = "/user-office/list", method = RequestMethod.GET)
 	public String menuacesslistlist(Locale locale, Model model, HttpSession session)  {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
@@ -48,49 +44,50 @@ public class UserFDCController {
 		
 		RegionDao dao = new RegionDao();
 		List<Region> regionlist = null;
-        List<Map<String, Object>> levelcontrollist=null;
+       List<Map<String, Object>> levelcontrollist=null;
+//        System.out.println("");
        
         try {
+        	
         	regionlist = dao.getlistByUserFDC(user.getUSER_ID(),user.getUSER_LEVEL());
         	levelcontrollist=UserDao.getUserDetailByOfficeCode(user.getOFFICE_CODE());
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        model.addAttribute("fx", "User FDC Map List");
+        model.addAttribute("fx", "User Office Map List");
         model.addAttribute("regionlist", regionlist);	        
         model.addAttribute("USER_LEVEL", user.getUSER_LEVEL());        
         model.addAttribute("levelcontrollist", levelcontrollist);
         
-		return "userfdc/list";
+		return "useroffice/list";
 		
 		
 		
 
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "userfdcbody")
+	@RequestMapping(method = RequestMethod.GET, value = "userofficebody")
 	public String userfdcbody(Model model, Locale locale) {
 
 
 		
-	        return "userfdc/userfdcbody";
+	        return "useroffice/userofficebody";
 
 	}
 	
-	
 	@ResponseBody
-	@RequestMapping(method = RequestMethod.GET, value = "/getuserfdc",produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.GET, value = "/getuseroffice",produces = MediaType.APPLICATION_JSON_VALUE)
 
-	public List<UserFdcModel> getEditMode(HttpServletRequest request, HttpServletResponse response) {
+	public List<UserOfficeModel> getEditMode(HttpServletRequest request, HttpServletResponse response) {
 		
 		String USER_ID = request.getParameter("USER_ID");
 	System.out.println("USER_ID "+USER_ID);
 		
-		List<UserFdcModel> list = null;
+		List<UserOfficeModel> list = null;
 		
 		try {
-			list = UserFdcDao.getModeList(USER_ID);
+			list = UserOfficeDao.getModeList(USER_ID);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,23 +97,7 @@ public class UserFDCController {
 
 	}
 	
-	@ResponseBody
-	@RequestMapping(method = RequestMethod.GET, value = "/currentNepaliDate")
-
-	public String getCurrentDt(HttpServletRequest request, HttpServletResponse response) {
-		
-		try {
-			return FDCDao.getCurrentNepaliDate();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return null;
-
-	}
-	
-	@RequestMapping(value = "/saveuserfdc", method = RequestMethod.POST)
+	@RequestMapping(value = "/saveuseroffice", method = RequestMethod.POST)
 	@ResponseBody
 
 	public String saveModeList(String USER_ID, String menu_mode,  Model model, Locale locale,HttpSession session)
@@ -140,11 +121,11 @@ public class UserFDCController {
         });
 		
 //		SaveServiceTeam
-		UserFdcDao menuaccessdao = new UserFdcDao();
+		UserOfficeDao menuaccessdao = new UserOfficeDao();
 		String msg = null;
 		try {
 			
-			msg = menuaccessdao.SaveUserFDC(USER_ID, myObjects, user.getUSER_ID());
+			msg = menuaccessdao.SaveUserOffice(USER_ID, myObjects, user.getUSER_ID());
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -153,9 +134,5 @@ public class UserFDCController {
 		}
 		return msg;
 	}
-	
-	
-	
-	
 	
 }

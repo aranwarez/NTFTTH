@@ -49,7 +49,7 @@ public class CommonController {
 
 	public String newTopMenu(Model model, HttpSession session) {
 
-		model.addAttribute("menu_name", "<b>Nepal </b>Telecom ");
+		model.addAttribute("menu_name", "Nepal Telecom <b>FTTH</b> Complain Management System Telecom ");
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		model.addAttribute("UserList", user);
 		return "include/topsidebar";
