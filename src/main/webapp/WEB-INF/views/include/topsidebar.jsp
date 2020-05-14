@@ -4,7 +4,7 @@
 	pageEncoding="ISO-8859-1"%>
 <!-- Logo -->
 <a href="../dashboard/list" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
-	<span class="logo-mini"><b>N</b>TC</span> <!-- logo for regular state and mobile devices -->
+	<span class="logo-mini"><b>FTTH</b> </span> <!-- logo for regular state and mobile devices -->
 	<span class="logo-lg"> ${menu_name} </span>
 </a>
 <!-- Header Navbar: style can be found in header.less -->

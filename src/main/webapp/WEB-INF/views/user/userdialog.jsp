@@ -89,7 +89,7 @@
 						<option value="3">Zone</option>
 						<option value="4">District</option>
 						<option value="5">Office</option>
-
+						<option value="6">Customize Office</option>
 
 					</select>
 				</div>
@@ -203,7 +203,7 @@
 						<option value="3">Zone</option>
 						<option value="4">District</option>
 						<option value="5">Office</option>
-
+					<option value="6">Customize Office</option>
 					</select>
 				</div>
 				

@@ -48,11 +48,10 @@ public class UserFDCController {
 		
 		RegionDao dao = new RegionDao();
 		List<Region> regionlist = null;
-       List<Map<String, Object>> levelcontrollist=null;
-//        System.out.println("");
+        List<Map<String, Object>> levelcontrollist=null;
        
         try {
-        	regionlist = dao.getlist();
+        	regionlist = dao.getlistByUserFDC(user.getUSER_ID(),user.getUSER_LEVEL());
         	levelcontrollist=UserDao.getUserDetailByOfficeCode(user.getOFFICE_CODE());
         } catch (SQLException e) {
             // TODO Auto-generated catch block

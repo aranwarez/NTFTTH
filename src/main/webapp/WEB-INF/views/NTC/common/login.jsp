@@ -55,7 +55,7 @@
 
 	<div class="login-box">
 
-		<div class="login-logo">${fx}</div>
+		<h2 class="login-logo">${fx}</h2>
 		<!-- /.login-logo -->
 		<div class="login-box-body">
 

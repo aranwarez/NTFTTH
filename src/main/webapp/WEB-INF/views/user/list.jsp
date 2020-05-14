@@ -221,24 +221,21 @@
 
 	<script>
 		$(function() {
-
-			$("#EMPLOYEE_CODE,#EDITEMPLOYEE_CODE,#EDITOFFICE_CODE,#OFFICE_CODE").select2();
-			
+		
 			 $('#userlist').DataTable( {
 			        "scrollX": true
 			    } );
+			 $("#EMPLOYEE_CODE,#EDITEMPLOYEE_CODE,#EDITOFFICE_CODE,#OFFICE_CODE").select2();
 			 
 			 $('select:not(.normal)').each(function () {
 	                $(this).select2({
 	                    dropdownParent: $(this).parent()
 	                });
 	            });
+			
 		})
 	</script>
 	<script src="<c:url value="/resources/function/user.js?a=156" />"></script>
-<style>
-
-</style>
 
 </body>
 </html>
