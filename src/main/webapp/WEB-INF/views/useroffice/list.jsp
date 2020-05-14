@@ -75,7 +75,19 @@
 						</c:if>
 						</c:forEach>
 		</select>     
-    	</c:when>  		  
+    	</c:when>  
+    		<c:when test="${USER_LEVEL=='6'}">
+    
+      					<select id="REGION_CODE" onchange="return getZone()" class="form-control">
+							<option value="">Select Region</option>
+							
+						<c:forEach var="user3" items="${regionlist}">					
+	 					<c:if test = "${user3.ACTIVE_STATUS == 'Y'}">	
+						 <option value="${user3.REGION_CODE}">${user3.DESCRIPTION}</option>
+						</c:if>
+						</c:forEach>
+		</select>     
+    	</c:when> 		  
 <c:otherwise>
     <select id="REGION_CODE" class="form-control"  onchange="return getZone()">
     

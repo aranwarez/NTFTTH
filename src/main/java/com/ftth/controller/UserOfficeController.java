@@ -48,7 +48,8 @@ public class UserOfficeController {
 //        System.out.println("");
        
         try {
-        	regionlist = dao.getlist();
+        	
+        	regionlist = dao.getlistByUserFDC(user.getUSER_ID(),user.getUSER_LEVEL());
         	levelcontrollist=UserDao.getUserDetailByOfficeCode(user.getOFFICE_CODE());
         } catch (SQLException e) {
             // TODO Auto-generated catch block
