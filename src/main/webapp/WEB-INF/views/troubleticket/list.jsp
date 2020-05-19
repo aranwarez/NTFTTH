@@ -24,25 +24,11 @@
 		</header>
 		<!-- Left side column. contains the logo and sidebar -->
 		<aside class="main-sidebar">
-			<!-- sidebar: style can be found in sidebar.less -->
-			<section class="sidebar">
-				<!-- Sidebar user panel -->
-				<div class="user-panel">
-					<div class="pull-left image">
-						<img
-							src="<c:url value="/resources/adminltd/dist/img/user2-160x160.jpg" />"
-							class="img-circle" alt="User Image">
-					</div>
-					<div class="pull-left info">
-						<p>NABIN</p>
-						<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-					</div>
-				</div>
-				<!-- search form -->
+		<!-- search form -->
 				<form action="#" method="get" class="sidebar-form">
 					<div class="input-group">
-						<input type="text" name="q" class="form-control"
-							placeholder="Search..."> <span class="input-group-btn">
+						<input type="text" name="token_id" class="form-control"
+							placeholder="Enter Your Token ID" autocomplete="off"> <span class="input-group-btn">
 							<button type="submit" name="search" id="search-btn"
 								class="btn btn-flat">
 								<i class="fa fa-search"></i>
@@ -51,13 +37,9 @@
 					</div>
 				</form>
 				<!-- /.search form -->
-				<!-- sidebar menu: : style can be found in sidebar.less -->
-				<ul class="sidebar-menu" data-widget="tree">
-					<li class="header">MAIN NAVIGATION</li>
+		
 					<jsp:include page="${request.contextPath}/leftmenu"></jsp:include>
-				</ul>
-			</section>
-			<!-- /.sidebar -->
+			
 		</aside>
 
 		<!-- Content Wrapper. Contains page content -->
@@ -95,7 +77,19 @@
 						</c:if>
 						</c:forEach>
 		</select>     
-    	</c:when>  		  
+    	</c:when>  
+    	<c:when test="${USER_LEVEL=='6'}">
+    
+      					<select id="REGION_CODE" onchange="return getZone()" class="form-control">
+							<option value="">Select Region</option>
+							
+						<c:forEach var="user3" items="${regionlist}">					
+	 					<c:if test = "${user3.ACTIVE_STATUS == 'Y'}">	
+						 <option value="${user3.REGION_CODE}">${user3.DESCRIPTION}</option>
+						</c:if>
+						</c:forEach>
+		</select>     
+    	</c:when> 		  
 <c:otherwise>
     <select id="REGION_CODE" class="form-control"  onchange="return getZone()">
     
@@ -302,7 +296,7 @@
 						<div class="col-xs-2">
 						<select id="SUBTEAMCODE"
 							class="form-control">
-							<option value="">Select Team</option>
+							<option value="">Select Team Role</option>
 							<c:forEach var="user3" items="${userteamlist}">
 									<option value="${user3.SUB_TEAM_CODE}">${user3.SUB_TEAM_CODE}</option>
 							</c:forEach>
@@ -314,7 +308,7 @@
 						<div class="col-xs-2">
 						<select id="WEBTEAMCODE"
 							class="form-control">
-							<option value="">Select Team</option>
+							<option value="">Select FDC Team</option>
 							<c:forEach var="user3" items="${webteamlist}">
 									<option value="${user3.TEAM_ID}">${user3.TEAMNAME}-${user3.DESCRIPTION}</option>
 							</c:forEach>
@@ -346,7 +340,11 @@
 						</div>
 					</div>
 
-					<div class="col-xs-3"></div>
+					<div class="col-xs-1" id="closebuttondiv" style="display: none;">
+					<button type="button" class="btn btn-danger"
+								onclick="return Closealltickets()">Close All Tickets</button>
+					
+					</div>
 
 
 
@@ -457,7 +455,7 @@
 
 
 	<script
-		src="<c:url value="/resources/function/Complain/TroubleTickets.js?a=12" />"></script>
+		src="<c:url value="/resources/function/Complain/TroubleTickets.js?verdt=511" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 	<script>
