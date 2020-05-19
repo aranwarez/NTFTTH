@@ -40,40 +40,7 @@
 		</header>
 		<!-- Left side column. contains the logo and sidebar -->
 		<aside class="main-sidebar">
-			<!-- sidebar: style can be found in sidebar.less -->
-			<section class="sidebar">
-				<!-- Sidebar user panel -->
-				<div class="user-panel">
-					<div class="pull-left image">
-						<img
-							src="<c:url value="/resources/adminltd/dist/img/user2-160x160.jpg" />"
-							class="img-circle" alt="User Image">
-					</div>
-					<div class="pull-left info">
-						<p>NABIN</p>
-						<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-					</div>
-				</div>
-				<!-- search form -->
-				<form action="#" method="get" class="sidebar-form">
-					<div class="input-group">
-						<input type="text" name="q" class="form-control"
-							placeholder="Search..."> <span class="input-group-btn">
-							<button type="submit" name="search" id="search-btn"
-								class="btn btn-flat">
-								<i class="fa fa-search"></i>
-							</button>
-						</span>
-					</div>
-				</form>
-				<!-- /.search form -->
-				<!-- sidebar menu: : style can be found in sidebar.less -->
-				<ul class="sidebar-menu" data-widget="tree">
-					<li class="header">MAIN NAVIGATION</li>
-					<jsp:include page="${request.contextPath}/leftmenu"></jsp:include>
-				</ul>
-			</section>
-			<!-- /.sidebar -->
+			<jsp:include page="${request.contextPath}/leftmenu"></jsp:include>
 		</aside>
 
 		<!-- Content Wrapper. Contains page content -->
@@ -92,58 +59,35 @@
 			<!-- Main content -->
 			<section class="content">
 				<div class="row">
-					<div class="col-xs-12">
-
-						<!-- /.box -->
-
-						<div class="box">
-							<div class="overlay">
-								<i class="fa fa-refresh fa-spin"></i>
-							</div>
-							<div class="box-header with-border">
-								<h3 class="box-title">${fx}</h3>
-							</div>
 
 
-							<%
-								if (request.getParameter("sucess") != null) {
-							%>>
-							<div class="alert alert-success">
-								<strong> <%=request.getParameter("sucess")%>
-								</strong>
-							</div>
-							<%
-								}
-							%>
-							<%
-								if (request.getParameter("error") != null) {
-							%>>
-							<div class="alert alert-danger">
-								<strong> <%=request.getParameter("error")%>
-								</strong>
-							</div>
-							<%
-								}
-							%>
+					<!-- 					OLE Customer Registration -->
+					<div>
+						<!-- opening of new row -->
+						<div class="col-md-12">
+							<!-- AREA CHART -->
+							<div class="box box-primary">
+								<div class="overlay">
+									<i class="fa fa-refresh fa-spin"></i>
+								</div>
 
-							<!-- /.box-header -->
-							<div class="box-body">
+								<div class="box-header with-border">
+									<h3 class="box-title">
+										<i class="fa fa-user-plus"></i>Registration
+									</h3>
 
-
-
-								<div class="row with-border">
+								</div>
+								<div class="box-body">
 									<div class="col-md-2">
-										<div class="form-group">
-											<label>Select Your Information</label> <select id="infotype"
-												class="form-control " style="width: 100%;">
-												<option value="cpeSN">CPE Serial No.</option>
-												<option value="ftthDataNum">FTTH Data No.</option>
-												<option value="ftthVoiceNum">FTTH Voice No.</option>
-												<option value="custId">Customer ID</option>
-												<option value="contactNum">Contact No.</option>
-											
-											</select>
-										</div>
+										<label>Select Your Information</label> <select id="infotype"
+											class="form-control" style="width: 100%;">
+											<option value="cpeSN">CPE Serial No.</option>
+											<option value="ftthDataNum">FTTH Data No.</option>
+											<option value="ftthVoiceNum">FTTH Voice No.</option>
+											<option value="custId">Customer ID</option>
+											<option value="contactNum">Contact No.</option>
+
+										</select>
 
 									</div>
 									<!-- /.col -->
@@ -166,87 +110,102 @@
 											id="customerlabel">Address :</label> <span id="Address"></span>
 									</div>
 									<div class="col-md-2">
-									
-										<button type="button" class="btn btn-block btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+
+										<button type="button" class="btn btn-block btn-primary btn-lg"
+											data-toggle="modal" data-target="#myModal">
 											<i class="fa fa-edit"></i>Register Complain
 										</button>
 
 									</div>
 
-									<!-- 									<div class="col-md-4"> -->
-									<!-- 										<label id="customerlabel">Address</label> <span -->
-									<!-- 											class="form-control" id="Address"></span> -->
-									<!-- 									</div> -->
 
-
-
-
-									<!-- /.col -->
 								</div>
-
-								<!--           second row -->
-								<div id="divcustomerinfo" hidden="true">
-								
-								
-								
-								
-									<!-- opening of new row -->
-									<div class="col-md-12">
-						<!-- AREA CHART -->
-						<div class="box box-primary">
-							<div class="box-header with-border">
-								<h3 class="box-title"><i
-												class="fa fa-signal"></i>CPE OLT STATUS</h3>
-
-								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool" data-widget="collapse">
-										<i class="fa fa-minus"></i>
-									</button>
-									<button type="button" class="btn btn-box-tool" onclick="getstatusInfo()">
-										<i class="fa fa-refresh"></i>
-									</button>
-								</div>
+								<!-- /.box-body -->
 							</div>
-							<div   class="box-body">
-							<label>onuStatus:</label>  <span id="onuStatus"></span>
-							<label>onuRxPower:</label>  <span id="onuRxPower"></span>
-							<label>onuOltRxPower:</label><span id="onuOltRxPower"></span>
-							<label>onuDistance:</label><span id="onuDistance"></span>
-							<label>onuTemprature:</label><span id="onuTemprature"></span>
-							
-							
-							</div>
-							<!-- /.box-body -->
+							<!-- /.box -->
+
+
 						</div>
-						<!-- /.box -->
-
-						
-					</div>								
 
 
 
-								</div>
-								<!-- 							div	customer info -->
-
-							</div>
-							<!-- /.box-body -->
-						</div>
-						<!-- /.box -->
 					</div>
-			
-			<div class="col-md-12">
-			
+
+
+					<!-- till here custormer reg status -->
+
+
+
+
+
+
+
+					<!-- 					OLE status -->
+					<div id="divcustomerinfo" hidden="true">
+						<!-- opening of new row -->
+						<div class="col-md-12">
+							<!-- AREA CHART -->
+							<div class="box box-primary">
+								<div class="overlay">
+									<i class="fa fa-refresh fa-spin"></i>
+								</div>
+
+								<div class="box-header with-border">
+									<h3 class="box-title">
+										<i class="fa fa-signal"></i>CPE OLT STATUS
+									</h3>
+
+									<div class="box-tools pull-right">
+										<button type="button" class="btn btn-box-tool"
+											data-widget="collapse">
+											<i class="fa fa-minus"></i>
+										</button>
+										<button type="button" class="btn btn-box-tool"
+											onclick="getstatusInfo()">
+											<i class="fa fa-refresh"></i>
+										</button>
+									</div>
+								</div>
+								<div class="box-body">
+									<label>onuStatus:</label> <span id="onuStatus"></span> <label>onuRxPower:</label>
+									<span id="onuRxPower"></span> <label>onuOltRxPower:</label><span
+										id="onuOltRxPower"></span> <label>onuDistance:</label><span
+										id="onuDistance"></span> <label>onuTemprature:</label><span
+										id="onuTemprature"></span>
+
+
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.box -->
+
+
+						</div>
+
+
+
+					</div>
+
+
+					<!-- till here ole status -->
+
+
+					<div class="col-md-12">
+
 						<!-- AREA CHART -->
 						<div class="box box-primary">
 							<div class="box-header with-border">
-								<h3 class="box-title"><i
-												class="fa fa-tachometer"></i>CPE TMS STATUS</h3>
+								<h3 class="box-title">
+									<i class="fa fa-tachometer"></i>CPE TMS STATUS
+								</h3>
 
 								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="collapse">
 										<i class="fa fa-minus"></i>
 									</button>
-									<button type="button" class="btn btn-box-tool" onclick="refreshtmsstatus()">
+									<button type="button" class="btn btn-box-tool"
+										onclick="refreshtmsstatus()">
 										<i class="fa fa-refresh"></i>
 									</button>
 								</div>
@@ -254,338 +213,424 @@
 							<div class="overlay" id="tmsstatusoverlay">
 								<i class="fa fa-refresh fa-spin"></i>
 							</div>
-							<div id="divforCPEinfo"  class="box-body">
-							
-							</div>
+							<div id="divforCPEinfo" class="box-body"></div>
 							<!-- /.box-body -->
 						</div>
 						<!-- /.box -->
 
-						
+
 					</div>
-			
-			
-			
-			
+
+
+
+
 					<!-- /.col -->
-			
-			
-			
-			<div class="col-md-12">
+
+
+
+					<div class="col-md-12">
 						<!-- AREA CHART -->
 						<div class="box box-primary">
 							<div class="box-header with-border">
-								<h3 class="box-title"><i
-												class="fa fa-calendar"></i>Subscription Information</h3>
+								<h3 class="box-title">
+									<i class="fa fa-calendar"></i>Subscription Information
+								</h3>
 
 								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="collapse">
 										<i class="fa fa-minus"></i>
 									</button>
-									<button type="button" class="btn btn-box-tool" data-widget="remove">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="remove">
 										<i class="fa fa-times"></i>
 									</button>
 								</div>
 							</div>
-							<div id="divforsubsinfo"  class="box-body">
-							
+							<div id="divforsubsinfo" class="box-body"></div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+
+
+					</div>
+
+					<!-- 					AAA status from here -->
+
+					<div class="col-md-12">
+
+						<!-- AREA CHART -->
+						<div class="box box-primary collapsed-box">
+							<div class="box-header with-border">
+								<h3 class="box-title">
+									<i class="fa fa-server"></i>AAA STATUS : <span id="AAAuserid"></span>
+								</h3>
+
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="collapse">
+										<i class="fa fa-plus"></i>
+									</button>
+
+								</div>
+							</div>
+
+							<div id="divforAAAinfo" class="box-body">
+
+
+								<table class="table table-condensed">
+									<tbody>
+										<tr>
+											<td><label>Plan In AAA </label></td>
+											<td><span id="planAAA"></span></td>
+											<td><label>CallerID</label></td>
+											<td><span id="calleridAAA"></span></td>
+										</tr>
+
+									</tbody>
+								</table>
+								<label>Active Session</label>
+								<table class="table table-condensed">
+									<tbody>
+										<tr>
+											<td><label>Userid</label></td>
+											<td><span id="useridAAA"></span></td>
+
+											<td><label>CallerID</label></td>
+											<td><span id="calleridactAAA"></span></td>
+
+
+										</tr>
+										<tr>
+											<td><label>LoginIP</label></td>
+											<td><span id="loginIPAAA"></span></td>
+											<td><label>Start Time</label></td>
+											<td><span id="startimeidAAA"></span></td>
+
+										</tr>
+
+									</tbody>
+								</table>
+								<button type="button" class="btn bg-green" data-toggle="modal"
+									data-target="#AAAstatusModal">
+									<i class="fa fa-times"></i>View log
+								</button>
+								<a href="#" class="btn btn-primary pull-right"
+									data-toggle="modal" data-target="#AAAstatusModal"> <i
+									class="fa fa-plus"></i> View log
+								</a>
 							</div>
 							<!-- /.box-body -->
 						</div>
 						<!-- /.box -->
 
-						
+
 					</div>
-			
-					
-					
-					
-			
-			<div class="col-md-12">
+
+
+
+
+					<!-- /.col -->
+
+
+
+
+
+
+					<div class="col-md-12">
 						<!-- AREA CHART -->
 						<div class="box box-primary collapsed-box">
 							<div class="box-header with-border">
-								<h3 class="box-title"><i
-												class="fa fa-info-circle"></i>CPE / FAP Information</h3>
+								<h3 class="box-title">
+									<i class="fa fa-info-circle"></i>CPE / FAP Information
+								</h3>
 
 								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="collapse">
 										<i class="fa fa-plus"></i>
 									</button>
-									<button type="button" class="btn btn-box-tool" data-widget="remove">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="remove">
 										<i class="fa fa-times"></i>
 									</button>
 								</div>
 							</div>
 							<div class="box-body">
-							    <div class="col-md-4">
-     		
-						
-						
-						 <table class="table table-condensed">
-												<tbody>
-													<tr>
-														<td><label>cpeMac </label></td>
-														<td><span id="cpeMac"></span></td>
-													</tr>
-													<tr>
-														<td><label>cpeSN </label></td>
-														<td><span id="cpeSN"></span></td>
-													</tr>
-													<tr>
-														<td><label>fapName </label></td>
-														<td><span id="fapName"></span></td>
-													</tr>
-													<tr>
-														<td><label>fapPortName </label></td>
-														<td><span id="fapPortName"></span></td>
-													</tr>
-													<tr>
-														<td><label>fapPortSpec </label></td>
-														<td><span id="fapPortSpec"></span></td>
-													</tr>
-													<tr>
-														<td><label>fapSerialNumber </label></td>
-														<td><span id="fapSerialNumber"></span></td>
-													</tr>
+								<div class="col-md-4">
 
-												</tbody>
-											</table>
-						
-												
-							</div>
-							<div class="col-md-4">
-													
-						 <table class="table table-condensed">
-												<tbody>
-													<tr>
-														<td><label>distribCblName </label></td>
-														<td><span id="distribCblName"></span></td>
-													</tr>
-													<tr>
-														<td><label>distribCoreNo </label></td>
-														<td><span id="distribCoreNo"></span></td>
-													</tr>
-													<tr>
-														<td><label>distribPortNo </label></td>
-														<td><span id="distribPortNo"></span></td>
-													</tr>
-													<tr>
-														<td><label>fdcName</label></td>
-														<td><span id="fdcName"></span></td>
-													</tr>
-													<tr>
-														<td><label>feederCblName </label></td>
-														<td><span id="feederCblName"></span></td>
-													</tr>
-													<tr>
-														<td><label>feederCoreNo </label></td>
-														<td><span id="feederCoreNo"></span></td>
-													</tr>
 
-												</tbody>
-											</table>
-							
-							</div>
-							
-							<div class="col-md-4">
-													
-						 <table class="table table-condensed">
-												<tbody>
-													<tr>
-														<td><label>Fap Location </label></td>
-														<td><span id="faplocation"></span></td>
-													</tr>
-													<tr>
-														<td><label>Longitude </label></td>
-														<td><span id="Longitude"></span></td>
-													</tr>
-														<tr>
-														<td><label>Latitude </label></td>
-														<td><span id="Latitude"></span></td>
-													</tr>	
 
-												</tbody>
-											</table>
-							
-							</div>
-							
-							
+									<table class="table table-condensed">
+										<tbody>
+											<tr>
+												<td><label>cpeMac </label></td>
+												<td><span id="cpeMac"></span></td>
+											</tr>
+											<tr>
+												<td><label>cpeSN </label></td>
+												<td><span id="cpeSN"></span></td>
+											</tr>
+											<tr>
+												<td><label>fapName </label></td>
+												<td><span id="fapName"></span></td>
+											</tr>
+											<tr>
+												<td><label>fapPortName </label></td>
+												<td><span id="fapPortName"></span></td>
+											</tr>
+											<tr>
+												<td><label>fapPortSpec </label></td>
+												<td><span id="fapPortSpec"></span></td>
+											</tr>
+											<tr>
+												<td><label>fapSerialNumber </label></td>
+												<td><span id="fapSerialNumber"></span></td>
+											</tr>
+
+										</tbody>
+									</table>
+
+
+								</div>
+								<div class="col-md-4">
+
+									<table class="table table-condensed">
+										<tbody>
+											<tr>
+												<td><label>distribCblName </label></td>
+												<td><span id="distribCblName"></span></td>
+											</tr>
+											<tr>
+												<td><label>distribCoreNo </label></td>
+												<td><span id="distribCoreNo"></span></td>
+											</tr>
+											<tr>
+												<td><label>distribPortNo </label></td>
+												<td><span id="distribPortNo"></span></td>
+											</tr>
+											<tr>
+												<td><label>fdcName</label></td>
+												<td><span id="fdcName"></span></td>
+											</tr>
+											<tr>
+												<td><label>feederCblName </label></td>
+												<td><span id="feederCblName"></span></td>
+											</tr>
+											<tr>
+												<td><label>feederCoreNo </label></td>
+												<td><span id="feederCoreNo"></span></td>
+											</tr>
+
+										</tbody>
+									</table>
+
+								</div>
+
+								<div class="col-md-4">
+
+									<table class="table table-condensed">
+										<tbody>
+											<tr>
+												<td><label>Fap Location </label></td>
+												<td><span id="faplocation"></span></td>
+											</tr>
+											<tr>
+												<td><label>Longitude </label></td>
+												<td><span id="Longitude"></span></td>
+											</tr>
+											<tr>
+												<td><label>Latitude </label></td>
+												<td><span id="Latitude"></span></td>
+											</tr>
+
+										</tbody>
+									</table>
+
+								</div>
+
+
 							</div>
 							<!-- /.box-body -->
 						</div>
 						<!-- /.box -->
 
-						
-					</div>
-					
-					
-					
-<!-- 					cols -->
 
-	<div class="col-md-12">
+					</div>
+
+
+
+					<!-- 					cols -->
+
+					<div class="col-md-12">
 						<!-- AREA CHART -->
 						<div class="box box-primary collapsed-box">
 							<div class="box-header with-border">
-								<h3 class="box-title"><i
-												class="fa fa-exchange"></i>OLT/OLE Information</h3>
+								<h3 class="box-title">
+									<i class="fa fa-exchange"></i>OLT/OLE Information
+								</h3>
 
 								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="collapse">
 										<i class="fa fa-plus"></i>
 									</button>
-									<button type="button" class="btn btn-box-tool" data-widget="remove">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="remove">
 										<i class="fa fa-times"></i>
 									</button>
 								</div>
 							</div>
 							<div class="box-body">
-							    <div class="col-md-6">
-							     <table class="table table-condensed">
-												<tbody>
-													<tr>
-														<td><label>feederPortNo</label></td>
-														<td><span id="feederPortNo"></span></td>
-													</tr>
-													<tr>
-														<td><label>l1SplitterNo </label></td>
-														<td><span id="l1SplitterNo"></span></td>
-													</tr>
-													<tr>
-														<td><label>odfInPortOdfOutPort </label></td>
-														<td><span id="odfInPortOdfOutPort"></span></td>
-													</tr>
-													<tr>
-														<td><label>odfInfo </label></td>
-														<td><span id="odfInfo"></span></td>
-													</tr>
-													<tr>
-														<td><label>odfName </label></td>
-														<td><span id="odfName"></span></td>
-													</tr>
-													<tr>
-														<td><label>odfNo </label></td>
-														<td><span id="odfNo"></span></td>
-													</tr>
+								<div class="col-md-6">
+									<table class="table table-condensed">
+										<tbody>
+											<tr>
+												<td><label>feederPortNo</label></td>
+												<td><span id="feederPortNo"></span></td>
+											</tr>
+											<tr>
+												<td><label>l1SplitterNo </label></td>
+												<td><span id="l1SplitterNo"></span></td>
+											</tr>
+											<tr>
+												<td><label>odfInPortOdfOutPort </label></td>
+												<td><span id="odfInPortOdfOutPort"></span></td>
+											</tr>
+											<tr>
+												<td><label>odfInfo </label></td>
+												<td><span id="odfInfo"></span></td>
+											</tr>
+											<tr>
+												<td><label>odfName </label></td>
+												<td><span id="odfName"></span></td>
+											</tr>
+											<tr>
+												<td><label>odfNo </label></td>
+												<td><span id="odfNo"></span></td>
+											</tr>
 
-												</tbody>
-											</table>
-       					
-							</div>
-							<div class="col-md-6">
-							<table class="table table-condensed">
-												<tbody>
-													<tr>
-														<td><label>oltId</label></td>
-														<td><span id="oltId"></span></td>
-													</tr>
-													<tr>
-														<td><label>oltInfo </label></td>
-														<td><span id="oltInfo"></span></td>
-													</tr>
-													<tr>
-														<td><label>oltName </label></td>
-														<td><span id="oltName"></span></td>
-													</tr>
-													<tr>
-														<td><label>oltType </label></td>
-														<td><span id="oltType"></span></td>
-													</tr>
+										</tbody>
+									</table>
 
-												</tbody>
-											</table>
-							
-							</div>
+								</div>
+								<div class="col-md-6">
+									<table class="table table-condensed">
+										<tbody>
+											<tr>
+												<td><label>oltId</label></td>
+												<td><span id="oltId"></span></td>
+											</tr>
+											<tr>
+												<td><label>oltInfo </label></td>
+												<td><span id="oltInfo"></span></td>
+											</tr>
+											<tr>
+												<td><label>oltName </label></td>
+												<td><span id="oltName"></span></td>
+											</tr>
+											<tr>
+												<td><label>oltType </label></td>
+												<td><span id="oltType"></span></td>
+											</tr>
+
+										</tbody>
+									</table>
+
+								</div>
 							</div>
 							<!-- /.box-body -->
 						</div>
 						<!-- /.box -->
 
-						
+
 					</div>
-					
-					
-<!-- 					team row -->
 
 
-	<div class="col-md-12">
+					<!-- 					team row -->
+
+
+					<div class="col-md-12">
 						<!-- AREA CHART -->
 						<div class="box box-primary collapsed-box">
 							<div class="box-header with-border">
-								<h3 class="box-title"><i
-												class="fa fa-users"></i>Team Information</h3>
+								<h3 class="box-title">
+									<i class="fa fa-users"></i>Team Information
+								</h3>
 
 								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="collapse">
 										<i class="fa fa-plus"></i>
 									</button>
-									<button type="button" class="btn btn-box-tool" data-widget="remove">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="remove">
 										<i class="fa fa-times"></i>
 									</button>
 								</div>
 							</div>
 							<div class="box-body">
-							    <div class="col-md-6">
-							     <table class="table table-condensed">
-												<tbody>
-													<tr>
-														<td><label>Team Name</label></td>
-														<td><span id="teamName"></span></td>
-													</tr>
-													<tr>
-														<td><label>Team SuperVisor Name </label></td>
-														<td><span id="teamSupervisorName"></span></td>
-													</tr>
-													<tr>
-														<td><label>Team SuperVisor Contact Number </label></td>
-														<td><span id="teamSupervisorContactNumber"></span></td>
-													</tr>
-													
-													
+								<div class="col-md-6">
+									<table class="table table-condensed">
+										<tbody>
+											<tr>
+												<td><label>Team Name</label></td>
+												<td><span id="teamName"></span></td>
+											</tr>
+											<tr>
+												<td><label>Team SuperVisor Name </label></td>
+												<td><span id="teamSupervisorName"></span></td>
+											</tr>
+											<tr>
+												<td><label>Team SuperVisor Contact Number </label></td>
+												<td><span id="teamSupervisorContactNumber"></span></td>
+											</tr>
 
-												</tbody>
-											</table>
-       					
-							</div>
-							<div class="col-md-6">
-							<table class="table table-condensed">
-												<tbody>
-													<tr>
-														<td><label>Team Leader </label></td>
-														<td><span id="teamleaderName"></span></td>
-													</tr>
-													<tr>
-														<td><label>Team Leader Contact Number </label></td>
-														<td><span id="teamleaderContactNumber"></span></td>
-													</tr>
 
-												</tbody>
-											</table>
-							
-							</div>
+
+										</tbody>
+									</table>
+
+								</div>
+								<div class="col-md-6">
+									<table class="table table-condensed">
+										<tbody>
+											<tr>
+												<td><label>Team Leader </label></td>
+												<td><span id="teamleaderName"></span></td>
+											</tr>
+											<tr>
+												<td><label>Team Leader Contact Number </label></td>
+												<td><span id="teamleaderContactNumber"></span></td>
+											</tr>
+
+										</tbody>
+									</table>
+
+								</div>
 							</div>
 							<!-- /.box-body -->
 						</div>
 						<!-- /.box -->
 
-						
+
 					</div>
 
-			
-<!-- 	  end				team row -->
-			
-			
-			
-			
-			
+
+					<!-- 	  end				team row -->
+
+
+
+
+
 				</div>
 				<!-- /.row -->
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 			</section>
 			<!-- /.content -->
 		</div>
@@ -615,7 +660,7 @@
 	<jsp:include page="${request.contextPath}/complain/dialog"></jsp:include>
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 	<script
-		src="<c:url value="/resources/function/Complain/NewComplain.js" />"></script>
+		src="<c:url value="/resources/function/Complain/NewComplain.js?verdt=511" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 
