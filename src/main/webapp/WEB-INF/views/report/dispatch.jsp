@@ -224,7 +224,7 @@
      
     		</c:when>    
    		 <c:otherwise>
-   	 	<select id="OFFICE_CODE" name="OFFICE_CODE" onchange="return getOLT()" class="form-control">
+   	 	<select id="OFFICE_CODE" name="OFFICE_CODE" onchange="getfdcteam()" class="form-control">
 							<option value="">Select Office </option>
 												
 							
@@ -281,8 +281,9 @@
 <div class='table'>
                                        <input type="hidden" name="reportname" value="FTTHDispatch">
                                         <table class="table-condensed">
-                                         <tr><td>Export Type</td><td><select name="reporttype"><option value="XLS">XLS</option>
+                                         <tr><td>Export Type</td><td><select name="reporttype">
                                                         <option value="pdf">PDF</option>
+                                                        <option value="XLS">XLS</option>
                                                     </select></td><td></td></tr>
                                         
                                            <tr>
