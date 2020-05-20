@@ -52,8 +52,7 @@
 					<option></option>
 						</select>
 						
-						 Output Filename <input id='outputfile' type='hidden' name='outputfile' ><br>
-   			 Extension <input id='extension' type='hidden' name='extension'>
+				
 				</div>
 				
 			</div>

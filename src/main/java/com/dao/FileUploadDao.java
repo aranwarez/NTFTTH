@@ -127,12 +127,17 @@ public class FileUploadDao {
 	public String maxOneActiveFile(String ROLE_CODE) throws SQLException {
     	Connection con = DbCon.getConnection();
 		  try {
-			  PreparedStatement pst=con.prepareStatement("select file_location from FILE_NOTIFICATION where upload_id=(select max(upload_id)upload_id from FILE_NOTIFICATION where display_flag='Y' and ROLE_CODE= NVL(?, ROLE_CODE)) and ROLE_CODE= NVL(?, ROLE_CODE)");
+		
+			  PreparedStatement pst=con.prepareStatement("select file_location from FILE_NOTIFICATION \r\n" + 
+			  		"where upload_id=(select max(upload_id)upload_id from FILE_NOTIFICATION where display_flag='Y' and ROLE_CODE= NVL(?, ROLE_CODE)) \r\n" + 
+			  		"and ROLE_CODE= NVL(?, ROLE_CODE)");
 			  pst.setString(1, ROLE_CODE); 
-			  pst.setString(2, ROLE_CODE);
+			  pst.setString(2, ROLE_CODE); 
 			  ResultSet rs = pst.executeQuery();
 			   if(rs.next()) {
+					  System.out.println("file location ="+rs.getString("FILE_LOCATION"));
 				   return rs.getString(1);
+				   
 			   }
 			   
 		  }catch(Exception e) {

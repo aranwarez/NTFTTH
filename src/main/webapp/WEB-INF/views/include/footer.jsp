@@ -77,8 +77,12 @@
             <h4 class="modal-title">Notification</h4>
           </div>
           <div class="modal-body">
-            <object data="https://cdn.tutsplus.com/net/uploads/2013/08/github-collab-retina-preview.gif" type="image/png">
-            </object>
+          
+         <div id="container">
+		</div>
+            
+       
+            </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
