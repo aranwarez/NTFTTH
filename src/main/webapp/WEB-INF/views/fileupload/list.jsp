@@ -97,10 +97,13 @@
 								<table id="example1" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-											<th>Id</th>
-											<th>code</th>
-											<th>Desc</th>
+											
+											<th>DESCRIPTION</th>
+											<th>ROLE</th>
+											<th>DISPLAY_FLAG</th>
+											
 											<th>Edit</th>
+											
 											<th>Delete</th>
 
 										</tr>
@@ -109,14 +112,15 @@
 										<c:forEach var="user" items="${data_list}">
 
 											<tr>
-												<td>${user.getSN()}</td>
-												<td>${user.getREGION_CODE()}</td>
-												<td>${user.getDESCRIPTION()}</td>
+												<td>${user.DESCRIPTION}</td>
+												<td>${user.ROLE}</td>
+												<td>${user.DISPLAY_FLAG}</td>
+												
 												<td>
 													<div class="btn-group">
 														<a href="#" class="btn btn-info" data-toggle="modal"
 															data-target="#editModal"
-															onclick="return editRegion('${user.getREGION_CODE()}')">
+															onclick="return editRegion('${user.UPLOAD_ID}','${user.DISPLAY_FLAG}')">
 															<i class="fa fa-edit"></i> Edit
 														</a>
 													</div>
@@ -128,7 +132,7 @@
 													<div>
 														<a href="" class="btn btn-default" data-toggle="modal"
 															data-target="#deleteModal"
-															onclick="return delRegion('${user.getREGION_CODE()}')">
+															onclick="return delFILE('${user.UPLOAD_ID}')">
 															<i class="fa fa-trash"></i> Delete
 														</a>
 													</div>
@@ -176,7 +180,7 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialogregion"></jsp:include>
+	<jsp:include page="${request.contextPath}/dialogupload"></jsp:include>
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
 	<script>
@@ -187,7 +191,7 @@
 		})
 	</script>
 	<script src="<c:url value="/resources/function/firsttimepassword.js" />"></script>
-	<script src="<c:url value="/resources/function/region.js" />"></script>
+	<script src="<c:url value="/resources/function/upload.js" />"></script>
 
 
 </body>

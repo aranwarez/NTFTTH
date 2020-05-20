@@ -20,7 +20,7 @@
 		<ul class="nav navbar-nav">
 
 			<!-- User Account: style can be found in dropdown.less -->
-			<li class="dropdown user user-menu"><a href="#"
+			<li class="dropdown user user-menu"><a href="../my-profile/list"
 				class="dropdown-toggle" data-toggle="dropdown"> <img
 					src="<c:url value="/resources/adminltd/dist/img/avatar5.png" />"
 					class="user-image" alt="User Image"> <span class="hidden-xs">${UserList.getFULL_NAME()}</span>
@@ -49,7 +49,7 @@
 					<!-- Menu Footer-->
 					<li class="user-footer">
 						<div class="pull-left">
-							<a href="#" class="btn btn-default btn-flat">Profile</a>
+							<a href="../my-profile/list" class="btn btn-default btn-flat">Profile</a>
 						</div>
 						<div class="pull-right">
 							<a href="../Logout" class="btn btn-default btn-flat">Sign out</a>

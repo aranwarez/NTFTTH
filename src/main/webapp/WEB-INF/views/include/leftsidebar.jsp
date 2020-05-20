@@ -14,7 +14,7 @@
 					</div>
 					<div class="pull-left info">
 						<p>${UserList.getUSER_ID()}</p>
-						<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+						<a href="../my-profile/list"><i class="fa fa-circle text-success"></i> Online</a>
 					</div>
 				</div>
 				

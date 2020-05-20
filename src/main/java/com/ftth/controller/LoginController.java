@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dao.ProfileDao;
 import com.dao.UserDao;
 import com.model.UserInformationModel;
 
@@ -36,9 +37,10 @@ public class LoginController {
 			session.setMaxInactiveInterval(15 * 60);
 			session.setAttribute("UserList", level);		
 			
-			
+			ProfileDao.loginLog(level.getUSER_ID());
 			
 			model.addAttribute("fx", "Thank you for signing up!");
+			
 			return "redirect:/dashboard/list";
 
 		} else if (level != null && level.getLOCK_FLAG().equalsIgnoreCase("Y")) {

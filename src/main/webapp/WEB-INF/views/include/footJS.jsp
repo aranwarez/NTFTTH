@@ -34,6 +34,9 @@
 	
 <script>
 (function ($) {
+	
+	
+	
 	/* Recover sidebar state */
     (function () {
         if (Boolean(localStorage.getItem('sidebar-toggle-collapsed'))) {
@@ -52,7 +55,14 @@
             localStorage.setItem('sidebar-toggle-collapsed', '1');
         }
     });
+    
+   
+    	
+    
+
+    
 })(jQuery);
+  
   
   
 </script>

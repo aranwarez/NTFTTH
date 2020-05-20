@@ -107,7 +107,7 @@ function changePassword() {
 	});
 
 }
-function editUser(code) {
+function editUser(code,officeCode) {
     CODE = code;
    
     jQuery.ajaxSetup({async: false});
@@ -138,11 +138,11 @@ function editUser(code) {
         $("#EDITLOCATION_CODE").val(response.location_CODE);
              
 
-        $("#EDITUSER_LEVEL").val(response.user_LEVEL);
+        $("#EDITUSER_LEVEL").val(response.user_LEVEL).trigger('change');
         
         
-        $("#EDITROLE_CODE").val(response.role_CODE);
-        $("#EDITOFFICE_CODE").val(response.office_CODE).trigger('change');
+        $("#EDITROLE_CODE").val(response.role_CODE).trigger('change');
+        $("#EDITOFFICE_CODE").val(officeCode).trigger('change');
         $("#EDITMOBILE_NO").val(response.mobile_NO);
    
 
