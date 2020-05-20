@@ -82,7 +82,7 @@ public class FileUploadController {
 
 					// Create the file on server
 					File serverFile = new File(dir.getAbsolutePath()
-							+ File.separator + "/"+file.getOriginalFilename());
+							+ File.separator + "/"+file.getOriginalFilename().toLowerCase());
 					BufferedOutputStream stream = new BufferedOutputStream(
 							new FileOutputStream(serverFile));
 					stream.write(bytes);
@@ -91,19 +91,19 @@ public class FileUploadController {
 					logger.info("Server File Location= + extension "+file.getOriginalFilename()
 							+ serverFile.getAbsolutePath());
 //					http://172.16.39.16:8080/ server
-					FileUploadDao.saveUpload(name, "http://172.16.39.16:8080/FTTH/resources/FTTH_IMAGE/"+file.getOriginalFilename(),role_code, display_flag, user.getUSER_ID());
+					FileUploadDao dao=new FileUploadDao();
 					
+					if(dao.get_file(role_code)!=null) {
+
+						File deletedir = new File(rootPath + File.separator + "webapps/FTTH");
+						
+						File deleteFile = new File(deletedir.getAbsolutePath()
+								+ File.separator + "/"+dao.get_file(role_code));
+						
+						org.apache.commons.io.FileUtils.deleteQuietly(deleteFile);
+					}
 					
-					
-					
-					
-//					final Part filePart = request.getPart("file");
-					
-					
-					
-					
-					
-					
+					dao.saveUpload(name, "/resources/FTTH_IMAGE/"+file.getOriginalFilename().toLowerCase(),role_code, display_flag, user.getUSER_ID());
 					
 					return "You successfully uploaded file=" + name+"<a href='fileupload/list'> &nbsp;BACK</a>";
 				} catch (Exception e) {

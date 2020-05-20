@@ -367,6 +367,7 @@ public class UserController {
 	 		UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
 	        
 	        FileUploadDao dao=new FileUploadDao();
+	        System.out.println(userinfo.getROLE_CODE());
 	        
 	 		String msg=null;
 			try {
