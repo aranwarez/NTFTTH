@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ComplainHandlingsummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fc565034-ab42-4130-b62c-636f311996c0">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="22"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FTTH"/>
+	<parameter name="pm_frm_dt" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_to_dt" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_solve_flag" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_user" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_comp_name" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_address" class="java.lang.String"/>
+	<parameter name="pm_filter" class="java.lang.String"/>
+	<parameter name="pm_region" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_zone" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_district" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_office" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_fdc" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_servicetype" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_sub_team_code" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT  region_code,office,master_sub_team_code,region,office_code,service_desc,
+ sum(new)new,sum(solved)solved, sum(pending)pending,sum(closed)closed
+FROM(
+select distinct CONCAT(CONCAT(CONTACT_NAME, ','), COMPLAIN_NO) CONTACT_NAME,region_code,region,office_code,office,TO_SUB_TEAM_CODE to_sub_team_code,
+TO_SUB_TEAM_CODE as sub_team_desc,
+(select description from m_service where service_id=a.service_id) as service_desc,MASTER_SUB_TEAM_CODE,MASTER_SERVICE_NO,
+(SELECT count(*) from vw_token_all
+where region_code=a.region_code
+and zone_code=a.ZONE_CODE
+and DISTRICT_CODE=a.DISTRICT_CODE
+and office_code=a.office_code
+and SERVICE_TYPE_ID=a.SERVICE_TYPE_ID
+and TO_SUB_TEAM_CODE=a.TO_SUB_TEAM_CODE
+and solve_flag='N'
+AND trunc(MAIN_CREATE_DT) BETWEEN nvl($P{pm_frm_dt},(sysdate-40)) AND nvl($P{pm_to_dt},sysdate)) new,
+(SELECT count(*) from vw_token_all
+where region_code=a.region_code
+and zone_code=a.ZONE_CODE
+and DISTRICT_CODE=a.DISTRICT_CODE
+and office_code=a.office_code
+and SERVICE_TYPE_ID=a.SERVICE_TYPE_ID
+and TO_SUB_TEAM_CODE=a.TO_SUB_TEAM_CODE
+and solve_flag='Y'
+AND trunc(MAIN_CREATE_DT) BETWEEN nvl($P{pm_frm_dt},(sysdate-40)) AND nvl($P{pm_to_dt},sysdate)
+) solved,
+(SELECT count(*) from vw_token_all
+where region_code=a.region_code
+and zone_code=a.ZONE_CODE
+and DISTRICT_CODE=a.DISTRICT_CODE
+and office_code=a.office_code
+and SERVICE_TYPE_ID=a.SERVICE_TYPE_ID
+and TO_SUB_TEAM_CODE=a.TO_SUB_TEAM_CODE
+and solve_flag='C'
+AND trunc(MAIN_CREATE_DT) BETWEEN nvl($P{pm_frm_dt},(sysdate-40)) AND nvl($P{pm_to_dt},sysdate)
+) closed,
+(SELECT count(*) from vw_token_all
+where region_code=a.region_code
+and zone_code=a.ZONE_CODE
+and DISTRICT_CODE=a.DISTRICT_CODE
+and office_code=a.office_code
+and SERVICE_TYPE_ID=a.SERVICE_TYPE_ID
+and TO_SUB_TEAM_CODE=a.TO_SUB_TEAM_CODE
+and solve_flag='F'
+AND trunc(MAIN_CREATE_DT) BETWEEN nvl($P{pm_frm_dt},(sysdate-40)) AND nvl($P{pm_to_dt},sysdate)
+) pending
+FROM vw_token_all a
+where  a.REGION_CODE=nvl($P{pm_region},a.REGION_CODE)
+and a.ZONE_CODE=nvl($P{pm_zone},a.ZONE_CODE)
+and a.DISTRICT_CODE=nvl($P{pm_district},a.DISTRICT_CODE)
+and a.OFFICE_CODE=nvl($P{pm_office},a.OFFICE_CODE)
+and a.SERVICE_TYPE_ID=nvl($P{pm_servicetype},a.SERVICE_TYPE_ID)
+and a.TO_SUB_TEAM_CODE=nvl($P{pm_sub_team_code},a.TO_SUB_TEAM_CODE)
+AND trunc(a.MAIN_CREATE_DT) BETWEEN nvl($P{pm_frm_dt},(sysdate-40)) AND nvl($P{pm_to_dt},sysdate)
+)
+WHERE new>0 or solved>0 or CLOSED>0 OR PENDING>0 group by region_code,office,region,office_code,service_desc,master_sub_team_code
+ORDER BY 1,2,3]]>
+	</queryString>
+	<field name="REGION_CODE" class="java.lang.String"/>
+	<field name="OFFICE" class="java.lang.String"/>
+	<field name="MASTER_SUB_TEAM_CODE" class="java.lang.String"/>
+	<field name="REGION" class="java.lang.String"/>
+	<field name="OFFICE_CODE" class="java.math.BigDecimal"/>
+	<field name="SERVICE_DESC" class="java.lang.String"/>
+	<field name="NEW" class="java.math.BigDecimal"/>
+	<field name="SOLVED" class="java.math.BigDecimal"/>
+	<field name="PENDING" class="java.math.BigDecimal"/>
+	<field name="CLOSED" class="java.math.BigDecimal"/>
+	<variable name="tot_new" class="java.math.BigDecimal" resetType="Group" resetGroup="region" calculation="Sum">
+		<variableExpression><![CDATA[$F{NEW}]]></variableExpression>
+	</variable>
+	<variable name="tot_pending" class="java.math.BigDecimal" resetType="Group" resetGroup="region" calculation="Sum">
+		<variableExpression><![CDATA[$F{PENDING}]]></variableExpression>
+	</variable>
+	<variable name="tot_solved" class="java.math.BigDecimal" resetType="Group" resetGroup="region" calculation="Sum">
+		<variableExpression><![CDATA[$F{SOLVED}]]></variableExpression>
+	</variable>
+	<variable name="tot_new_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NEW}]]></variableExpression>
+	</variable>
+	<variable name="tot_pending_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{PENDING}]]></variableExpression>
+	</variable>
+	<variable name="tot_solved_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{SOLVED}]]></variableExpression>
+	</variable>
+	<variable name="tot_closed" class="java.math.BigDecimal" resetType="Group" resetGroup="region" calculation="Sum">
+		<variableExpression><![CDATA[$F{CLOSED}]]></variableExpression>
+	</variable>
+	<variable name="tot_closed_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CLOSED}]]></variableExpression>
+	</variable>
+	<group name="region">
+		<groupExpression><![CDATA[$F{REGION_CODE}]]></groupExpression>
+		<groupHeader>
+			<band height="21">
+				<textField>
+					<reportElement x="3" y="3" width="73" height="17" uuid="7ad3e69f-ab0c-455f-a0c3-187ffc718d0b"/>
+					<textElement>
+						<font fontName="Times New Roman" size="8" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{REGION}+"("+$F{REGION_CODE}+")"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="1" y="1" width="552" height="1" uuid="7b545206-dead-4828-9096-ebb605dd5a99"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="18">
+				<line>
+					<reportElement x="1" y="1" width="552" height="1" uuid="953cc313-dcc4-45d0-93d6-e1161dea526a"/>
+				</line>
+				<textField>
+					<reportElement x="270" y="2" width="91" height="15" uuid="b6807c9f-a7b1-49ef-a8b8-f824a470de92"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_pending}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="361" y="2" width="89" height="15" uuid="546a7c8c-6514-4101-8328-a8a7bf5c97f2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_solved}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="173" y="1" width="91" height="17" uuid="37cf39f6-4286-4a90-b16c-626e9d76cee7"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_new}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="2" y="2" width="75" height="16" uuid="dc018c66-0d2e-4a5f-b8d7-4d1b96762c58"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="8" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[RD wise Total :]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="454" y="2" width="89" height="15" uuid="2ab5527b-940b-41fb-a0ab-8ad02f22f016"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_closed}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{OFFICE_CODE}]]></groupExpression>
+		<groupHeader>
+			<band height="18">
+				<textField>
+					<reportElement x="2" y="0" width="73" height="17" uuid="e7c10faa-ba5e-4d1a-970e-159635879ea3"/>
+					<textElement>
+						<font fontName="Times New Roman" size="8" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{OFFICE}+"("+$F{OFFICE_CODE}+")"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="1"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="22" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="70" splitType="Stretch">
+			<line>
+				<reportElement x="1" y="53" width="552" height="1" uuid="34512529-4bb2-410b-a625-29204b9f5e71"/>
+			</line>
+			<textField>
+				<reportElement x="3" y="4" width="243" height="15" uuid="95e5fd5c-d6fc-4b75-97fa-c057da1c86ba"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pm_comp_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="35" width="319" height="15" uuid="69d4f468-1e0f-4ca8-b629-6642593325ac"/>
+				<textElement>
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Complain Handling Summary Report]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="3" y="19" width="243" height="15" uuid="7f8868ea-06e9-4a3d-9beb-1577b7d97f5b"/>
+				<textElement>
+					<font fontName="Times New Roman" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pm_address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="378" y="23" width="175" height="15" uuid="1edc6341-ab10-4cb4-94f4-074e51d26b7e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pm_user}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="380" y="38" width="140" height="15" uuid="cc2ab8c8-e24a-403a-9593-61b95f882f4c"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="2" y="54" width="797" height="15" uuid="62e3d312-b722-4e82-8729-7eb006a147d4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pm_filter}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="69" width="552" height="1" uuid="2c30fc61-d9ec-4cf6-826a-d08b4ffa57a1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="2" width="75" height="17" uuid="71d58215-8bd1-487d-a293-d9e3a3eeea95"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Service]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="359" y="2" width="91" height="17" uuid="c90a5224-923c-4a12-b2e2-738b217584af"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Solved]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="173" y="2" width="91" height="17" uuid="81b4ff04-16a6-4a07-9f5d-dc943daf19bb"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[New Registered]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="268" y="2" width="91" height="17" uuid="b2ceee12-14be-48fe-afdb-623cc59aab90"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pending]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="77" y="2" width="95" height="17" uuid="b9eca492-24ed-4b26-a8f4-2c441a0820b6"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sub Team]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="452" y="2" width="91" height="17" uuid="9813fed6-a628-4737-aacb-7bd6f16350ec"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Closed]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement x="1" y="2" width="75" height="17" uuid="2c2627c9-f147-4514-b875-d6e5dd86e176"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SERVICE_DESC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="361" y="2" width="89" height="17" uuid="139d8f50-3b07-4f7a-a08d-5d964f897428"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SOLVED}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="77" y="2" width="95" height="17" uuid="f90f1a72-9b3c-439e-8754-3cf610ed3904"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MASTER_SUB_TEAM_CODE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="173" y="2" width="91" height="17" uuid="70ec89df-02e3-438a-b080-6e31609dd876"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NEW}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="2" width="91" height="17" uuid="46e3b105-9757-45c0-af8f-3f1d828b2a1e"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PENDING}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="1" width="552" height="1" uuid="ad7a4ff0-8457-40f7-b7ac-60878ad1359a"/>
+			</line>
+			<textField>
+				<reportElement x="452" y="2" width="91" height="17" uuid="79bc3c54-6f9b-418a-afcc-7d7a13d1789a"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLOSED}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement x="1" y="1" width="552" height="1" uuid="6ae35530-3846-4100-826e-dcfd7adceda3"/>
+			</line>
+			<textField>
+				<reportElement x="173" y="3" width="91" height="12" uuid="aa98e8a4-6ca8-4d4f-9e15-75ad4e1b5a6e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{tot_new_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="361" y="3" width="89" height="16" uuid="d4f340da-5be1-4736-bb05-9d2cac13e65e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{tot_solved_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="7" width="91" height="12" uuid="21c3e4d5-8b30-40fe-af89-7eed09bc4052"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{tot_pending_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="3" width="75" height="16" uuid="532cc403-d062-4572-b09c-6bfff81e5141"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Grand Total :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="454" y="4" width="89" height="16" uuid="fc6f0966-8f14-4e43-9a34-9094803c61c0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{tot_solved_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="2" splitType="Stretch"/>
+	</summary>
+</jasperReport>

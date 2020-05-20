@@ -166,13 +166,29 @@
 										</button>
 									</div>
 								</div>
-								<div class="box-body">
-									<label>onuStatus:</label> <span id="onuStatus"></span> <label>onuRxPower:</label>
-									<span id="onuRxPower"></span> <label>onuOltRxPower:</label><span
-										id="onuOltRxPower"></span> <label>onuDistance:</label><span
-										id="onuDistance"></span> <label>onuTemprature:</label><span
-										id="onuTemprature"></span>
+								<div class="box-body table-responsive no-padding">
 
+									<table class="table table-condensed">
+										<tbody>
+											<tr>
+											
+												<td><label>CPE Status</label></td>
+												<td><span id="onuStatus"></span></td>
+
+												<td><label>CPE RX Power</label></td>
+												<td><span id="onuRxPower"></span></td>
+
+												<td><label>OLT RX Power</label></td>
+												<td><span id="onuOltRxPower"></span></td>
+												<td><label>CPE Distance</label></td>
+												<td><span id="onuDistance"></span></td>
+												<td><label>CPE Temp</label></td>
+												<td><span id="onuTemprature"></span></td>
+
+
+											</tr>
+										</tbody>
+									</table>
 
 								</div>
 								<!-- /.box-body -->
@@ -189,42 +205,6 @@
 
 					<!-- till here ole status -->
 
-
-					<div class="col-md-12">
-
-						<!-- AREA CHART -->
-						<div class="box box-primary">
-							<div class="box-header with-border">
-								<h3 class="box-title">
-									<i class="fa fa-tachometer"></i>CPE TMS STATUS
-								</h3>
-
-								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool"
-										data-widget="collapse">
-										<i class="fa fa-minus"></i>
-									</button>
-									<button type="button" class="btn btn-box-tool"
-										onclick="refreshtmsstatus()">
-										<i class="fa fa-refresh"></i>
-									</button>
-								</div>
-							</div>
-							<div class="overlay" id="tmsstatusoverlay">
-								<i class="fa fa-refresh fa-spin"></i>
-							</div>
-							<div id="divforCPEinfo" class="box-body"></div>
-							<!-- /.box-body -->
-						</div>
-						<!-- /.box -->
-
-
-					</div>
-
-
-
-
-					<!-- /.col -->
 
 
 
@@ -247,7 +227,7 @@
 									</button>
 								</div>
 							</div>
-							<div id="divforsubsinfo" class="box-body"></div>
+							<div id="divforsubsinfo" class="box-body table-responsive no-padding"></div>
 							<!-- /.box-body -->
 						</div>
 						<!-- /.box -->
@@ -275,7 +255,7 @@
 								</div>
 							</div>
 
-							<div id="divforAAAinfo" class="box-body">
+							<div id="divforAAAinfo" class="box-body table-responsive no-padding">
 
 
 								<table class="table table-condensed">
@@ -332,6 +312,43 @@
 
 					<!-- /.col -->
 
+
+					<!-- TMS status from here -->
+					<div class="col-md-12">
+
+						<!-- AREA CHART -->
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<h3 class="box-title">
+									<i class="fa fa-tachometer"></i>CPE TMS STATUS
+								</h3>
+
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="collapse">
+										<i class="fa fa-minus"></i>
+									</button>
+									<button type="button" class="btn btn-box-tool"
+										onclick="refreshtmsstatus()">
+										<i class="fa fa-refresh"></i>
+									</button>
+								</div>
+							</div>
+							<div class="overlay" id="tmsstatusoverlay">
+								<i class="fa fa-refresh fa-spin"></i>
+							</div>
+							<div id="divforCPEinfo" class="box-body"></div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+
+
+					</div>
+
+
+
+
+					<!-- /.col -->
 
 
 
@@ -660,7 +677,7 @@
 	<jsp:include page="${request.contextPath}/complain/dialog"></jsp:include>
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 	<script
-		src="<c:url value="/resources/function/Complain/NewComplain.js?verdt=511" />"></script>
+		src="<c:url value="/resources/function/Complain/NewComplain.js?verdt=521" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 

@@ -54,7 +54,9 @@
 					            'src': '../'+data,
 					            'alt': 'JSFiddle logo',
 					            'title': 'JSFiddle logo',
-					            'width': 250
+					            'width': 'auto',
+					            'height': 'auto'
+					            
 					        }).appendTo('#container');
 						 
 						 $("#image_notication").modal();

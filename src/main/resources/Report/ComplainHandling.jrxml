@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ComplainHandling" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fc565034-ab42-4130-b62c-636f311996c0">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FTTH"/>
+	<parameter name="pm_frm_dt" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_to_dt" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_solve_flag" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_region" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_zone" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_district" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_office" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_fdc" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_servicetype" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_sub_team_code" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_team_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_comp_name" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_address" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_user" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pm_filter" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+decode(b.solve_flag,'N','New','C','Closed','B','Pending','Y', 'Solved', b.SOLVE_FLAG) current_status,
+c.solve_flag,
+ common.to_bs(a.CREATE_DT)||to_char(a.CREATE_DT,'HH24MISS') as entry_dt, common.to_bs(c.create_dt)||to_char(c.create_dt,'HH24MISS') as problem_dt,
+j.REGION_CODE,j.REGION,
+j.ZONE_CODE,j.ZONE,
+j.DISTRICT_CODE,j.DISTRICT,
+j.OFFICE_CODE,j.OFFICE,
+j.FDC_CODE,j.FDC,i.token_id,i.customer_name,i.contact_no as acct_id,i.olt_port,i.fap_location,
+a.service_id,g.description service_desc,a.srv_no,a.sub_team_code,
+a.COMPLAIN_NO,a.CONTACT_NAME,a.REMARKS,
+e.DESCRIPTION as CONFIG_TYPE,
+-----------
+c.from_sub_team_code, c.to_sub_team_code,
+decode(c.solve_flag,'N','New','C','Closed','B','Pending','Y', 'Solved', b.SOLVE_FLAG) query_status,
+c.remarks as solution,
+CONCAT(CONCAT(h.teamname, ','),h.TEAMSUPERVISORCONTACTNUMBER) as teamname
+-----------
+FROM main_token_master a, token_master b,token_detail c, m_fdc d, m_service_type e,m_problem f,m_service g,web_team h, customer_info i,vw_ftth_all_fdc j
+WHERE a.token_id=b.token_id
+and a.SERVICE_ID=g.SERVICE_ID
+and a.fdc_code=d.fdc_code
+and a.TEAM_ID=h.TEAM_ID
+
+and b.token_id=a.token_id
+and b.service_type_id=e.service_type_id
+and b.problem_id=f.problem_id
+and c.sub_token_id=b.sub_token_id
+and i.token_id=a.token_id
+and j.fdc_code=a.fdc_code
+and c.td_id=(SELECT max(td_id) FROM token_detail where sub_token_id=b.sub_token_id
+and j.REGION_CODE=nvl($P{pm_region},j.REGION_CODE)
+and j.ZONE_CODE=nvl($P{pm_zone},j.ZONE_CODE)
+and j.DISTRICT_CODE=nvl($P{pm_district},j.DISTRICT_CODE)
+and j.OFFICE_CODE=nvl($P{pm_office},j.OFFICE_CODE)
+and j.FDC_CODE=nvl($P{pm_fdc},j.FDC_CODE)
+and b.SERVICE_TYPE_ID=nvl($P{pm_servicetype},b.SERVICE_TYPE_ID)
+and a.CREATE_DT BETWEEN NVL (common.TO_AD ($P{pm_frm_dt}), SYSDATE - 30)
+	 AND NVL (common.TO_AD ($P{pm_to_dt}), SYSDATE)
+and c.solve_flag=nvl($P{pm_solve_flag},c.solve_flag))
+AND a.complain_no =nvl(null,a.complain_no)
+
+AND a.sub_team_code=nvl($P{pm_sub_team_code},a.sub_team_code)
+and a.team_id=nvl($P{pm_team_id},a.team_id)
+order by a.sub_team_code, decode(b.solve_flag,'N','New','I','First Forward','C','Closed','Y', 'Solved', b.SOLVE_FLAG), c.td_id]]>
+	</queryString>
+	<field name="CURRENT_STATUS" class="java.lang.String"/>
+	<field name="SOLVE_FLAG" class="java.lang.String"/>
+	<field name="ENTRY_DT" class="java.lang.String"/>
+	<field name="PROBLEM_DT" class="java.lang.String"/>
+	<field name="REGION_CODE" class="java.lang.String"/>
+	<field name="REGION" class="java.lang.String"/>
+	<field name="ZONE_CODE" class="java.math.BigDecimal"/>
+	<field name="ZONE" class="java.lang.String"/>
+	<field name="DISTRICT_CODE" class="java.math.BigDecimal"/>
+	<field name="DISTRICT" class="java.lang.String"/>
+	<field name="OFFICE_CODE" class="java.math.BigDecimal"/>
+	<field name="OFFICE" class="java.lang.String"/>
+	<field name="FDC_CODE" class="java.math.BigDecimal"/>
+	<field name="FDC" class="java.lang.String"/>
+	<field name="TOKEN_ID" class="java.math.BigDecimal"/>
+	<field name="CUSTOMER_NAME" class="java.lang.String"/>
+	<field name="ACCT_ID" class="java.lang.String"/>
+	<field name="OLT_PORT" class="java.lang.String"/>
+	<field name="FAP_LOCATION" class="java.lang.String"/>
+	<field name="SERVICE_ID" class="java.math.BigDecimal"/>
+	<field name="SERVICE_DESC" class="java.lang.String"/>
+	<field name="SRV_NO" class="java.lang.String"/>
+	<field name="SUB_TEAM_CODE" class="java.lang.String"/>
+	<field name="COMPLAIN_NO" class="java.lang.String"/>
+	<field name="CONTACT_NAME" class="java.lang.String"/>
+	<field name="REMARKS" class="java.lang.String"/>
+	<field name="CONFIG_TYPE" class="java.lang.String"/>
+	<field name="FROM_SUB_TEAM_CODE" class="java.lang.String"/>
+	<field name="TO_SUB_TEAM_CODE" class="java.lang.String"/>
+	<field name="QUERY_STATUS" class="java.lang.String"/>
+	<field name="SOLUTION" class="java.lang.String"/>
+	<field name="TEAMNAME" class="java.lang.String"/>
+	<group name="region">
+		<groupExpression><![CDATA[$F{REGION}+$F{QUERY_STATUS}]]></groupExpression>
+		<groupHeader>
+			<band height="21">
+				<textField>
+					<reportElement x="3" y="3" width="239" height="17" uuid="7ad3e69f-ab0c-455f-a0c3-187ffc718d0b"/>
+					<textElement>
+						<font fontName="Times New Roman" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{REGION}+"("+$F{REGION_CODE}+") "+$F{OFFICE}+"("+$F{OFFICE_CODE}+")"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="1" y="1" width="802" height="1" uuid="7b545206-dead-4828-9096-ebb605dd5a99"/>
+				</line>
+				<textField>
+					<reportElement x="248" y="3" width="155" height="17" uuid="3d645609-9520-4d2e-aedc-a90175bd37f9"/>
+					<textElement>
+						<font fontName="Times New Roman" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Status: "+$F{QUERY_STATUS}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="22" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="70" splitType="Stretch">
+			<line>
+				<reportElement x="1" y="53" width="802" height="1" uuid="34512529-4bb2-410b-a625-29204b9f5e71"/>
+			</line>
+			<textField>
+				<reportElement x="3" y="4" width="243" height="15" uuid="95e5fd5c-d6fc-4b75-97fa-c057da1c86ba"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pm_comp_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="35" width="319" height="15" uuid="69d4f468-1e0f-4ca8-b629-6642593325ac"/>
+				<textElement>
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Complain Handling Detail Report]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="3" y="19" width="243" height="15" uuid="7f8868ea-06e9-4a3d-9beb-1577b7d97f5b"/>
+				<textElement>
+					<font fontName="Times New Roman" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pm_address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="555" y="22" width="243" height="15" uuid="1edc6341-ab10-4cb4-94f4-074e51d26b7e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pm_user}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="557" y="37" width="208" height="15" uuid="cc2ab8c8-e24a-403a-9593-61b95f882f4c"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Print Dt:"+new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="2" y="54" width="797" height="15" uuid="62e3d312-b722-4e82-8729-7eb006a147d4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pm_filter}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="69" width="802" height="1" uuid="2c30fc61-d9ec-4cf6-826a-d08b4ffa57a1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="2" width="241" height="17" uuid="71d58215-8bd1-487d-a293-d9e3a3eeea95"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<text><![CDATA[Customer Information]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="571" y="2" width="72" height="17" uuid="c90a5224-923c-4a12-b2e2-738b217584af"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<text><![CDATA[Register Dt]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="337" y="2" width="60" height="17" uuid="81b4ff04-16a6-4a07-9f5d-dc943daf19bb"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<text><![CDATA[ADSL NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="397" y="2" width="129" height="17" uuid="5f167a1a-d19a-4913-ac3c-30b4b5e0c0a9"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<text><![CDATA[Configure Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="526" y="2" width="44" height="17" uuid="b2ceee12-14be-48fe-afdb-623cc59aab90"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="717" y="1" width="85" height="17" uuid="2640fcb6-b710-4142-ad3c-878a65f49575"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<text><![CDATA[Forward From -To]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="242" y="2" width="95" height="17" uuid="b9eca492-24ed-4b26-a8f4-2c441a0820b6"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<text><![CDATA[Connect To]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="645" y="1" width="72" height="17" uuid="7c04d14e-8fed-422d-ab3a-681c6894597d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<text><![CDATA[Current Dt]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement x="1" y="2" width="241" height="17" uuid="2c2627c9-f147-4514-b875-d6e5dd86e176"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CUSTOMER_NAME}+"-"+$F{ACCT_ID}+"-"+$F{SRV_NO}+"-"+$F{COMPLAIN_NO}+"-"+$F{FDC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="571" y="2" width="72" height="17" uuid="139d8f50-3b07-4f7a-a08d-5d964f897428"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ENTRY_DT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="645" y="2" width="72" height="17" uuid="d751c026-f29e-4f1d-80c0-88c48eba1be1"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROBLEM_DT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="242" y="2" width="95" height="17" uuid="f90f1a72-9b3c-439e-8754-3cf610ed3904"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OLT_PORT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="337" y="2" width="60" height="17" uuid="70ec89df-02e3-438a-b080-6e31609dd876"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FAP_LOCATION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="398" y="2" width="128" height="17" uuid="0040baa2-5a62-4239-bebd-af3c57a0dccd"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CONFIG_TYPE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="717" y="2" width="85" height="17" uuid="8c8e0195-0e2f-4d1b-bafc-e730a81f875f"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FROM_SUB_TEAM_CODE}+'-'+$F{TO_SUB_TEAM_CODE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="526" y="2" width="44" height="17" uuid="46e3b105-9757-45c0-af8f-3f1d828b2a1e"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CURRENT_STATUS}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="-1" y="1" width="802" height="1" uuid="ad7a4ff0-8457-40f7-b7ac-60878ad1359a"/>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="9" splitType="Stretch">
+			<line>
+				<reportElement x="1" y="7" width="802" height="1" uuid="953cc313-dcc4-45d0-93d6-e1161dea526a"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="7" splitType="Stretch"/>
+	</summary>
+</jasperReport>

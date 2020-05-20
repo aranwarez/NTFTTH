@@ -102,7 +102,7 @@ public class ReportController {
 
 	@RequestMapping(value = "ReportView", method = RequestMethod.POST)
 	public ResponseEntity<byte[]> getRpt(HttpServletRequest request, HttpServletResponse response) {
-		logger.info("Preparing for report");
+		logger.info("Generating RPt"+request.getParameter("reportname"));
 		try {
 			InputStream jasperStream = this.getClass()
 					.getResourceAsStream("/Report/" + request.getParameter("reportname") + ".jasper");

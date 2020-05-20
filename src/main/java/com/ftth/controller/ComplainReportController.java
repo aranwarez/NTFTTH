@@ -34,7 +34,7 @@ public class ComplainReportController {
 	@RequestMapping(value = "/complain-summary/report", method = RequestMethod.GET)
 	public String menuacesslistlist(Locale locale, Model model, HttpSession session) throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		logger.info("/complain-summary/report by user"+user.getUSER_ID(), locale);
+		
 		
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
