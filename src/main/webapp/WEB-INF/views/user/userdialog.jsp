@@ -50,6 +50,7 @@
 					<label>EMPLOYEE_CODE</label> <select
 						class="form-control modal-combobox" name="EMPLOYEE_CODE"
 						id="EMPLOYEE_CODE" style="width:270px;">
+						<option value="">Select Employee Type</option>
 						<c:forEach var="COA" items="${empList}">
 							<option value="${COA.EMPLOYEE_CODE}">${COA.EMPLOYEE_NAME}(${COA.EMPLOYEE_CODE})</option>
 						</c:forEach>
@@ -164,6 +165,7 @@
 					<label>EMPLOYEE_CODE</label> <select
 						class="form-control" name="EDITEMPLOYEE_CODE"
 						id="EDITEMPLOYEE_CODE" style="width:270px;">
+						<option value="">Select Employee Type</option>
 						<c:forEach var="COA" items="${empList}">
 							<option value="${COA.EMPLOYEE_CODE}">${COA.EMPLOYEE_NAME}(${COA.EMPLOYEE_CODE})</option>
 						</c:forEach>

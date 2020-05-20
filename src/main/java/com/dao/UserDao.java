@@ -65,15 +65,15 @@ public class UserDao {
 		List<UserInformationModel> list = new ArrayList<UserInformationModel>();
 		try {
 		
-			 String qry = "select user_id,full_name,\r\n" + 
-			 		"password,employee_code,lock_flag,\r\n" + 
-			 		"super_flag,disable_flag,\r\n" + 
-			 		"location_code,user_level,\r\n" + 
-			 		"role_code,office_code,\r\n" + 
-			 		"mobile_no,created_by,\r\n" + 
-			 		"created_Date,UPDATE_BY,\r\n" + 
-			 		"update_Dt\r\n" + 
-			 		"from web_user order by user_id";
+			 String qry = "select (select description from m_office where office_code=a.office_code) office,a.user_id,a.full_name,\r\n" + 
+			 		"a.password,a.employee_code,a.lock_flag,\r\n" + 
+			 		"a.super_flag,a.disable_flag,\r\n" + 
+			 		"a.location_code,a.user_level,\r\n" + 
+			 		"a.role_code,a.office_code,\r\n" + 
+			 		"a.mobile_no,a.created_by,\r\n" + 
+			 		"a.created_Date,a.UPDATE_BY,\r\n" + 
+			 		"a.update_Dt\r\n" + 
+			 		"from web_user a order by a.user_id";
 			PreparedStatement pst = con.prepareStatement(qry);
 
 			ResultSet rs = pst.executeQuery();
@@ -89,6 +89,7 @@ public class UserDao {
 				level.setLOCK_FLAG(rs.getString("LOCK_FLAG"));
 				level.setSUPER_FLAG(rs.getString("SUPER_FLAG"));
 				level.setOFFICE_CODE(rs.getString("OFFICE_CODE"));
+				level.setOFFICE(rs.getString("OFFICE"));
 				level.setCREATED_BY(rs.getString("CREATED_BY"));
 				level.setCREATED_DATE(rs.getString("CREATED_DATE"));
 				level.setDISABLE_FLAG(rs.getString("DISABLE_FLAG"));
@@ -152,13 +153,19 @@ public class UserDao {
 		try {
 			if (pass != null) {
 
+				PreparedStatement pst1 = con.prepareStatement(
+						"update web_user set pass_update='Y' where user_id=?");
+				pst1.setString(1, USER_ID);
+				pst1.executeUpdate();
+				
 				PreparedStatement pst = con.prepareStatement(
 						"update WEB_USER set PASSWORD=app_user_security.get_hash(upper(?),?) where USER_ID=?");
-				pst.setString(1, USER_ID.toUpperCase());
+				pst.setString(1, USER_ID);
 				pst.setString(2, pass);
 
 				pst.setString(3, USER_ID);
 				pst.executeUpdate();
+				
 			} else {
 				return " ";
 			}
@@ -342,6 +349,31 @@ public class UserDao {
             con.close();
         }
         return null;
+    }
+	
+
+    public String checkOldPAss(String user, String password) throws SQLException {
+        Connection con = DbCon.getConnection();
+        System.out.println("user id="+user);
+        System.out.println("password id="+password);
+        try {
+            PreparedStatement pst = con.prepareStatement("select * from WEB_USER where user_id=? AND PASSWORD=app_user_security.get_hash(upper(?),?)");
+            pst.setString(1, user.toUpperCase());
+            pst.setString(2, user.toUpperCase());
+            pst.setString(3, password);
+
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return "Confirmed!!";
+            } else {
+                return "Old Password Didnt Match";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            con.close();
+        }
+        return "Database issue!!! Contact Admin/Support for Help.";
     }
 	
 	

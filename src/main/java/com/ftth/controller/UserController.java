@@ -19,12 +19,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dao.EmployeeDao;
-import com.dao.FDCDao;
+import com.dao.FileUploadDao;
 import com.dao.OfficeDao;
-import com.dao.RegionDao;
+import com.dao.ProfileDao;
 import com.dao.RoleDao;
 import com.dao.UserDao;
-import com.model.Region;
 import com.model.Role;
 import com.model.UserInformationModel;
 
@@ -52,7 +51,7 @@ public class UserController {
 
 		RoleDao roledao = new RoleDao();
 
-		List<Region> regionlist = null;
+		
 		List<Role> rolelist = null;
 			
 		try {
@@ -267,5 +266,120 @@ public class UserController {
 		return list;
 
 	}
+	//for profile and password change
+	@RequestMapping(value = "/my-profile/list", method = RequestMethod.GET)
+    public String sd(Locale locale, Model model,HttpSession session) throws SQLException {
+
+		logger.info("my-profile/list.", locale);
+        
+
+        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+        model.addAttribute("fx",userinfo.getUSER_ID());
+        model.addAttribute("name",userinfo.getFULL_NAME()+"");
+        model.addAttribute("userinfo", ProfileDao.getUserInfo(userinfo.getUSER_ID()));
+
+        return "user/profile";
+    }
+	 	@RequestMapping(value = "/profile-update/saveJS", method = RequestMethod.POST)
+	    @ResponseBody
+	    public String profileUpdate(String USER_ID, String FULL_NAME,String MOBILE_NO, HttpSession session, Model model, Locale locale) {
+
+	        logger.info("Save Service {}.", locale);
+	        ProfileDao dao = new ProfileDao();
+
+	        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+	        String updateby = userinfo.getUSER_ID();
+	        model.addAttribute("fx", "Profile Update ");
+	        model.addAttribute("userName", "NEPal");
+	        String msg = null;
+	        try {
+	            msg = dao.updateProfile(FULL_NAME,MOBILE_NO,USER_ID,updateby);
+	        } catch (SQLException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+	        return msg;
+	    }
+	 	
+	 	@RequestMapping(value = "/checkOldPASS", method = RequestMethod.POST)
+	    @ResponseBody
+	    public String oldPasswordCheck(String PASSWORD, HttpSession session, Model model, Locale locale) {
+
+	        logger.info("Save Service {}.", locale);
+	        UserDao dao = new UserDao();
+
+	        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+	        String USER_ID = userinfo.getUSER_ID();
+	        
+	        
+	        String msg = null;
+	        try {
+	            msg = dao.checkOldPAss(USER_ID,PASSWORD);
+	        } catch (SQLException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+	        return msg;
+	    }
+	 	@RequestMapping(value = "/update-user/password", method = RequestMethod.POST)
+	    @ResponseBody
+	    public String updateUserPasswordByUser(String PASSWORD, HttpSession session, Model model, Locale locale) {
+
+	        logger.info("Save Service {}.", locale);
+	        UserDao dao = new UserDao();
+
+	        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+	        String USER_ID = userinfo.getUSER_ID();
+	        
+	        
+	        String msg = null;
+	        try {
+	            msg = dao.passWordChange(PASSWORD,USER_ID);
+	        } catch (SQLException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+	        return msg;
+	    }
+	 	
+	 	@ResponseBody
+		@RequestMapping(method = RequestMethod.GET, value = "firsttime/check")
+		public String loginCount(String COUNT,HttpServletRequest request, HttpServletResponse response,HttpSession session) {
+	 		
+	 		UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+	        String USER_ID = userinfo.getUSER_ID();
+	        
+	 		String msg=null;
+			try {
+				msg = ProfileDao.firstTimePasswordCheck(USER_ID);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return msg;
+
+		}
+		@ResponseBody
+		@RequestMapping(method = RequestMethod.GET, value = "max-OneActiveFile/check")
+		public String OneActiveFile(String FILENAME,HttpServletRequest request, HttpServletResponse response,HttpSession session) {
+	 		
+	 		UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+	        
+	        FileUploadDao dao=new FileUploadDao();
+	        
+	 		String msg=null;
+			try {
+				msg = dao.maxOneActiveFile(userinfo.getROLE_CODE());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+//	 		OneActiveFile
+			
+			return msg;
+
+		}
+	    
 	
 }

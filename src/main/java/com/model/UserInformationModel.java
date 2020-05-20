@@ -29,9 +29,16 @@ public class UserInformationModel implements java.io.Serializable{
     private String EMPLOYEE_NAME;
     private String OFFICE_CODE;
     private String ROLE_DESCRIPTION;
+    private String OFFICE;
     
     private String MOBILE_NO;
     
+	public String getOFFICE() {
+		return OFFICE;
+	}
+	public void setOFFICE(String oFFICE) {
+		OFFICE = oFFICE;
+	}
 	public String getMOBILE_NO() {
 		return MOBILE_NO;
 	}

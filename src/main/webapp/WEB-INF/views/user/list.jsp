@@ -142,7 +142,7 @@
 												<td>${user.getROLE_CODE()}</td>
 												
 												
-												<td>${user.getOFFICE_CODE()}</td>
+												<td>${user.getOFFICE()}</td>
 
 												<td>${user.getMOBILE_NO()}</td>
 												
@@ -156,7 +156,7 @@
 															onclick="return getHold('${user.getUSER_ID()}')">
 															Pass Change </a> <a href="#" class="btn btn-info"
 															data-toggle="modal" data-target="#editModal"
-															onclick="return editUser('${user.getUSER_ID()}')"> <i
+															onclick="return editUser('${user.getUSER_ID()}','${user.getOFFICE_CODE()}')"> <i
 															class="fa fa-edit"></i> Edit
 														</a>
 													</div>
@@ -227,11 +227,11 @@
 			    } );
 			 $("#EMPLOYEE_CODE,#EDITEMPLOYEE_CODE,#EDITOFFICE_CODE,#OFFICE_CODE").select2();
 			 
-			 $('select:not(.normal)').each(function () {
-	                $(this).select2({
-	                    dropdownParent: $(this).parent()
-	                });
-	            });
+			 //$('select:not(.normal)').each(function () {
+	            //    $(this).select2({
+	         //           dropdownParent: $(this).parent()
+	            //    });
+	           // });
 			
 		})
 	</script>
