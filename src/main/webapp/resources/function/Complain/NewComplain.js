@@ -11,6 +11,26 @@ $(document).ready(function() {
 	
 	getCustomerInfo();
 	 }
+	 
+	 // set max date for AAA as today
+	 var today = new Date();
+	 var dd = today.getDate();
+	 var mm = today.getMonth()+1; // January is 0!
+	 var yyyy = today.getFullYear();
+	  if(dd<10){
+	         dd='0'+dd
+	     } 
+	     if(mm<10){
+	         mm='0'+mm
+	     } 
+
+	 today = yyyy+'-'+mm+'-'+dd;
+	 document.getElementById("AAAdatepicker").setAttribute("max", today);
+
+	 
+	 // -- till here
+	 
+	 
 
 });
 
@@ -27,7 +47,6 @@ function getCustomerInfo() {
 	}, function(response) {
 		try{
 			TEST = JSON.parse(response);
-		
 			
 			if($('#infotype').val()=="custId"){
 				
@@ -59,48 +78,47 @@ function getCustomerInfo() {
 			
 			
 			$('#divcustomerinfo').fadeIn();
-			
-			$('#customerName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.customerName);
-			$('#Address').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.installAddress);
-			$('#ContantNum').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.contactNum);
-			$('#cpeMac').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.cpeInfo.cpeMac);
-			$('#cpeSN').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.cpeInfo.cpeSN);
-			$('#fapName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapInfo.fapName);
-			$('#fapPortName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapPortInfo.fapPortName);
-			$('#fapPortSpec').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapPortInfo.portSpec);
-			$('#fapSerialNumber').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapPortInfo.serialNumber);
+			$('#customerName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.customerName);
+			$('#Address').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.installAddress);
+			$('#ContantNum').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.contactNum);
+			$('#cpeMac').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.cpeInfo.cpeMac);
+			$('#cpeSN').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.cpeInfo.cpeSN);
+			$('#fapName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapInfo.fapName);
+			$('#fapPortName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapPortInfo.fapPortName);
+			$('#fapPortSpec').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapPortInfo.portSpec);
+			$('#fapSerialNumber').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapPortInfo.serialNumber);
 			// OLT
-			$('#distribCblName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.distribCblName);
-			$('#distribCoreNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.distribCoreNo);
-			$('#distribPortNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.distribPortNo);
-			$('#fdcName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.fdcName);
-			$('#feederCblName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.feederCblName);
-			$('#feederCoreNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.feederCoreNo);
-			$('#feederPortNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.feederPortNo);
-			$('#l1SplitterNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.l1SplitterNo);
-			$('#odfInPortOdfOutPort').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.odfInPortOdfOutPort);
-			$('#odfInfo').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.odfInfo);
-			$('#odfName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.odfName);
-			$('#odfNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.odfNo);
-			$('#oltId').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltId);
-			$('#oltInfo').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltInfo);
-			$('#oltName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltName);
-			$('#oltType').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltType);
+			$('#distribCblName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.distribCblName);
+			$('#distribCoreNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.distribCoreNo);
+			$('#distribPortNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.distribPortNo);
+			$('#fdcName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.fdcName);
+			$('#feederCblName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.feederCblName);
+			$('#feederCoreNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.feederCoreNo);
+			$('#feederPortNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.feederPortNo);
+			$('#l1SplitterNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.l1SplitterNo);
+			$('#odfInPortOdfOutPort').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.odfInPortOdfOutPort);
+			$('#odfInfo').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.odfInfo);
+			$('#odfName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.odfName);
+			$('#odfNo').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.odfNo);
+			$('#oltId').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltId);
+			$('#oltInfo').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltInfo);
+			$('#oltName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltName);
+			$('#oltType').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.oltOdfFdcInfo.oltType);
 	
 			// fap info
-			$('#faplocation').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapInfo.location);
-			$('#Longitude').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapInfo.longitude);
-			$('#Latitude').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapInfo.latitude);
+			$('#faplocation').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapInfo.location);
+			$('#Longitude').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapInfo.longitude);
+			$('#Latitude').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapInfo.latitude);
 			
 			
 			
 			// team info
 			
-			$('#teamName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamName);
-			$('#teamSupervisorContactNumber').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamSupervisorContactNumber);
-			$('#teamSupervisorName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamSupervisorName);
-			$('#teamleaderContactNumber').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamleaderContactNumber);
-			$('#teamleaderName').html(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamleaderName);
+			$('#teamName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamName);
+			$('#teamSupervisorContactNumber').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamSupervisorContactNumber);
+			$('#teamSupervisorName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamSupervisorName);
+			$('#teamleaderContactNumber').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamleaderContactNumber);
+			$('#teamleaderName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.fdcTeamDetail.teamleaderName);
 			
 			// subscriber info
 			getSubsInfo(TEST.subsinfo);
@@ -114,6 +132,10 @@ function getCustomerInfo() {
 			// $('#').html(TEST.);
 			
 		// getCustomerInfo(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.cpeInfo.cpeSN);
+			
+			// clearing complain cart
+			$('#complainservcies').empty();
+			
 			// clearing TMS status
 			$('#divforCPEinfo').empty();
 			// get AAA data
@@ -132,6 +154,141 @@ function getCustomerInfo() {
 
 }
 
+
+function getAAAstatus(serviceNo){
+	
+	$.get('../complain/getAAAstatus1', {
+		FTTHDatanum : serviceNo
+			}, function(response) {
+				console.log(response);
+				$('#planAAA').html(response.plan);
+				$('#calleridAAA').html(response.fcallerid);
+				$('#loginIPAAA').html(response.loginip);
+				$('#startimeidAAA').html(response.starttime);
+				$('#calleridactAAA').html(response.callerid);
+				$('#useridAAA').html(response.userid);
+				$('#AAAuserid').html(response.oldUSERID);
+			});
+}
+
+
+function getAAAAuthenticationlog(){
+	if($('#AAAuserid').html()==null || $('#AAAuserid').html()==""){
+		alert('UserID not found for NTDATA');
+		return;
+	}
+	var asd=$('#AAAdatepicker').val();
+	var mmdd=asd.substr(5,2)+asd.substr(8,2);
+	
+	$.get('../complain/getAAAstatusviewAuthenticationlog', {
+		FTTHDatanum : $('#AAAuserid').html(),
+		mmdd:mmdd
+			}, function(response) {
+				$('#AAAviewlogdiv').empty();
+				var tableappend="<table id='AAAviewlogtable' style='width:100%' class='table table-condensed'><thead><tr><td>Access Time</td><td>CallerID</td><td>Result</td></tr></thread></table>"
+					$('#AAAviewlogdiv').append(tableappend);
+					var table=$("#AAAviewlogtable").DataTable();
+				table
+			    .clear()
+			    .draw();
+				$.each(response, function (index, value) {
+					var result;
+					if(value.result=="0"){
+						result='Authentication Successful';
+					}
+					else if(value.result=="4001"){
+						result='Wrong Password';
+					}
+					else if(value.result=="4002"){
+						result='Account Inactive';
+						
+					}else if(value.result=="4003"){
+						result='Account Expired';
+						
+					}else if(value.result=="4004"){
+						result='Account Locked';
+					}else if(value.result=="4005"){
+						result='Account Transfer';
+					}else if(value.result=="4006"){
+						result='Unauthorized Caller ID';
+					}else if(value.result=="4008"){
+						result='Subscriber Not Exist';
+					}else if(value.result=="40010"){
+						result='No Free Resource';
+					}
+					else result=value.result;
+				      
+				      
+					$("#AAAviewlogtable")
+					.dataTable()
+					.fnAddData(
+							[
+								value.accesstime,
+								value.calling_station_id,
+								result
+								 ]);
+					
+					
+				});
+				
+			});
+	
+}
+
+function getAAAAccountinglog(){
+	if($('#AAAuserid').html()==null || $('#AAAuserid').html()==""){
+		alert('UserID not found for NTDATA');
+		return;
+	}
+	var asd=$('#AAAdatepicker').val();
+	var mmdd=asd.substr(5,2)+asd.substr(8,2);
+	
+	$.get('../complain/getAAAstatusviewAccountinglog', {
+		FTTHDatanum : $('#AAAuserid').html(),
+		mmdd:mmdd
+			}, function(response) {
+				$('#AAAviewlogdiv').empty();
+				var tableappend="<table id='AAAviewlogtable' style='width:100%' class='table table-condensed'><thead><tr><td>starttime</td><td>stoptime</td><td>Total Volume(MB)</td><td>Termination Cause</td></tr></thread></table>"
+					$('#AAAviewlogdiv').append(tableappend);
+					var table=$("#AAAviewlogtable").DataTable();
+				table
+			    .clear()
+			    .draw();
+				$.each(response, function (index, value) {
+					var result;
+					if(value.terminate_cause=="1" || value.terminate_cause=="2" || value.terminate_cause=="3"){
+						result='User Side: Line SNR or Router Power Problem';
+					}
+					else if(value.terminate_cause=="4"){
+						result='Idle TimeOut';
+					}
+					else if(value.terminate_cause=="5"){
+						result='Normal Session Out';
+						
+					}
+					else result="Other";
+				      
+				      
+					$("#AAAviewlogtable")
+					.dataTable()
+					.fnAddData(
+							[
+								jsondatetonormale(value.starttime)
+								,
+								jsondatetonormale(value.stoptime),
+								(Number(value.total_volume)/(1024*1024)).toFixed(2),
+								result
+								 ]);
+					
+					
+				});
+				
+			});
+	
+}
+
+
+
 function getSubsInfo(subsinfo) {
 
 
@@ -140,6 +297,17 @@ function getSubsInfo(subsinfo) {
 			$('#divforsubsinfo').empty();
 			
 			$.each(subsinfo, function (index, value) {
+				// checking if DATA service available in subsinfo and calling
+				// AAA status
+				if(value.serviceNumber.substr(0,6)==='NTFTTH'){
+					getAAAstatus(value.serviceNumber);
+				}
+				
+				
+				// till herechecking if DATA service available in subsinfo and
+				// calling AAA status
+				
+				
 				
 				var div='<div class="col-md-6"><table id="subsinfotable'+index+'" class="table table-condensed"><tbody><tr><td><label>serviceNumber </label></td><td><span id="serviceNumber'+index+'"></span></td></tr><tr><td><label>offerName </label></td><td><span id="offerName'+index+'"></span></td>		</tr><tr>										<td><label>status</label></td>						<td><span id="status'+index+'"></span></td>					</tr>	<tr><td><label>balanceOfCreditLimit</label></td>		<td><span id="balanceOfCreditLimit'+index+'"></span></td>			</tr></tbody>			</table>		</div>';						
 			if((index+1)%2==0){
@@ -149,8 +317,20 @@ function getSubsInfo(subsinfo) {
 			}
 				
 				$('#divforsubsinfo').append(div);	
-				var button=': <div class="btn-group complain'+value.serviceNumber+'"><button onclick="addservicecomplain(\''+value.serviceNumber+'\')" type="button" class="btn btn-box-tool"><i class="fa fa-plus"></i></button><button onclick="removeservicecomplain(\''+value.serviceNumber+'\')" type="button" class="btn btn-box-tool"><i class="fa fa-minus"></i></button></div>';
-			$('#balanceOfCreditLimit'+index).html(value.balanceOfCreditLimit);
+			// var button=': <div class="btn-group
+			// complain'+value.serviceNumber+'"><input type="checkbox"
+			// onchange="chkaddremoveservicecomplain(this)"
+			// value="'+value.serviceNumber+'" /><button
+			// onclick="addservicecomplain(\''+value.serviceNumber+'\')"
+			// type="button" class="btn btn-box-tool"><i class="fa
+			// fa-plus"></i></button><button
+			// onclick="removeservicecomplain(\''+value.serviceNumber+'\')"
+			// type="button" class="btn btn-box-tool"><i class="fa
+			// fa-minus"></i></button></div>';
+			// replaced with checkbox for + button
+				var button=': <div class="btn-group complain'+value.serviceNumber+'"><input type="checkbox" onchange="chkaddremoveservicecomplain(this)" value="'+value.serviceNumber+'" /></div>';
+				
+				$('#balanceOfCreditLimit'+index).html(value.balanceOfCreditLimit);
 			$('#offerName'+index).html(value.offerName);
 			$('#serviceNumber'+index).html(value.serviceNumber+button);
 			$('#status'+index).html(value.status);
@@ -283,6 +463,17 @@ problemlist=response;
 	
 }
 
+// checkbox for add or remove service
+function chkaddremoveservicecomplain(a){
+	if(a.checked){
+		addservicecomplain(a.value);
+	}
+	else{
+		removeservicecomplain(a.value);
+	}
+	
+}
+
 function addservicecomplain(serno){
 	if (($('.'+serno)[0])){
 	alert('Complain for this service has been added for registration. Please click on Register Complain to continue ');
@@ -342,6 +533,7 @@ function PostRegister(solved){
 	
 	if ($('.cproblemid:checked').length == 0) {
 		if (confirm("No service has been checked!!! This will halted for FLMT!")) {
+			return false;
 		} else {
 			  return false;
 			}
@@ -386,6 +578,26 @@ function PostRegister(solved){
 				 FAP_PORT:$('#fapPortName').html(),
 				 CPE_RX_LVL:$('#onuRxPower').html()
 					 	 }, function(response) {
+					 		// debugger;
+					 		 if(response.substr(0,22)=="Complain Already Exist"){
+					 			if (confirm(response+'. Do you want to add another service to provided token?')) {
+					 				  // Save it!
+					 				$.post('../complain/addsrvexistingtoken', {
+					 					JSON:JSON.stringify(transnop),
+					 					tokenid:response.substr(32)
+					 				 }, function(valres) {
+					 					 alert(valres);
+					 					 return;
+					 				 });
+					 				  console.log('Thing was saved to the database.');
+					 				} else {
+					 				  // Do nothing!
+					 				  return;
+					 				}
+					 			location.reload(); 
+					 		 return;
+					 		 }
+					 		 
 			alert(response);
 			 });
 		
@@ -406,18 +618,24 @@ function getCRMSServiceBalance(serviceNo,index){
 	         success: function(response) {
 	        		var state=response.split('!');
 	        		var statestatus;			
+	        		$('#balanceOfCreditLimit'+index).css('background-color','#FE2E2E');
 	        		if($('#status'+index).html().substring(0,3)=='Pos'){
 	        			// postpaid
 	        						statestatus='Due Amt:'+(state[0]/100)+'-Rem Credit:'+(state[1]/100);
-	        					}
+	        						if(state[1]>0){
+	        		        			$('#balanceOfCreditLimit'+index).css('background-color','#9FF781');
+	        		        		}			
+	        		
+	        		}
 	        		else if($('#status'+index).html().substring(0,3)=='Pre'){
 			 // prepaid
 	        			statestatus='Balance:'+(state[0]/100)+'-Expiry Dt of Subs:'+state[1];
+	        			if(state[0]>0){
+		        			$('#balanceOfCreditLimit'+index).css('background-color','#9FF781');
+		        		}
 	        		} 
-	        		if(state[0]>0){
-	        			$('#balanceOfCreditLimit'+index).css('background-color','#9FF781');
-	        		}
-	        		else $('#balanceOfCreditLimit'+index).css('background-color','#FE2E2E');
+	        		
+	        		
 	        			        		$('#balanceOfCreditLimit'+index).html(statestatus);
 
 	        			
@@ -453,8 +671,8 @@ function getQueryFreeResource(serviceNo,index){
 	        		if(state[0]=='102'){
 	        			FRIExp=state[3];			
 		        		
-	        			javexpdt=	stringToDate(state[3].substring(0,9),"MM/dd/yyyy","/");
-	        		var today = new Date();
+	        			javexpdt=	stringToDate(state[3].substring(0,10),"MM/dd/yyyy","/");
+	        			var today = new Date();
 	        		if(today>javexpdt){
 	        			$('#FRIExpdt'+index).css('background-color','#FE2E2E');
 	        		}
@@ -462,10 +680,11 @@ function getQueryFreeResource(serviceNo,index){
 	        		}
 	        		else if(state[0]=='104'){
 	        			FRIExp=state[3]+'--'+state[4];			
-		        		javexpdt=	stringToDate(state[4].substring(0,9),"MM/dd/yyyy","/");
+		        		javexpdt=	stringToDate(state[4].substring(0,10),"MM/dd/yyyy","/");
 	        			var today = new Date();
 	        			if(today>javexpdt){
 		        			$('#FRIExpdt'+index).css('background-color','#FE2E2E');
+		        			
 		        		}			
 	        			
 	        		}
@@ -576,6 +795,15 @@ function stringToDate(_date,_format,_delimiter)
             month-=1;
             var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
             return formatedDate;
+}
+
+function jsondatetonormale(indate){
+	var currentTime = new Date(indate);
+	var month = currentTime.getMonth() + 1;
+	var day = currentTime.getDate();
+	var year = currentTime.getFullYear();
+	var date = day + "/" + month + "/" + year+" "+currentTime.getHours()+":"+currentTime.getMinutes();
+	return date;
 }
 
 

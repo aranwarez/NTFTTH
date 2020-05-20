@@ -172,6 +172,97 @@ public class ComplainDao {
 			con.close();
 		}
 	}
+	
+	
+	public String addProblem(List<Map<String, Object>> servicestypelist,String token_ID,String USER) throws SQLException {
+		Connection con = DbCon.getConnection();
+		try {
+			con.setAutoCommit(false);
+			ResultSet tokenrs;
+			PreparedStatement pst;
+			// for multiple services - token master
+			String cqry = "select TM_SUB_TOKEN_ID.NEXTVAL from dual";
+
+			String subqry = "INSERT INTO FTTH.TOKEN_MASTER (SUB_TOKEN_ID,\r\n"
+					+ "                               TOKEN_ID,\r\n"
+					+ "                               SUB_TEAM_CODE,\r\n"
+					+ "                               SOLVE_FLAG,\r\n"
+					+ "                               PROBLEM_ID,\r\n" + "                               REMARKS,\r\n"
+					+ "                               SERVICE_NO,\r\n"
+
+					+ "                               SERVICE_TYPE_ID,\r\n"
+					+ "                               CREATE_BY,\r\n" + "                               CREATE_DT)\r\n"
+					+ "     VALUES (?,\r\n" + "             ?,\r\n" + "             (SELECT sub_team_code\r\n"
+					+ "                FROM m_problem\r\n" + "               WHERE problem_id = ?),\r\n"
+					+ "             'N',\r\n" + "             ?,\r\n" + "         ?,    ?,\r\n" + "             ?,\r\n"
+					+ "             ?,\r\n" + "             SYSDATE)";
+
+			if (servicestypelist.size() > 0) {
+				for (Map<String, Object> obj : servicestypelist) {
+					tokenrs = con.prepareStatement(cqry).executeQuery();
+					while (tokenrs.next()) {
+						sub_token_id = tokenrs.getString(1);
+					}
+					pst = con.prepareStatement(subqry);
+					pst.setString(1, sub_token_id);
+					pst.setString(2, token_ID);
+					pst.setString(3, (String) obj.get("PROBLEM_ID"));
+					pst.setString(4, (String) obj.get("PROBLEM_ID"));
+					pst.setString(5, (String) obj.get("REMARKS"));
+					pst.setString(6, (String) obj.get("SERVICE_NO"));
+
+					pst.setString(7, (String) obj.get("SERVICE_ID"));
+
+					pst.setString(8, USER);
+					pst.executeUpdate();
+
+					// for multiple services - token detail
+					String seqqry = "select TM_SUB_TOKEN_DETAIL_ID.NEXTVAL from dual";
+					tokenrs = con.prepareStatement(seqqry).executeQuery();
+					while (tokenrs.next()) {
+						seqqry = tokenrs.getString(1);
+					}
+					String detailqry = "INSERT INTO FTTH.TOKEN_DETAIL (\r\n"
+							+ "   TD_ID, SUB_TOKEN_ID, FROM_SUB_TEAM_CODE, \r\n"
+							+ "   TO_SUB_TEAM_CODE, SOLVE_FLAG, PROBLEM_ID, \r\n"
+							+ "   REMARKS, CREATE_BY, CREATE_DT \r\n" + "   ) \r\n"
+							+ "VALUES ( TM_SUB_TOKEN_DETAIL_ID.NEXTVAL,\r\n" + " ?,\r\n"
+							+ " (select sub_team_code from m_problem where problem_id=?),\r\n"
+							+ " (select sub_team_code from m_problem where problem_id=?),\r\n" + " 'N',\r\n" + " ?,\r\n"
+							+ " ?,\r\n" + " ?,\r\n" + " sysdate)";
+
+					pst = con.prepareStatement(detailqry);
+					pst.setString(1, sub_token_id);
+					pst.setString(2, (String) obj.get("PROBLEM_ID"));
+					pst.setString(3, (String) obj.get("PROBLEM_ID"));
+					pst.setString(4, (String) obj.get("PROBLEM_ID"));
+
+					pst.setString(5, (String) obj.get("REMARKS"));
+					pst.setString(6, USER);
+					pst.executeUpdate();
+
+					// ---------------- token detail
+				}
+			}
+			
+			con.commit();
+			return "Succesfully Added Services to existing Complaint";
+			
+			
+			
+			
+		}catch(Exception e) {
+			e.printStackTrace();;
+			return "Failed to add Services in exisiting problem. Error:"+e.getLocalizedMessage();	
+		}
+		finally {
+			con.close();
+		}
+		
+	}
+	
+	
+	
 
 	public String saveProblem(List<Map<String, Object>> servicestypelist, String serviceID, String SRV_NO,
 			String Complain_no, String contactName, String Remarks, String USER, String FDCName, String teamname,
@@ -188,7 +279,7 @@ public class ComplainDao {
 			qpst.setString(1, SRV_NO);
 			ResultSet rs = qpst.executeQuery();
 			if (rs.next() == true) {
-				return ("Complain Already Exist");
+				return ("Complain Already Exist Token_ID:"+rs.getString("TOKEN_ID"));
 				// throw new SQLException("Complain Already Exist");
 			}
 			WebTeamDao teammdao = new WebTeamDao();

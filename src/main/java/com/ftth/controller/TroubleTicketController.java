@@ -44,7 +44,7 @@ public class TroubleTicketController {
 		logger.info("/troubleticket/list by user"+user.getUSER_ID(), locale);
 		
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
-		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
 			model.addAttribute("fx", "Unauthorized Page for this role!!");
 			return "/home";
 		}
@@ -61,7 +61,7 @@ public class TroubleTicketController {
 		List<Map<String, Object>> levelcontrollist=null;
 		
 		try {
-			regionlist = dao.getlist();
+			regionlist = dao.getlistByUserFDC(user.getUSER_ID(),user.getUSER_LEVEL());
 			servicetypelist=ServiceTypedao.getServiceTypeList();
 			teamlist=teamdao.getTeamList();
 			webteamlist=teamdao.getWebTeamList();
@@ -115,7 +115,7 @@ public class TroubleTicketController {
 		ComplainDao dao=new ComplainDao();
 		
 		try {
-			if(user.getUSER_LEVEL().equals("5")) {
+			if(user.getUSER_LEVEL().equals("5") || user.getUSER_LEVEL().equals("6")) {
 			list = dao.getComplainListlowlvl(user.getUSER_ID(), REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE, Sub_Team, Service_Type, FRM_DT, TO_DT,Statusflag,Teamid);
 			}
 			else {

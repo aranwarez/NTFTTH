@@ -2,91 +2,92 @@ var currentdate;
 var glbUser;
 var token_id;
 var closeflag;
-$(document).ready(function() {
-	 if(getURLParameter('token_id')!=null && getURLParameter('token_id').length>0){
-		 getTokenDetailbyID(getURLParameter('token_id'));
-	 
-	 }
-	
-});
+$(document).ready(
+		function() {
+			if (getURLParameter('token_id') != null
+					&& getURLParameter('token_id').length > 0) {
+				getTokenDetailbyID(getURLParameter('token_id'));
 
+			}
 
-function getTokenDetailbyID(token){
-	$.get("../troubleticket/gettokendetails", {
-		token_id : token
-	}, function(data) {
-		var table = $('#example1').DataTable();
-		 
-		table
-		    .clear()
-		    .draw();
-		
+		});
 
-		$
-				.each(
-						data,
-						function(key, value) {
-							var date=new Date(value.CREATE_DT).toDateString("yyyy-MM-dd");;
-							var solveflag='<button type="button" title="Resolve" class="btn bg-yellow" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
-								+ value.SUB_TOKEN_ID
-								+ '\');closeflag=(\''
-								+ 'Y'
-								+ '\');"> <i class="fa fa-trash"></i>Resolved</button>';
-							var forwardflag='<button type="button" title="Forward" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
-								+ value.SUB_TOKEN_ID
-								+ '\')"> <i class="fa fa-mail-forward"></i>Fordward</button>';
-							if(value.SOLVE_FLAG=='Y'){
-								solveflag='<button type="button" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
-									+ value.SUB_TOKEN_ID
-									+ '\');closeflag=(\''
-									+ 'C'
-									+ '\');"> <i class="fa fa-trash"></i> Close</button>';
-							forwardflag="";
-							}
-							else if(value.SOLVE_FLAG=='C'){
-								solveflag='Closed-';
-								forwardflag="";
-							}
-							
-							$("#example1")
-									.dataTable()
-									.fnAddData(
-											[
-													value.TOKEN_ID,
-													value.SRV_NO,
-													value.SERVICE_DESC,
-													
-													javadate(value.CREATE_DT),
-													value.SUB_TEAM_CODE,
-													value.PROBLEM_DESC,
-													value.FDC_DESC,
-													value.COMPLAIN_NO,
-													value.CONTACT_NAME,
-													'<div class="btn=group">'+forwardflag+
-															solveflag+
-													'<button type="button" class="btn bg-blue" data-toggle="modal" data-target="#viewModal" onclick="return viewdetail(\''
-															+ value.SUB_TOKEN_ID
-															+ '\')"> <i class="fa fa-history"></i>History</button>',
-															'<a target="_blank" href="../complain/list?CPE='+value.SRV_NO+'" class="btn bg-green"> <i class="fa fa-edit"></i> Detail </a></div>'				
-															
-															
+function getTokenDetailbyID(token) {
+	$
+			.get(
+					"../troubleticket/gettokendetails",
+					{
+						token_id : token
+					},
+					function(data) {
+						var table = $('#example1').DataTable();
+
+						table.clear().draw();
+
+						$
+								.each(
+										data,
+										function(key, value) {
+											var date = new Date(value.CREATE_DT)
+													.toDateString("yyyy-MM-dd");
+											;
+											var solveflag = '<button type="button" title="Resolve" class="btn bg-yellow" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
+													+ value.SUB_TOKEN_ID
+													+ '\');closeflag=(\''
+													+ 'Y'
+													+ '\');"> <i class="fa fa-trash"></i>Resolved</button>';
+											var forwardflag = '<button type="button" title="Forward" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
+													+ value.SUB_TOKEN_ID
+													+ '\')"> <i class="fa fa-mail-forward"></i>Fordward</button>';
+											if (value.SOLVE_FLAG == 'Y') {
+												solveflag = '<button type="button" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
+														+ value.SUB_TOKEN_ID
+														+ '\');closeflag=(\''
+														+ 'C'
+														+ '\');"> <i class="fa fa-trash"></i> Close</button>';
+												forwardflag = "";
+											} else if (value.SOLVE_FLAG == 'C') {
+												solveflag = 'Closed-';
+												forwardflag = "";
+											}
+
+											$("#example1")
+													.dataTable()
+													.fnAddData(
+															[
+																	value.TOKEN_ID,
+																	value.SRV_NO,
+																	value.SERVICE_DESC,
+
+																	javadate(value.CREATE_DT),
+																	value.SUB_TEAM_CODE,
+																	value.PROBLEM_DESC,
+																	value.FDC_DESC,
+																	value.COMPLAIN_NO,
+																	value.CONTACT_NAME,
+																	'<div class="btn=group">'
+																			+ forwardflag
+																			+ solveflag
+																			+ '<button type="button" class="btn bg-blue" data-toggle="modal" data-target="#viewModal" onclick="return viewdetail(\''
+																			+ value.SUB_TOKEN_ID
+																			+ '\')"> <i class="fa fa-history"></i>History</button>',
+																	'<a target="_blank" href="../complain/list?CPE='
+																			+ value.SRV_NO
+																			+ '" class="btn bg-green"> <i class="fa fa-edit"></i> Detail </a></div>'
+
 															]);
-						});
+										});
 
-		
-		
-	});
+					});
 
-	
-	
-	
 }
 
-
 function getURLParameter(name) {
-	  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
-	}
-
+	return decodeURIComponent((new RegExp('[?|&]' + name + '='
+			+ '([^&;]+?)(&|#|;|$)').exec(location.search) || [ null, '' ])[1]
+			.replace(/\+/g, '%20'))
+			|| null;
+}
 
 function getZone() {
 
@@ -103,7 +104,6 @@ function getZone() {
 		$('#OFFICE_CODE').find('option:not(:first)').remove();
 		$('#OLT_CODE').find('option:not(:first)').remove();
 
-	
 		$.each(data, function(index, value) {
 			$('<option>').val(value.ZONE_CODE).text(value.DESCRIPTION)
 					.appendTo(select);
@@ -229,46 +229,47 @@ function fetchView() {
 						SUB_TEAM : SUBTEAMCODE,
 						FRM_DT : FRM_DT,
 						TO_DT : TO_DT,
-						Statusflag:Statusflag,
-						WEBTEAMCODE:$('#WEBTEAMCODE').val()
+						Statusflag : Statusflag,
+						WEBTEAMCODE : $('#WEBTEAMCODE').val()
 
 					},
 					function(data) {
 						console.log(data);
-					//	$('#example1').DataTable();
-						var table = $('#example1').DataTable();
-						 
-						table
-						    .clear()
-						    .draw();
-						
+						// $('#example1').DataTable();
+
+						var table = $('#example1').DataTable({
+							responsive : true
+						});
+
+						table.clear().draw();
 
 						$
 								.each(
 										data,
 										function(key, value) {
-											var date=new Date(value.CREATE_DT).toDateString("yyyy-MM-dd");;
-											var solveflag='<button type="button" title="Resolve" class="btn bg-yellow" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
-												+ value.SUB_TOKEN_ID
-												+ '\');closeflag=(\''
-												+ 'Y'
-												+ '\');"> <i class="fa fa-trash"></i>Resolved</button>';
-											var forwardflag='<button type="button" title="Forward" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
-												+ value.SUB_TOKEN_ID
-												+ '\')"> <i class="fa fa-mail-forward"></i>Fordward</button>';
-											if(value.SOLVE_FLAG=='Y'){
-												solveflag='<button type="button" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
+											var date = new Date(value.CREATE_DT)
+													.toDateString("yyyy-MM-dd");
+											;
+											var solveflag = '<button type="button" title="Resolve" class="btn bg-yellow" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
 													+ value.SUB_TOKEN_ID
 													+ '\');closeflag=(\''
-													+ 'C'
-													+ '\');"> <i class="fa fa-trash"></i> Close</button>';
-											forwardflag="";
+													+ 'Y'
+													+ '\');"> <i class="fa fa-trash"></i>Resolved</button>';
+											var forwardflag = '<button type="button" title="Forward" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
+													+ value.SUB_TOKEN_ID
+													+ '\')"> <i class="fa fa-mail-forward"></i>Fordward</button>';
+											if (value.SOLVE_FLAG == 'Y') {
+												solveflag = '<button type="button" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
+														+ value.SUB_TOKEN_ID
+														+ '\');closeflag=(\''
+														+ 'C'
+														+ '\');"> <i class="fa fa-trash"></i> Close</button>';
+												forwardflag = "";
+											} else if (value.SOLVE_FLAG == 'C') {
+												solveflag = 'Closed-';
+												forwardflag = "";
 											}
-											else if(value.SOLVE_FLAG=='C'){
-												solveflag='Closed-';
-												forwardflag="";
-											}
-											
+
 											$("#example1")
 													.dataTable()
 													.fnAddData(
@@ -276,25 +277,34 @@ function fetchView() {
 																	value.TOKEN_ID,
 																	value.SRV_NO,
 																	value.SERVICE_DESC,
-																	
+
 																	javadate(value.CREATE_DT),
 																	value.SUB_TEAM_CODE,
 																	value.PROBLEM_DESC,
 																	value.FDC_DESC,
 																	value.COMPLAIN_NO,
 																	value.CONTACT_NAME,
-																	'<div class="btn=group">'+forwardflag+
-																			solveflag+
-																	'<button type="button" class="btn bg-blue" data-toggle="modal" data-target="#viewModal" onclick="return viewdetail(\''
+																	'<div class="btn=group">'
+																			+ forwardflag
+																			+ solveflag
+																			+ '<button type="button" class="btn bg-blue" data-toggle="modal" data-target="#viewModal" onclick="return viewdetail(\''
 																			+ value.SUB_TOKEN_ID
 																			+ '\')"> <i class="fa fa-history"></i>History</button>',
-																			'<a target="_blank" href="../complain/list?CPE='+value.SRV_NO+'" class="btn bg-green"> <i class="fa fa-edit"></i> Detail </a></div>'				
-																			
-																			
-																			]);
+																	'<a target="_blank" href="../complain/list?CPE='
+																			+ value.SRV_NO
+																			+ '" class="btn bg-green"> <i class="fa fa-edit"></i> Detail </a></div>'
+
+															]);
 										});
 
 					});
+
+	// geting close all ticket button
+	if ($('#Statusflag').val() == 'Y' && $('#SUBTEAMCODE').val() == 'FLMTA') {
+		$('#closebuttondiv').fadeIn();
+	} else {
+		$('#closebuttondiv').fadeOut();
+	}
 
 }
 
@@ -345,163 +355,137 @@ function saveUserFDC() {
 
 }
 
+function getSubTeamList() {
 
-function getSubTeamList(){
-	
-		var TEAM_CODE=$("#TEAM_CODE").val();
-		
-		 $.get('../subteamByTeam/jsonlist', {TEAM_CODE: TEAM_CODE
-		    }, function (response) {
-		        var select = $('#SUB_TEAM_CODE');
-		        select.find('option').remove();
-		        $('<option>').val("").text("SELECT Sub Team ").appendTo(select);
-		        $.each(response, function (index, value) {
-		            $('<option>').val(value.SUB_TEAM_CODE).text(value.DESCRIPTION+'-'+value.SUB_TEAM_CODE).appendTo(
-		                    select);
+	var TEAM_CODE = $("#TEAM_CODE").val();
 
-		        });
+	$.get('../subteamByTeam/jsonlist', {
+		TEAM_CODE : TEAM_CODE
+	}, function(response) {
+		var select = $('#SUB_TEAM_CODE');
+		select.find('option').remove();
+		$('<option>').val("").text("SELECT Sub Team ").appendTo(select);
+		$.each(response, function(index, value) {
+			$('<option>').val(value.SUB_TEAM_CODE).text(
+					value.DESCRIPTION + '-' + value.SUB_TEAM_CODE).appendTo(
+					select);
 
-		    });
+		});
+
+	});
 }
 
-function ForwardTeam(){
-	if($('#remarks').val().length>250 || $('#SUB_TEAM_CODE').val()===""){
+function ForwardTeam() {
+	if ($('#remarks').val().length > 250 || $('#SUB_TEAM_CODE').val() === "") {
 		alert('Warning Sub team is invalid or remark length exceeded!!!');
 		return false;
 	}
 
-	$.post('../troubleticket/Forward', {Remarks: $('#remarks').val(),
-		 token:token_id,
-		 toteam:$('#SUB_TEAM_CODE').val()
-	    }, function (response) {
-	    	alert(response);
-	    	$('#myModal').modal('hide');
-	    	fetchView();
-	    	
-	    	
-	    });
+	$.post('../troubleticket/Forward', {
+		Remarks : $('#remarks').val(),
+		token : token_id,
+		toteam : $('#SUB_TEAM_CODE').val()
+	}, function(response) {
+		alert(response);
+		$('#myModal').modal('hide');
+		fetchView();
+
+	});
 }
 
+function CloseTicket() {
 
-
-
-
-function CloseTicket(){
-	
-	if($('#remarks').val().length>250){
+	if ($('#remarks').val().length > 250) {
 		alert('Warning remark length exceeded!!!');
 		return false;
 	}
-	
-	if(closeflag=='Y'){
-		$.post('../troubleticket/Resolved', {Remarks: $('#closeremarks').val(),
-			 token:token_id
-		    }, function (response) {
-		    	alert(response);
-		    	$('#deleteModal').modal('hide');
-		    	fetchView();
-		    	
-		    	
-		    });		
-		
-		
-	}
-	else if(closeflag=='C'){
-		$.post('../troubleticket/Close', {Remarks: $('#closeremarks').val(),
-			 token:token_id
-		    }, function (response) {
-		    	alert(response);
-		    	$('#deleteModal').modal('hide');
-		    	fetchView();
-		    	
-		    	
-		    });		
-		
-	}
-	
-	
-	
-	
 
+	if (closeflag == 'Y') {
+		$.post('../troubleticket/Resolved', {
+			Remarks : $('#closeremarks').val(),
+			token : token_id
+		}, function(response) {
+			alert(response);
+			$('#deleteModal').modal('hide');
+			fetchView();
+
+		});
+
+	} else if (closeflag == 'C') {
+		$.post('../troubleticket/Close', {
+			Remarks : $('#closeremarks').val(),
+			token : token_id
+		}, function(response) {
+			alert(response);
+			$('#deleteModal').modal('hide');
+			fetchView();
+
+		});
+
+	}
 
 }
 
-function viewdetail(subtokenid){
-	$
-	.get(
-			"../troubleticket/gettokenhistory",
-			{
-				SUBTOKEN:subtokenid
+function viewdetail(subtokenid) {
+	$.get("../troubleticket/gettokenhistory", {
+		SUBTOKEN : subtokenid
 
-			},
-			function(data) {
-				console.log(data);
-			//	$('#example1').DataTable();
-				var table = $('#viewdetailtable').DataTable();
-				 
-				table
-				    .clear()
-				    .draw();
-				
+	}, function(data) {
+		console.log(data);
+		// $('#example1').DataTable();
+		var table = $('#viewdetailtable').DataTable();
 
-				$
-						.each(
-								data,
-								function(key, value) {
-									var date=new Date(value.CREATE_DT);
-									$("#viewdetailtable")
-											.dataTable()
-											.fnAddData(
-													[value.FROM_SUB_TEAM_CODE,
-														value.TO_SUB_TEAM_CODE,
-														value.SOLVE_FLAG,
-														value.REMARKS,
-														value.CREATE_BY,
-														date
-														 ]);
-								});
+		table.clear().draw();
 
-			});
+		$.each(data, function(key, value) {
+			var date = new Date(value.CREATE_DT);
+			$("#viewdetailtable").dataTable().fnAddData(
+					[ value.FROM_SUB_TEAM_CODE, value.TO_SUB_TEAM_CODE,
+							value.SOLVE_FLAG, value.REMARKS, value.CREATE_BY,
+							date ]);
+		});
 
+	});
 
 }
 
-
-function loadLevelWise(level){
-	if(level=='1'){
-	return;
-	}
-	else if(level=='2'){
+function loadLevelWise(level) {
+	if (level == '1') {
+		return;
+	} else if (level == '2') {
 		getZone();
 		return;
+	} else if (level == '3') {
+		getDistrict();
+		return;
+
+	} else if (level == '4') {
+		getOffice();
+		return;
+	} else {
+		getOLT();
+		return;
 	}
-	else if(level=='3'){
-	getDistrict();
-	return;
-	
-	}
-	else if(level=='4'){
-	getOffice();
-	return;
+
 }
-else {
-	getOLT();
-	return;
-}
-	
-}
-function clearDataTable(){
-	
+function clearDataTable() {
+
 }
 
-function javadate(date){
+function javadate(date) {
 	var d = new Date(date);
 	var curr_date = d.getDate();
-	var curr_month = d.getMonth() + 1; //Months are zero based
+	var curr_month = d.getMonth() + 1; // Months are zero based
 	var curr_year = d.getFullYear();
-	var hour=d.getHours();
-	var min=d.getMinutes();
-	//return (curr_year + "-" + curr_month + "-" + curr_date+" "+ hour+":"+min);
+	var hour = d.getHours();
+	var min = d.getMinutes();
+	// return (curr_year + "-" + curr_month + "-" + curr_date+" "+
+	// hour+":"+min);
 	return (curr_year + "-" + curr_month + "-" + curr_date);
+
+}
+
+function Closealltickets() {
+	alert('WIP in progress!!');
 
 }

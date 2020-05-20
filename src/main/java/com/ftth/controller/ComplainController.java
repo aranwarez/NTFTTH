@@ -18,18 +18,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.aaa.dao.AAAStatusDao;
 import com.dao.CommonDateDao;
 import com.dao.CommonMenuDao;
 import com.dao.ComplainDao;
 import com.dao.MServiceDao;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.model.AAAModel;
 import com.model.MenuAccess;
 import com.model.UserInformationModel;
 import com.soap.dao.AAADao;
 import com.soap.dao.CPEAPI;
 import com.soap.dao.CRMSBalanceDao;
-import com.soap.dao.CrmDao;
 
 @Controller
 public class ComplainController {
@@ -71,7 +72,7 @@ public class ComplainController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 		}
 
-		CrmDao dao = new CrmDao();
+		CRMSBalanceDao dao = new CRMSBalanceDao();
 		try {
 			String msg = dao.getCustomerDetail(info, infotype);
 			return msg;
@@ -171,6 +172,37 @@ public class ComplainController {
 
 	}
 
+	//add service to existing token
+	@RequestMapping(value = "/complain/addsrvexistingtoken", method = RequestMethod.POST)
+	@ResponseBody
+	public String addsrvexistingtoken(String JSON,String tokenid,HttpSession session)
+			throws SQLException {
+		logger.info("Adding service to existing tokenid : ",tokenid);
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+
+		ComplainDao dao = new ComplainDao();
+		ObjectMapper mapper = new ObjectMapper();
+
+		String msg = null;
+		try {
+			List<Map<String, Object>> myObjects = mapper.readValue(JSON,
+					new TypeReference<List<Map<String, Object>>>() {
+					});
+			msg=dao.addProblem(myObjects, tokenid, user.getUSER_ID());
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return msg;
+
+	}
+
+	
 	// CPE detial information
 	@ResponseBody
 	@RequestMapping(value = "/complain/getCPETMSStatus", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -281,6 +313,74 @@ public class ComplainController {
 
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/complain/getAAAstatus1", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public AAAModel getgetAAAstatus1(String FTTHDatanum, Locale locale, Model model, HttpSession session)
+			throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		AAAStatusDao cbd = new AAAStatusDao();
+		AAAModel obj=new AAAModel();
+		try {
+			obj = cbd.getAAAstatus(FTTHDatanum);
+			return obj;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
 	
+	@ResponseBody
+	@RequestMapping(value = "/complain/getAAAstatusviewAuthenticationlog", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Map<String, Object>> getAAAstatusviewAuthenticationlog(String FTTHDatanum,String mmdd, Locale locale, Model model, HttpSession session)
+			throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		AAAStatusDao cbd = new AAAStatusDao();
+		
+		try {
+			return cbd.getAuthenticationlog(FTTHDatanum, mmdd);
+		
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/complain/getAAAstatusviewAccountinglog", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Map<String, Object>> getAAAstatusviewAccountinglog(String FTTHDatanum,String mmdd, Locale locale, Model model, HttpSession session)
+			throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		AAAStatusDao cbd = new AAAStatusDao();
+		
+		try {
+			return cbd.getAccountinglog(FTTHDatanum, mmdd);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+
 	
 }
