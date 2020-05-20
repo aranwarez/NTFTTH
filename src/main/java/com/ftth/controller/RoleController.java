@@ -3,6 +3,8 @@ package com.ftth.controller;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,26 +14,38 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.dao.CommonMenuDao;
 import com.dao.RoleDao;
+import com.model.MenuAccess;
 import com.model.Role;
 import com.model.UserInformationModel;
 
 @Controller
 public class RoleController {
+	private static final String classname = "../role/list";
 	private static final Logger logger = LoggerFactory.getLogger(RoleController.class);
 
 	RoleDao dao = new RoleDao();
 
 	/**
 	 * Simply selects the home view to render by returning its name.
+	 * @throws SQLException 
 	 */
 	@RequestMapping(value = "/role/list", method = RequestMethod.GET)
-	public String rolelist(Locale locale, Model model, HttpSession session) {
+	public String rolelist(Locale locale, Model model, HttpSession session, HttpServletRequest request) throws SQLException {
 		logger.info("Welcome home! The client locale is {}.", locale);
-
 		Role u1 = new Role();
-
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+	
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
+		
 		List<Role> list = null;
 		try {
 			list = dao.getlist();
@@ -42,18 +56,33 @@ public class RoleController {
 
 		model.addAttribute("fx", "Role List");
 		model.addAttribute("data_list", list);
-
+		model.addAttribute("data_list", list);
 		return "role/list";
 	}
 
 	@RequestMapping(value = "/role/save", method = RequestMethod.POST)
-	public String saveRole(@Validated Role role, Model model, Locale locale, HttpSession session) {
+	public String saveRole(@Validated Role role, Model model, Locale locale, HttpSession session,
+			HttpServletRequest request) throws SQLException {
 		logger.info("Trying to save new role by user id:", locale);
 		RoleDao dao = new RoleDao();
+		
+		
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		System.out.println(menuaccess.getADD_FLAG());
+		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+			
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
+		
+		
 		if(session.getAttribute("UserList")!=null) {
 		UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
 		role.setUSER(userinfo.getUSER_ID());
 		}
+		
+
 		model.addAttribute("userName", role.getROLE_CODE());
 		String msg = null;
 		try {
@@ -72,10 +101,22 @@ public class RoleController {
 
 	@RequestMapping(value = "/role/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public String roleDelete(String ROLE_CODE, Model model, Locale locale) {
+	public String roleDelete(String ROLE_CODE, Model model, Locale locale,HttpServletRequest request) {
 		logger.info("delete role", locale);
 		RoleDao dao = new RoleDao();
-		System.out.println("delete role code==" + ROLE_CODE);
+		
+		
+//		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+//		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+//		System.out.println(menuaccess.getLIST_FLAG());
+//		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+//			
+//			model.addAttribute("fx", "Unauthorized Page for this role!!");
+//			return "/home";
+//		}
+
+
+		
 
 		String msg = null;
 		try {

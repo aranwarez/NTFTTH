@@ -65,7 +65,7 @@ public class FileUploadController {
 		@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
 		public @ResponseBody
 		String uploadFileHandler(String name,MultipartFile file,String role_code,
-				String display_flag,String outputfile,String extension,HttpSession session) {
+				String display_flag,HttpSession session) {
 			UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		
 			
@@ -76,34 +76,34 @@ public class FileUploadController {
 					// Creating the directory to store file
 					String rootPath = System.getProperty("catalina.home");
 //					File dir = new File(rootPath + File.separator + "webapps/FTTH_IMAGE");
-					File dir = new File(rootPath + File.separator + "webapps/FTTH_IMAGE");
+					File dir = new File(rootPath + File.separator + "webapps/FTTH/resources/FTTH_IMAGE");
 					if (!dir.exists())
 						dir.mkdirs();
 
 					// Create the file on server
 					File serverFile = new File(dir.getAbsolutePath()
-							+ File.separator + "/"+outputfile+"."+extension);
+							+ File.separator + "/"+file.getOriginalFilename().toLowerCase());
 					BufferedOutputStream stream = new BufferedOutputStream(
 							new FileOutputStream(serverFile));
 					stream.write(bytes);
 					stream.close();
 
-					logger.info("Server File Location="
+					logger.info("Server File Location= + extension "+file.getOriginalFilename()
 							+ serverFile.getAbsolutePath());
+//					http://172.16.39.16:8080/ server
+					FileUploadDao dao=new FileUploadDao();
+					
+					if(dao.get_file(role_code)!=null) {
 
-					FileUploadDao.saveUpload(name, "webapps/FTTH/FTTH_IMAGE/"+outputfile+"."+extension,role_code, display_flag, user.getUSER_ID());
+						File deletedir = new File(rootPath + File.separator + "webapps/FTTH");
+						
+						File deleteFile = new File(deletedir.getAbsolutePath()
+								+ File.separator + "/"+dao.get_file(role_code));
+						
+						org.apache.commons.io.FileUtils.deleteQuietly(deleteFile);
+					}
 					
-					
-					
-					
-					
-//					final Part filePart = request.getPart("file");
-					
-					
-					
-					
-					
-					
+					dao.saveUpload(name, "/resources/FTTH_IMAGE/"+file.getOriginalFilename().toLowerCase(),role_code, display_flag, user.getUSER_ID());
 					
 					return "You successfully uploaded file=" + name+"<a href='fileupload/list'> &nbsp;BACK</a>";
 				} catch (Exception e) {

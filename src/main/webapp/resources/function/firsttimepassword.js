@@ -3,10 +3,10 @@
 	$(document).ready(function() { 
 	    	   setTimeout(function() {
     		   
-		   //if(!localStorage.getItem('popupShown')) {	    			   
+		  if(!localStorage.getItem('popupShown')) {	    			   
 	    			   notification();
 	    			   localStorage.setItem('popupShown', 'false');	    			   
-  		//	 }
+		  	}
 	    		   
 	    		   
 	           	check();
@@ -40,13 +40,30 @@
 			function notification(){
 				
 				$.get("../max-OneActiveFile/check", {
-				}, function(sss) {
-											
-//					 if(sss==='N'){
-					$("#image_notication").modal();	 
+				}, function(data) {
+					
+			
+		           if(data.length>0){ 
+		        	   var img_index = 1;
+		        	   // '<c:out value="${USER_LEVEL}"/>'
+		        	   
+//		        	   http://localhost:9006/FTTH/
+		        	
+						 var img = $('<img />').attr({
+					            'id': 'myImage'+img_index,
+					            'src': '../'+data,
+					            'alt': 'JSFiddle logo',
+					            'title': 'JSFiddle logo',
+					            'width': 250
+					        }).appendTo('#container');
+						 
+						 $("#image_notication").modal();
+						 
+		           }
+//					
 					
 					
-					// }
+				
 				});
 				
 			}
