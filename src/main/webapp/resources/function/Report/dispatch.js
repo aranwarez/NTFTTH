@@ -95,6 +95,38 @@ function getOffice() {
 
 }
 
+function getfdcteam() {
+
+	var OFFICE_CODE = $("#OFFICE_CODE").val();
+
+	$.get("../fdcteam/jsonlist", {
+
+	}, function(data) {
+
+		var select = $('#WEBTEAMCODE');
+		select.find('option').remove();
+		$('<option>').val("").text("SELECT FDC TEAM").appendTo(select);
+
+		$('#WEBTEAMCODE').find('option:not(:first)').remove();
+		if (data.length == 0 || data.length == undefined) {
+
+			clearDataTable();
+			return;
+		}
+		
+		$.each(data, function(index, value) {
+			if(value.OFFICE_CODE==OFFICE_CODE || OFFICE_CODE=="" ){
+			$('<option>').val(value.OLT_CODE).text(
+					value.DESCRIPTION + "-" + value.TEAMNAME).appendTo(select);
+			}
+		});
+		
+
+	});
+
+}
+
+
 
 function loadLevelWise(level){
 	if(level=='1'){
@@ -113,10 +145,7 @@ function loadLevelWise(level){
 	getOffice();
 	return;
 }
-else {
-	getOLT();
-	return;
-}
+
 	
 }
 

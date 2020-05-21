@@ -90,6 +90,8 @@
 													</c:forEach>
 												</select>
 											</c:when>
+
+
 											<c:otherwise>
 												<select id="REGION_CODE" name="REGION_CODE"
 													class="form-control" onchange="return getZone()">
@@ -259,7 +261,7 @@
 											</c:when>
 											<c:otherwise>
 												<select id="OFFICE_CODE" name="OFFICE_CODE"
-													onchange="getfdcteam()" class="form-control">
+													onchange="return getOLT()" class="form-control">
 													<option value="">Select Office</option>
 
 
@@ -314,13 +316,14 @@
 
 									<!--                                        to here -->
 									<div class='table'>
-										<input type="hidden" name="reportname" value="FTTHDispatch">
+										<input type="hidden" name="reportname"
+											value="ComplainHandlingMaster">
 										<table class="table-condensed">
 											<tr>
 												<td>Export Type</td>
-												<td><select name="reporttype">
+												<td><select name="reporttype"><option
+															value="XLS">XLS</option>
 														<option value="pdf">PDF</option>
-														<option value="XLS">XLS</option>
 												</select></td>
 												<td></td>
 											</tr>

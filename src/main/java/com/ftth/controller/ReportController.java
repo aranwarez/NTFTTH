@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dao.CommonDateDao;
+import com.dao.ReportCountDao;
 import com.model.UserInformationModel;
 import java.sql.SQLException;
 
@@ -102,8 +103,9 @@ public class ReportController {
 
 	@RequestMapping(value = "ReportView", method = RequestMethod.POST)
 	public ResponseEntity<byte[]> getRpt(HttpServletRequest request, HttpServletResponse response) {
-		logger.info("Preparing for report");
 		try {
+			logger.info("Generating RPt" + request.getParameter("reportname"));
+
 			InputStream jasperStream = this.getClass()
 					.getResourceAsStream("/Report/" + request.getParameter("reportname") + ".jasper");
 			// InputStream jasperStream =
@@ -129,6 +131,22 @@ public class ReportController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.warn(e.getMessage());
+		} finally {
+			if (request.getParameter("reportname").equals("FTTHDispatch")) {
+				ReportCountDao dao = new ReportCountDao();
+				UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+
+				try {
+					dao.DispatchReportCountlog(user.getUSER_ID(), request.getParameter("REGION_CODE"),
+							request.getParameter("ZONE_CODE"), request.getParameter("DISTRICT_CODE"),
+							request.getParameter("OFFICE_CODE"), request.getParameter("QFROM_DT"),
+							request.getParameter("QTO_DT"), request.getParameter("WEBTEAMCODE"));
+				} catch (SQLException e) {
+					System.err.println("Error inserting count for Dispatch report");
+					e.printStackTrace();
+				}
+			}
+
 		}
 		return null;
 	}
@@ -182,9 +200,6 @@ public class ReportController {
 			filterparam = filterparam + "TEAMCODE : All ";
 			parameters.put("pm_team_id", request.getParameter("WEBTEAMCODE"));
 		}
-		
-		
-		
 
 		if (request.getParameter("FRM_YEAR") != null) {
 			filterparam = filterparam + "FRM_YEAR : " + request.getParameter("FRM_YEAR").toString();

@@ -238,7 +238,7 @@
      
     		</c:when>    
    		 <c:otherwise>
-   	 	<select id="OFFICE_CODE" onchange="return getOLT()" class="form-control">
+   	 	<select id="OFFICE_CODE" onchange="getOLT();getfdcteam();" class="form-control">
 							<option value="">Select Office </option>
 												
 							
@@ -320,11 +320,12 @@
 		<div class="col-xs-2">
 						<select id="Statusflag"
 							class="form-control">
+									<option value="">ALL</option>
 									<option value="N">New Unsolved</option>
 									<option value="F">Forwarded</option>
 									<option value="Y">Solved</option>
 									<option value="C">Closed</option>
-									<option value="">ALL</option>
+									
 							
 						</select>
 
@@ -455,7 +456,7 @@
 
 
 	<script
-		src="<c:url value="/resources/function/Complain/TroubleTickets.js?verdt=511" />"></script>
+		src="<c:url value="/resources/function/Complain/TroubleTickets.js?verdt=521" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 	<script>
@@ -463,7 +464,7 @@
 	
 		$(function() {
 
-			$('#example1').DataTable()
+			$('#example1').DataTable({"bDestroy": true})
 			$("#REGION_CODE,#ZONE_CODE,#DISTRICT_CODE,#OFFICE_CODE,#USER_ID").select2();			
 			
 			 var level = '<c:out value="${USER_LEVEL}"/>';			 

@@ -405,6 +405,10 @@ function getstatusInfo() {
 	$('#onuTemprature').html(TEST3.onuTemprature);
 	// $('#').val(value.);
 	
+	if(TEST3.onuStatus!="On"){
+		$('#onuStatus').css('background-color', '#FE2E2E');
+	}
+	
 	if(TEST3.onuRxPower>=-25){
 	 $('#onuRxPower').css('background-color', '#9FF781');
 	}

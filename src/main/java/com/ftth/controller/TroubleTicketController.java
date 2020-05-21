@@ -115,7 +115,7 @@ public class TroubleTicketController {
 		ComplainDao dao=new ComplainDao();
 		
 		try {
-			if(user.getUSER_LEVEL().equals("5") || user.getUSER_LEVEL().equals("6")) {
+			if(user.getUSER_LEVEL().equals("6")) {
 			list = dao.getComplainListlowlvl(user.getUSER_ID(), REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE, Sub_Team, Service_Type, FRM_DT, TO_DT,Statusflag,Teamid);
 			}
 			else {

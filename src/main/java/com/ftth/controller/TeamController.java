@@ -66,6 +66,16 @@ public class TeamController {
         
     }
     
+    @ResponseBody
+    @RequestMapping(value = "/fdcteam/jsonlist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Map<String, Object>> getfdcteam(Locale locale, Model model, HttpSession session)
+            throws SQLException {
+    	TeamDao dao = new TeamDao();
+        return dao.getWebTeamList();
+        
+    }
+    
+    
     @RequestMapping(method = RequestMethod.GET, value = "dialogteam")
     public String dialogservice(Model model, Locale locale) {
         return "team/teamdialog";

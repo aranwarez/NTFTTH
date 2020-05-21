@@ -441,7 +441,7 @@ public class ComplainDao {
 					+ "           WHERE     MTM.TOKEN_ID = TM.TOKEN_ID\r\n" + "                 AND EXISTS\r\n"
 					+ "                         (SELECT fdc_code\r\n"
 					+ "                            FROM WEB_USER_FDC_MAP\r\n"
-					+ "                           WHERE user_id = ?)) TOKENS\r\n" + "   WHERE     EXISTS\r\n"
+					+ "                           WHERE user_id = ? AND MTM.FDC_CODE = WEB_USER_FDC_MAP.FDC_CODE)) TOKENS\r\n" + "   WHERE     EXISTS\r\n"
 					+ "                 (SELECT *\r\n" + "                    FROM WEB_USER_TEAM_MAP\r\n"
 					+ "                   WHERE     USER_ID = ?\r\n"
 					+ "                         AND TOKENS.SUB_TEAM_CODE =\r\n"
@@ -461,7 +461,7 @@ public class ComplainDao {
 					"          AND TOKENS.TEAM_ID=NVL(?,TEAM_ID)\r\n" +
 				    "ORDER BY token_ID, create_dt DESC";
 			
-		
+	
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, User);
 			pst.setString(2, User);

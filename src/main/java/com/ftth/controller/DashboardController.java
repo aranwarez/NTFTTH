@@ -47,7 +47,7 @@ public class DashboardController {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		
 		dashboardquery dao=new dashboardquery();
-		return dao.getSRVwiseRevenue(user.getUSER_ID());
+		return dao.getSRVwiseRevenue(user.getUSER_ID(),user.getUSER_LEVEL());
 	}
 	
 	@ResponseBody
@@ -56,7 +56,7 @@ public class DashboardController {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		
 		dashboardquery dao=new dashboardquery();
-		return dao.getSRVwisepayable(user.getUSER_ID());
+		return dao.getSRVwisepayable(user.getUSER_ID(),user.getUSER_LEVEL());
 	}
 	
 	@ResponseBody
@@ -65,7 +65,7 @@ public class DashboardController {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		
 		dashboardquery dao=new dashboardquery();
-		return dao.getSolvedvsUnsovled(user.getUSER_ID());
+		return dao.getSolvedvsUnsovled(user.getUSER_ID(),user.getUSER_LEVEL());
 	}
 	
 
