@@ -285,7 +285,7 @@ function viewUser(WORKING_REGION_CODE,WORKING_ZONE_CODE,WORKING_DIS_CODE,WORKING
        
 		       
 		        $.each(data, function (index, value) {
-	        	if(value.USER_LEVEL=='5'){	        		
+	        	if(value.USER_LEVEL=='6'){	        		
 		        	
 		            $('<option>').val(value.USER_ID).text(value.FULL_NAME+"-"+value.USER_ID+"-"+value.WORKING_DISTRICT+"-"+value.MOBILE_NO).appendTo(
 		                    select);
