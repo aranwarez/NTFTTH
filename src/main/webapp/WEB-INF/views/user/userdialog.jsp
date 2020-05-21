@@ -25,13 +25,13 @@
 
 				<div class="form-group">
 					<label for="name">PASSWORD</label> <input type="password"
-						class="form-control" id="PASSWORD" autocomplete="off"  placeholder="Enter password">
+						class="form-control" id="PASSWORD"  placeholder="Enter password">
 					<span class="matchpass"></span>
 				</div>
 
 				<div class="form-group">
 					<label>Re- Password </label> <input type="password"
-						class="form-control" id="passmatch" autocomplete="off" onchange="checkPass()">
+						class="form-control" id="passmatch"  onchange="checkPass()">
 					<span class="matchpass"></span>
 
 				</div>
@@ -61,7 +61,7 @@
 				<div class="form-group">
 					<label>LOCK_FLAG</label> <input type="radio" name="LOCK_FLAG"
 						value="Y" class="LOCK_FLAG"> Yes <input type="radio"
-						name="LOCK_FLAG" value="N" class="LOCK_FLAG" checked="checked">
+						name="LOCK_FLAG" value="N" class="LOCK_FLAG" checked>
 					No
 
 				</div>
@@ -174,9 +174,9 @@
 				
 				
 				<div class="form-group">
-					<label>LOCK_FLAG</label> <input type="radio" name="LOCK_FLAG"
+					<label>LOCK_FLAG</label> <input type="radio" name="EDITLOCK_FLAG"
 						value="Y" class="EDITLOCK_FLAG"> Yes <input type="radio"
-						name="LOCK_FLAG" value="N" class="EDITLOCK_FLAG" checked="checked">
+						name="EDITLOCK_FLAG" value="N" class="EDITLOCK_FLAG">
 					No
 
 				</div>
@@ -184,7 +184,7 @@
 				<div class="form-group">
 					<label>SUPER_FLAG</label> <input type="radio" name="EDITSUPER_FLAG"
 						value="Y" class="EDITSUPER_FLAG"> Yes <input type="radio"
-						name="SUPER_FLAG" value="N" class="EDITSUPER_FLAG" checked> No
+						name="EDITSUPER_FLAG" value="N" class="EDITSUPER_FLAG" checked> No
 
 				</div>
 				<div class="form-group">

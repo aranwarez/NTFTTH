@@ -103,7 +103,7 @@
 											<th>USER_ID</th>
 											<th>FULL_NAME</th>
 											<th>EMP_CODE</th>										
-											<th>Delete</th>
+											<th>LOCK</th>
 											<th>SUPER</th>
 											<th>DISABLE</th>
 											
@@ -116,7 +116,7 @@
 											
 											<th>MOBILE</th>
 											<th>Edit</th>
-											<th>Delete</th>
+											<th>Lock</th>
 
 										</tr>
 									</thead>
@@ -169,7 +169,7 @@
 														<a href="#" class="btn btn-default" data-toggle="modal"
 															data-target="#deleteModal"
 															onclick="return deleteUser('${user.getUSER_ID()}')">
-															<i class="fa fa-trash"></i> Delete
+															<i class="fa fa-trash"></i> Lock
 														</a>
 													</div>
 
@@ -227,11 +227,11 @@
 			    } );
 			 $("#EMPLOYEE_CODE,#EDITEMPLOYEE_CODE,#EDITOFFICE_CODE,#OFFICE_CODE").select2();
 			 
-			 //$('select:not(.normal)').each(function () {
-	            //    $(this).select2({
-	         //           dropdownParent: $(this).parent()
-	            //    });
-	           // });
+			$('select:not(.normal)').each(function () {
+	            $(this).select2({
+	                   dropdownParent: $(this).parent()
+	            });
+	         });
 			
 		})
 	</script>

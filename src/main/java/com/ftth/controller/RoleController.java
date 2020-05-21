@@ -69,7 +69,7 @@ public class RoleController {
 		
 		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
-		System.out.println(menuaccess.getADD_FLAG());
+		
 		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
 			
 			model.addAttribute("fx", "Unauthorized Page for this role!!");
@@ -101,19 +101,19 @@ public class RoleController {
 
 	@RequestMapping(value = "/role/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public String roleDelete(String ROLE_CODE, Model model, Locale locale,HttpServletRequest request) {
+	public String roleDelete(String ROLE_CODE, Model model, Locale locale,HttpServletRequest request) throws SQLException {
 		logger.info("delete role", locale);
 		RoleDao dao = new RoleDao();
 		
 		
-//		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
-//		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
-//		System.out.println(menuaccess.getLIST_FLAG());
-//		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
-//			
-//			model.addAttribute("fx", "Unauthorized Page for this role!!");
-//			return "/home";
-//		}
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		System.out.println(menuaccess.getDELETE_FLAG());
+		if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
+			
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
 
 
 		
@@ -137,7 +137,7 @@ public class RoleController {
 
 	@RequestMapping(value = "/role/update", method = RequestMethod.POST)
 	@ResponseBody
-	public String updateRole(String ROLE_CODE, String DESCRIPTION, Model model, Locale locale, HttpSession session) {
+	public String updateRole(String ROLE_CODE, String DESCRIPTION, Model model, Locale locale, HttpSession session,HttpServletRequest request) throws SQLException {
 
 		logger.info("Welcome home! The client locale is {}.", locale);
 
@@ -145,6 +145,18 @@ public class RoleController {
 		UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
 
 		model.addAttribute("fx", "Role controller list ");
+		
+		
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+
+		if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
+			
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
+
+		
 
 		String msg = null;
 		try {

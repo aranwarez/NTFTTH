@@ -46,8 +46,7 @@ public class MenuController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-//menu code should know before validate
-//System.out.println("dfsdf"+url + user.getROLE_CODE());
+
         MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
         if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
             model.addAttribute("fx", "Unauthorized Page for this role!!");
@@ -91,16 +90,25 @@ public class MenuController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST, value = "menu/save")
     public String saveMenu(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session,
-            Locale locale) {
+            Locale locale) throws SQLException {
         logger.info(" user id:", locale);
 
-        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+    //  ADD_FLAG
+       UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+//        		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+//        		
+//        		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+//        			
+//        			model.addAttribute("fx", "Unauthorized Page for this role!!");
+//        			return "/home";
+//        		}
+
+        		
+     
         m.setMENU_CODE(request.getParameter("MENU_CODE"));
         m.setMENU_DESC(request.getParameter("MENU_DESC"));
 
-        if (user == null) {
-            return "Session has been expired";
-        }
+        
         m.setUSER(user.getUSER_ID());
 
         m.setMENU_URL(request.getParameter("MENU_URL"));
@@ -122,16 +130,22 @@ public class MenuController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST, value = "menu/update")
     public String updateMenu(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session,
-            Locale locale) {
+            Locale locale) throws SQLException {
         logger.info(" user id:", locale);
 
-        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+//    //  EDIT_FLAG
+//       
+     UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+//        		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+//
+//        		if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
+//        			
+//        			model.addAttribute("fx", "Unauthorized Page for this role!!");
+//        			return "/home";
+//        		}
         m.setMENU_CODE(request.getParameter("MENU_CODE"));
         m.setMENU_DESC(request.getParameter("MENU_DESC"));
-
-        if (user == null) {
-            return "Session has been expired";
-        }
+ 
         m.setUSER(user.getUSER_ID());
 
         m.setMENU_URL(request.getParameter("MENU_URL"));
@@ -153,8 +167,19 @@ public class MenuController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST, value = "menu/delete")
     public String deleteMenu(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session,
-            Locale locale) {
+            Locale locale) throws SQLException {
         logger.info(" user id:", locale);
+        
+
+        UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+	
+//		if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
+//			
+//			model.addAttribute("fx", "Unauthorized Page for this role!!");
+//			return "/home";
+//		}
+        
         String msg = null;
         try {
             msg = dao.delete(request.getParameter("MENU_CODE"));

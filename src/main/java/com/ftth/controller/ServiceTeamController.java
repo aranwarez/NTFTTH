@@ -19,17 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dao.CommonMenuDao;
 import com.dao.MServiceTypeDao;
-import com.dao.MenuAccessDao;
 import com.dao.ServiceTeamDao;
 import com.dao.SubTeamDao;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.model.Menu;
 import com.model.MenuAccess;
-import com.model.Role;
 import com.model.ServiceTeamModel;
 import com.model.UserInformationModel;
 
@@ -37,14 +35,19 @@ import com.model.UserInformationModel;
 public class ServiceTeamController {
 	private static final Logger logger = LoggerFactory.getLogger(ServiceTeamController.class);
 	
-	
+	private static final String classname = "../service-team/list";
 
 	@RequestMapping(value = "/service-team/list", method = RequestMethod.GET)
-	public String menuacesslistlist(Locale locale, Model model, HttpSession session)  {
+	public String menuacesslistlist(Locale locale, Model model, HttpServletRequest request,HttpSession session) throws SQLException  {
 		logger.info("Welcome home! The client locale is {}.", locale);
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		if (user == null) {
-			return "redirect:/login";
+		
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
 		}
 		
 		MServiceTypeDao dao = new MServiceTypeDao();
@@ -94,7 +97,7 @@ public class ServiceTeamController {
 	public List<ServiceTeamModel> getEditMode(HttpServletRequest request, HttpServletResponse response) {
 		
 		String SERVICE_TYPE_ID = request.getParameter("SERVICE_TYPE_ID");
-	System.out.println("SERVICE_TYPE_ID "+SERVICE_TYPE_ID);
+	
 		
 		List<ServiceTeamModel> list = null;
 		
@@ -113,19 +116,23 @@ public class ServiceTeamController {
 	@RequestMapping(value = "/saveServiceTeam", method = RequestMethod.POST)
 	@ResponseBody
 
-	public String saveModeList(String SERVICE_TYPE_ID, String menu_mode,  Model model, Locale locale,HttpSession session)
-			throws JsonParseException, JsonMappingException, IOException {
+	public String saveModeList(String SERVICE_TYPE_ID, String menu_mode,  HttpServletRequest request,Model model, Locale locale,HttpSession session)
+			throws JsonParseException, JsonMappingException, IOException, SQLException {
 
 
-		System.out.println(" role code = " + SERVICE_TYPE_ID);
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		
+		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+			
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
+		
 		if (SERVICE_TYPE_ID == null) {
 			return "Please Enter SERVICE_TYPE ";
 		}
 
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		if (user == null) {
-			return "redirect:/login";
-		}
 
 		ObjectMapper mapper = new ObjectMapper();
 	

@@ -29,8 +29,11 @@ import com.model.UserInformationModel;
 
 @Controller
 public class ExcelImportController {
+	private static final String classname = "../import-excel/list";
+	
 	  private static final Logger logger = LoggerFactory.getLogger(ExcelImportController.class);
-	    private static final String classname = "../import-excel/list";
+	  
+	    
 	   @RequestMapping(value = "/import-excel/list", method = RequestMethod.GET)
 	    public String menuList(Locale locale, Model model, HttpServletRequest request, HttpServletResponse response,
 	            HttpSession session) throws SQLException {
@@ -80,9 +83,19 @@ public class ExcelImportController {
 	    @RequestMapping(value = "/impntsp/postExcelHalfData", method = RequestMethod.POST)
 	    @ResponseBody
 	    public String saveExcelData(String JSONarrayList, String Filename, Model model, Locale locale, String IMP_YEAR,
-	            String Period, String IMP_MONTH, String Services, String NT_SP, String SERVICE_CODE, String IMP_PERIOD, HttpSession session)
+	            String Period, String IMP_MONTH, String Services, String NT_SP, String SERVICE_CODE, String IMP_PERIOD, HttpSession session,HttpServletRequest request)
 	            throws JsonParseException, JsonMappingException, IOException, SQLException {
 
+	    //  ADD_FLAG
+	    	UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+	    			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+	    			
+	    			if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+	    				
+	    				model.addAttribute("fx", "Unauthorized Page for this role!!");
+	    				return "/home";
+	    			}
+	    			
 	        logger.info("Saving Excel data in TMP table in DB {}.", locale);
 	        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
 	        String USER = userinfo.getUSER_ID();

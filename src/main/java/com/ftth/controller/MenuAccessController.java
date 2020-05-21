@@ -18,6 +18,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.dao.CommonMenuDao;
 import com.dao.MenuAccessDao;
 import com.dao.MenuDao;
 import com.dao.RoleDao;
@@ -35,16 +37,23 @@ public class MenuAccessController {
 	
 	RoleDao roledao = new RoleDao();
 	MenuDao menudao = new MenuDao();
-
+	private static final String classname = "../access/list";
 	private static final Logger logger = LoggerFactory.getLogger(MenuAccessController.class);
 
 	@RequestMapping(value = "/access/list", method = RequestMethod.GET)
-	public String menuacesslistlist(Locale locale, Model model, HttpSession session) {
+	public String menuacesslistlist(Locale locale, Model model, HttpServletRequest request,HttpSession session) throws SQLException {
 		logger.info("Welcome home! The client locale is {}.", locale);
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		if (user == null) {
-			return "redirect:/login";
-		}
+		
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+
+//		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+//			
+//			model.addAttribute("fx", "Unauthorized Page for this role!!");
+//			return "/home";
+//		}
+
+		
 
 		List<Role> rolelist = null;
 		try {
@@ -84,12 +93,15 @@ public class MenuAccessController {
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET, value = "getEditMode",produces = MediaType.APPLICATION_JSON_VALUE)
 
-	public List<MenuAccess> getEditMode(HttpServletRequest request, HttpServletResponse response) {
+	public List<MenuAccess> getEditMode(Model model,HttpServletRequest request, HttpServletResponse response) {
 		
 		String ROLE_CODE = request.getParameter("ROLE_CODE");
 		List<MenuAccess> list = null;
 
+	
+				
 		try {
+		
 			list = MenuAccessDao.getModeList(ROLE_CODE);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -103,22 +115,22 @@ public class MenuAccessController {
 	@RequestMapping(value = "/saveModeList", method = RequestMethod.POST)
 	@ResponseBody
 
-	public String saveModeList(String ROLE_CODE, String menu_mode,  Model model, Locale locale,HttpSession session)
-			throws JsonParseException, JsonMappingException, IOException {
+	public String saveModeList(String ROLE_CODE, String menu_mode,  Model model, Locale locale,HttpSession session,HttpServletRequest request)
+			throws JsonParseException, JsonMappingException, IOException, SQLException {
 
-//		String ROLE_CODE = request.getParameter("ROLE_CODE");
-		System.out.println(" role code = " + ROLE_CODE);
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		
+//		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+//			
+//			model.addAttribute("fx", "Unauthorized Page for this role!!");
+//			return "/home";
+//		}
+		
 		if (ROLE_CODE == null) {
 			return "Please Enter role code ";
 		}
-
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		if (user == null) {
-			return "redirect:/login";
-		}
-
-//		String menu_mode = request.getParameter("menu_mode");
-
+      
 		ObjectMapper mapper = new ObjectMapper();
 
 //		List<MenuAccess> editmodelist = mapper.readValue(menu_mode, new TypeReference<List<MenuAccess>>() {

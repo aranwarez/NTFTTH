@@ -3,10 +3,10 @@
 	$(document).ready(function() { 
 	    	   setTimeout(function() {
     		   
-		  if(!localStorage.getItem('popupShown')) {	    			   
+		//  if(!localStorage.getItem('popupShown')) {	    			   
 	    			   notification();
 	    			   localStorage.setItem('popupShown', 'false');	    			   
-		  	}
+		//  	}
 	    		   
 	    		   
 	           	check();
@@ -56,7 +56,6 @@
 					            'title': 'JSFiddle logo',
 					            'width': 'auto',
 					            'height': 'auto'
-					            
 					        }).appendTo('#container');
 						 
 						 $("#image_notication").modal();
