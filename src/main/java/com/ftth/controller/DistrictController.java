@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dao.DistrictDao;
-import com.dao.ZoneDao;
 import com.model.UserInformationModel;
 
 @Controller
@@ -36,7 +35,7 @@ public class DistrictController {
 		try {
 			
 			if(user.getUSER_LEVEL().contains("6")) {
-				System.out.println(" userid "+user.getUSER_ID());
+				
 				
 				list = DistrictDao.getDistrictListByZoneFDC(ZONE_CODE, user.getUSER_ID());
 			}else {

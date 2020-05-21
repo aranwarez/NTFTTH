@@ -18,31 +18,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dao.CommonMenuDao;
 import com.dao.EmployeeDao;
 import com.dao.FileUploadDao;
 import com.dao.OfficeDao;
 import com.dao.ProfileDao;
 import com.dao.RoleDao;
 import com.dao.UserDao;
+import com.model.MenuAccess;
 import com.model.Role;
 import com.model.UserInformationModel;
 
 @Controller
 public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static final String classname = "../user/list";
 
 	UserDao dao = new UserDao();
 
 	@RequestMapping(value = "/user/list", method = RequestMethod.GET)
-	public String rolelist(Locale locale, Model model, HttpSession session) {
+	public String rolelist(Locale locale, Model model,HttpServletRequest request, HttpSession session) throws SQLException {
 		logger.info("Welcome home! The client locale is {}.", locale);
 
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		if (user == null) {
 
-			return "redirect:/login";
+		//LIST_FLAG
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+				MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 
-		}
+				if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+					
+					model.addAttribute("fx", "Unauthorized Page for this role!!");
+					return "/home";
+				}
+
 
 		List<UserInformationModel> list = null;
 		List<Map<String, Object>> empList = null;
@@ -87,19 +95,27 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.POST, value = "save/user")
 	public String saveMenu(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session,
-			Locale locale) {
+			Locale locale) throws SQLException {
 
 		logger.info(" user id:", locale);
-
+	//  ADD_FLAG
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+				MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+				
+				if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+					
+					model.addAttribute("fx", "Unauthorized Page for this role!!");
+					return "/home";
+				}
+				
 		UserDao userdao = new UserDao();
 
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-
+		
 		UserInformationModel m = new UserInformationModel();
 
 		m.setUSER_ID(request.getParameter("USER_ID"));
 		m.setPASSWORD(request.getParameter("PASSWORD"));
-		
+		System.out.println(request.getParameter("PASSWORD"));
 		m.setFULL_NAME(request.getParameter("FULL_NAME"));
 		
 		m.setUSER(user.getUSER_ID());
@@ -162,7 +178,7 @@ public class UserController {
 	public UserInformationModel editUser(String code, Model model, HttpServletRequest request,
 			HttpServletResponse response, HttpSession session, Locale locale) {
 
-		System.out.println("nabin "+code);
+		
 		
 		UserDao userdao = new UserDao();
 		UserInformationModel user = null;
@@ -178,13 +194,21 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.POST, value = "update/user")
 	public String userUpdate(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session,
-			Locale locale) {
+			Locale locale) throws SQLException {	
+	//  EDIT_FLAG
+		
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+				MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 
+				if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
+					
+					model.addAttribute("fx", "Unauthorized Page for this role!!");
+					return "/home";
+				}
+				
 		UserInformationModel m = new UserInformationModel();
 		UserDao userdao = new UserDao();
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-//		String user = session.getAttribute("USER_ID").toString();
-
+	
 		m.setUSER_ID(request.getParameter("USER_ID"));
 
 		m.setFULL_NAME(request.getParameter("FULL_NAME"));
@@ -221,8 +245,16 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.POST, value = "user/delete")
 	public String userDelete(Model model, HttpServletRequest request, HttpServletResponse response,
-			HttpSession session, Locale locale) {
-
+			HttpSession session, Locale locale) throws SQLException {
+		
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+	
+		if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
+			
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
 		UserDao userdao = new UserDao();
 		String msg = null;
 
@@ -290,7 +322,7 @@ public class UserController {
 	        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
 	        String updateby = userinfo.getUSER_ID();
 	        model.addAttribute("fx", "Profile Update ");
-	        model.addAttribute("userName", "NEPal");
+	        model.addAttribute("userName", updateby);
 	        String msg = null;
 	        try {
 	            msg = dao.updateProfile(FULL_NAME,MOBILE_NO,USER_ID,updateby);

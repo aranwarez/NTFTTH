@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dao.CommonMenuDao;
 import com.dao.RegionDao;
 import com.dao.UserDao;
 import com.dao.UserOfficeDao;
@@ -26,21 +27,31 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.model.MenuAccess;
 import com.model.Region;
 import com.model.UserInformationModel;
 import com.model.UserOfficeModel;
 
 @Controller
 public class UserOfficeController {
+	private static final String classname = "../user-office/list";
+	
 	private static final Logger logger = LoggerFactory.getLogger(UserOfficeController.class);
 	@RequestMapping(value = "/user-office/list", method = RequestMethod.GET)
-	public String menuacesslistlist(Locale locale, Model model, HttpSession session)  {
+	public String menuacesslistlist(Locale locale, Model model,HttpServletRequest request, HttpSession session) throws SQLException  {
 		logger.info("Welcome home! The client locale is {}.", locale);
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-	
-		if (user == null) {
-			return "redirect:/login";
-		}
+		
+		//LIST_FLAG
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+				MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+
+				if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+					
+					model.addAttribute("fx", "Unauthorized Page for this role!!");
+					return "/home";
+				}
+				
+		
 		
 		RegionDao dao = new RegionDao();
 		List<Region> regionlist = null;
@@ -100,19 +111,25 @@ public class UserOfficeController {
 	@RequestMapping(value = "/saveuseroffice", method = RequestMethod.POST)
 	@ResponseBody
 
-	public String saveModeList(String USER_ID, String menu_mode,  Model model, Locale locale,HttpSession session)
-			throws JsonParseException, JsonMappingException, IOException {
+	public String saveModeList(String USER_ID, String menu_mode, HttpServletRequest request, Model model, Locale locale,HttpSession session)
+			throws JsonParseException, JsonMappingException, IOException, SQLException {
 
-
-		System.out.println(" User code = " + USER_ID);
+	//  ADD_FLAG
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+				MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+				
+				if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+					
+					model.addAttribute("fx", "Unauthorized Page for this role!!");
+					return "/home";
+				}
+				
+		
 		if (USER_ID == null) {
 			return "Please Enter User  ";
 		}
 
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		if (user == null) {
-			return "redirect:/login";
-		}
+		
 
 		ObjectMapper mapper = new ObjectMapper();
 	

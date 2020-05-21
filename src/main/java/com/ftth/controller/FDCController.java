@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dao.FDCDao;
-import com.dao.OLTDao;
 
 @Controller
 public class FDCController {

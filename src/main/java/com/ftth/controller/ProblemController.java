@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -16,18 +17,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dao.MServiceTypeDao;
+import com.dao.CommonMenuDao;
 import com.dao.ProblemDao;
 import com.dao.TeamDao;
+import com.model.MenuAccess;
 import com.model.UserInformationModel;
 
 @Controller
 public class ProblemController {
 	private static final Logger logger = LoggerFactory.getLogger(ServiceTypeController.class);
-
+	private static final String classname = "../problem/list";
+	
 	@RequestMapping(value = "/problem/list", method = RequestMethod.GET)
-	public String serviceTypelist(Locale locale, Model model) throws SQLException {
-		logger.info("Getting Problem List", locale);		
+	public String problemlist(Locale locale, Model model,HttpServletRequest request) throws SQLException {
+		logger.info("Getting Problem List", locale);	
+		
+
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
+
 		ProblemDao dao = new ProblemDao();
 		TeamDao teamdao=new TeamDao();
 		
@@ -46,11 +60,7 @@ public class ProblemController {
 		model.addAttribute("fx", "Problem List");
 		model.addAttribute("data_list", list);
 		model.addAttribute("teamlist", teamlist);
-		
-//	        MServiceDao servicedao=new MServiceDao();
-//	        List<Map<String, Object>> service_list = servicedao.getServiceList();
 
-//	        model.addAttribute("service_list", service_list);
 
 		return "problem/list";
 	}
@@ -80,8 +90,18 @@ public class ProblemController {
 	@RequestMapping(value = "/problem/saveJS", method = RequestMethod.POST)
 	@ResponseBody
 	public String saveJSService(String DESCRIPTION, String SERVICE_TYPE_ID, String ACTIVE_DT, String DEACTIVE_DT,
-			String ACTIVE_STATUS,String SUB_TEAM_CODE, HttpSession session, Model model, Locale locale) {
+			String ACTIVE_STATUS,String SUB_TEAM_CODE,HttpServletRequest request, HttpSession session, Model model, Locale locale) throws SQLException {
 
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		
+		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+			
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
+
+		
 		logger.info("Save Service {}.", locale);
 		ProblemDao dao = new ProblemDao();
 
@@ -103,9 +123,19 @@ public class ProblemController {
 	@RequestMapping(value = "/problem/update", method = RequestMethod.POST)
 	@ResponseBody
 	public String updateService(String PROBLEM_ID, String DESCRIPTION, String SERVICE_TYPE_ID, String ACTIVE_DT,
-			String DEACTIVE_DT, String ACTIVE_STATUS,String SUB_TEAM_CODE, HttpSession session, Model model, Locale locale) {
+			String DEACTIVE_DT, String ACTIVE_STATUS,String SUB_TEAM_CODE, HttpServletRequest request,HttpSession session, Model model, Locale locale) throws SQLException {
 
 		logger.info("Updata Service {}.", locale);
+
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+				MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+
+				if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
+					
+					model.addAttribute("fx", "Unauthorized Page for this role!!");
+					return "/home";
+				}
+
 		ProblemDao dao = new ProblemDao();
 
 		UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
@@ -125,8 +155,21 @@ public class ProblemController {
 
 	@RequestMapping(value = "/problem/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public String serviceDelete(String PROBLEM_ID, Model model, Locale locale) {
+	public String problemDelete(String PROBLEM_ID, Model model,HttpServletRequest request, Locale locale) throws SQLException {
 		logger.info("delete service", locale);
+		
+		
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+	
+		if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
+			
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
+
+		
+		
 		ProblemDao dao = new ProblemDao();
 
 		String msg = null;

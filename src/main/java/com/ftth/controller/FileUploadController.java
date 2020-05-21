@@ -23,28 +23,37 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.dao.CommonMenuDao;
 import com.dao.FileUploadDao;
 import com.dao.RoleDao;
+import com.model.MenuAccess;
 import com.model.Role;
 import com.model.UserInformationModel;
 
 @Controller
 public class FileUploadController {
-
+	private static final String classname = "../fileupload/list";
+	
 	 private static final Logger logger = LoggerFactory
 				.getLogger(FileUploadController.class);
 	 RoleDao roledao = new RoleDao();
 	 @GetMapping("/fileupload/list")
-	   public String fileUploadForm(Locale locale, Model model, HttpSession session) throws SQLException {		 
+	   public String fileUploadForm(Locale locale, Model model, HttpSession session,HttpServletRequest request) throws SQLException {		 
 		    logger.info("Welcome home! The client locale is {}.", locale);
 
-			UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		    
+		    UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+
+			if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+				
+				model.addAttribute("fx", "Unauthorized Page for this role!!");
+				return "/home";
+			}
 			
 			FileUploadDao dao=new FileUploadDao();
 			
-			if (user == null) {
-				return "redirect:/login";
-			}
 		
 		
 			List<Map<String, Object>> list = null;			
@@ -61,14 +70,23 @@ public class FileUploadController {
 	   }
 		/**
 		 * Upload single file using Spring Controller
+		 * @throws SQLException 
 		 */
 		@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
 		public @ResponseBody
 		String uploadFileHandler(String name,MultipartFile file,String role_code,
-				String display_flag,HttpSession session) {
-			UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+				String display_flag,HttpSession session,Model model,HttpServletRequest request) throws SQLException {
 		
-			
+		//  ADD_FLAG
+			UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+					MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+					
+					if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+						
+						model.addAttribute("fx", "Unauthorized Page for this role!!");
+						return "/home";
+					}
+					
 			if (!file.isEmpty()) {
 				try {
 					byte[] bytes = file.getBytes();
@@ -172,9 +190,17 @@ public class FileUploadController {
 		}
 		@ResponseBody
 		@RequestMapping(method = RequestMethod.POST, value = "/update/uploadpath",produces = MediaType.APPLICATION_JSON_VALUE)
-		public String getViewFDC(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
+		public String getViewFDC(HttpServletRequest request, HttpServletResponse response,HttpSession session,Model model) throws SQLException {
 			UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-			
+		
+					MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+
+					if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
+						
+						model.addAttribute("fx", "Unauthorized Page for this role!!");
+						return "/home";
+					}
+
 			
 			String UPLOAD_ID = request.getParameter("UPLOAD_ID");
 			String DISPLAY_FLAG = request.getParameter("DISPLAY_FLAG");			
@@ -197,10 +223,19 @@ public class FileUploadController {
 		}
 		@RequestMapping(value = "/upload/delete", method = RequestMethod.POST)
 	    @ResponseBody
-	    public String serviceDelete(String UPLOAD_ID, Model model, Locale locale) {
+	    public String serviceDelete(String UPLOAD_ID, Model model, Locale locale,HttpServletRequest request) throws SQLException {
 	        logger.info("delete service", locale);
 	        FileUploadDao dao = new FileUploadDao();
 
+	        UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		
+			if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
+				
+				model.addAttribute("fx", "Unauthorized Page for this role!!");
+				return "/home";
+			}
+			
 	        String msg = null;
 	        try {
 	            msg = dao.delete_file(UPLOAD_ID);

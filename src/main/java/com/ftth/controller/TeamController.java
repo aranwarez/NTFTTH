@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -16,18 +17,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dao.MServiceDao;
+import com.dao.CommonMenuDao;
 import com.dao.TeamDao;
+import com.model.MenuAccess;
 import com.model.UserInformationModel;
 @Controller
 public class TeamController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TeamController.class);
-    
+	private static final String classname = "../team/list";
+	
     @RequestMapping(value = "/team/list", method = RequestMethod.GET)
-    public String teamlist(Locale locale, Model model) throws SQLException {
+    public String teamlist(Locale locale, Model model,HttpServletRequest request) throws SQLException {
 
         logger.info("Getting Services List", locale);
+        
+      //LIST_FLAG
+        UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+        		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+
+        		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+        			
+        			model.addAttribute("fx", "Unauthorized Page for this role!!");
+        			return "/home";
+        		}
+        		
         TeamDao dao = new TeamDao();
         List<Map<String, Object>> list = null;
         try {
@@ -61,15 +75,26 @@ public class TeamController {
 
     @RequestMapping(value = "/team/saveJS", method = RequestMethod.POST)
     @ResponseBody
-    public String saveJSService(String TEAM_CODE, String DESCRIPTION, HttpSession session, Model model, Locale locale) {
+    public String saveJSService(String TEAM_CODE, String DESCRIPTION, HttpServletRequest request,HttpSession session, Model model, Locale locale) throws SQLException {
 
         logger.info("Save Service {}.", locale);
+        
+    //  ADD_FLAG
+        UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+        		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+        		
+        		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+        			
+        			model.addAttribute("fx", "Unauthorized Page for this role!!");
+        			return "/home";
+        		}
+        		
         TeamDao dao = new TeamDao();
 
         UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
         String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "Team controller list ");
-        model.addAttribute("userName", "NEPal");
+        model.addAttribute("userName", USER);
         String msg = null;
         try {
             msg = dao.saveTeam(TEAM_CODE,DESCRIPTION,USER);
@@ -81,15 +106,28 @@ public class TeamController {
     }
     @RequestMapping(value = "/team/update", method = RequestMethod.POST)
     @ResponseBody
-    public String updateService(String TEAM_CODE,String DESCRIPTION, HttpSession session, Model model, Locale locale) {
+    public String updateService(String TEAM_CODE,String DESCRIPTION,  HttpServletRequest request, HttpSession session, Model model, Locale locale) throws SQLException {
 
         logger.info("Updata Service {}.", locale);
+        
+    //  EDIT_FLAG
+      
+        UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+        		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+
+        		if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
+        			
+        			model.addAttribute("fx", "Unauthorized Page for this role!!");
+        			return "/home";
+        		}
+        		
+        		
         TeamDao dao = new TeamDao();
 
         UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
         String USER = userinfo.getUSER_ID();
         model.addAttribute("fx", "team controller list ");
-        model.addAttribute("userName", "NEPal");
+        model.addAttribute("userName", USER);
         String msg = null;
         try {
             msg = dao.updateTeam(TEAM_CODE, DESCRIPTION, USER);
@@ -101,8 +139,17 @@ public class TeamController {
     }
     @RequestMapping(value = "/team/delete", method = RequestMethod.POST)
     @ResponseBody
-    public String serviceDelete(String TEAM_CODE, Model model, Locale locale) {
+    public String serviceDelete(String TEAM_CODE, HttpServletRequest request,Model model, Locale locale) throws SQLException {
         logger.info("delete service", locale);
+        
+        UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+	
+		if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
+			
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
        TeamDao dao = new TeamDao();
 
         String msg = null;
