@@ -145,10 +145,7 @@ function loadLevelWise(level){
 	getOffice();
 	return;
 }
-else {
-	getOLT();
-	return;
-}
+
 	
 }
 

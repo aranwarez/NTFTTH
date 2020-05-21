@@ -71,6 +71,15 @@ public class UserFdcDao {
 
 			pst1.setString(1, USER_ID);
 			pst1.executeUpdate();
+			
+			//delete user reference from WEB_USER_OFFICE_MAP
+			 pst1 = con.prepareStatement(
+					"delete from WEB_USER_OFFICE_MAP where USER_ID=?");
+
+			pst1.setString(1, USER_ID);
+			pst1.executeUpdate();
+
+			
 			PreparedStatement pst4 = con.prepareStatement("insert into WEB_USER_FDC_MAP\r\n" + 
 					"(WUTM_ID,USER_ID,FDC_CODE,ACTIVE_DT,DEACTIVE_DT,CREATE_BY,CREATE_DT)\r\n" + 
 					"values((WUTM_ID.nextval),?,?,common.to_ad(?),common.to_ad(?),?,sysdate)");
