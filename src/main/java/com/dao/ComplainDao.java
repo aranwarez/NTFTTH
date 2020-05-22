@@ -196,15 +196,10 @@ public class ComplainDao {
 					+ "     VALUES (?,\r\n" + "             ?,\r\n" + "             (?),\r\n" + "             'C',\r\n"
 					+ "             ?,\r\n" + "         ?,    ?,\r\n" + "             ?,\r\n" + "             ?,\r\n"
 					+ "             SYSDATE)";
-			String subcloseqry="UPDATE TOKEN_MASTER\r\n" + 
-					"   SET SUB_TEAM_CODE = ?,\r\n" + 
-					"       SOLVE_FLAG = 'C',\r\n" + 
-					"       SOLVE_DT = SYSDATE,\r\n" + 
-					"       SOLVE_BY = ?,\r\n" + 
-					"       REMARKS = ?,\r\n" + 
-					"       UPDATE_BY = ?,\r\n" + 
-					"       UPDATE_DT = SYSDATE\r\n" + 
-					" WHERE SUB_TOKEN_ID = ?";
+			String subcloseqry = "UPDATE TOKEN_MASTER\r\n" + "   SET SUB_TEAM_CODE = ?,\r\n"
+					+ "       SOLVE_FLAG = 'C',\r\n" + "       SOLVE_DT = SYSDATE,\r\n" + "       SOLVE_BY = ?,\r\n"
+					+ "       REMARKS = ?,\r\n" + "       UPDATE_BY = ?,\r\n" + "       UPDATE_DT = SYSDATE\r\n"
+					+ " WHERE SUB_TOKEN_ID = ?";
 
 			if (servicestypelist.size() > 0) {
 				for (Map<String, Object> obj : servicestypelist) {
@@ -216,7 +211,7 @@ public class ComplainDao {
 					// repon existing close service and close it again
 					if (tokenrs.next()) {
 						sub_token_id = tokenrs.getString(1);
-						System.out.println("subtoken"+sub_token_id);
+						System.out.println("subtoken" + sub_token_id);
 						pst = con.prepareStatement(subcloseqry);
 						pst.setString(1, "FLMTA");
 						pst.setString(2, USER);
@@ -250,54 +245,53 @@ public class ComplainDao {
 
 						// ---------------- token detail
 
-						
-						
 					}
+
+					// just resolving tickets
 					
-					//just resolving tickets
 					else {
 
-					tokenrs = con.prepareStatement(cqry).executeQuery();
-					while (tokenrs.next()) {
-						sub_token_id = tokenrs.getString(1);
-					}
-					pst = con.prepareStatement(subqry);
-					pst.setString(1, sub_token_id);
-					pst.setString(2, token_ID);
-					pst.setString(3, "FLMTA");
-					pst.setString(4, (String) obj.get("PROBLEM_ID"));
-					pst.setString(5, (String) obj.get("REMARKS"));
-					pst.setString(6, (String) obj.get("SERVICE_NO"));
+						tokenrs = con.prepareStatement(cqry).executeQuery();
+						while (tokenrs.next()) {
+							sub_token_id = tokenrs.getString(1);
+						}
+						pst = con.prepareStatement(subqry);
+						pst.setString(1, sub_token_id);
+						pst.setString(2, token_ID);
+						pst.setString(3, "FLMTA");
+						pst.setString(4, (String) obj.get("PROBLEM_ID"));
+						pst.setString(5, (String) obj.get("REMARKS"));
+						pst.setString(6, (String) obj.get("SERVICE_NO"));
 
-					pst.setString(7, (String) obj.get("SERVICE_ID"));
+						pst.setString(7, (String) obj.get("SERVICE_ID"));
 
-					pst.setString(8, USER);
-					pst.executeUpdate();
+						pst.setString(8, USER);
+						pst.executeUpdate();
 
-					// for multiple services - token detail
-					String seqqry = "select TM_SUB_TOKEN_DETAIL_ID.NEXTVAL from dual";
-					tokenrs = con.prepareStatement(seqqry).executeQuery();
-					while (tokenrs.next()) {
-						seqqry = tokenrs.getString(1);
-					}
-					String detailqry = "INSERT INTO FTTH.TOKEN_DETAIL (\r\n"
-							+ "   TD_ID, SUB_TOKEN_ID, FROM_SUB_TEAM_CODE, \r\n"
-							+ "   TO_SUB_TEAM_CODE, SOLVE_FLAG, PROBLEM_ID, \r\n"
-							+ "   REMARKS, CREATE_BY, CREATE_DT \r\n" + "   ) \r\n"
-							+ "VALUES ( TM_SUB_TOKEN_DETAIL_ID.NEXTVAL,\r\n" + " ?,\r\n" + " (?),\r\n" + " (?),\r\n"
-							+ " 'C',\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " sysdate)";
+						// for multiple services - token detail
+						String seqqry = "select TM_SUB_TOKEN_DETAIL_ID.NEXTVAL from dual";
+						tokenrs = con.prepareStatement(seqqry).executeQuery();
+						while (tokenrs.next()) {
+							seqqry = tokenrs.getString(1);
+						}
+						String detailqry = "INSERT INTO FTTH.TOKEN_DETAIL (\r\n"
+								+ "   TD_ID, SUB_TOKEN_ID, FROM_SUB_TEAM_CODE, \r\n"
+								+ "   TO_SUB_TEAM_CODE, SOLVE_FLAG, PROBLEM_ID, \r\n"
+								+ "   REMARKS, CREATE_BY, CREATE_DT \r\n" + "   ) \r\n"
+								+ "VALUES ( TM_SUB_TOKEN_DETAIL_ID.NEXTVAL,\r\n" + " ?,\r\n" + " (?),\r\n" + " (?),\r\n"
+								+ " 'C',\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " sysdate)";
 
-					pst = con.prepareStatement(detailqry);
-					pst.setString(1, sub_token_id);
-					pst.setString(2, "FLMTA");
-					pst.setString(3, "FLMTA");
-					pst.setString(4, (String) obj.get("PROBLEM_ID"));
+						pst = con.prepareStatement(detailqry);
+						pst.setString(1, sub_token_id);
+						pst.setString(2, "FLMTA");
+						pst.setString(3, "FLMTA");
+						pst.setString(4, (String) obj.get("PROBLEM_ID"));
 
-					pst.setString(5, (String) obj.get("REMARKS"));
-					pst.setString(6, USER);
-					pst.executeUpdate();
+						pst.setString(5, (String) obj.get("REMARKS"));
+						pst.setString(6, USER);
+						pst.executeUpdate();
 
-					// ---------------- token detail
+						// ---------------- token detail
 					}
 				}
 			}
@@ -324,7 +318,7 @@ public class ComplainDao {
 			PreparedStatement pst;
 			// for multiple services - token master
 			String chkqry = "select sub_token_id from token_master where token_id=? and service_no=?";
-			
+
 			String cqry = "select TM_SUB_TOKEN_ID.NEXTVAL from dual";
 
 			String subqry = "INSERT INTO FTTH.TOKEN_MASTER (SUB_TOKEN_ID,\r\n"
@@ -340,17 +334,12 @@ public class ComplainDao {
 					+ "                FROM m_problem\r\n" + "               WHERE problem_id = ?),\r\n"
 					+ "             'N',\r\n" + "             ?,\r\n" + "         ?,    ?,\r\n" + "             ?,\r\n"
 					+ "             ?,\r\n" + "             SYSDATE)";
-			String subcloseqry="UPDATE TOKEN_MASTER\r\n" + 
-					"   SET SUB_TEAM_CODE = (select sub_team_code from m_problem where problem_id=?),\r\n" + 
-					"       SOLVE_FLAG = 'F',\r\n" + 
-					"       SOLVE_DT = SYSDATE,\r\n" + 
-					"       SOLVE_BY = ?,\r\n" + 
-					"       REMARKS = ?,\r\n" + 
-					"       UPDATE_BY = ?,\r\n" + 
-					"       UPDATE_DT = SYSDATE\r\n" + 
-					" WHERE SUB_TOKEN_ID = ?";
+			String subcloseqry = "UPDATE TOKEN_MASTER\r\n"
+					+ "   SET SUB_TEAM_CODE = (select sub_team_code from m_problem where problem_id=?),\r\n"
+					+ "       SOLVE_FLAG = 'F',\r\n" + "       SOLVE_DT = SYSDATE,\r\n" + "       SOLVE_BY = ?,\r\n"
+					+ "       REMARKS = ?,\r\n" + "       UPDATE_BY = ?,\r\n" + "       UPDATE_DT = SYSDATE\r\n"
+					+ " WHERE SUB_TOKEN_ID = ?";
 
-			
 			if (servicestypelist.size() > 0) {
 				for (Map<String, Object> obj : servicestypelist) {
 					pst = con.prepareStatement(chkqry);
@@ -363,7 +352,7 @@ public class ComplainDao {
 						pst = con.prepareStatement(subcloseqry);
 						pst.setString(1, (String) obj.get("PROBLEM_ID"));
 						pst.setString(2, USER);
-						pst.setString(3, "REOPEN:"+(String) obj.get("REMARKS"));
+						pst.setString(3, "REOPEN:" + (String) obj.get("REMARKS"));
 						pst.setString(4, USER);
 						pst.setString(5, sub_token_id);
 						pst.executeUpdate();
@@ -378,8 +367,10 @@ public class ComplainDao {
 								+ "   TD_ID, SUB_TOKEN_ID, FROM_SUB_TEAM_CODE, \r\n"
 								+ "   TO_SUB_TEAM_CODE, SOLVE_FLAG, PROBLEM_ID, \r\n"
 								+ "   REMARKS, CREATE_BY, CREATE_DT \r\n" + "   ) \r\n"
-								+ "VALUES ( TM_SUB_TOKEN_DETAIL_ID.NEXTVAL,\r\n" + " ?,\r\n" + " (select sub_team_code from m_problem where problem_id=?),\r\n" + " (select sub_team_code from m_problem where problem_id=?),\r\n"
-								+ " 'F',\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " sysdate)";
+								+ "VALUES ( TM_SUB_TOKEN_DETAIL_ID.NEXTVAL,\r\n" + " ?,\r\n"
+								+ " (select sub_team_code from m_problem where problem_id=?),\r\n"
+								+ " (select sub_team_code from m_problem where problem_id=?),\r\n" + " 'F',\r\n"
+								+ " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " sysdate)";
 
 						pst = con.prepareStatement(detailqry);
 						pst.setString(1, sub_token_id);
@@ -387,62 +378,60 @@ public class ComplainDao {
 						pst.setString(3, (String) obj.get("PROBLEM_ID"));
 						pst.setString(4, (String) obj.get("PROBLEM_ID"));
 
-						pst.setString(5, "REOPEN:"+(String) obj.get("REMARKS"));
+						pst.setString(5, "REOPEN:" + (String) obj.get("REMARKS"));
 						pst.setString(6, USER);
 						pst.executeUpdate();
 
 						// ---------------- token detail
 
-						
-						
 					}
-					
-					//just resolving tickets
+
+					// just resolving tickets
 					else {
-					tokenrs = con.prepareStatement(cqry).executeQuery();
-					while (tokenrs.next()) {
-						sub_token_id = tokenrs.getString(1);
-					}
-					pst = con.prepareStatement(subqry);
-					pst.setString(1, sub_token_id);
-					pst.setString(2, token_ID);
-					pst.setString(3, (String) obj.get("PROBLEM_ID"));
-					pst.setString(4, (String) obj.get("PROBLEM_ID"));
-					pst.setString(5, (String) obj.get("REMARKS"));
-					pst.setString(6, (String) obj.get("SERVICE_NO"));
+						tokenrs = con.prepareStatement(cqry).executeQuery();
+						while (tokenrs.next()) {
+							sub_token_id = tokenrs.getString(1);
+						}
+						pst = con.prepareStatement(subqry);
+						pst.setString(1, sub_token_id);
+						pst.setString(2, token_ID);
+						pst.setString(3, (String) obj.get("PROBLEM_ID"));
+						pst.setString(4, (String) obj.get("PROBLEM_ID"));
+						pst.setString(5, (String) obj.get("REMARKS"));
+						pst.setString(6, (String) obj.get("SERVICE_NO"));
 
-					pst.setString(7, (String) obj.get("SERVICE_ID"));
+						pst.setString(7, (String) obj.get("SERVICE_ID"));
 
-					pst.setString(8, USER);
-					pst.executeUpdate();
+						pst.setString(8, USER);
+						pst.executeUpdate();
 
-					// for multiple services - token detail
-					String seqqry = "select TM_SUB_TOKEN_DETAIL_ID.NEXTVAL from dual";
-					tokenrs = con.prepareStatement(seqqry).executeQuery();
-					while (tokenrs.next()) {
-						seqqry = tokenrs.getString(1);
-					}
-					String detailqry = "INSERT INTO FTTH.TOKEN_DETAIL (\r\n"
-							+ "   TD_ID, SUB_TOKEN_ID, FROM_SUB_TEAM_CODE, \r\n"
-							+ "   TO_SUB_TEAM_CODE, SOLVE_FLAG, PROBLEM_ID, \r\n"
-							+ "   REMARKS, CREATE_BY, CREATE_DT \r\n" + "   ) \r\n"
-							+ "VALUES ( TM_SUB_TOKEN_DETAIL_ID.NEXTVAL,\r\n" + " ?,\r\n"
-							+ " (select sub_team_code from m_problem where problem_id=?),\r\n"
-							+ " (select sub_team_code from m_problem where problem_id=?),\r\n" + " 'N',\r\n" + " ?,\r\n"
-							+ " ?,\r\n" + " ?,\r\n" + " sysdate)";
+						// for multiple services - token detail
+						String seqqry = "select TM_SUB_TOKEN_DETAIL_ID.NEXTVAL from dual";
+						tokenrs = con.prepareStatement(seqqry).executeQuery();
+						while (tokenrs.next()) {
+							seqqry = tokenrs.getString(1);
+						}
+						String detailqry = "INSERT INTO FTTH.TOKEN_DETAIL (\r\n"
+								+ "   TD_ID, SUB_TOKEN_ID, FROM_SUB_TEAM_CODE, \r\n"
+								+ "   TO_SUB_TEAM_CODE, SOLVE_FLAG, PROBLEM_ID, \r\n"
+								+ "   REMARKS, CREATE_BY, CREATE_DT \r\n" + "   ) \r\n"
+								+ "VALUES ( TM_SUB_TOKEN_DETAIL_ID.NEXTVAL,\r\n" + " ?,\r\n"
+								+ " (select sub_team_code from m_problem where problem_id=?),\r\n"
+								+ " (select sub_team_code from m_problem where problem_id=?),\r\n" + " 'N',\r\n"
+								+ " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " sysdate)";
 
-					pst = con.prepareStatement(detailqry);
-					pst.setString(1, sub_token_id);
-					pst.setString(2, (String) obj.get("PROBLEM_ID"));
-					pst.setString(3, (String) obj.get("PROBLEM_ID"));
-					pst.setString(4, (String) obj.get("PROBLEM_ID"));
+						pst = con.prepareStatement(detailqry);
+						pst.setString(1, sub_token_id);
+						pst.setString(2, (String) obj.get("PROBLEM_ID"));
+						pst.setString(3, (String) obj.get("PROBLEM_ID"));
+						pst.setString(4, (String) obj.get("PROBLEM_ID"));
 
-					pst.setString(5, (String) obj.get("REMARKS"));
-					pst.setString(6, USER);
-					pst.executeUpdate();
+						pst.setString(5, (String) obj.get("REMARKS"));
+						pst.setString(6, USER);
+						pst.executeUpdate();
 
-					// ---------------- token detail
-				
+						// ---------------- token detail
+
 					}
 				}
 			}
@@ -932,6 +921,78 @@ public class ComplainDao {
 			con.close();
 		}
 		return "Successfully Trouble Ticket has been Resolved";
+	}
+
+	// close array of tickets dao
+	public String Closearrayofticket(List<String> closetokenarray, String User, String Remarks) throws SQLException {
+		Connection con = DbCon.getConnection();
+		con.setAutoCommit(false);
+		PreparedStatement pst = null;
+		try {
+			for (String var : closetokenarray) {
+				String closetoken=var;
+				pst = con.prepareStatement(
+						"INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n" + "                               SUB_TOKEN_ID,\r\n"
+								+ "                               FROM_SUB_TEAM_CODE,\r\n"
+								+ "                               TO_SUB_TEAM_CODE,\r\n"
+								+ "                               SOLVE_FLAG,\r\n"
+								+ "                               PROBLEM_ID,\r\n"
+								+ "                               REMARKS,\r\n"
+								+ "                               CREATE_BY)\r\n"
+								+ "     VALUES (TM_SUB_TOKEN_DETAIL_ID.NEXTVAL,\r\n" + "             ?,\r\n"
+								+ "             (select sub_team_code from TOKEN_MASTER where SUB_TOKEN_ID=?),\r\n"
+								+ "             (select sub_team_code from TOKEN_MASTER where SUB_TOKEN_ID=?),\r\n" +
+
+								"             'C',\r\n" + "             (SELECT PROBLEM_ID\r\n"
+								+ "                FROM TOKEN_MASTER\r\n"
+								+ "               WHERE SUB_TOKEN_ID = ?),\r\n" + "             ?,\r\n"
+								+ "             ?)");
+				pst.setString(1, closetoken);
+				pst.setString(2, closetoken);
+				pst.setString(3, closetoken);
+				pst.setString(4, closetoken);
+				pst.setString(5, Remarks);
+				pst.setString(6, User);
+				pst.executeUpdate();
+
+				// after closing ticket updating flag in token master
+				pst = con.prepareStatement(
+						"UPDATE TOKEN_MASTER SET SOLVE_FLAG= 'C',SOLVE_DT=sysdate,SOLVE_BY=?, UPDATE_BY=?,UPDATE_DT=sysdate WHERE  SUB_TOKEN_ID= ?");
+				pst.setString(3, closetoken);
+				pst.setString(2, User);
+				pst.setString(1, User);
+
+				pst.executeUpdate();
+
+				// checking if all tickets are resolved
+
+				pst = con.prepareStatement(
+						"select * from token_master where solve_flag<>'C' and token_id=(select token_id from token_master where sub_token_id=?)");
+				pst.setString(1, closetoken);
+				ResultSet qsolveflag = pst.executeQuery();
+				if (!qsolveflag.next()) {
+					pst = con.prepareStatement("UPDATE MAIN_TOKEN_MASTER\r\n" + "   SET SOLVE_FLAG = 'C',\r\n"
+							+ "       SOLVE_DT = SYSDATE,\r\n" + "       SOLVE_BY = ?,\r\n" +
+
+							"       UPDATE_BY = ?,\r\n" + "       UPDATE_DT = SYSDATE\r\n"
+							+ " WHERE token_id = (SELECT token_id\r\n" + "                     FROM token_master\r\n"
+							+ "                    WHERE sub_token_id = ?)");
+					pst.setString(1, User);
+
+					pst.setString(2, User);
+					pst.setString(3, closetoken);
+					pst.executeUpdate();
+				}
+			}
+			con.commit();
+		} catch (Exception e) {
+			con.rollback();
+			e.printStackTrace();
+			return "Failed " + e;
+		} finally {
+			con.close();
+		}
+		return "Successfully All Trouble Ticket has been Resolved";
 	}
 
 	public List<Map<String, Object>> getTokenDetail(String SUB_TOKEN_ID) throws SQLException {

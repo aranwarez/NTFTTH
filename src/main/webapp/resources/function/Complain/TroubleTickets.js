@@ -2,6 +2,7 @@ var currentdate;
 var glbUser;
 var token_id;
 var closeflag;
+var closeticketarray;
 $(document).ready(
 		function() {
 			if (getURLParameter('token_id') != null
@@ -221,19 +222,18 @@ function getfdcteam() {
 			clearDataTable();
 			return;
 		}
-		
+
 		$.each(data, function(index, value) {
-			if(value.OFFICE_CODE==OFFICE_CODE || OFFICE_CODE=="" ){
-			$('<option>').val(value.OLT_CODE).text(
-					value.DESCRIPTION + "-" + value.TEAMNAME).appendTo(select);
+			if (value.OFFICE_CODE == OFFICE_CODE || OFFICE_CODE == "") {
+				$('<option>').val(value.OLT_CODE).text(
+						value.DESCRIPTION + "-" + value.TEAMNAME).appendTo(
+						select);
 			}
 		});
-		
 
 	});
 
 }
-
 
 function fetchView() {
 
@@ -267,11 +267,25 @@ function fetchView() {
 
 					},
 					function(data) {
+
+						// geting close all ticket button and store tickets in
+						// array
+						closeticketarray = [];
+						if ($('#Statusflag').val() == 'Y'
+								&& $('#SUBTEAMCODE').val() == 'FLMTA') {
+							$('#closebuttondiv').fadeIn();
+							$.each(data, function(key, value) {
+								closeticketarray.push(value.SUB_TOKEN_ID);
+							});
+						} else {
+							$('#closebuttondiv').fadeOut();
+						}
+
 						console.log(data);
 						// $('#example1').DataTable();
 
 						var table = $('#example1').DataTable({
-							"bDestroy": true
+							"bDestroy" : true
 						});
 
 						table.clear().draw();
@@ -298,8 +312,8 @@ function fetchView() {
 														+ 'C'
 														+ '\');"> <i class="fa fa-trash"></i> Close</button>';
 												forwardflag = '<button type="button" title="Forward" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
-													+ value.SUB_TOKEN_ID
-													+ '\')"> <i class="fa fa-mail-forward"></i>Fordward</button>';
+														+ value.SUB_TOKEN_ID
+														+ '\')"> <i class="fa fa-mail-forward"></i>Fordward</button>';
 											} else if (value.SOLVE_FLAG == 'C') {
 												solveflag = 'Closed-';
 												forwardflag = "";
@@ -333,60 +347,6 @@ function fetchView() {
 										});
 
 					});
-
-	// geting close all ticket button
-	if ($('#Statusflag').val() == 'Y' && $('#SUBTEAMCODE').val() == 'FLMTA') {
-		$('#closebuttondiv').fadeIn();
-	} else {
-		$('#closebuttondiv').fadeOut();
-	}
-
-}
-
-function saveUserFDC() {
-
-	var table = $('#checkDatatable').dataTable();
-
-	// alert(table.fnGetData().length);
-
-	if ($('#USER_ID').val() == '') {
-		alert('Please select user ');
-		return;
-	}
-
-	// Get the total rows
-	var inserteditdeletepost = [];
-	for (i = 1; i <= table.fnGetData().length; i++) {
-		var myobj = new Object();
-		if ($('#USER_ID').val() != null) {
-
-			// console.log('user cha '+$('#USER_ID').val());
-
-			if ($('.list' + i).val() == 'Y') {
-
-				myobj.USER_ID = $("#USER_ID").val();
-				myobj.FDC_CODE = $('.mastersetup' + i).val();
-				myobj.ACTIVE_DT = $('#ACTIVE_DT' + i).val();
-				myobj.DEACTIVE_DT = $('#DEACTIVE_DT' + i).val();
-
-				myobj.LIST_FLAG = $('.list' + i).val();
-
-				inserteditdeletepost.push(myobj);
-
-			}
-		}
-	}
-
-	// console.log(JSON.stringify(inserteditdeletepost));
-
-	$.post("../saveuserfdc", {
-		USER_ID : $("#USER_ID").val(),
-		menu_mode : JSON.stringify(inserteditdeletepost)
-	}, function(data) {
-		alert(data);
-		// getAllMenu();
-
-	});
 
 }
 
@@ -503,9 +463,6 @@ function loadLevelWise(level) {
 	}
 
 }
-function clearDataTable() {
-
-}
 
 function javadate(date) {
 	var d = new Date(date);
@@ -521,6 +478,14 @@ function javadate(date) {
 }
 
 function Closealltickets() {
-	alert('WIP in progress!!');
+	$.post('../troubleticket/CloseArray', {
+		Remarks : $('#closeallremarks').val(),
+		tokenarray : JSON.stringify(closeticketarray)
+	}, function(response) {
+		alert(response);
+		$('#deleteallModal').modal('hide');
+		fetchView();
+
+	});
 
 }

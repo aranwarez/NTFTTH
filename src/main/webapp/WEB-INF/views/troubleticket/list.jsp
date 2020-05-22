@@ -361,8 +361,7 @@
 					</div>
 
 					<div class="col-xs-1" id="closebuttondiv" style="display: none;">
-						<button type="button" class="btn btn-danger"
-							onclick="return Closealltickets()">Close All Tickets</button>
+						<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteallModal">Close All Tickets</button>
 
 					</div>
 
