@@ -172,6 +172,38 @@ public class ComplainController {
 
 	}
 
+
+	//Resolve service to existing token
+	@RequestMapping(value = "/complain/addthencloservexistingtoken", method = RequestMethod.POST)
+	@ResponseBody
+	public String addthencloservexistingtoken(String JSON,String tokenid,HttpSession session)
+			throws SQLException {
+		logger.info("Adding then closing service to existing tokenid : ",tokenid);
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+
+		ComplainDao dao = new ComplainDao();
+		ObjectMapper mapper = new ObjectMapper();
+
+		String msg = null;
+		try {
+			List<Map<String, Object>> myObjects = mapper.readValue(JSON,
+					new TypeReference<List<Map<String, Object>>>() {
+					});
+			msg=dao.addthencloseProblem(myObjects, tokenid, user.getUSER_ID());
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return msg;
+
+	}
+
+	
 	//add service to existing token
 	@RequestMapping(value = "/complain/addsrvexistingtoken", method = RequestMethod.POST)
 	@ResponseBody

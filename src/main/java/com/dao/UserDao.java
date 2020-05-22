@@ -27,7 +27,7 @@ public class UserDao {
 			String qry = "select * from WEB_USER where upper(user_id)=upper(?) and password=app_user_security.get_hash(upper(?),?)";
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, username.toUpperCase());
-			pst.setString(2, password);
+			pst.setString(2, username);
 			pst.setString(3, password);
 			ResultSet rs = pst.executeQuery();
 			if (rs.next()) {
@@ -111,16 +111,15 @@ public class UserDao {
 
 	public String saveUser(UserInformationModel m) throws SQLException {
 		Connection con = DbCon.getConnection();
-		System.out.println("dao password "+m.getPASSWORD());
 		try {
 			PreparedStatement pst = con.prepareStatement("insert into web_user(USER_ID,FULL_NAME,PASSWORD,\r\n" + 
 					"EMPLOYEE_CODE,LOCK_FLAG,SUPER_FLAG,DISABLE_FLAG,\r\n" + 
 					"LOCATION_CODE,USER_LEVEL,ROLE_CODE,OFFICE_CODE,\r\n" + 
 					"MOBILE_NO,CREATED_BY,CREATED_DATE)\r\n" + 
-					"values(?,?,(app_user_security.get_hash(upper(?),?)),?,?,?,?,?,?,?,?,?,?,sysdate)");
+					"values(?,?,app_user_security.get_hash(upper(?),?),?,?,?,?,?,?,?,?,?,?,sysdate)");
 			pst.setString(1, m.getUSER_ID().toUpperCase());
 			pst.setString(2, m.getFULL_NAME());			
-			pst.setString(3, m.getPASSWORD().trim());
+			pst.setString(3, m.getUSER_ID().toUpperCase());
 			pst.setString(4, m.getPASSWORD());
 			pst.setString(5, m.getEMPLOYEE_CODE());
 			pst.setString(6, "N");
@@ -161,7 +160,7 @@ public class UserDao {
 				
 				PreparedStatement pst = con.prepareStatement(
 						"update WEB_USER set PASSWORD=app_user_security.get_hash(upper(?),?) where USER_ID=?");
-				pst.setString(1, pass);
+				pst.setString(1, USER_ID);
 				pst.setString(2, pass);
 
 				pst.setString(3, USER_ID);
@@ -360,7 +359,7 @@ public class UserDao {
         try {
             PreparedStatement pst = con.prepareStatement("select * from WEB_USER where user_id=? AND PASSWORD=app_user_security.get_hash(upper(?),?)");
             pst.setString(1, user.toUpperCase());
-            pst.setString(2, password);
+            pst.setString(2, user.toUpperCase());
             pst.setString(3, password);
 
             ResultSet rs = pst.executeQuery();

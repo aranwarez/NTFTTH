@@ -1,3 +1,4 @@
+var datanum;
 var problemlist;
 var servicetypelist;
 $(document).ready(function() {
@@ -77,6 +78,17 @@ function getCustomerInfo() {
 			}
 			
 			
+			else if($('#infotype').val()=="ftthVoiceNum" && TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.nil){
+				alert("No result found..");
+				return;
+			}
+			else if ($('#infotype').val()=="cpeSN" && TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.customerName.nil){
+				alert("No result found..")
+				return;
+			}
+			
+			
+			
 			$('#divcustomerinfo').fadeIn();
 			$('#customerName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.customerName);
 			$('#Address').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.installAddress);
@@ -133,11 +145,10 @@ function getCustomerInfo() {
 			
 		// getCustomerInfo(TEST.Body.queryServiceNumberCPEInfosResponse.return.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.cpeInfo.cpeSN);
 			
-			// clearing complain cart
-			$('#complainservcies').empty();
+			// clearing all contains from forms
 			
-			// clearing TMS status
-			$('#divforCPEinfo').empty();
+			clearformcontains();
+			
 			// get AAA data
 			getstatusInfo(); 
 			
@@ -145,7 +156,7 @@ function getCustomerInfo() {
 		
 		}catch (e) {
 			console.log(e);
-			alert(response);
+			alert("Error:"+response);
 			}
 		
 		
@@ -154,11 +165,34 @@ function getCustomerInfo() {
 
 }
 
+function clearformcontains(){
+	// clearing CPE cpeoltstatusfield
+	$('.cpeoltstatusfield').html("");
+	
+	// clearing complain cart
+	$('#complainservcies').empty();
+	// clearing AAA values
+	
+	datanum=null;
+	$('.AAAinfield').html("");
+	Date.prototype.toDateInputValue = (function() {
+	    var local = new Date(this);
+	    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+	    return local.toJSON().slice(0,10);
+	});
+	  $('#AAAdatepicker').val(new Date().toDateInputValue());
+	// clearing TMS status
+	$('#divforCPEinfo').empty();
+	
+	
+	
+}
 
-function getAAAstatus(serviceNo){
+
+function getAAAstatus(){
 	
 	$.get('../complain/getAAAstatus1', {
-		FTTHDatanum : serviceNo
+		FTTHDatanum : datanum
 			}, function(response) {
 				console.log(response);
 				$('#planAAA').html(response.plan);
@@ -248,7 +282,7 @@ function getAAAAccountinglog(){
 		mmdd:mmdd
 			}, function(response) {
 				$('#AAAviewlogdiv').empty();
-				var tableappend="<table id='AAAviewlogtable' style='width:100%' class='table table-condensed'><thead><tr><td>starttime</td><td>stoptime</td><td>Total Volume(MB)</td><td>Termination Cause</td></tr></thread></table>"
+				var tableappend="<table id='AAAviewlogtable' style='width:100%' class='table table-condensed'><thead><tr><td>starttime</td><td>stoptime</td><td>Time Diff</td><td>Total Volume(MB)</td><td>Termination Cause</td></tr></thread></table>"
 					$('#AAAviewlogdiv').append(tableappend);
 					var table=$("#AAAviewlogtable").DataTable();
 				table
@@ -256,6 +290,7 @@ function getAAAAccountinglog(){
 			    .draw();
 				$.each(response, function (index, value) {
 					var result;
+					 debugger;
 					if(value.terminate_cause=="1" || value.terminate_cause=="2" || value.terminate_cause=="3"){
 						result='User Side: Line SNR or Router Power Problem';
 					}
@@ -268,7 +303,7 @@ function getAAAAccountinglog(){
 					}
 					else result="Other";
 				      
-				      
+				     
 					$("#AAAviewlogtable")
 					.dataTable()
 					.fnAddData(
@@ -276,6 +311,8 @@ function getAAAAccountinglog(){
 								jsondatetonormale(value.starttime)
 								,
 								jsondatetonormale(value.stoptime),
+								gettimediff(value.starttime,value.stoptime),
+								
 								(Number(value.total_volume)/(1024*1024)).toFixed(2),
 								result
 								 ]);
@@ -300,8 +337,9 @@ function getSubsInfo(subsinfo) {
 				// checking if DATA service available in subsinfo and calling
 				// AAA status
 				if(value.serviceNumber.substr(0,6)==='NTFTTH'){
-					getAAAstatus(value.serviceNumber);
-				}
+				datanum=value.serviceNumber;
+					getAAAstatus();
+						}
 				
 				
 				// till herechecking if DATA service available in subsinfo and
@@ -309,9 +347,9 @@ function getSubsInfo(subsinfo) {
 				
 				
 				
-				var div='<div class="col-md-6"><table id="subsinfotable'+index+'" class="table table-condensed"><tbody><tr><td><label>serviceNumber </label></td><td><span id="serviceNumber'+index+'"></span></td></tr><tr><td><label>offerName </label></td><td><span id="offerName'+index+'"></span></td>		</tr><tr>										<td><label>status</label></td>						<td><span id="status'+index+'"></span></td>					</tr>	<tr><td><label>balanceOfCreditLimit</label></td>		<td><span id="balanceOfCreditLimit'+index+'"></span></td>			</tr></tbody>			</table>		</div>';						
+				var div='<div class="col-md-6"><table id="subsinfotable'+index+'" class="table table-condensed"><tbody><tr><td><label>Service No. </label></td><td><span id="serviceNumber'+index+'"></span></td></tr><tr><td><label>offerName </label></td><td><span id="offerName'+index+'"></span></td>		</tr>  <tr><td><label>Service Type</label></td><td><span id="servicetype'+index+'"></span></td></tr> <tr><td><label>Status</label></td>						<td><span id="status'+index+'"></span></td>					</tr>	<tr><td><label>balanceOfCreditLimit</label></td>		<td><span id="balanceOfCreditLimit'+index+'"></span></td>			</tr></tbody>			</table>		</div>';						
 			if((index+1)%2==0){
-				 div='<div class="row"><div class="col-md-6"><table id="subsinfotable'+index+'" class="table table-condensed"><tbody><tr><td><label>serviceNumber </label></td><td><span id="serviceNumber'+index+'"></span></td></tr><tr><td><label>offerName </label></td><td><span id="offerName'+index+'"></span></td>		</tr><tr>										<td><label>status</label></td>						<td><span id="status'+index+'"></span></td>					</tr>	<tr><td><label>balanceOfCreditLimit</label></td>		<td><span id="balanceOfCreditLimit'+index+'"></span></td>			</tr></tbody>			</table>		</div>';				
+				 div='<div class="row"><div class="col-md-6"><table id="subsinfotable'+index+'" class="table table-condensed"><tbody><tr><td><label>Service No.  </label></td><td><span id="serviceNumber'+index+'"></span></td></tr><tr><td><label>offerName </label></td><td><span id="offerName'+index+'"></span></td>		</tr>  <tr><td><label>Service Type</label></td><td><span id="servicetype'+index+'"></span></td></tr> <tr><td><label>Status</label></td>						<td><span id="status'+index+'"></span></td>					</tr>	<tr><td><label>balanceOfCreditLimit</label></td>		<td><span id="balanceOfCreditLimit'+index+'"></span></td>			</tr></tbody>			</table>		</div>';				
 				
 				div=div+'</div>';
 			}
@@ -328,7 +366,7 @@ function getSubsInfo(subsinfo) {
 			// type="button" class="btn btn-box-tool"><i class="fa
 			// fa-minus"></i></button></div>';
 			// replaced with checkbox for + button
-				var button=': <div class="btn-group complain'+value.serviceNumber+'"><input type="checkbox" onchange="chkaddremoveservicecomplain(this)" value="'+value.serviceNumber+'" /></div>';
+				var button=': <div class="btn-group complain'+value.serviceNumber+'"><label><input type="checkbox" class="big-checkbox" onchange="chkaddremoveservicecomplain(this)" value="'+value.serviceNumber+'" />Click Here</label></div>';
 				
 				$('#balanceOfCreditLimit'+index).html(value.balanceOfCreditLimit);
 			$('#offerName'+index).html(value.offerName);
@@ -336,7 +374,7 @@ function getSubsInfo(subsinfo) {
 			$('#status'+index).html(value.status);
 
 			$.each(value.vasName, function (indexvas, valuevas) {
-				$('#subsinfotable'+index+' tr:last').after('<tr><td><label>VasName</label></td><td>'+valuevas+'</td></tr>');
+				$('#subsinfotable'+index+' tr:last').after('<tr><td><label>FTTH Package</label></td><td>'+valuevas+'</td></tr>');
 			});	 
 			
 			// getting CRMS balance resource
@@ -360,11 +398,14 @@ getQueryFreeResource(value.serviceNumber,index);
 				alert('Complain Already exist for this CPE Serial');
 				}
 				$.each(response, function (index, value) {
-					
-				var remark='<span>'+value.REMARKS+'</span>';
-				$('.complain'+value.SERVICE_NO).empty();
-				$('.complain'+value.SERVICE_NO).append(remark);
-				$('.complain'+value.SERVICE_NO).css('background-color', '#FACC2E');
+				// only if problem exist
+				if(value.MASTER_SOLVE_FLAG!="C"){
+					var remark='<span data-toggle="tooltip" title="'+value.MASTER_REMARKS+'">'+value.PROBLEM_DESC+'</span>';
+				$('.complain'+value.MASTER_SERVICE_NO).empty();
+				$('.complain'+value.MASTER_SERVICE_NO).append(remark);
+				$('.complain'+value.MASTER_SERVICE_NO).css('background-color', '#FACC2E');
+				}
+				
 				});
 				
 				var detaillink='<a target="_blank" href="../troubleticket/list?token_id='+response[0].TOKEN_ID+'" class="btn bg-green"> <i class="fa fa-info-circle"></i> View All In Detail </a>';
@@ -405,11 +446,15 @@ function getstatusInfo() {
 	$('#onuTemprature').html(TEST3.onuTemprature);
 	// $('#').val(value.);
 	
-	if(TEST3.onuStatus!="On"){
-		$('#onuStatus').css('background-color', '#FE2E2E');
+	if(TEST3.onuStatus=="On"){
+		$('#onuStatus').css('background-color', '#9FF781');
 	}
+	else $('#onuStatus').css('background-color', '#FE2E2E');
 	
-	if(TEST3.onuRxPower>=-25){
+	if(TEST3.onuRxPower==0){
+		 $('#onuRxPower').css('background-color', '#FE2E2E');
+		}
+	else if(TEST3.onuRxPower>=-25){
 	 $('#onuRxPower').css('background-color', '#9FF781');
 	}
 	else if(TEST3.onuRxPower<-25 && TEST3.onuRxPower>=-28 ){
@@ -582,8 +627,28 @@ function PostRegister(solved){
 				 FAP_PORT:$('#fapPortName').html(),
 				 CPE_RX_LVL:$('#onuRxPower').html()
 					 	 }, function(response) {
-					 		// debugger;
-					 		 if(response.substr(0,22)=="Complain Already Exist"){
+					 		if(response.substr(0,55)=="Resolving Service Complain while Complain Already Exist"){
+					 			if (confirm(response+'. Do you want to Resolve service to provided token?')) {
+					 				  // Save it!
+					 				$.post('../complain/addthencloservexistingtoken', {
+					 					JSON:JSON.stringify(transnop),
+					 					tokenid:response.substr(65)
+					 				 }, function(valres) {
+					 					 alert(valres);
+					 					location.reload();
+					 					// return;
+					 				 });
+					 				  console.log('Thing was saved to the database.');
+					 				} else {
+					 				  // Do nothing!
+					 				  return;
+					 				}
+					 			// location.reload();
+					 		 return;
+					 		 }
+					 		 
+					 		 
+					 		else if(response.substr(0,22)=="Complain Already Exist"){
 					 			if (confirm(response+'. Do you want to add another service to provided token?')) {
 					 				  // Save it!
 					 				$.post('../complain/addsrvexistingtoken', {
@@ -591,18 +656,19 @@ function PostRegister(solved){
 					 					tokenid:response.substr(32)
 					 				 }, function(valres) {
 					 					 alert(valres);
-					 					 return;
+					 				// return;
 					 				 });
 					 				  console.log('Thing was saved to the database.');
 					 				} else {
 					 				  // Do nothing!
 					 				  return;
 					 				}
-					 			location.reload(); 
+					 			// location.reload();
 					 		 return;
 					 		 }
 					 		 
 			alert(response);
+			location.reload();
 			 });
 		
 	// alert("No service has been checked!!! This will be");
@@ -623,17 +689,17 @@ function getCRMSServiceBalance(serviceNo,index){
 	        		var state=response.split('!');
 	        		var statestatus;			
 	        		$('#balanceOfCreditLimit'+index).css('background-color','#FE2E2E');
-	        		if($('#status'+index).html().substring(0,3)=='Pos'){
+	        		if($('#servicetype'+index).html().substring(0,3)=='Pos'){
 	        			// postpaid
-	        						statestatus='Due Amt:'+(state[0]/100)+'-Rem Credit:'+(state[1]/100);
-	        						if(state[1]>0){
+	        						statestatus='Due Amt:'+(state[1]/100)+' &nbsp  &nbsp  &nbsp  &nbsp'+'Rem Credit:'+(state[0]/100);
+	        						if(state[0]>0){
 	        		        			$('#balanceOfCreditLimit'+index).css('background-color','#9FF781');
 	        		        		}			
 	        		
 	        		}
-	        		else if($('#status'+index).html().substring(0,3)=='Pre'){
+	        		else if($('#servicetype'+index).html().substring(0,3)=='Pre'){
 			 // prepaid
-	        			statestatus='Balance:'+(state[0]/100)+'-Expiry Dt of Subs:'+state[1];
+	        			statestatus='Balance:'+(state[0]/100)+' &nbsp  &nbsp  &nbsp'+'Expiry Dt of Subs:'+state[1];
 	        			if(state[0]>0){
 		        			$('#balanceOfCreditLimit'+index).css('background-color','#9FF781');
 		        		}
@@ -668,9 +734,9 @@ function getQueryFreeResource(serviceNo,index){
 	        						statestatus='Total Vol:'+state[1]+'/Remaming Vol:'+state[2];
 	        		
 	        	 
-	        		$('#subsinfotable'+index+' tr:last').after('<tr><td><label>FRI Expiry</label></td><td><span id="FRIExpdt'+index+'"></span></td></tr>');
+	        		$('#subsinfotable'+index+' tr:last').after('<tr><td><label>Package Validity</label></td><td><span id="FRIExpdt'+index+'"></span></td></tr>');
 	        		
-	        		$('#subsinfotable'+index+' tr:last').after('<tr><td><label>Free Resource</label></td><td><span id="Freeresourceqry'+index+'"></span></td></tr>');
+	        		$('#subsinfotable'+index+' tr:last').after('<tr><td><label>Package Vol. Usage</label></td><td><span id="Freeresourceqry'+index+'"></span></td></tr>');
 	        		$('#FRIExpdt'+index).css('background-color','#9FF781');
 	        		if(state[0]=='102'){
 	        			FRIExp=state[3];			
@@ -683,7 +749,7 @@ function getQueryFreeResource(serviceNo,index){
 		 
 	        		}
 	        		else if(state[0]=='104'){
-	        			FRIExp=state[3]+'--'+state[4];			
+	        			FRIExp=state[3]+'&nbsp; &nbsp; &nbsp; &nbsp;'+state[4];			
 		        		javexpdt=	stringToDate(state[4].substring(0,10),"MM/dd/yyyy","/");
 	        			var today = new Date();
 	        			if(today>javexpdt){
@@ -719,26 +785,26 @@ function getservicestatus(serviceNo,index){
         		var statestatus;
         		$('#status'+index).css('background-color', '#FE2E2E');
         		if(state[0]==0){
-        						statestatus='Prepaid';
+        			$('#servicetype'+index).html('Prepaid');
         					}
         		else if(state[0]==1){
-        			statestatus='Postpaid';
-        		} 
+        			$('#servicetype'+index).html('Postpaid');
+        			        		} 
         		if(state[1]==1001){
-        			statestatus=statestatus+':Active';
+        			statestatus='Active';
         			 $('#status'+index).css('background-color', '#9FF781');
         		}
         		else if(state[1]==1011){
-        			statestatus=statestatus+':One way Bar';
+        			statestatus='One way Bar';
         		}
         		else if(state[1]==1010){
-        			statestatus=statestatus+':Pre-Terminated';
+        			statestatus='Pre-Terminated';
         		}
         		else if(state[1]==1006){
-        			statestatus=statestatus+':Two way Bar';
+        			statestatus='Two way Bar';
         		}
         		else if(state[1]==1007){
-        			statestatus=statestatus+':Frozen';
+        			statestatus='Frozen';
         		}
         		$('#status'+index).html(statestatus);
          }
@@ -810,6 +876,19 @@ function jsondatetonormale(indate){
 	return date;
 }
 
+function gettimediff(adate, bdate){
+	var date1 = new Date(adate);
+	var date2 = new Date(bdate);
+	var diff = date2.getTime() - date1.getTime();
+	var msec = diff;
+	var hh = Math.floor(msec / 1000 / 60 / 60);
+	msec -= hh * 1000 * 60 * 60;
+	var mm = Math.floor(msec / 1000 / 60);
+	msec -= mm * 1000 * 60;
+	var ss = Math.floor(msec / 1000);
+	msec -= ss * 1000;
+	return (hh + ":" + mm + ":" + ss);
+}
 
 
 

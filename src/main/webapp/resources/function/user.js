@@ -10,7 +10,6 @@ function saveUser() {
 		$(".matchpass").html("Password doesn't match");
 		return false;
 	}
-	alert(pass);
 
 	$.post('../save/user', {
 		USER_ID : $("#USER_ID").val(),
