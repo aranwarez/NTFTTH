@@ -297,7 +297,9 @@ function fetchView() {
 														+ '\');closeflag=(\''
 														+ 'C'
 														+ '\');"> <i class="fa fa-trash"></i> Close</button>';
-												forwardflag = "";
+												forwardflag = '<button type="button" title="Forward" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
+													+ value.SUB_TOKEN_ID
+													+ '\')"> <i class="fa fa-mail-forward"></i>Fordward</button>';
 											} else if (value.SOLVE_FLAG == 'C') {
 												solveflag = 'Closed-';
 												forwardflag = "";

@@ -173,17 +173,17 @@
 											<tr>
 											
 												<td><label>CPE Status</label></td>
-												<td><span id="onuStatus"></span></td>
+												<td><span class="cpeoltstatusfield" id="onuStatus"></span></td>
 
 												<td><label>CPE RX Power</label></td>
-												<td><span id="onuRxPower"></span></td>
+												<td><span class="cpeoltstatusfield" id="onuRxPower"></span></td>
 
 												<td><label>OLT RX Power</label></td>
-												<td><span id="onuOltRxPower"></span></td>
+												<td><span class="cpeoltstatusfield" id="onuOltRxPower"></span></td>
 												<td><label>CPE Distance</label></td>
-												<td><span id="onuDistance"></span></td>
+												<td><span class="cpeoltstatusfield" id="onuDistance"></span></td>
 												<td><label>CPE Temp</label></td>
-												<td><span id="onuTemprature"></span></td>
+												<td><span class="cpeoltstatusfield" id="onuTemprature"></span></td>
 
 
 											</tr>
@@ -243,7 +243,7 @@
 						<div class="box box-primary collapsed-box">
 							<div class="box-header with-border">
 								<h3 class="box-title">
-									<i class="fa fa-server"></i>AAA STATUS : <span id="AAAuserid"></span>
+									<i class="fa fa-server"></i>AAA STATUS : <span class="AAAinfield" id="AAAuserid"></span>
 								</h3>
 
 								<div class="box-tools pull-right">
@@ -251,6 +251,10 @@
 										data-widget="collapse">
 										<i class="fa fa-plus"></i>
 									</button>
+									<button type="button" class="btn btn-box-tool"
+											onclick="getAAAstatus()">
+											<i class="fa fa-refresh"></i>
+										</button>
 
 								</div>
 							</div>
@@ -262,9 +266,9 @@
 									<tbody>
 										<tr>
 											<td><label>Plan In AAA </label></td>
-											<td><span id="planAAA"></span></td>
+											<td><span class="AAAinfield" id="planAAA"></span></td>
 											<td><label>CallerID</label></td>
-											<td><span id="calleridAAA"></span></td>
+											<td><span class="AAAinfield" id="calleridAAA"></span></td>
 										</tr>
 
 									</tbody>
@@ -274,18 +278,18 @@
 									<tbody>
 										<tr>
 											<td><label>Userid</label></td>
-											<td><span id="useridAAA"></span></td>
+											<td><span id="useridAAA" class="AAAinfield"></span></td>
 
 											<td><label>CallerID</label></td>
-											<td><span id="calleridactAAA"></span></td>
+											<td><span id="calleridactAAA" class="AAAinfield"></span></td>
 
 
 										</tr>
 										<tr>
 											<td><label>LoginIP</label></td>
-											<td><span id="loginIPAAA"></span></td>
+											<td><span id="loginIPAAA" class="AAAinfield"></span></td>
 											<td><label>Start Time</label></td>
-											<td><span id="startimeidAAA"></span></td>
+											<td><span id="startimeidAAA" class="AAAinfield"></span></td>
 
 										</tr>
 
@@ -310,7 +314,7 @@
 
 
 
-					<!-- /.col -->
+					<!-- TMS/.col -->
 
 
 					<!-- TMS status from here -->
@@ -348,7 +352,7 @@
 
 
 
-					<!-- /.col -->
+					<!-- FAP/.col -->
 
 
 
@@ -480,7 +484,7 @@
 					<!-- 					cols -->
 
 					<div class="col-md-12">
-						<!-- AREA CHART -->
+						<!-- OLT _OLE -->
 						<div class="box box-primary collapsed-box">
 							<div class="box-header with-border">
 								<h3 class="box-title">
