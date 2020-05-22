@@ -173,7 +173,6 @@ function clearformcontains(){
 	$('#complainservcies').empty();
 	// clearing AAA values
 	
-	datanum=null;
 	$('.AAAinfield').html("");
 	Date.prototype.toDateInputValue = (function() {
 	    var local = new Date(this);
@@ -190,8 +189,7 @@ function clearformcontains(){
 
 
 function getAAAstatus(){
-	
-	$.get('../complain/getAAAstatus1', {
+		$.get('../complain/getAAAstatus1', {
 		FTTHDatanum : datanum
 			}, function(response) {
 				console.log(response);
@@ -327,8 +325,6 @@ function getAAAAccountinglog(){
 
 
 function getSubsInfo(subsinfo) {
-
-
 		try{
 			
 			$('#divforsubsinfo').empty();

@@ -28,6 +28,8 @@ import com.dao.RegionDao;
 import com.dao.TeamDao;
 import com.dao.UserDao;
 import com.dao.UserTeamDao;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.MenuAccess;
 import com.model.Region;
 import com.model.UserInformationModel;
@@ -173,7 +175,7 @@ public class TroubleTicketController {
 	        logger.info("Closing Ticket"+token+ "by "+user.getUSER_ID(), locale);
 		       
 	        MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
-			if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+			if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
 				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 			}
 
@@ -189,6 +191,45 @@ public class TroubleTicketController {
 	        return msg;
 
 	    }
+
+	 @RequestMapping(value = "/troubleticket/CloseArray", method = RequestMethod.POST)
+	    @ResponseBody
+	    public String CloseArray(String Remarks,String tokenarray,Locale locale,HttpSession session) throws SQLException {
+	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+	        logger.info("Closing Ticket In arrays"+tokenarray+ "by "+user.getUSER_ID(), locale);
+			ObjectMapper mapper = new ObjectMapper();
+
+//			List<MenuAccess> editmodelist = mapper.readValue(menu_mode, new TypeReference<List<MenuAccess>>() {
+//			});
+		
+			
+ 
+	        
+	        MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+			if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+			}
+
+	        ComplainDao dao = new ComplainDao();
+	    	
+	        String msg = null;
+	        try {
+	        	List<String> myObjects = mapper.readValue(tokenarray,
+		                new TypeReference<List<String>>() {
+		        });
+	        	
+	        	     msg=	dao.Closearrayofticket(myObjects, user.getUSER_ID(), Remarks);
+	        	
+	   
+	         } catch (Exception e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	            return e.getLocalizedMessage();
+	         }
+	        return msg;
+
+	    }
+
 	 
 
 	 @RequestMapping(value = "/troubleticket/Resolved", method = RequestMethod.POST)
