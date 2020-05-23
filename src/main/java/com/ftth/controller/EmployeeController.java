@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.dao.CommonMenuDao;
 import com.dao.EmployeeDao;
@@ -87,9 +89,8 @@ public class EmployeeController {
         		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
         		
         		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+        			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
         			
-        			model.addAttribute("fx", "Unauthorized Page for this role!!");
-        			return "/home";
         		}
         		
         EmployeeDao dao = new EmployeeDao();
@@ -98,7 +99,7 @@ public class EmployeeController {
         employee.setUSER(userinfo.getUSER_ID());
         
         model.addAttribute("fx", "Employee controller list ");
-        model.addAttribute("userName", "NEPal");
+        model.addAttribute("userName", userinfo.getUSER_ID());
         String msg = null;
         try {
 			msg = dao.saveEmployeeObj(employee);
@@ -123,8 +124,8 @@ public class EmployeeController {
 
 		if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
 			
-			model.addAttribute("fx", "Unauthorized Page for this role!!");
-			return "/home";
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+			
 		}
 		
         EmployeeDao dao = new EmployeeDao();
@@ -133,7 +134,7 @@ public class EmployeeController {
       
         
         model.addAttribute("fx", "Employee controller list ");
-        model.addAttribute("userName", "NEPal");
+        model.addAttribute("userName", userinfo.getUSER_ID().toString());
         String msg = null;
         try {
 			msg = dao.updateEmployee(userinfo.getUSER_ID().toString(), EMPLOYEE_NAME, ADDRESS, TEL_NO, MOBILE_NO, EMAIL, DEPT_CD, LOCATION_CD,EMPLOYEE_CODE);
@@ -156,9 +157,9 @@ public class EmployeeController {
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 	
 		if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
-			
-			model.addAttribute("fx", "Unauthorized Page for this role!!");
-			return "/home";
+
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+	
 		}
 		
         

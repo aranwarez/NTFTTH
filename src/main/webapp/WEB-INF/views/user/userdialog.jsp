@@ -20,6 +20,7 @@
 				<div class="form-group">
 					<label for="name">USER_ID</label> <input type="text"
 						class="form-control" id="USER_ID" autocomplete="off" placeholder="Enter user id">
+						<span class="uniqueuser"></span>
 				</div>
 
 

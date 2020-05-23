@@ -125,4 +125,30 @@ public class ProfileDao {
 			
 	}
 	
+	public String uniqueUserCheck(String USER_ID) throws SQLException{
+		Connection con = DbCon.getConnection();
+		  try {
+//				This user id already Exists
+				PreparedStatement pst1=con.prepareStatement("select user_id,mobile_no from web_user where user_id=? or user_id=?");
+				  
+				pst1.setString(1, USER_ID.toUpperCase());	
+				pst1.setString(2,  USER_ID);	
+				ResultSet rs = pst1.executeQuery();
+				   if(rs.next()) {				  
+						
+					   return "This user id already Exists";
+				   }
+				
+			   
+		  }catch(Exception e) {
+			   e.printStackTrace();
+			  
+		   }finally {
+			   con.close();
+			   
+		   }
+		  return "";
+		  
+	}
+	
 }
