@@ -413,6 +413,28 @@ public class UserController {
 			return msg;
 
 		}
+		
+		
+		@RequestMapping(value = "/checkUniqueUser", method = RequestMethod.POST)
+	    @ResponseBody
+	    public String uniqueUser(String USER_ID, HttpSession session, Model model, Locale locale) {
+
+	        logger.info("checkUniqueUser {}.", locale);
+	        ProfileDao dao = new ProfileDao();
+
+	        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
+	        String updateby = userinfo.getUSER_ID();
+	        model.addAttribute("fx", "unique user ");
+	        model.addAttribute("userName", updateby);
+	        String msg = null;
+	        try {
+	            msg = dao.uniqueUserCheck(USER_ID);
+	        } catch (SQLException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+	        return msg;
+	    }
 	    
 	
 }

@@ -140,6 +140,10 @@ public class UserDao {
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+			if(e.getMessage().contains("unique constraint")) {
+				
+				return "This user id already Exists ";
+			}
 			return "Failed to Save : " + e.getMessage();
 		} finally {
 			con.close();
