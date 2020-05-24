@@ -52,11 +52,11 @@ public class SessionFilter implements Filter {
 
 		}
 
-		else if (url.equals("/postLogIn") || url.equals("/login")) {
+		else if (url.equals("/postLogIn") || url.equals("/login") ||url.equals("/forgotpassword") || url.equals("/generateToken")) {
 			// action to record attemp of the user login
 			System.out.println("login page");
 		}
-
+		
 		else if (session == null || session.getAttribute("UserList") == null) {
 			ServletContext servletContext = request.getServletContext();
 			RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/login");
