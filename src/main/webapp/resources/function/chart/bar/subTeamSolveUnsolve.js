@@ -95,64 +95,94 @@ $.ajax({
 	 var coloRN = [];
 	 var coloRC = [];
 	 var coloRS = [];
-		for ( var i in data) {	
+	 //--
+	 
+	 
+	 for ( var i in data) {
+			if (!labels.includes(data[i].SUB_TEAM_CODE)) {
+				// teampointer=data[i].SUB_TEAM_CODE;
+				labels.push(data[i].SUB_TEAM_CODE);
+				// if team doesn't exist
+				// taking count of existing ticket inside one team
+				var newcount = 0;
+				var closecount = 0;
+				var forwardcount = 0;
+				var solvedcount = 0;
+				for ( var j in data) {
+
+					if (data[j].SUB_TEAM_CODE == data[i].SUB_TEAM_CODE) {
+
+						if (data[j].SOLVE_FLAG == 'FORWARDED') {
+
+							forwardcount = data[j].SCOUNT;
+						}
+
+						else if (data[j].SOLVE_FLAG == 'NEW') {
+							newcount = data[j].SCOUNT;
+						} else if (data[j].SOLVE_FLAG == 'CLOSED') {
+							closecount = data[j].SCOUNT;
+						}
+
+						else if (data[j].SOLVE_FLAG == 'SOLVED') {
+							solvedcount = data[j].SCOUNT;
+						}
+					} // if for teaminsdie loop
+					
+					
+				}// for loop
+
+				// pusing all the count for one team
+				forward.push(forwardcount);
 			
-			 
-			if(!labels.includes(data[i].SUB_TEAM_CODE)){								
-				labels.push(data[i].SUB_TEAM_CODE);				
-		}
+
+				//
+				newtoken.push(newcount);
 			
-			if(data[i].SOLVE_FLAG == 'FORWARDED'){ 
+				//
+				closed.push(closecount);
 				
-				forward.push(data[i].SCOUNT);
-				coloRF.push(dynamicColors());
+				//
+				solved.push(solvedcount);
+				
+
+				
 			}
 			
-	if(data[i].SOLVE_FLAG=='NEW'){
-		
-		newtoken.push(data[i].SCOUNT);
-		coloRN.push(dynamicColors());
-	}
-	if(data[i].SOLVE_FLAG == 'CLOSED'){ 
-		
-		closed.push(data[i].SCOUNT);
-		coloRC.push(dynamicColors());
-	}
-			
-	if(data[i].SOLVE_FLAG == 'SOLVED'){ 
-		
-		solved.push(data[i].SCOUNT);
-		coloRS.push(dynamicColors());
-	}
-			
-			
 		}
-		
+	
+		//--
+	 
+	 var newcolor=dynamicColors();
+	 var forcolor=dynamicColors();
+	 var closecolor=dynamicColors();
+	 var solvecolor=dynamicColors();
+	 
+	 
 
 		var arrydata2 = {
 		  labels: labels,
 		  datasets: [
 		    {
 		      label: "NEW",
-		      backgroundColor: coloRN,
+		      backgroundColor: newcolor,
 		      data: newtoken,
 		      stack: 1
 		    },
 		    {
 		      label: "CLOSED",
-		      backgroundColor:  coloRC,
+		      backgroundColor:  closecolor,
 		      data: closed,
 		      stack: 2
 		    },
 		    {
 		      label: "FORWARDED",
-		      backgroundColor: coloRF,
+		      backgroundColor: forcolor,
 		      data: forward,
 		      stack: 3
 		    },
 		    {
 		        label: "SOLVED",
-		        backgroundColor: coloRS,
+		        backgroundColor: solvecolor,
 		        data: solved,
 		        stack: 4
 		      }
