@@ -590,7 +590,7 @@ public class ComplainDao {
 				}
 			}
 			con.commit();
-			return "Succesfully Resolved Complaint";
+			return "New Trouble Ticket Generated, Token ID : "+tOKEN_ID;
 
 		} catch (Exception e) {
 			con.rollback();
@@ -769,6 +769,16 @@ public class ComplainDao {
 		con.setAutoCommit(false);
 		PreparedStatement pst = null;
 		try {
+			//check validate if forwardtoken team is assigned to session user
+			pst = con.prepareStatement("select sub_team_code from token_master where sub_token_id=? and exists (select SUB_TEAM_CODE from WEB_USER_TEAM_MAP where USER_ID=? and token_master.SUB_TEAM_CODE = WEB_USER_TEAM_MAP.SUB_TEAM_CODE)");
+			pst.setString(1, forwardtoken);
+			pst.setString(2, User);
+			ResultSet rsvalidateteam=pst.executeQuery();
+			if(!rsvalidateteam.next()) {
+				return ("Forbidden: Current Ticket Team isn't assigned to User!!!");
+			
+			}
+			//validation till here
 
 			pst = con.prepareStatement("INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n"
 					+ "                               SUB_TOKEN_ID,\r\n"
@@ -815,6 +825,17 @@ public class ComplainDao {
 		con.setAutoCommit(false);
 		PreparedStatement pst = null;
 		try {
+			//check validate if forwardtoken team is assigned to session user
+			pst = con.prepareStatement("select sub_team_code from token_master where sub_token_id=? and exists (select SUB_TEAM_CODE from WEB_USER_TEAM_MAP where USER_ID=? and token_master.SUB_TEAM_CODE = WEB_USER_TEAM_MAP.SUB_TEAM_CODE)");
+			pst.setString(1, forwardtoken);
+			pst.setString(2, User);
+			ResultSet rsvalidateteam=pst.executeQuery();
+			if(!rsvalidateteam.next()) {
+				return ("Forbidden: Current Ticket Team isn't assigned to User!!!");
+			
+			}
+			//validation till here
+
 
 			pst = con.prepareStatement("INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n"
 					+ "                               SUB_TOKEN_ID,\r\n"
@@ -861,6 +882,17 @@ public class ComplainDao {
 		con.setAutoCommit(false);
 		PreparedStatement pst = null;
 		try {
+			//check validate if ticket team is assigned to session user
+			pst = con.prepareStatement("select sub_team_code from token_master where sub_token_id=? and exists (select SUB_TEAM_CODE from WEB_USER_TEAM_MAP where USER_ID=? and token_master.SUB_TEAM_CODE = WEB_USER_TEAM_MAP.SUB_TEAM_CODE)");
+			pst.setString(1, closetoken);
+			pst.setString(2, User);
+			ResultSet rsvalidateteam=pst.executeQuery();
+			if(!rsvalidateteam.next()) {
+				return ("Forbidden: Current Ticket Team isn't assigned to User!!!");
+			
+			}
+			//validation till here
+
 
 			pst = con.prepareStatement("INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n"
 					+ "                               SUB_TOKEN_ID,\r\n"
@@ -930,6 +962,18 @@ public class ComplainDao {
 		PreparedStatement pst = null;
 		try {
 			for (String var : closetokenarray) {
+				//check validate if ticket team is assigned to session user
+				pst = con.prepareStatement("select sub_team_code from token_master where sub_token_id=? and exists (select SUB_TEAM_CODE from WEB_USER_TEAM_MAP where USER_ID=? and token_master.SUB_TEAM_CODE = WEB_USER_TEAM_MAP.SUB_TEAM_CODE)");
+				pst.setString(1, var);
+				pst.setString(2, User);
+				ResultSet rsvalidateteam=pst.executeQuery();
+				if(!rsvalidateteam.next()) {
+					con.rollback();
+					return ("Forbidden: Current Ticket Team isn't assigned to User!!!");
+				
+				}
+				//validation till here
+
 				String closetoken=var;
 				pst = con.prepareStatement(
 						"INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n" + "                               SUB_TOKEN_ID,\r\n"

@@ -92,7 +92,9 @@
 					<!-- /.col -->
 				</div>
 			</form>
-
+	<button onclick="window.location.href='forgotpassword'"
+								class="btn bg-red">Forgot Password</button>
+	
 
 
 		</div>
