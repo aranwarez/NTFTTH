@@ -150,6 +150,16 @@
 				</div>
 				</div>
 <!-- close 2nd row -->
+
+<!-- close 2nd row -->
+
+<div class="col-md-9">
+
+<jsp:include page="${request.contextPath}/subTeamSolveUnsolve"></jsp:include>
+
+				</div>
+				<!-- /./ -->
+
 					
 				</div>
 				<!-- /.row -->
@@ -190,7 +200,12 @@
 	 
 	
    	<script src="<c:url value="/resources/function/Dashboard/srvwiserevenue.js" />"></script>
-   	<script src="<c:url value="/resources/function/firsttimepassword.js" />"></script>
+   	
+   	
+   	<script src="<c:url value="/resources/function/chart/bar/subTeamSolveUnsolve.js?a=125" />"></script>
+   	
+   	
+   	<%-- 	<script src="<c:url value="/resources/function/firsttimepassword.js" />"></script> --%>
 <%-- 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script> --%>
 </body>
 </html>

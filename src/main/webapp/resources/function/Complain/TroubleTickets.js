@@ -132,7 +132,7 @@ function getDistrict() {
 
 		if (data.length == 0 || data.length == undefined) {
 
-			clearDataTable();
+			
 			return;
 		}
 
@@ -161,7 +161,7 @@ function getOffice() {
 		$('#OLT_CODE').find('option:not(:first)').remove();
 		if (data.length == 0 || data.length == undefined) {
 
-			clearDataTable();
+		//	clearDataTable();
 			return;
 		}
 
@@ -190,7 +190,7 @@ function getOLT() {
 		$('#OLT_CODE').find('option:not(:first)').remove();
 		if (data.length == 0 || data.length == undefined) {
 
-			clearDataTable();
+//			clearDataTable();
 			return;
 		}
 
@@ -219,7 +219,7 @@ function getfdcteam() {
 		$('#WEBTEAMCODE').find('option:not(:first)').remove();
 		if (data.length == 0 || data.length == undefined) {
 
-			clearDataTable();
+		//	clearDataTable();
 			return;
 		}
 
