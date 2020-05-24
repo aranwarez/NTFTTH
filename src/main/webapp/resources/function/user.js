@@ -231,3 +231,21 @@ function del() {
 
 
 
+jQuery("#USER_ID").on("change", function(e) {
+	  var input = $(this);
+	  var val = input.val();
+
+	  $.post('../checkUniqueUser', {USER_ID: val}, function (data) {	    
+
+		  if(data.length!=0){	
+			  $(".uniqueuser").html(data);
+		  }
+		  else{
+			  $(".uniqueuser").html('');
+		  	}
+
+	    });
+	  
+	  
+
+	});
