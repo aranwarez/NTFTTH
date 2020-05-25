@@ -105,7 +105,7 @@ public class UserDao {
 
 	public String saveUser(UserInformationModel m) throws SQLException {
 		Connection con = DbCon.getConnection();
-		con.setAutoCommit(false);
+	//	con.setAutoCommit(false);
 		try {
 			PreparedStatement pst = con.prepareStatement("insert into web_user(USER_ID,FULL_NAME,PASSWORD,\r\n"
 					+ "EMPLOYEE_CODE,LOCK_FLAG,SUPER_FLAG,DISABLE_FLAG,\r\n"
@@ -134,9 +134,9 @@ public class UserDao {
 			String message = "FTTHCMS URL: http://172.16.39.16:8080/FTTH " + "Userid: " + m.getUSER_ID().toUpperCase()
 					+ " Password: " + m.getPASSWORD();
 			SendSMS.sendsms(m.getMOBILE_NO(), message, "USER ADDED", m.getUSER(), "0");
-			con.commit();
+	//		con.commit();
 		} catch (Exception e) {
-			con.rollback();
+	//		con.rollback();
 			e.printStackTrace();
 			if (e.getMessage().contains("unique constraint")) {
 
