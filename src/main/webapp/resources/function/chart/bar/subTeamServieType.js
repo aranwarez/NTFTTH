@@ -73,7 +73,7 @@ Chart.controllers.groupableBar = Chart.controllers.bar.extend({
 
 //sevice wise payable
 $.ajax({
-	url : "../bar-charts/subTeamSolveUnsolve",
+	url : "../bar-charts/subTeamServiceType",
 	method : "GET",
 	success : function(data) {
 		console.log(data);		
@@ -91,10 +91,7 @@ $.ajax({
 	 var newtoken = [];
 	 var closed = [];
 	 var solved = []; 
-	 var coloRF = [];
-	 var coloRN = [];
-	 var coloRC = [];
-	 var coloRS = [];
+	 
 	 //--
 	 
 	 
@@ -112,18 +109,18 @@ $.ajax({
 
 					if (data[j].SUB_TEAM_CODE == data[i].SUB_TEAM_CODE) {
 
-						if (data[j].SOLVE_FLAG == 'FORWARDED') {
+						if (data[j].SERVICE_TYPE == 'FTTH DATA') {
 
 							forwardcount = data[j].SCOUNT;
 						}
 
-						else if (data[j].SOLVE_FLAG == 'NEW') {
+						else if (data[j].SERVICE_TYPE == 'FTTH VOICE') {
 							newcount = data[j].SCOUNT;
-						} else if (data[j].SOLVE_FLAG == 'CLOSED') {
+						} else if (data[j].SERVICE_TYPE == 'FTTH IP TV') {
 							closecount = data[j].SCOUNT;
 						}
 
-						else if (data[j].SOLVE_FLAG == 'SOLVED') {
+						else if (data[j].SERVICE_TYPE == 'IPTV') {
 							solvedcount = data[j].SCOUNT;
 						}
 					} // if for teaminsdie loop
@@ -159,29 +156,29 @@ $.ajax({
 	 
 	 
 
-		var arrydata2 = {
+		var arrydata3 = {
 		  labels: labels,
 		  datasets: [
 		    {
-		      label: "NEW",
+		      label: "FTTH DATA",
 		      backgroundColor: newcolor,
-		      data: newtoken,
+		      data: forward,
 		      stack: 1
 		    },
 		    {
-		      label: "CLOSED",
+		      label: "FTTH VOICE",
 		      backgroundColor:  closecolor,
-		      data: closed,
+		      data: newtoken,
 		      stack: 2
 		    },
 		    {
-		      label: "FORWARDED",
+		      label: "FTTH IP TV",
 		      backgroundColor: forcolor,
-		      data: forward,
+		      data: closed,
 		      stack: 3
 		    },
 		    {
-		        label: "SOLVED",
+		        label: "IPTV",
 		        backgroundColor: solvecolor,
 		        data: solved,
 		        stack: 4
@@ -190,10 +187,10 @@ $.ajax({
 		  ]
 		};
 
-		var ctx = document.getElementById("subTeamSolveUnsolve").getContext("2d");
+		var ctx = document.getElementById("subTeamServieType").getContext("2d");
 		new Chart(ctx, {
 		  type: 'groupableBar',
-		  data: arrydata2,
+		  data: arrydata3,
 		  options: {
 		    scales: {
 		      yAxes: [{

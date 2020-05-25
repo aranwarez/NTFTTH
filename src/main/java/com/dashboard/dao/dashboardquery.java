@@ -429,7 +429,7 @@ public class dashboardquery {
 					"                         AND TOKENS.SUB_TEAM_CODE=NVL (?, SUB_TEAM_CODE)\r\n" + 
 					"                         and TOKENS.SERVICE_TYPE_ID=NVL (?, SERVICE_TYPE_ID)\r\n" + 
 					"                         and TOKENS.CREATE_DT between nvl(null,sysdate-30) and nvl(null,sysdate) \r\n" + 
-					"                         group by TOKENS.sub_team_code,TOKENS.SOLVE_FLAG order by TOKENS.sub_team_code";
+					"                         group by TOKENS.sub_team_code,TOKENS.SOLVE_FLAG order by TOKENS.sub_team_code,TOKENS.SOLVE_FLAG";
 			
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, user);
@@ -461,6 +461,71 @@ public class dashboardquery {
 		return null;
 	}
 	
+	
+	public List<Map<String, Object>> subTeamServiceType(String user,String SUB_TEAM_CODE,String SERVICE_TYPE_ID,String FROM_DT,String TO_DT) throws SQLException {
+		Connection con = DbCon.getConnection();
+
+		try {
+			String qry="SELECT count(1) SCOUNT,TOKENS.sub_team_code,\r\n" + 
+					"        -- decode(SOLVE_FLAG,'N','NEW','Y','SOLVED','F','FORWARDED','C','CLOSED') SOLVE_FLAG\r\n" + 
+					"        (select DESCRIPTION  from M_SERVICE_TYPE where SERVICE_TYPE_ID=TOKENS.SERVICE_TYPE_ID) SERVICE_TYPE\r\n" + 
+					"    FROM (SELECT TM.TOKEN_ID,\r\n" + 
+					"                 SUB_TOKEN_ID,\r\n" + 
+					"                 SERVICE_ID,\r\n" + 
+					"                 SRV_NO,\r\n" + 
+					"                 COMPLAIN_NO,\r\n" + 
+					"                 CONTACT_NAME,\r\n" + 
+					"                 TM.PROBLEM_ID,\r\n" + 
+					"                 TM.REMARKS,\r\n" + 
+					"                 FDC_CODE,\r\n" + 
+					"                 TM.SUB_TEAM_CODE,\r\n" + 
+					"                 TM.SOLVE_FLAG,\r\n" + 
+					"                 SERVICE_TYPE_ID,\r\n" + 
+					"                 TM.CREATE_DT\r\n" + 
+					"            FROM MAIN_TOKEN_MASTER MTM, TOKEN_MASTER TM\r\n" + 
+					"           WHERE     MTM.TOKEN_ID = TM.TOKEN_ID\r\n" + 
+					"                 ) TOKENS\r\n" + 
+					"   WHERE     EXISTS\r\n" + 
+					"                 (SELECT *\r\n" + 
+					"                    FROM WEB_USER_TEAM_MAP\r\n" + 
+					"                   WHERE     USER_ID = ?\r\n" + 
+					"                         AND TOKENS.SUB_TEAM_CODE =\r\n" + 
+					"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
+					"        \r\n" + 
+					"                         AND TOKENS.SUB_TEAM_CODE=NVL (?, SUB_TEAM_CODE)\r\n" + 
+					"                         and TOKENS.SERVICE_TYPE_ID=NVL (?, SERVICE_TYPE_ID)\r\n" + 
+					"                         and TOKENS.CREATE_DT between nvl(null,sysdate-30) and nvl(null,sysdate) \r\n" + 
+					"                         group by TOKENS.sub_team_code,TOKENS.SERVICE_TYPE_ID order by TOKENS.sub_team_code";
+			
+			PreparedStatement pst = con.prepareStatement(qry);
+			pst.setString(1, user);
+			pst.setString(2, SUB_TEAM_CODE);
+			pst.setString(3, SERVICE_TYPE_ID);
+			ResultSet rs = pst.executeQuery();
+
+			List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+			Map<String, Object> row = null;
+
+			ResultSetMetaData metaData = rs.getMetaData();
+			Integer columnCount = metaData.getColumnCount();
+
+			while (rs.next()) {
+				row = new HashMap<String, Object>();
+				for (int i = 1; i <= columnCount; i++) {
+					
+					row.put(metaData.getColumnName(i), rs.getObject(i));
+					
+				}
+				resultList.add(row);
+			}
+			return resultList;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			con.close();
+		}
+		return null;
+	}
 
 
 	
