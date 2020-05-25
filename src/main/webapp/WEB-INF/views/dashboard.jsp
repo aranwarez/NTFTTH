@@ -114,7 +114,7 @@
 				
 				
 <!-- 				2nd row  -->
-<div class="col-md-9">
+<div class="col-md-6">
 <div class="box">
 					
 <!-- 					<div id="barprtoverlay" class="overlay"> -->
@@ -141,7 +141,7 @@
 							
 								<div class="chart">
 									<canvas id="barmonthly" style="height: 174px; width: 348px;" height="217" width="435"></canvas>
-									<progress id="animationProgress" max="10" value="0" style="width: 100%"></progress>
+								
 								</div>
 							</div>
 							<!-- /.box-body -->
@@ -153,15 +153,15 @@
 
 <!-- close 2nd row -->
 
-<div class="col-md-9">
+<div class="col-md-6">
 
-<jsp:include page="${request.contextPath}/subTeamSolveUnsolve"></jsp:include>
+<jsp:include page="${request.contextPath}/dashboard/subTeamSolveUnsolve"></jsp:include>
 
 				</div>
 				
-				<div class="col-md-9">
+				<div class="col-md-6">
 
-<jsp:include page="${request.contextPath}/subTeamServiceType"></jsp:include>
+<jsp:include page="${request.contextPath}/dashboard/subTeamServiceType"></jsp:include>
 
 				</div>
 				
