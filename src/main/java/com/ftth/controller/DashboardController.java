@@ -100,5 +100,33 @@ public class DashboardController {
 
 	}
 	
+	@RequestMapping(value = "/subTeamServiceType", method = RequestMethod.GET)
+	public String subTeamServiceType(Locale locale, Model model, HttpSession session, HttpServletRequest request) throws SQLException {
+		logger.info("Welcome subTeamSolveUnsolve ! The client locale is {}.", locale);
+		
+		model.addAttribute("menu_name", "Sub Team Service Type ");
+		
+		return "chart/bar/subTeamServiceType";
+	}
+	
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET, value = "bar-charts/subTeamServiceType",produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Map<String, Object>> subTeamServiceType(HttpServletRequest request,HttpSession session) throws SQLException {
+		
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+			
+		dashboardquery dao=new dashboardquery();
+			
+		String SUB_TEAM_CODE = request.getParameter("SUB_TEAM_CODE");
+		String SERVICE_TYPE_ID = request.getParameter("SERVICE_TYPE_ID");
+		String FROM_DT = request.getParameter("FROM_DT");
+		String TO_DT = request.getParameter("TO_DT");
+		
+	
+		return dao.subTeamServiceType(user.getUSER_ID(), SUB_TEAM_CODE, SERVICE_TYPE_ID, FROM_DT, TO_DT);
+
+
+	}
+	
 
 }

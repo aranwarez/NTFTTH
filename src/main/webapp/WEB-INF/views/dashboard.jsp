@@ -158,6 +158,13 @@
 <jsp:include page="${request.contextPath}/subTeamSolveUnsolve"></jsp:include>
 
 				</div>
+				
+				<div class="col-md-9">
+
+<jsp:include page="${request.contextPath}/subTeamServiceType"></jsp:include>
+
+				</div>
+				
 				<!-- /./ -->
 
 					
@@ -204,6 +211,7 @@
    	
    	<script src="<c:url value="/resources/function/chart/bar/subTeamSolveUnsolve.js?a=125" />"></script>
    	
+   	<script src="<c:url value="/resources/function/chart/bar/subTeamServieType.js?a=125" />"></script>
    	
    	<%-- 	<script src="<c:url value="/resources/function/firsttimepassword.js" />"></script> --%>
 <%-- 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script> --%>
