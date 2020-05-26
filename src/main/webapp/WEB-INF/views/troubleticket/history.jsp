@@ -90,7 +90,7 @@ Enter Service No.
 								<table id="example1" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-										<td>SRV.NO</td>
+									     	<td>SRV.NO</td>
 											<th>OFFICE</th>
 											<th>OLT</th>
 											<th>FDC</th>
@@ -101,6 +101,7 @@ Enter Service No.
 											<th>FLAG</th>
 											<th>REMARKS</th>
 											<th>Create By</th>
+											<th>Date</th>
 											<th>CPE_RX_LVL</th>
 										
 
@@ -124,6 +125,7 @@ Enter Service No.
 									<td>${user.SOLVE_FLAG}</td>
 									<td>${user.REMARKS}</td>
 									<td>${user.CREATE_BY} </td>
+									<td>${user.CREATE_DT}</td>
 									<td>${user.CPE_RX_LVL}</td> 
 										
 									</tr>

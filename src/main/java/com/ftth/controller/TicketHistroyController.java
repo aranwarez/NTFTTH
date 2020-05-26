@@ -46,7 +46,7 @@ public class TicketHistroyController {
 				model.addAttribute("fx", "Unauthorized Page for this role!!");
 				return "/home";
 			}
-			model.addAttribute("fx", "Trouble Tickets histry");
+			model.addAttribute("fx", "Trouble Ticket histry by Service No");
 			
 	        
 			return "troubleticket/history";
@@ -59,8 +59,6 @@ public class TicketHistroyController {
 			
 			logger.info("/history/by service"+user.getUSER_ID()+" srv no "+request.getParameter("MAIN_SRV_NO") , locale);
 			
-			
-
 			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 			if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
 				model.addAttribute("fx", "Unauthorized Page for this role!!");
