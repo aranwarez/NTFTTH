@@ -46,12 +46,12 @@ public class LoginController {
 		} else if (level != null && level.getLOCK_FLAG().equalsIgnoreCase("Y")) {
 
 			model.addAttribute("error", "You Account is locked !");
-			model.addAttribute("fx", "Nepal Telecom FTTH CMS Complain Management Systems ");
+			model.addAttribute("fx", "<h1>FTTH CMS</h1><h2>Complain Management System</h2>");
 
 		} else {
 
 			model.addAttribute("error", "Wrong Credentials!!");
-			model.addAttribute("fx", "Nepal Telecom FTTH CMS Complain Management System  ");
+			model.addAttribute("fx", "<h1>FTTH CMS</h1><h2>Complain Management System</h2> ");
 
 		}
 		return "NTC/common/login";

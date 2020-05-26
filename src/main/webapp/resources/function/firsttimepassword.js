@@ -82,9 +82,9 @@
 			
 			function changePassword() {
 			    //   alert($("#oldpass").html());
-			    // checkPass();
+			    // checkPass(); $("#oldpass").html().substring(0, 9) == 'Confirmed' &&
 
-			    if ($("#oldpass").html().substring(0, 9) == 'Confirmed' && $('#pass').val() == $('#cpassmatch').val()) {
+			    if ($('#pass').val() == $('#cpassmatch').val()) {
 
 
 			        $.post('../update-user/password', { PASSWORD: $("#pass").val()}, function (response) {

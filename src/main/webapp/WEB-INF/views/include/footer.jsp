@@ -34,11 +34,12 @@
 					<div class="modal-body">
 					<b><p>You need to update your password because this is the first time you are signing in,</br>
 					 Thank you !</p></b>
-					<div class="form-group">
+					 
+					<!-- <div class="form-group">
 							<label for="password">Old Password</label> <input type="password"
 								class="form-control" id="myOldPassword" onchange="return OldPassword()">
 				<span id="oldpass"></span>
-						</div>
+						</div> -->
 						
 						<div class="form-group">
 							<label for="name">New Password</label> <input type="password"

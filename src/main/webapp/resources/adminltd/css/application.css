@@ -39,9 +39,21 @@ object {
 	height: auto;
 }
 
+.select2-container {
+	width: 100% !important;
+	margin-bottom: 10px !important;
+}
+
+
 @media ( min-width : 768px) {
 	#image_notication .modal-dialog {
 		width: auto;
 		max-width: 90%;
 	}
+	
+	.select2-container {
+		
+	}
+	
 }
+
