@@ -91,9 +91,6 @@ Enter Service No.
 									<thead>
 										<tr>
 									     	<td>SRV.NO</td>
-											<th>OFFICE</th>
-											<th>OLT</th>
-											<th>FDC</th>
 											<th>COMPLAIN_NO</th>											
 											<th>SERVICE_NO</th>
 											<th>FROM_TEAM</th>
@@ -115,9 +112,6 @@ Enter Service No.
 									
 									<tr>
 									<td>${user.MAIN_SRV_NO}</td>
-									<td>${user.REGION}(${user.OFFICE})</td>
-									<td>${user.OLT}</td>
-									<td>${user.FDC}</td>
 									<td>${user.CONTACT_NAME}(${user.COMPLAIN_NO})</td>									
 									<td>${user.MASTER_SERVICE_NO}</td>								
 									<td>${user.FROM_SUB_TEAM_CODE} </td>
@@ -186,7 +180,8 @@ Enter Service No.
 		$(function() {
 
 			$('#example1').DataTable({
-				"bDestroy" : true
+				"bDestroy" : true,
+				"ordering": false
 			})
 			$("#REGION_CODE,#ZONE_CODE,#DISTRICT_CODE,#OFFICE_CODE,#USER_ID")
 					.select2();

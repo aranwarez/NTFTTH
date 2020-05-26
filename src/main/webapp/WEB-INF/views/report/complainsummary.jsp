@@ -62,7 +62,7 @@
 								<form method="post">
 
 									<!--                                        from here -->
-									<div class="col-xs-2">
+									<div class="col-md-2">
 										<c:choose>
 											<c:when test="${USER_LEVEL=='1'}">
 
@@ -96,11 +96,8 @@
 												<select id="REGION_CODE" name="REGION_CODE"
 													class="form-control" onchange="return getZone()">
 
-													<c:if test="${USER_LEVEL=='2'}">
-														<option value="">Select Region</option>
-													</c:if>
-													<c:forEach var="user3" items="${levelcontrollist}"
-														begin="1" end="1">
+													
+													<c:forEach var="user3" items="${levelcontrollist}">
 
 
 														<option value="${user3.REGION_CODE}" selected="selected">${user3.REGION}</option>
@@ -115,7 +112,7 @@
 									</div>
 
 
-									<div class="col-xs-2">
+									<div class="col-md-2">
 
 
 										<c:choose>
@@ -125,11 +122,8 @@
 												<select id="ZONE_CODE" name="ZONE_CODE" class="form-control"
 													onchange="getDistrict()">
 
-													<c:if test="${USER_LEVEL=='3'}">
-														<option value="">Select Zone</option>
-													</c:if>
-													<c:forEach var="user3" items="${levelcontrollist}"
-														begin="1" end="1">
+													
+													<c:forEach var="user3" items="${levelcontrollist}">
 
 														<option value="${user3.ZONE_CODE}" selected="selected">${user3.ZONE}</option>
 
@@ -144,8 +138,7 @@
 												<select id="ZONE_CODE" name="ZONE_CODE" class="form-control"
 													onchange="getDistrict()">
 
-													<c:forEach var="user3" items="${levelcontrollist}"
-														begin="1" end="1">
+													<c:forEach var="user3" items="${levelcontrollist}">
 
 														<option value="${user3.ZONE_CODE}" selected="selected">${user3.ZONE}</option>
 
@@ -161,8 +154,7 @@
 												<select id="ZONE_CODE" name="ZONE_CODE" class="form-control"
 													onchange="getDistrict()">
 
-													<c:forEach var="user3" items="${levelcontrollist}"
-														begin="1" end="1">
+													<c:forEach var="user3" items="${levelcontrollist}">
 
 														<option value="${user3.ZONE_CODE}" selected="selected">${user3.ZONE}</option>
 
@@ -188,15 +180,14 @@
 
 									</div>
 
-									<div class="col-xs-2">
+									<div class="col-md-2">
 										<c:choose>
 											<c:when test="${USER_LEVEL=='4'}">
 
 												<select id="DISTRICT_CODE" name="DISTRICT_CODE"
 													onchange="return getOffice()" class="form-control">
-													<option value="">Select District</option>
-													<c:forEach var="user3" items="${levelcontrollist}"
-														begin="1" end="1">
+												
+													<c:forEach var="user3" items="${levelcontrollist}">
 
 														<option value="${user3.DISTRICT_CODE}" selected="selected">${user3.DISTRICT}</option>
 
@@ -212,8 +203,7 @@
 												<select id="DISTRICT_CODE" name="DISTRICT_CODE"
 													onchange="return getOffice()" class="form-control">
 
-													<c:forEach var="user3" items="${levelcontrollist}"
-														begin="1" end="1">
+													<c:forEach var="user3" items="${levelcontrollist}">
 
 														<option value="${user3.DISTRICT_CODE}" selected="selected">${user3.DISTRICT}</option>
 
@@ -238,17 +228,16 @@
 									</div>
 
 
-									<div class="col-xs-2">
+									<div class="col-md-2">
 
 										<c:choose>
 											<c:when test="${USER_LEVEL=='5'}">
 
 												<select id="OFFICE_CODE" name="OFFICE_CODE"
 													onchange="return getOLT()" class="form-control">
-													<option value="">Select Office</option>
+													
 
-													<c:forEach var="user3" items="${levelcontrollist}"
-														begin="1" end="1">
+													<c:forEach var="user3" items="${levelcontrollist}">
 
 														<option value="${user3.OFFICE_CODE}" selected="selected">${user3.OFFICE}</option>
 
@@ -280,13 +269,13 @@
 
 									<c:forEach var="DAT" items="${Date_list}">
 
-										<div class="col-xs-2">
+										<div class="col-md-2">
 
 											<input type="text" value="${DAT.NEP_FROM_DATE}"
 												class="nepali-calendar form-control" name="QFROM_DT"
 												id="QFROM_DT" placeholder="From Date">
 										</div>
-										<div class="col-xs-2">
+										<div class="col-md-2">
 
 											<input type="text" value="${DAT.NEP_TODAY_DATE}"
 												class="nepali-calendar form-control" name="QTO_DT"
@@ -298,7 +287,7 @@
 									</c:forEach>
 
 
-									<div class="col-xs-2">
+									<div class="col-md-2">
 										<select id="WEBTEAMCODE" name="WEBTEAMCODE"
 											class="form-control">
 											<option value="">Select Team</option>

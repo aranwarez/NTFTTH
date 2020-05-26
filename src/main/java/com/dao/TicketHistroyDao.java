@@ -18,7 +18,7 @@ public class TicketHistroyDao {
 	public List<Map<String, Object>> getComplainBySrvNo(String User, String MAIN_SRV_NO) throws SQLException {
 		Connection con = DbCon.getConnection();
 		try {
-			String qry = "select * from vw_token_all where MAIN_SRV_NO=?";
+			String qry = "select * from vw_token_all where MAIN_SRV_NO=?  ORDER BY token_ID,  create_dt DESC";
 
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, MAIN_SRV_NO.trim());
