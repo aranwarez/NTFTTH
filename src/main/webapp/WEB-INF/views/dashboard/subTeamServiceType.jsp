@@ -25,7 +25,7 @@
 							
 								<div class="chart">
 								<canvas id="subTeamServieType" width="800" height="450"></canvas>
-									<progress id="animationProgress" max="10" value="0" style="width: 100%"></progress>
+							
 								</div>
 							</div>
 							<!-- /.box-body -->
