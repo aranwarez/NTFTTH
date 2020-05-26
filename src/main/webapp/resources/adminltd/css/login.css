@@ -1,0 +1,120 @@
+html {
+	box-sizing: border-box;
+}
+
+body {
+	font: 18px/22px Arial, Helvetica, sans-serif;
+	background: #01358b;
+	color: #fff;
+	margin: 0;
+	min-width: 320px;
+}
+
+img {
+	vertical-align: top;
+	max-width: 100%;
+	height: auto;
+}
+
+#wrapper {
+	position: relative;
+	overflow: hidden;
+	padding: 30px 15px;
+}
+
+.ntc-logo {
+	width: 52px;
+	margin: 0 auto 20px;
+}
+
+.login-holder {
+	max-width: 500px;
+	margin: 0 auto;
+}
+
+.login-holder .banner-image {
+	margin-bottom: 40px;
+}
+
+.login-holder .heading-block {
+	margin-bottom: 40px;
+}
+
+.login-holder h1,
+.login-holder h2 {
+	font-family: Georgia, serif;
+	text-align: center;
+	margin: 0 0 25px;
+	color: #e6b74c;
+	letter-spacing: 0.5px;
+}
+
+.login-form {
+	background: #fff;
+	padding: 30px 26px;
+	color: #777;
+}
+
+.login-form .text {
+	display: block;
+	margin-bottom: 20px;
+}
+
+.login-form .input-holder {
+	border: 1px solid #ccc;
+	background: #fff;
+	position: relative;
+	margin-bottom: 15px;
+	padding-right: 47px;
+}
+
+.login-form .input-holder .ico {
+	width: 20px;
+	position: absolute;
+	top: 50%;
+	right: 13px;
+	transform: translateY(-50%);
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+	width: 100%;
+	border: none;
+	padding: 8px 16px;
+	box-sizing: border-box;
+	height: 46px;
+	font-size: 16px;
+	line-height: 28px;
+	outline: none;
+}
+
+.login-form input[type="submit"] {
+	background: #398eb5;
+	color: #fff;
+	border: none;
+	padding: 10px 12px;
+	font-size: 16px;
+	width: 118px;
+	height: 46px;
+	cursor: pointer;
+}
+.forget-password {
+	color:red;
+	
+}
+.login-form input[type="submit"]:hover {
+	background: #2c6182;
+}
+
+@media only screen and (min-width: 1024px) {
+	#wrapper {
+		/*padding: 70px 15px;*/
+	}
+
+	.ntc-logo {
+		width: 104px;
+		position: absolute;
+		top: 25px;
+		left: 75px;
+	}
+}

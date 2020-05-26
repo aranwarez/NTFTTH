@@ -46,7 +46,7 @@ public class RegionDao {
 		PreparedStatement pst=null;
 		try {
 			if(level.contains("6")) {		
-				System.out.println("size = 6");
+				System.out.println("level = 6");
 				pst = con.prepareStatement("select distinct(REGION_CODE),REGION DESCRIPTION,'Y' ACTIVE_STATUS from VW_FTTH_ALL_FDC VFAF where exists (select FDC_CODE  from WEB_USER_FDC_MAP where VFAF.FDC_CODE=WEB_USER_FDC_MAP.FDC_CODE and user_id=?)");
 				pst.setString(1, USER);
 			}else {
