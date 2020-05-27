@@ -113,7 +113,7 @@ public class EmployeeController {
     }
     @RequestMapping(value = "/employee/updateJS", method = RequestMethod.POST)
     @ResponseBody
-    public String updateJSEmployee(String EMPLOYEE_CODE,String EMPLOYEE_NAME,String ADDRESS,String TEL_NO,String MOBILE_NO,String EMAIL,String DEPT_CD,String LOCATION_CD, HttpSession session, Model model, Locale locale,HttpServletRequest request) throws SQLException {
+    public String updateJSEmployee(String EMPLOYEE_CODE,String EMPLOYEE_NAME,String ADDRESS,String TEL_NO,String MOBILE_NO,String EMAIL,String DEPT_CD,String LOCATION_CD,String EMP_TITLE, HttpSession session, Model model, Locale locale,HttpServletRequest request) throws SQLException {
 
         logger.info("Update JS Employee {}.", locale);
         
@@ -137,7 +137,7 @@ public class EmployeeController {
         model.addAttribute("userName", userinfo.getUSER_ID().toString());
         String msg = null;
         try {
-			msg = dao.updateEmployee(userinfo.getUSER_ID().toString(), EMPLOYEE_NAME, ADDRESS, TEL_NO, MOBILE_NO, EMAIL, DEPT_CD, LOCATION_CD,EMPLOYEE_CODE);
+			msg = dao.updateEmployee(userinfo.getUSER_ID().toString(), EMPLOYEE_NAME, ADDRESS, TEL_NO, MOBILE_NO, EMAIL, DEPT_CD, LOCATION_CD,EMP_TITLE,EMPLOYEE_CODE);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -120,29 +120,19 @@
 												<td>${user.DOB}</td>
 												<td>${user.DOJ}</td>
 												<td>${user.QUALIFICATION}</td>
-												<td>${user.DISABLE_FLAG}</td>
-												
-												
+												<td>${user.DISABLE_FLAG}</td>											
 												<td>${user.TEL_NO}</td>
-												
-												
-												<td>${user.MOBILE_NO}</td>
-												
-												
-												
-												<td>${user.EMAIL}</td>
-												
+												<td>${user.MOBILE_NO}</td> 
+												<td>${user.EMAIL}</td> 
 												<td>${user.EMP_NO}</td>
 												<td>${user.TTC_NO}</td>
-												
 												<td>${user.POST_CD}</td>
 												<td>${user.DEPT_CD}</td>
 												<td>${user.LOCATION_CD}</td>
 												<td>${user.EMP_LEVEL}</td>
 												<td>${user.EMP_TYPE}</td>
 												<td>${user.EMP_TITLE}</td>
-												<td>${user.DOB}</td>
-												<td>${user.DOB}</td>
+												
 												
 												<td>
 													<div class="btn-group">
@@ -219,6 +209,7 @@
 
 		})
 	</script>
+	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 	<script src="<c:url value="/resources/function/employee.js" />"></script>
 
 

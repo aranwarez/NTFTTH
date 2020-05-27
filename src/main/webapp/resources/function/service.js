@@ -76,8 +76,9 @@ function del() {
     $.post('../service/delete', {
         SERVICE_CODE: CODE
     }, function (data) {
+    	alert(data);
         location.reload();
-        alert(data);
+        
     });
 }
 

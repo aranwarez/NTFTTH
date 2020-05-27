@@ -116,7 +116,7 @@ function editUser(code,officeCode) {
         $("#EDITUSER_ID").val(CODE);
         $("#EDITFULL_NAME").val(response.full_NAME);
         $("#EDITEMPLOYEE_CODE").val(response.employee_CODE).trigger('change');
-//    	alert(response.employee_CODE);
+
     	
         if (response.lock_FLAG == 'Y') {
             $('input:radio[name="EDITLOCK_FLAG"][value=Y]').attr('checked', true);
@@ -190,7 +190,7 @@ function updateUser() {
     }, function (data) {
         	alert(data);
         	
-//        location.reload();
+      location.reload();
     });
 }
 

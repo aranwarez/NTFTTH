@@ -10,12 +10,14 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.dao.CommonMenuDao;
 import com.dao.TeamDao;
@@ -30,7 +32,7 @@ public class TeamController {
     @RequestMapping(value = "/team/list", method = RequestMethod.GET)
     public String teamlist(Locale locale, Model model,HttpServletRequest request) throws SQLException {
 
-        logger.info("Getting Services List", locale);
+        logger.info("Getting team List", locale);
         
       //LIST_FLAG
         UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
@@ -87,7 +89,7 @@ public class TeamController {
     @ResponseBody
     public String saveJSService(String TEAM_CODE, String DESCRIPTION, HttpServletRequest request,HttpSession session, Model model, Locale locale) throws SQLException {
 
-        logger.info("Save Service {}.", locale);
+        logger.info("Save team {}.", locale);
         
     //  ADD_FLAG
         UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
@@ -96,7 +98,7 @@ public class TeamController {
         		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
         			
         			model.addAttribute("fx", "Unauthorized Page for this role!!");
-        			return "/home";
+        			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
         		}
         		
         TeamDao dao = new TeamDao();
@@ -128,7 +130,7 @@ public class TeamController {
         		if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
         			
         			model.addAttribute("fx", "Unauthorized Page for this role!!");
-        			return "/home";
+        			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
         		}
         		
         		
@@ -158,7 +160,7 @@ public class TeamController {
 		if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
 			
 			model.addAttribute("fx", "Unauthorized Page for this role!!");
-			return "/home";
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 		}
        TeamDao dao = new TeamDao();
 

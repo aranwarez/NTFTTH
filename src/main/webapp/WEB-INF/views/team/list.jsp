@@ -163,6 +163,7 @@
 		})
 	</script>
 	<script src="<c:url value="/resources/function/team.js" />"></script>
+<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 
 </body>

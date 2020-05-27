@@ -10,12 +10,14 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.dao.CommonMenuDao;
 import com.dao.SubTeamDao;
@@ -100,7 +102,7 @@ public class SubTeamController {
 	        		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
 	        			
 	        			model.addAttribute("fx", "Unauthorized Page for this role!!");
-	        			return "/home";
+	        			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 	        		}
 	        
 	        SubTeamDao dao = new SubTeamDao();
@@ -134,7 +136,7 @@ public class SubTeamController {
 	        		if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
 	        			
 	        			model.addAttribute("fx", "Unauthorized Page for this role!!");
-	        			return "/home";
+	        			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 	        		}
 	        		
 	        SubTeamDao dao = new SubTeamDao();
@@ -163,7 +165,7 @@ public class SubTeamController {
 			if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
 				
 				model.addAttribute("fx", "Unauthorized Page for this role!!");
-				return "/home";
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 			}
 			
 			

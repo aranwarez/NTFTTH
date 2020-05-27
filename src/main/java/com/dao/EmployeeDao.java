@@ -178,11 +178,11 @@ public class EmployeeDao {
 	        return "successfully changed";
 	    }
 	 
-	    public String updateEmployee(String USER, String EMPLOYEE_NAME,String ADDRESS, String TEL_NO, String MOBILE_NO, String EMAIL, String DEPT_CD, String LOCATION_CD, String employee_code) throws SQLException {
+	    public String updateEmployee(String USER, String EMPLOYEE_NAME,String ADDRESS, String TEL_NO, String MOBILE_NO, String EMAIL, String DEPT_CD, String LOCATION_CD,String EMP_TITLE, String employee_code) throws SQLException {
 	  
 	        Connection con = DbCon.getConnection();
 	        try {
-	            PreparedStatement pst = con.prepareStatement("update m_employee set EMPLOYEE_NAME=?,ADDRESS=?,TEL_NO=?,MOBILE_NO=?,EMAIL=?,DEPT_CD=?,LOCATION_CD=?,UPDATE_DT=sysdate where EMPLOYEE_CODE=?");
+	            PreparedStatement pst = con.prepareStatement("update m_employee set EMPLOYEE_NAME=?,ADDRESS=?,TEL_NO=?,MOBILE_NO=?,EMAIL=?,DEPT_CD=?,LOCATION_CD=?,UPDATE_DT=sysdate,EMP_TITLE=? where EMPLOYEE_CODE=?");
 	            pst.setString(1, EMPLOYEE_NAME);
 	            pst.setString(2, ADDRESS);
 	            pst.setString(3, TEL_NO);
@@ -190,7 +190,8 @@ public class EmployeeDao {
 	            pst.setString(5, EMAIL);
 	            pst.setString(6, DEPT_CD);
 	            pst.setString(7, LOCATION_CD);
-	            pst.setString(8, employee_code);
+	            pst.setString(8, EMP_TITLE);
+	            pst.setString(9, employee_code);
 	            
 	            pst.executeUpdate();
 

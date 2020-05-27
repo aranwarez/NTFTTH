@@ -91,7 +91,7 @@
 <c:otherwise>
     <select id="REGION_CODE" class="form-control"  onchange="return getZone()">
     
-   	 <c:if test="${USER_LEVEL=='2'}"> <option value="">Select Region</option> </c:if>     
+   	    
 							<c:forEach var="user3" items="${levelcontrollist}">
 										
 	 				
@@ -175,7 +175,7 @@
     			<c:when test="${USER_LEVEL=='4'}">
     			
   					  <select id="DISTRICT_CODE" onchange="return getOffice()" class="form-control">
-							<option value="">Select District </option>						
+											
 									<c:forEach var="user3" items="${levelcontrollist}"  >				
 	 				
 						 <option value="${user3.DISTRICT_CODE}" selected="selected">${user3.DISTRICT}</option>

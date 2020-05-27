@@ -236,6 +236,7 @@
 		})
 	</script>
 	<script src="<c:url value="/resources/function/user.js?a=156" />"></script>
+   <script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 </body>
 </html>

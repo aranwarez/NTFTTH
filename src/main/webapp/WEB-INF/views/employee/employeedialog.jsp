@@ -43,26 +43,33 @@
 
                         <div class="form-group">
                             <label for="MARITAL_STATUS">MARITAL_STATUS</label>
-                            <input type="text" class="form-control" id="MARITAL_STATUS" >
+                            
+                            <select name="MARITAL_STATUS" id="MARITAL_STATUS" class="form-control" >
+    <option value="">-Select Marital Status-</option>
+    <option value="M">M</option>
+   <option value="U">U</option>
+</select>
+
                         </div>
 
-                        <div class="form-group">
+                           <!--<div class="form-group">
                             <label for="DOB">DOB</label>
                             <input type="text" class="form-control" id="DOB" >
-                        </div>
+                        </div> 
+                      
                         <div class="form-group">
                             <label for="DOJ">DOJ</label>
                             <input type="text" class="form-control" id="DOJ" >
                         </div>
-
+  -->
 
                         <div class="form-group">
                             <label for="QUALIFICATION">QUALIFICATION</label>
                             <input type="text" class="form-control" id="QUALIFICATION" >
                         </div>
                         <div class="form-group">
-                            <label for="QUALIFICATION">TEL_NO</label>
-                            <input type="text" class="form-control" id="QUALIFICATION" >
+                            <label for="TEL_NO">TEL_NO</label>
+                            <input type="text" class="form-control" id="TEL_NO" >
                         </div>
 
                         <div class="form-group">
@@ -76,12 +83,12 @@
 
                         <div class="form-group">
                             <label for="EMP_NO">EMP_NO</label>
-                            <input type="text" class="form-control" id="EMP_NO" required="required">
+                            <input type="number" class="form-control" id="EMP_NO" required="required" onkeypress="return isNumberKey(event)">
                         </div>
 
                         <div class="form-group">
                             <label for="TTC_NO">TTC_NO</label>
-                            <input type="text" class="form-control" id="TTC_NO">
+                            <input type="number" class="form-control" id="TTC_NO" onkeypress="return isNumberKey(event)">
                         </div>
 
                         <div class="form-group">
@@ -105,13 +112,13 @@
 
                         <div class="form-group">
                             <label for="EMP_LEVEL">EMP_LEVEL</label>
-                            <input type="text" class="form-control" id="EMP_LEVEL">
+                            <input type="number" class="form-control" id="EMP_LEVEL" onkeypress="return isNumberKey(event)">
                         </div>
 
 
                         <div class="form-group">
                             <label for="EMP_LEVEL">EMP_TYPE</label>
-                            <input type="text" class="form-control" id="EMP_TYPE">
+                            <input type="text" class="form-control" id="EMP_TYPE"   maxlength="1">
                         </div>
 
 
@@ -137,8 +144,7 @@
                 <h4 class="modal-title" id="myModalLabel">Edit Employee</h4>
             </div>
 
-            <form action="#"
-                  acceptCharset="UTF-8">
+            
 
                  <div class="modal-body">
                  
@@ -172,30 +178,39 @@
 
                         <div class="form-group">
                             <label for="MARITAL_STATUS">MARITAL_STATUS</label>
-                            <input type="text" class="form-control" id="EDITMARITAL_STATUS" >
+                                                       
+                                 <select name="MARITAL_STATUS" id="EDITMARITAL_STATUS" class="form-control" >
+    <option value="">-Select Marital Status-</option>
+
+    <option value="M">M</option>
+   <option value="U">U</option>
+ 
+</select>
+
                         </div>
 
-                        <div class="form-group">
+                       <!-- <div class="form-group">
                             <label for="DOB">DOB</label>
                             <input type="text" class="form-control" id="EDITDOB" >
                         </div>
+                        
                         <div class="form-group">
                             <label for="DOJ">DOJ</label>
                             <input type="text" class="form-control" id="EDITDOJ" >
                         </div>
-
+-->
 
                         <div class="form-group">
                             <label for="QUALIFICATION">QUALIFICATION</label>
                             <input type="text" class="form-control" id="EDITQUALIFICATION" >
                         </div>
                         <div class="form-group">
-                            <label for="QUALIFICATION">TEL_NO</label>
-                            <input type="text" class="form-control" id="EDITQUALIFICATION" >
+                            <label for="TEL_NO">TEL_NO</label>
+                            <input type="text" class="form-control" id="EDITTEL_NO" >
                         </div>
 
                         <div class="form-group">
-                            <label for="QUALIFICATION">MOBILE_NO</label>
+                            <label for="MOBILE_NO">MOBILE_NO</label>
                             <input type="text" class="form-control" id="EDITMOBILE_NO" >
                         </div>
                         <div class="form-group">
@@ -205,12 +220,12 @@
 
                         <div class="form-group">
                             <label for="EMP_NO">EMP_NO</label>
-                            <input type="text" class="form-control" id="EDITEMP_NO" required="required">
+                            <input type="number" class="form-control" id="EDITEMP_NO" onkeypress="return isNumberKey(event)" required="required">
                         </div>
 
                         <div class="form-group">
                             <label for="TTC_NO">TTC_NO</label>
-                            <input type="text" class="form-control" id="EDITTTC_NO">
+                            <input type="number" class="form-control" id="EDITTTC_NO" onkeypress="return isNumberKey(event)">
                         </div>
 
                         <div class="form-group">
@@ -234,21 +249,21 @@
 
                         <div class="form-group">
                             <label for="EMP_LEVEL">EMP_LEVEL</label>
-                            <input type="text" class="form-control" id="EDITEMP_LEVEL">
+                            <input type="number" class="form-control" id="EDITEMP_LEVEL" onkeypress="return isNumberKey(event)">
                         </div>
 
 
                         <div class="form-group">
                             <label for="EMP_LEVEL">EMP_TYPE</label>
-                            <input type="text" class="form-control" id="EDITEMP_TYPE">
+                            <input type="text" class="form-control" id="EDITEMP_TYPE"  maxlength="1">
                         </div>
 
 
-                        <div class="form-group">
+                         <div class="form-group">
                             <label for="EMP_TITLE">EMP_TITLE</label>
                             <input type="text" class="form-control" id="EDITEMP_TITLE ">
                         </div>
-                        
+                       
                         
                 </div>
                 <div class="modal-footer">
@@ -256,12 +271,13 @@
                     <button type="button" onclick="return updateEmployee();" class="btn btn-primary">Update</button>
                 </div>
 
-            </form>
+          
 
         </div>
     </div>
-</div>
 
+ </div>
+ 
  <!-- delete modal -->
         <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
