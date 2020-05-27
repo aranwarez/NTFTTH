@@ -10,15 +10,19 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.dao.CommonMenuDao;
 import com.dao.RegionDao;
 import com.model.Menu;
+import com.model.MenuAccess;
 import com.model.Region;
 import com.model.UserInformationModel;
 
@@ -27,14 +31,21 @@ public class RegionController {
 	private static final Logger logger = LoggerFactory.getLogger(RegionController.class);
 	RegionDao dao = new RegionDao();
 	Region m = new Region();
-
+	private static final String classname = "../region/list";
+	
 	@RequestMapping(value = "/region/list", method = RequestMethod.GET)
-	public String rolelist(Locale locale, Model model, HttpSession session) {
+	public String rolelist(Locale locale, Model model, HttpServletRequest request,HttpSession session) throws SQLException {
 		logger.info("Welcome home! The client locale is {}.", locale);
 
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		if (user == null) {
-			return "redirect:/login";
+		//LIST_FLAG
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+				MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+
+				if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+				
+
+					model.addAttribute("fx", "Unauthorized Page for this role!!");
+					return "/home";
 		}
 		List<Region> list = null;
 
@@ -60,14 +71,17 @@ public class RegionController {
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.POST, value = "region/save")
 	public String saveRegion(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session,
-			Locale locale) {
-		logger.info(" user id:", locale);
+			Locale locale) throws SQLException {
+		logger.info(" region save:", locale);
 
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-
-		if (user == null) {
-			return "Session has been expired";
-		}
+	//  ADD_FLAG
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+				MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+				
+				if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
+					
+					throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+				}
 		String REGION_CODE = request.getParameter("REGION_CODE");
 		String DESCRIPTION = request.getParameter("DESCRIPTION");
 		m.setREGION_CODE(REGION_CODE);
@@ -89,14 +103,19 @@ public class RegionController {
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.POST, value = "region/update")
 	public String updateRegion(Model model, HttpServletRequest request, HttpServletResponse response,
-			HttpSession session, Locale locale) {
+			HttpSession session, Locale locale) throws SQLException {
 		logger.info(" user id:", locale);
 
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+	//  EDIT_FLAG
+		
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+				MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 
-		if (user == null) {
-			return "Session has been expired";
-		}
+				if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
+					throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+				}
+		
+		
 		String REGION_CODE = request.getParameter("REGION_CODE");
 		String DESCRIPTION = request.getParameter("DESCRIPTION");
 		m.setREGION_CODE(REGION_CODE);
@@ -118,14 +137,19 @@ public class RegionController {
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.POST, value = "region/delete")
 	public String deleteRegion(Model model, HttpServletRequest request, HttpServletResponse response,
-			HttpSession session, Locale locale) {
-		logger.info(" user id:", locale);
+			HttpSession session, Locale locale) throws SQLException {
+		logger.info(" Region delete:", locale);
 
-		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-
-		if (user == null) {
-			return "Session has been expired";
+		
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+	
+		if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
+			
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 		}
+
+		
 		String REGION_CODE = request.getParameter("REGION_CODE");
 
 		String msg = null;

@@ -75,7 +75,7 @@
                                     <strong> <%=request.getParameter("sucess")%> </strong>
                                 </div>
                                 <%}%>
-                                <%if (request.getParameter("error") != null) {%>>
+                                <%if (request.getParameter("error") != null) {%>
                                 <div class="alert alert-danger">
                                     <strong> <%=request.getParameter("error")%> </strong>
                                 </div>
@@ -174,7 +174,7 @@
                 })
             </script>
             <script src="<c:url value="/resources/function/role.js" />"></script>
-
+			<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
     </body>
 </html>

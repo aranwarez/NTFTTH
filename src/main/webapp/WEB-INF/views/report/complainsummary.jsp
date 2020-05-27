@@ -234,7 +234,7 @@
 											<c:when test="${USER_LEVEL=='5'}">
 
 												<select id="OFFICE_CODE" name="OFFICE_CODE"
-													onchange="return getOLT()" class="form-control">
+													 class="form-control">
 													
 
 													<c:forEach var="user3" items="${levelcontrollist}">
@@ -250,7 +250,7 @@
 											</c:when>
 											<c:otherwise>
 												<select id="OFFICE_CODE" name="OFFICE_CODE"
-													onchange="return getOLT()" class="form-control">
+													 class="form-control">
 													<option value="">Select Office</option>
 
 
@@ -261,12 +261,7 @@
 
 
 									</div>
-
-
-
-
-
-
+ 
 									<c:forEach var="DAT" items="${Date_list}">
 
 										<div class="col-md-2">

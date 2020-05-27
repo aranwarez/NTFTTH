@@ -170,7 +170,7 @@
 		})
 	</script>
 	<script src="<c:url value="/resources/function/mservice.js" />"></script>
-
+<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 </body>
 </html>

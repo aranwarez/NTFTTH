@@ -11,12 +11,14 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.dao.CommonMenuDao;
 import com.dao.EmployeeDao;
@@ -105,7 +107,7 @@ public class UserController {
 				if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
 					
 					model.addAttribute("fx", "Unauthorized Page for this role!!");
-					return "/home";
+					throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 				}
 				
 		UserDao userdao = new UserDao();
@@ -158,7 +160,18 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.POST, value = "adminPassChange")
 	public String adminPasswordChange(Model model, HttpServletRequest request, HttpServletResponse response,
-			HttpSession session, Locale locale) {
+			HttpSession session, Locale locale) throws SQLException {
+		
+		// POST_FLAG should be Y otherwise Update fails?
+		
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+				MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+			
+				if (menuaccess == null || menuaccess.getPOST_FLAG().equals("N")) {
+					
+					throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+				}
+		
 		String usercode = request.getParameter("usercode");
 		UserDao userdao = new UserDao();
 		String msg = null;
@@ -203,7 +216,7 @@ public class UserController {
 				if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
 					
 					model.addAttribute("fx", "Unauthorized Page for this role!!");
-					return "/home";
+					throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 				}
 				
 		UserInformationModel m = new UserInformationModel();
@@ -253,7 +266,7 @@ public class UserController {
 		if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
 			
 			model.addAttribute("fx", "Unauthorized Page for this role!!");
-			return "/home";
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 		}
 		UserDao userdao = new UserDao();
 		String msg = null;
@@ -362,7 +375,6 @@ public class UserController {
 
 	        UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
 	        String USER_ID = userinfo.getUSER_ID();
-	        
 	        
 	        String msg = null;
 	        try {

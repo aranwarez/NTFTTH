@@ -180,8 +180,9 @@
                 EMP_TYPE: $("#EMP_TYPE").val(), EMP_TITLE: $("#EMP_TITLE").val()
             }, function (data) {
                 y = true;
-                location.reload();
                 alert(data);
+                location.reload();
+                
                 getlist();
 
             });
@@ -220,14 +221,18 @@
         var l = row.length;
         for (var i = 0; i < l; i++) {
             if (row[i][0] == code) {
+            	
                 $("#EDITEMPLOYEE_CODE").val(row[i][0].toString());
+                
                 $("#EDITEMPLOYEE_NAME").val(row[i][1]);
                 $("#EDITADDRESS").val(row[i][2]);
+                
                 $("#EDITSEX").val(row[i][3]);
                 $("#EDITMARITAL_STATUS").val(row[i][4]);
                 $("#EDITDOB").val(row[i][5]);
                 $("#EDITDOJ").val(row[i][6]);
                 $("#EDITQUALIFICATION").val(row[i][7]);
+                
                 $("#EDITTEL_NO").val(row[i][9]);
                 $("#EDITMOBILE_NO").val(row[i][10]);
 
@@ -278,12 +283,13 @@
         var EMAIL = $("#EDITEMAIL").val();
         var DEPT_CD = $("#EDITDEPT_CD").val();
         var LOCATION_CD = $("#EDITLOCATION_CD").val();
-
-
+        
+        var EMP_TITLE = $("#EDITEMP_TITLE").val();
         $.post('../employee/updateJS', {EMPLOYEE_CODE: EMPLOYEE_CODE, EMPLOYEE_NAME: EMPLOYEE_NAME,
-            ADDRESS: ADDRESS, TEL_NO: TEL_NO, MOBILE_NO: MOBILE_NO, EMAIL: EMAIL, DEPT_CD: DEPT_CD, LOCATION_CD: LOCATION_CD}, function (response) {
-            location.reload();
-            alert(response);
+            ADDRESS: ADDRESS, TEL_NO: TEL_NO, MOBILE_NO: MOBILE_NO, EMAIL: EMAIL, DEPT_CD: DEPT_CD, LOCATION_CD: LOCATION_CD,EMP_TITLE:EMP_TITLE}, function (response) {
+            	alert(response);
+            	location.reload();
+            
 
         });
         $('.modal').modal('hide');
@@ -308,3 +314,13 @@
 
         });
     }
+    
+    
+    function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+    
+   

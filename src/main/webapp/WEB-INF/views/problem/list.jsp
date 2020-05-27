@@ -170,6 +170,7 @@
 	</script>
 	<script src="<c:url value="/resources/function/problem.js?a=132" />"></script>
 
+<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 </body>
 </html>
