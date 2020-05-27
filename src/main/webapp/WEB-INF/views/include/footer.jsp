@@ -28,8 +28,7 @@
 				
 				</div>
 				
-				<form action="<c:url value="/role/save" />" method="post"
-					acceptCharset="UTF-8" >
+				
 					
 					<div class="modal-body">
 					<b><p>You need to update your password because this is the first time you are signing in,</br>
@@ -60,7 +59,7 @@
 						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="return check()" >Close</button>
 						<button type="submit" class="btn btn-primary" onclick="return changePassword();">Save changes</button>
 					</div>
-				</form>
+				
 			</div>
 		</div>
 	</div>

@@ -92,7 +92,7 @@
 			            alert(response);
 			            location.reload();
 			        });
-
+			        return false;
 			    }
 			    else alert('Confirmation password didnt match!!')
 
