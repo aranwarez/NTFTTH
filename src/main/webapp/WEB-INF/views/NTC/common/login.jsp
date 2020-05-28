@@ -57,7 +57,7 @@
 				</div>
 				<input type="submit" value="Sign in">
 				
-				<a  href="forgotpassword"
+				<a  href="<c:url value="/forgotpassword" />"
 								class="forget-password">Forgot Password</a>
 								
 			</form>
