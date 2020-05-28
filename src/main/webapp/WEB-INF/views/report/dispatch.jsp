@@ -8,11 +8,13 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="icon" href="<c:url value="/resources/adminltd/images/favicon.ico" />" type="image/x-icon">
 <title>Nepal Telecom | ${fx}</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
 	name="viewport">
+	
 <jsp:include page="${request.contextPath}/headCss"></jsp:include>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
