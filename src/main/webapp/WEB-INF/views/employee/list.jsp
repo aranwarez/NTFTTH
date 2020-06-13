@@ -210,7 +210,7 @@
 		})
 	</script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
-	<script src="<c:url value="/resources/function/employee.js" />"></script>
+	<script src="<c:url value="/resources/function/employee.js?verdt=527" />"></script>
 
 
 </body>

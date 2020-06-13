@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dao.CommonDateDao;
 import com.dao.CommonMenuDao;
+import com.dao.MServiceTypeDao;
 import com.dao.RegionDao;
 import com.dao.TeamDao;
 import com.dao.UserDao;
@@ -87,13 +88,15 @@ public class ReportMenuController {
 
 		CommonDateDao DAT = new CommonDateDao();
 		TeamDao teamdao = new TeamDao();
-
+		MServiceTypeDao ServiceTypedao= new MServiceTypeDao();
+		List<Map<String, Object>> servicetypelist=null;
+	
 		List<Map<String, Object>> webteamlist = null;
 		List<Map<String, Object>> levelcontrollist = null;
 
 		try {
 			regionlist = dao.getlistByUserFDC(user.getUSER_ID(), user.getUSER_LEVEL());
-			
+			servicetypelist=ServiceTypedao.getServiceTypeList();
 			webteamlist = teamdao.getWebTeamList();
 
 			model.addAttribute("Date_list", DAT.getDateList());
@@ -105,9 +108,9 @@ public class ReportMenuController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		model.addAttribute("fx", "Complain summary");
+		model.addAttribute("fx", "FTTH Complain Summary / Detail Report");
 		model.addAttribute("regionlist", regionlist);
-
+		model.addAttribute("servicetypelist", servicetypelist);
 		model.addAttribute("USER_LEVEL", user.getUSER_LEVEL());
 		model.addAttribute("levelcontrollist", levelcontrollist);
 

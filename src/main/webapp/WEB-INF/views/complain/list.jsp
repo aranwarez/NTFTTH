@@ -106,7 +106,8 @@
 									<div class="col-md-5">
 										<label id="customerlabel">Customer Name : </label> <span
 											id="customerName"></span> <BR> <label id="customerlabel">Contact
-											No :</label> <span id="ContantNum"></span><BR> <label
+											No :</label> <span id="ContantNum"></span> &nbsp; <label id="customerlabel"> CPE Serial
+											No :</label> <span id="CPEserial"></span><BR> <label
 											id="customerlabel">Address :</label> <span id="Address"></span>
 									</div>
 									<div class="col-md-2">
@@ -296,10 +297,10 @@
 									data-target="#AAAstatusModal">
 									<i class="fa fa-times"></i>View log
 								</button>
-								<a href="#" class="btn btn-primary pull-right"
-									data-toggle="modal" data-target="#AAAstatusModal"> <i
-									class="fa fa-plus"></i> View log
-								</a>
+<!-- 								<a href="#" class="btn btn-primary pull-right" -->
+<!-- 									data-toggle="modal" data-target="#AAAstatusModal"> <i -->
+<!-- 									class="fa fa-plus"></i> View log -->
+<!-- 								</a> -->
 							</div>
 							<!-- /.box-body -->
 						</div>
@@ -669,7 +670,7 @@
 	<jsp:include page="${request.contextPath}/complain/dialog"></jsp:include>
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 	<script
-		src="<c:url value="/resources/function/Complain/NewComplain.js?verdt=521" />"></script>
+		src="<c:url value="/resources/function/Complain/NewComplain.js?verdt=614" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 

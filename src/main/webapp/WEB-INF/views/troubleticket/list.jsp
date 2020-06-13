@@ -282,6 +282,9 @@
 						</select>
 
 					</div>
+					
+					</div>
+					<div class="row">
 
 					<c:forEach var="DAT" items="${Date_list}">
 
@@ -341,14 +344,14 @@
 
 
 
-					<div class="col-xs-3">
+					<div class="col-md-1">
 						<div class="align-middle">
 							<button type="submit" class="btn btn-primary"
 								onclick="return fetchView()">View</button>
 						</div>
 					</div>
 
-					<div class="col-xs-1" id="closebuttondiv" style="display: none;">
+					<div class="col-md-1" id="closebuttondiv" style="display: none;">
 						<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteallModal">Close All Tickets</button>
 
 					</div>
@@ -439,7 +442,7 @@
 
 
 	<script
-		src="<c:url value="/resources/function/Complain/TroubleTickets.js?verdt=521" />"></script>
+		src="<c:url value="/resources/function/Complain/TroubleTickets.js?verdt=614" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 	<script>

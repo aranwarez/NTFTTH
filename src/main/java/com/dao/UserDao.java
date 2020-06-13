@@ -105,7 +105,7 @@ public class UserDao {
 
 	public String saveUser(UserInformationModel m) throws SQLException {
 		Connection con = DbCon.getConnection();
-	//	con.setAutoCommit(false);
+		// con.setAutoCommit(false);
 		try {
 			PreparedStatement pst = con.prepareStatement("insert into web_user(USER_ID,FULL_NAME,PASSWORD,\r\n"
 					+ "EMPLOYEE_CODE,LOCK_FLAG,SUPER_FLAG,DISABLE_FLAG,\r\n"
@@ -131,12 +131,13 @@ public class UserDao {
 			pst.setString(14, m.getUSER());
 
 			pst.executeUpdate();
-			String message = "FTTHCMS URL: http://172.16.39.16:8080/FTTH " + "Userid: " + m.getUSER_ID().toUpperCase()
+			String message = "FTTHCMS URL: http://172.16.39.16:8080/FTTH " + "Userid: " + m.getUSER_ID().toLowerCase()
 					+ " Password: " + m.getPASSWORD();
-			SendSMS.sendsms(m.getMOBILE_NO(), message, "USER ADDED", m.getUSER(), "0");
-	//		con.commit();
+			SendSMS smsobj=new SendSMS();
+			smsobj.sendsms(m.getMOBILE_NO(), message, "USER ADDED", m.getUSER(), "0");
+			// con.commit();
 		} catch (Exception e) {
-	//		con.rollback();
+			// con.rollback();
 			e.printStackTrace();
 			if (e.getMessage().contains("unique constraint")) {
 
@@ -149,7 +150,7 @@ public class UserDao {
 		return "Successfully saved!";
 	}
 
-	public String passWordChange(String pass, String USER_ID) throws SQLException {
+	public String passWordChange(String pass, String USER_ID, String requestuser) throws SQLException {
 		Connection con = DbCon.getConnection();
 
 		try {
@@ -167,6 +168,16 @@ public class UserDao {
 				pst.setString(3, USER_ID);
 				pst.executeUpdate();
 
+				String getmob = "select mobile_no from web_user where REGEXP_LIKE(mobile_no, '^[[:digit:]]+$') and user_id=? and length(mobile_no)=10";
+				PreparedStatement mobpst = con.prepareStatement(getmob);
+				mobpst.setString(1, USER_ID);
+				ResultSet mobrs = mobpst.executeQuery();
+				while (mobrs.next()) {
+					String message = "FTTHCMS Password Changed By " + requestuser + " Userid: " + USER_ID.toLowerCase()
+						+ " Password: " + pass;
+					SendSMS smsobj=new SendSMS();
+					smsobj.sendsms(mobrs.getString(1), message, "USERPASS RESET", requestuser, "0");
+				}
 			} else {
 				return "Password Field is Empty!!! ";
 			}
@@ -390,7 +401,8 @@ public class UserDao {
 
 			String msg = ("One Time Generated Key ID :" + randnum + " ,Username : " + user
 					+ " , Valid for only 15 min.");
-			SendSMS.sendsms(rs.getString(1).toString(), msg, "OTP TO RESET PASSWORD", user.toUpperCase(), randnum);
+			SendSMS smsobj=new SendSMS();
+			smsobj.sendsms(rs.getString(1).toString(), msg, "OTP TO RESET PASSWORD", user.toUpperCase(), randnum);
 
 			return "OTP has been generated and sent to mobile Number. This token is valid for 15 mintues";
 

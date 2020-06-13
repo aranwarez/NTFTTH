@@ -168,7 +168,7 @@
 
 
 		<div class="text-center">
-			<a href="login.html">Or Reset using mobile No.</a>
+			<a href="login.html">Go Back To Login Page</a>
 		</div>
 		<div class="lockscreen-footer text-center">
 			Copyright © 2020-2021 <b><a href="https://ntc.net.np"

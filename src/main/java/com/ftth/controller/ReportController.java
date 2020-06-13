@@ -223,9 +223,9 @@ public class ReportController {
 			parameters.put("pm_frm_dt", FROM_DATE);
 			filterparam = filterparam + " From Date : " + request.getParameter("QFROM_DT").toString();
 		} else if (request.getParameter("QFROM_DT") == null || request.getParameter("QFROM_DT").isEmpty()) {
-			Date FROM_DATE = new Date();
-			parameters.put("pm_frm_dt", FROM_DATE);
-			filterparam = filterparam + " From Today";
+		//	Date FROM_DATE = new Date();
+		//	parameters.put("pm_frm_dt", FROM_DATE);
+		//	filterparam = filterparam + " From Today";
 		}
 
 		if (request.getParameter("QTO_DT") != null && !request.getParameter("QTO_DT").isEmpty()) {

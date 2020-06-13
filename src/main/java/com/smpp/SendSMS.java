@@ -40,7 +40,7 @@ public class SendSMS {
 
 	private static final String SERVICE_TYPE = "CMT";
 
-	public  static void sendsms(String Number,String message,String REMARKS,String USER,String REF_TOKEN) {
+	public  void sendsms(String Number,String message,String REMARKS,String USER,String REF_TOKEN) {
 		// bind(connect)
 		SMPPSession session = SmsSession.getSession();
 		// send Message

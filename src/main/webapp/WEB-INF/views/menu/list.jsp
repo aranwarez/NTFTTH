@@ -204,7 +204,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/menu.js" />"></script>
+	<script src="<c:url value="/resources/function/menu.js?verdt=527" />"></script>
 
 
 </body>
