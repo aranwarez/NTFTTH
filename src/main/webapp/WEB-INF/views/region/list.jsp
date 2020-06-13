@@ -186,8 +186,8 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/firsttimepassword.js" />"></script>
-	<script src="<c:url value="/resources/function/region.js" />"></script>
+	
+	<script src="<c:url value="/resources/function/region.js?verdt=527" />"></script>
 
 
 </body>

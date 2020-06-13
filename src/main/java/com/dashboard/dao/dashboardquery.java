@@ -296,7 +296,7 @@ public class dashboardquery {
 					"         AND VTM.DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
 					"         AND VTM.OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
 					"GROUP BY VTM.MASTER_SOLVE_FLAG";
-			System.out.println(qry);
+		//	System.out.println(qry);
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, username);
 			pst.setString(2, region);

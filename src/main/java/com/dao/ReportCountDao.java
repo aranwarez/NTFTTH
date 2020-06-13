@@ -14,7 +14,7 @@ public class ReportCountDao {
 					+ "    SELECT REPORT_COUNT.NEXTVAL     ID,\r\n" + "           SUB_TOKEN_ID,\r\n"
 					+ "           'DISPATCH'               REPORT_NAME,\r\n" + "           '" + USER_ID
 					+ "'                   PRINT_BY,\r\n" + "           SYSDATE                  PRINT_DT\r\n"
-					+ "      FROM VW_TOKEN_MASTER_ONLY\r\n" + "     WHERE     MASTER_SUB_TEAM_CODE = 'SLMTN'\r\n"
+					+ "      FROM VW_TOKEN_MASTER_ONLY\r\n" + "     WHERE     MASTER_SUB_TEAM_CODE = 'FLMTN'\r\n"
 					+ "           AND REGION_CODE = NVL (?, REGION_CODE)\r\n"
 					+ "           AND ZONE_CODE = NVL (?, ZONE_CODE)\r\n"
 					+ "           AND DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n"

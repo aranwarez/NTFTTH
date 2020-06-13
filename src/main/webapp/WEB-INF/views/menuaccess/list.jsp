@@ -166,7 +166,7 @@
 		//	$('#example1').DataTable()
 		})
 	</script>
-	<script src="<c:url value="/resources/function/menuaccess.js" />"></script>
+	<script src="<c:url value="/resources/function/menuaccess.js??verdt=527" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 

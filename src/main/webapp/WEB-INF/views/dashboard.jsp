@@ -122,7 +122,7 @@
 <!-- 							</div>	 -->
 						<div class="box box-danger">
 							<div class="box-header with-border">
-								<h3 class="box-title">Solved VS Unsolved</h3>
+								<h3 class="box-title">Status of Ticket</h3>
 
 								<div class="box-tools pull-right">
 									<button type="button" class="btn btn-box-tool"
@@ -199,7 +199,6 @@
 	<%--         <jsp:include page="${request.contextPath}/cashsale/dialog"></jsp:include> --%>
 
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
-
 	 
 	 	<script src="<c:url value="/resources/adminltd/js/Chart.bundle.js" />"></script>
 	 
@@ -209,11 +208,11 @@
    	<script src="<c:url value="/resources/function/Dashboard/srvwiserevenue.js" />"></script>
    	
    	
-   	<script src="<c:url value="/resources/function/chart/bar/subTeamSolveUnsolve.js?a=125" />"></script>
+   	<script src="<c:url value="/resources/function/chart/bar/subTeamSolveUnsolve.js?a=527" />"></script>
    	
-   	<script src="<c:url value="/resources/function/chart/bar/subTeamServieType.js?a=125" />"></script>
+   	<script src="<c:url value="/resources/function/chart/bar/subTeamServieType.js?a=527" />"></script>
    	
-   	<%-- 	<script src="<c:url value="/resources/function/firsttimepassword.js" />"></script> --%>
+   		<script src="<c:url value="/resources/function/firsttimepassword.js?verdt=527" />"></script>
 <%-- 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script> --%>
 </body>
 </html>

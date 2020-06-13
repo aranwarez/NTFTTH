@@ -90,7 +90,7 @@ Enter Service No.
 								<table id="example1" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-									     	<td>SRV.NO</td>
+									     	<td>CPE.NO</td>
 											<th>COMPLAIN_NO</th>											
 											<th>SERVICE_NO</th>
 											<th>FROM_TEAM</th>
