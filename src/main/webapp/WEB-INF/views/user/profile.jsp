@@ -103,7 +103,7 @@
                  </li>
  
               <li class="list-group-item">
-                 <b>DISABLE_FLAG</b> <a class="pull-right">${user.DISABLE_FLAG}</a>
+                 <b>Scheduled SMS Disable Flag</b> <a class="pull-right">${user.DISABLE_FLAG}</a>
                  </li>
               
               <li class="list-group-item">
