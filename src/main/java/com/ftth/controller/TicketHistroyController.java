@@ -11,12 +11,14 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.dao.CommonDateDao;
 import com.dao.CommonMenuDao;
@@ -53,30 +55,28 @@ public class TicketHistroyController {
 
 	 }  
 	 
-	    @RequestMapping(value = "/ticket-history/fetch", method = RequestMethod.GET)
-		public String  getTroubleTicketList(HttpServletRequest request, HttpServletResponse response,HttpSession session,Model model,Locale locale) throws SQLException {
-			UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+	 
+	    
+		@RequestMapping(method = RequestMethod.GET, value = "/ticket-history/fetch")
+		public String getTroubleTicketbyTokenID(HttpServletRequest request, HttpServletResponse response,HttpSession session,Model model) throws SQLException {
+		    UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+				//	MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+					
+		    model.addAttribute("fx", "History By CPESN");
 			
-			logger.info("/history/by service"+user.getUSER_ID()+" srv no "+request.getParameter("MAIN_SRV_NO") , locale);
+			String MAIN_SRV_NO = request.getParameter("MAIN_SRV_NO").trim();
 			
-			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
-			if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
-				model.addAttribute("fx", "Unauthorized Page for this role!!");
-				return "/home";
-			}
-			
-			
-			
-			String MAIN_SRV_NO = request.getParameter("srv_no");
-			
-			model.addAttribute("fx", "Trouble Tickets histry");
 			List<Map<String, Object>> list = null;
-			TicketHistroyDao dao=new TicketHistroyDao();			 
-			try {				
-				list = dao.getComplainBySrvNo(user.getUSER_ID(), MAIN_SRV_NO);		
-				
+			TicketHistroyDao dao=new TicketHistroyDao();
+			
+			try {
+				list = dao.getComplainListDetailbyToken(MAIN_SRV_NO);
+			
 				model.addAttribute("data_list", list);
-     			model.addAttribute("srv_no", MAIN_SRV_NO);
+				model.addAttribute("MAIN_SRV_NO", MAIN_SRV_NO);
+				
+				
+						
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -86,4 +86,6 @@ public class TicketHistroyController {
 			return "troubleticket/history";
 
 		}
+	 
+	   
 }
