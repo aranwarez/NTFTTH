@@ -105,7 +105,7 @@
 											<th>EMP_CODE</th>										
 											<th>LOCK</th>
 											<th>SUPER</th>
-											<th>DISABLE</th>
+											<th>Scheduled SMS Disable Flag</th>
 											
 											<th>LOCATION</th>
 											

@@ -8,6 +8,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="icon" href="<c:url value="/resources/adminltd/images/favicon.ico" />" type="image/x-icon">
 <title>Nepal Telecom | ${fx}</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta

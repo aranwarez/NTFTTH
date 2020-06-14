@@ -24,9 +24,7 @@
 		</header>
 		<!-- Left side column. contains the logo and sidebar -->
 		<aside class="main-sidebar">
-			<!-- search form -->
 		
-			<!-- /.search form -->
 
 			<jsp:include page="${request.contextPath}/leftmenu"></jsp:include>
 
@@ -48,18 +46,20 @@
 
 			<!-- Main content -->
 			<section class="content">
-Enter Service No.
- <div class="row">
 
-<form class="login-form" action="<c:url value="/ticket-history/fetch" />" method="GET"
+
+
+        <div class="row">
+					
+					<form class="login-form" action="<c:url value="/ticket-history/fetch" />" method="GET"
 				acceptCharset="UTF-8" >
 				 					
 					<div class="col-md-3">					
 
-								<input type="text" id="MAIN_SRV_NO" <c:if test="${srv_no != null}"> value="${srv_no}"
+								<input type="text" id="MAIN_SRV_NO" <c:if test="${MAIN_SRV_NO != null}"> value="${MAIN_SRV_NO}"
 											
 										</c:if>
-									class="form-control" name="srv_no" placeholder="Enter Service No">
+									class="form-control" name="MAIN_SRV_NO" placeholder="Enter Service No">
 							 
 					</div>
 
@@ -72,14 +72,41 @@ Enter Service No.
 					</div>
     
     </form>
-    				<div class="col-xs-12">
+    
+  
+   </div>
+
+					
+
+
+					<div class="row">
+
+					
+
+
+					
+
+					
+
+					
+
+
+
+
+
+					
+
+
+
+					<div class="col-xs-12">
 						<!-- /.box -->
 
 						<div class="box">
 							<div class="box-header">
-								<h3 class="box-title">${fx}</h3>
+								<h3 class="box-title">List of All Tickets</h3>
 							</div>
-	                   <div class="overlay">
+
+							<div class="overlay">
 								<i class="fa fa-refresh fa-spin"></i>
 							</div>
 
@@ -90,38 +117,55 @@ Enter Service No.
 								<table id="example1" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-									     	<td>CPE.NO</td>
-											<th>COMPLAIN_NO</th>											
-											<th>SERVICE_NO</th>
-											<th>FROM_TEAM</th>
-											<th>TO_TEAM</th>
-											<th>FLAG</th>
-											<th>REMARKS</th>
-											<th>Create By</th>
-											<th>Date</th>
-											<th>CPE_RX_LVL</th>
-										
+
+											<th>ID</th>
+											<th>CPESN</th>
+											<th>Type</th>
+
+											<th>RegDT</th>
+											<th>Team</th>
+											<th>Problem</th>
+											<th>FDC</th>
+											<th>No.</th>
+											<th>Customer</th>
+											<th>Action</th>
+											<th>Info</th>
 
 
-								</tr>
+										</tr>
+
 									</thead>
-									
 									<tbody>
+									
 									
 									<c:forEach var="user" items="${data_list}">
 									
 									<tr>
-									<td>${user.MAIN_SRV_NO}</td>
-									<td>${user.CONTACT_NAME}(${user.COMPLAIN_NO})</td>									
-									<td>${user.MASTER_SERVICE_NO}</td>								
-									<td>${user.FROM_SUB_TEAM_CODE} </td>
-									<td>${user.TO_SUB_TEAM_CODE}</td>
-									<td>${user.SOLVE_FLAG}</td>
-									<td>${user.REMARKS}</td>
-									<td>${user.CREATE_BY} </td>
-									<td>${user.CREATE_DT}</td>
-									<td>${user.CPE_RX_LVL}</td> 
-										
+									<td> ${user.TOKEN_ID}</td>
+									<td> ${user.SRV_NO} </td>									
+									<td>${user.SERVICE_DESC}</td>								
+									<td>${user.CREATE_DT} </td>
+									<td>${user.SUB_TEAM_CODE}</td>
+									<td>${user.PROBLEM_DESC}</td>
+									
+									<td>${user.FDC_DESC}</td>
+									<td>${user.COMPLAIN_NO} </td>
+									<td>${user.CONTACT_NAME}</td>
+								
+									<td> 
+									    
+									<div class="btn=group">
+		<button type="button" class="btn bg-blue" data-toggle="modal" data-target="#viewModal" onclick="return viewdetail(${user.SUB_TOKEN_ID})"> <i class="fa fa-history"></i>History</button>
+																			
+										</div>
+									</td> 
+									<td>
+										<div class="btn=group">
+									<a target="_blank" href="../complain/list?CPE=${user.SRV_NO}" class="btn bg-green"> <i class="fa fa-edit"></i> Detail </a>
+										</div>
+									</td> 
+								
+							
 									</tr>
 									
 										</c:forEach>
@@ -173,22 +217,20 @@ Enter Service No.
 
 
 	<script
-		src="<c:url value="/resources/function/Complain/history.js?verdt=521" />"></script>
+		src="<c:url value="/resources/function/Complain/history.js?verdt=614" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 	<script>
 		$(function() {
 
 			$('#example1').DataTable({
-				"bDestroy" : true,
-				"ordering": false
+				"bDestroy" : true
 			})
 			$("#REGION_CODE,#ZONE_CODE,#DISTRICT_CODE,#OFFICE_CODE,#USER_ID")
 					.select2();
 
 			var level = '<c:out value="${USER_LEVEL}"/>';
-			
-
+		
 			$('#QFROM_DT').nepaliDatePicker();
 			$('#QTO_DT').nepaliDatePicker();
 		})

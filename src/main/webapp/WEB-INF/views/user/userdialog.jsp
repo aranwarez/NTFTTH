@@ -74,7 +74,7 @@
 
 				</div>
 				<div class="form-group">
-					<label>DISABLE_FLAG</label> <input type="radio" name="DISABLE_FLAG"
+					<label>Scheduled SMS Disable Flag</label> <input type="radio" name="DISABLE_FLAG"
 						value="Y" class="DISABLE_FLAG"> Yes <input type="radio"
 						name="DISABLE_FLAG" value="N" class="DISABLE_FLAG" checked>
 					No
@@ -189,8 +189,8 @@
 
 				</div>
 				<div class="form-group">
-					<label>DISABLE_FLAG</label> <input type="radio" name="EDITDISABLE_FLAG"
-						value="Y" class="DISABLE_FLAG"> Yes <input type="radio"
+					<label>Scheduled SMS Disable Flag</label> <input type="radio" name="EDITDISABLE_FLAG"
+						value="Y" class="EDITDISABLE_FLAG"> Yes <input type="radio"
 						name="EDITDISABLE_FLAG" value="N" class="EDITDISABLE_FLAG" checked>
 					No
 
