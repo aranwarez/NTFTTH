@@ -82,29 +82,29 @@ public class Config implements ServletContextListener {
 		LocalDateTime localNow = LocalDateTime.now();
         ZoneId currentZone = ZoneId.systemDefault();
         ZonedDateTime zonedNow = ZonedDateTime.of(localNow, currentZone);
-        ZonedDateTime zonedNextTarget = zonedNow.withHour(2).withMinute(17).withSecond(0);
+        ZonedDateTime zonedNextTarget = zonedNow.withHour(10).withMinute(15).withSecond(0);
         if(zonedNow.compareTo(zonedNextTarget) > 0)
             zonedNextTarget = zonedNextTarget.plusDays(1);
 
         Duration duration = Duration.between(zonedNow, zonedNextTarget);
 		long initalDelay = duration.getSeconds();
-		System.out.println(initalDelay/60);
-		System.out.println(initalDelay/60/60);
+	//	System.out.println(initalDelay/60);
+	//	System.out.println(initalDelay/60/60);
         
 
 		//second timer
-		ZonedDateTime zonedNextTarget2 = zonedNow.withHour(18).withMinute(41).withSecond(0);
+		ZonedDateTime zonedNextTarget2 = zonedNow.withHour(14).withMinute(30).withSecond(0);
         if(zonedNow.compareTo(zonedNextTarget2) > 0)
             zonedNextTarget2 = zonedNextTarget2.plusDays(1);
 
         Duration duration2 = Duration.between(zonedNow, zonedNextTarget2);
 		long initalDelay2 = duration2.getSeconds();
-		System.out.println(initalDelay2/60);
-		System.out.println(initalDelay2/60/60);
+	//	System.out.println(initalDelay2/60);
+	//	System.out.println(initalDelay2/60/60);
 		
 		//third timer
 		//second timer
-		ZonedDateTime zonedNextTarget3 = zonedNow.withHour(18).withMinute(42).withSecond(0);
+		ZonedDateTime zonedNextTarget3 = zonedNow.withHour(19).withMinute(00).withSecond(0);
         if(zonedNow.compareTo(zonedNextTarget3) > 0)
             zonedNextTarget3 = zonedNextTarget3.plusDays(1);
 

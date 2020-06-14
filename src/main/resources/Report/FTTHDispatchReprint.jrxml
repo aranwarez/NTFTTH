@@ -42,9 +42,9 @@
        Result.TEAMSUPERVISORCONTACTNUMBER,
        Result.TEAMSUPERVISORNAME
        
-  FROM (SELECT (GET_SNO_CONCAT (MTM.TOKEN_ID, 2))     VOICE,
-               (GET_SNO_CONCAT (MTM.TOKEN_ID, 1))     NTDATA,
-               (GET_SNO_CONCAT (MTM.TOKEN_ID, 3))     NTTV,
+  FROM (SELECT (GET_SNO_CONCAT_REPRINT (MTM.TOKEN_ID, 2))     VOICE,
+               (GET_SNO_CONCAT_REPRINT (MTM.TOKEN_ID, 1))     NTDATA,
+               (GET_SNO_CONCAT_REPRINT (MTM.TOKEN_ID, 3))     NTTV,
                WT.*,
                CI.*,
                MTM.*,

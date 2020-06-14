@@ -95,6 +95,9 @@ function getCustomerInfo() {
 			$('#ContantNum').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.contactNum);
 			$('#cpeMac').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.cpeInfo.cpeMac);
 			$('#cpeSN').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.cpeInfo.cpeSN);
+			$('#CPEserial').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.cpeInfo.cpeSN);
+			
+			
 			$('#fapName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapInfo.fapName);
 			$('#fapPortName').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapPortInfo.fapPortName);
 			$('#fapPortSpec').html(TEST.Body.queryServiceNumberCPEInfosResponse.queryServiceNumberCPEInfosResult.serviceNumberCPEInfosRsp.serviceNumberCPEEptInfo.resourceView.fapPortInfo.portSpec);
@@ -245,7 +248,7 @@ function getAAAAuthenticationlog(){
 						result='Unauthorized Caller ID';
 					}else if(value.result=="4008"){
 						result='Subscriber Not Exist';
-					}else if(value.result=="40010"){
+					}else if(value.result=="4010"){
 						result='No Free Resource';
 					}
 					else result=value.result;
@@ -343,9 +346,9 @@ function getSubsInfo(subsinfo) {
 				
 				
 				
-				var div='<div class="col-md-6"><table id="subsinfotable'+index+'" class="table table-condensed"><tbody><tr><td><label>Service No. </label></td><td><span id="serviceNumber'+index+'"></span></td></tr><tr><td><label>offerName </label></td><td><span id="offerName'+index+'"></span></td>		</tr>  <tr><td><label>Service Type</label></td><td><span id="servicetype'+index+'"></span></td></tr> <tr><td><label>Status</label></td>						<td><span id="status'+index+'"></span></td>					</tr>	<tr><td><label>balanceOfCreditLimit</label></td>		<td><span id="balanceOfCreditLimit'+index+'"></span></td>			</tr></tbody>			</table>		</div>';						
+				var div='<div class="col-md-6"><table id="subsinfotable'+index+'" class="table table-condensed"><tbody><tr><td><label>Service No. </label></td><td><span id="serviceNumber'+index+'"></span></td></tr><tr><td><label>offerName </label></td><td><span id="offerName'+index+'"></span></td>		</tr>  <tr><td><label>Service Type</label></td><td><span id="servicetype'+index+'"></span></td></tr> <tr><td><label>Status</label></td>						<td><span id="status'+index+'"></span></td>					</tr>	<tr><td><label id="labelbalanceid'+index+'">balanceOfCreditLimit</label></td>		<td><span id="balanceOfCreditLimit'+index+'"></span></td>			</tr></tbody>			</table>		</div>';						
 			if((index+1)%2==0){
-				 div='<div class="row"><div class="col-md-6"><table id="subsinfotable'+index+'" class="table table-condensed"><tbody><tr><td><label>Service No.  </label></td><td><span id="serviceNumber'+index+'"></span></td></tr><tr><td><label>offerName </label></td><td><span id="offerName'+index+'"></span></td>		</tr>  <tr><td><label>Service Type</label></td><td><span id="servicetype'+index+'"></span></td></tr> <tr><td><label>Status</label></td>						<td><span id="status'+index+'"></span></td>					</tr>	<tr><td><label>balanceOfCreditLimit</label></td>		<td><span id="balanceOfCreditLimit'+index+'"></span></td>			</tr></tbody>			</table>		</div>';				
+				 div='<div class="row"><div class="col-md-6"><table id="subsinfotable'+index+'" class="table table-condensed"><tbody><tr><td><label>Service No.  </label></td><td><span id="serviceNumber'+index+'"></span></td></tr><tr><td><label>offerName </label></td><td><span id="offerName'+index+'"></span></td>		</tr>  <tr><td><label>Service Type</label></td><td><span id="servicetype'+index+'"></span></td></tr> <tr><td><label>Status</label></td>						<td><span id="status'+index+'"></span></td>					</tr>	<tr><td><label id="labelbalanceid'+index+'">balanceOfCreditLimit</label></td>		<td><span id="balanceOfCreditLimit'+index+'"></span></td>			</tr></tbody>			</table>		</div>';				
 				
 				div=div+'</div>';
 			}
@@ -405,7 +408,7 @@ getQueryFreeResource(value.serviceNumber,index);
 				});
 				
 				var detaillink='<a target="_blank" href="../troubleticket/list?token_id='+response[0].TOKEN_ID+'" class="btn bg-green"> <i class="fa fa-info-circle"></i> View All In Detail </a>';
-				
+				detaillink=detaillink+'<br><a target="_blank" href="../ticket-history/fetch?srv_no='+response[0].MAIN_SRV_NO+'" class="btn bg-blue"> <i class="fa fa-history"></i> View CPE History Detail</a>';
 				
 				$("#divforsubsinfo").append(detaillink);
 			
@@ -687,6 +690,7 @@ function getCRMSServiceBalance(serviceNo,index){
 	        		$('#balanceOfCreditLimit'+index).css('background-color','#FE2E2E');
 	        		if($('#servicetype'+index).html().substring(0,3)=='Pos'){
 	        			// postpaid
+	        			$('#labelbalanceid'+index).html("Credit Limit");
 	        						statestatus='Due Amt:'+(state[1]/100)+' &nbsp  &nbsp  &nbsp  &nbsp'+'Rem Credit:'+(state[0]/100);
 	        						if(state[0]>0){
 	        		        			$('#balanceOfCreditLimit'+index).css('background-color','#9FF781');
@@ -695,6 +699,7 @@ function getCRMSServiceBalance(serviceNo,index){
 	        		}
 	        		else if($('#servicetype'+index).html().substring(0,3)=='Pre'){
 			 // prepaid
+	        			$('#labelbalanceid'+index).html("Balance");
 	        			statestatus='Balance:'+(state[0]/100)+' &nbsp  &nbsp  &nbsp'+'Expiry Dt of Subs:'+state[1];
 	        			if(state[0]>0){
 		        			$('#balanceOfCreditLimit'+index).css('background-color','#9FF781');

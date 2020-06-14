@@ -106,13 +106,15 @@ public class SmseventDao {
 
 				ResultSet rscount = pst.executeQuery();
 				if (rscount.next()) {
-					String message = "FTTH USER:"+rsuser.getString(1)+" Role: " + rsuser.getString(2) + " NEW:" + rscount.getString("NEW") + " Close:"
+					String message = "FTTH USER:"+rsuser.getString(1).toLowerCase()+" Role: " + rsuser.getString(2) + " NEW:" + rscount.getString("NEW") + " Close:"
 							+ rscount.getString("CLOSED") + " FORWARD:" + rscount.getString("FORWARD") + " SOLVED:"
 							+ rscount.getString("SOLVED");
 
 					try {
 				
-								SendSMS.sendsms(rsuser.getString(3), message, "AUTOSMSEVENT", "SYSTEM", "0");
+						SendSMS smsobj=new SendSMS();
+						
+								smsobj.sendsms(rsuser.getString(3), message, "AUTOSMSEVENT", "SYSTEM", "0");
 					} catch (Exception e) {
 						System.err.println("Failed to SMS EVENT to "+rsuser.getString(1));
 						e.printStackTrace();

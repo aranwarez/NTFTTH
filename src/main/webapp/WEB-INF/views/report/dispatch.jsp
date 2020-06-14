@@ -60,209 +60,213 @@
 								<i class="fa fa-refresh fa-spin"></i>
 							</div>
 							<!-- /.box-header -->
-							<div class="box-body table-responsive">
+							<div class="box-body">
 								<form method="post">
+									<div class="row">
 
-									<!--                                        from here -->
-									<div class="col-md-2">
-										<c:choose>
-											<c:when test="${USER_LEVEL=='1'}">
+										<!--                                        from here -->
+										<div class="col-md-2">
+											<c:choose>
+												<c:when test="${USER_LEVEL=='1'}">
 
-												<select id="REGION_CODE" name="REGION_CODE"
-													onchange="return getZone()" class="form-control">
-													<option value="">Select Region</option>
+													<select id="REGION_CODE" name="REGION_CODE"
+														onchange="return getZone()" class="form-control">
+														<option value="">Select Region</option>
 
-													<c:forEach var="user3" items="${regionlist}">
-														<c:if test="${user3.ACTIVE_STATUS == 'Y'}">
-															<option value="${user3.REGION_CODE}">${user3.DESCRIPTION}</option>
-														</c:if>
-													</c:forEach>
-												</select>
-											</c:when>
-											<c:when test="${USER_LEVEL=='6'}">
+														<c:forEach var="user3" items="${regionlist}">
+															<c:if test="${user3.ACTIVE_STATUS == 'Y'}">
+																<option value="${user3.REGION_CODE}">${user3.DESCRIPTION}</option>
+															</c:if>
+														</c:forEach>
+													</select>
+												</c:when>
+												<c:when test="${USER_LEVEL=='6'}">
 
-												<select id="REGION_CODE" onchange="return getZone()"
-													class="form-control">
-													<option value="">Select Region</option>
+													<select id="REGION_CODE" onchange="return getZone()"
+														class="form-control">
+														<option value="">Select Region</option>
 
-													<c:forEach var="user3" items="${regionlist}">
-														<c:if test="${user3.ACTIVE_STATUS == 'Y'}">
-															<option value="${user3.REGION_CODE}">${user3.DESCRIPTION}</option>
-														</c:if>
-													</c:forEach>
-												</select>
-											</c:when>
-											<c:otherwise>
-												<select id="REGION_CODE" name="REGION_CODE"
-													class="form-control" onchange="return getZone()">
+														<c:forEach var="user3" items="${regionlist}">
+															<c:if test="${user3.ACTIVE_STATUS == 'Y'}">
+																<option value="${user3.REGION_CODE}">${user3.DESCRIPTION}</option>
+															</c:if>
+														</c:forEach>
+													</select>
+												</c:when>
+												<c:otherwise>
+													<select id="REGION_CODE" name="REGION_CODE"
+														class="form-control" onchange="return getZone()">
 
-													<c:forEach var="user3" items="${levelcontrollist}">
+														<c:forEach var="user3" items="${levelcontrollist}">
 
 
-														<option value="${user3.REGION_CODE}" selected="selected">${user3.REGION}</option>
+															<option value="${user3.REGION_CODE}" selected="selected">${user3.REGION}</option>
 
-													</c:forEach>
+														</c:forEach>
 
-												</select>
+													</select>
 
-											</c:otherwise>
-										</c:choose>
+												</c:otherwise>
+											</c:choose>
+
+										</div>
+
+
+										<div class="col-md-2">
+
+
+											<c:choose>
+
+												<c:when test="${USER_LEVEL=='3'}">
+
+													<select id="ZONE_CODE" name="ZONE_CODE"
+														class="form-control" onchange="getDistrict()">
+
+
+														<c:forEach var="user3" items="${levelcontrollist}">
+
+															<option value="${user3.ZONE_CODE}" selected="selected">${user3.ZONE}</option>
+
+														</c:forEach>
+
+													</select>
+
+												</c:when>
+
+												<c:when test="${USER_LEVEL=='4'}">
+
+													<select id="ZONE_CODE" name="ZONE_CODE"
+														class="form-control" onchange="getDistrict()">
+
+														<c:forEach var="user3" items="${levelcontrollist}">
+
+															<option value="${user3.ZONE_CODE}" selected="selected">${user3.ZONE}</option>
+
+
+														</c:forEach>
+
+
+													</select>
+
+												</c:when>
+												<c:when test="${USER_LEVEL=='5'}">
+
+													<select id="ZONE_CODE" name="ZONE_CODE"
+														class="form-control" onchange="getDistrict()">
+
+														<c:forEach var="user3" items="${levelcontrollist}">
+
+															<option value="${user3.ZONE_CODE}" selected="selected">${user3.ZONE}</option>
+
+
+														</c:forEach>
+
+
+													</select>
+
+												</c:when>
+												<c:otherwise>
+													<select id="ZONE_CODE" name="ZONE_CODE"
+														onchange="return getDistrict()" class="form-control">
+
+														<option value="">Select Zone</option>
+
+													</select>
+												</c:otherwise>
+											</c:choose>
+
+
+
+
+										</div>
+
+										<div class="col-md-2">
+											<c:choose>
+												<c:when test="${USER_LEVEL=='4'}">
+
+													<select id="DISTRICT_CODE" name="DISTRICT_CODE"
+														onchange="return getOffice()" class="form-control">
+
+														<c:forEach var="user3" items="${levelcontrollist}">
+
+															<option value="${user3.DISTRICT_CODE}"
+																selected="selected">${user3.DISTRICT}</option>
+
+														</c:forEach>
+
+													</select>
+
+
+												</c:when>
+
+												<c:when test="${USER_LEVEL=='5'}">
+
+													<select id="DISTRICT_CODE" name="DISTRICT_CODE"
+														onchange="return getOffice()" class="form-control">
+
+														<c:forEach var="user3" items="${levelcontrollist}">
+
+															<option value="${user3.DISTRICT_CODE}"
+																selected="selected">${user3.DISTRICT}</option>
+
+														</c:forEach>
+
+													</select>
+
+
+												</c:when>
+
+												<c:otherwise>
+													<select id="DISTRICT_CODE" name="DISTRICT_CODE"
+														onchange="return getOffice()" class="form-control">
+														<option value="">Select District</option>
+													</select>
+
+												</c:otherwise>
+											</c:choose>
+
+
+
+										</div>
+
+
+										<div class="col-md-2">
+
+											<c:choose>
+												<c:when test="${USER_LEVEL=='5'}">
+
+													<select id="OFFICE_CODE" name="OFFICE_CODE"
+														onchange="return getOLT()" class="form-control">
+
+
+														<c:forEach var="user3" items="${levelcontrollist}">
+
+															<option value="${user3.OFFICE_CODE}" selected="selected">${user3.OFFICE}</option>
+
+														</c:forEach>
+
+
+													</select>
+
+
+												</c:when>
+												<c:otherwise>
+													<select id="OFFICE_CODE" name="OFFICE_CODE"
+														onchange="getfdcteam()" class="form-control">
+														<option value="">Select Office</option>
+
+
+													</select>
+
+												</c:otherwise>
+											</c:choose>
+
+
+										</div>
+
+
 
 									</div>
-
-
-									<div class="col-md-2">
-
-
-										<c:choose>
-
-											<c:when test="${USER_LEVEL=='3'}">
-
-												<select id="ZONE_CODE" name="ZONE_CODE" class="form-control"
-													onchange="getDistrict()">
-
-													
-													<c:forEach var="user3" items="${levelcontrollist}">
-
-														<option value="${user3.ZONE_CODE}" selected="selected">${user3.ZONE}</option>
-
-													</c:forEach>
-
-												</select>
-
-											</c:when>
-
-											<c:when test="${USER_LEVEL=='4'}">
-
-												<select id="ZONE_CODE" name="ZONE_CODE" class="form-control"
-													onchange="getDistrict()">
-
-													<c:forEach var="user3" items="${levelcontrollist}" >
-
-														<option value="${user3.ZONE_CODE}" selected="selected">${user3.ZONE}</option>
-
-
-													</c:forEach>
-
-
-												</select>
-
-											</c:when>
-											<c:when test="${USER_LEVEL=='5'}">
-
-												<select id="ZONE_CODE" name="ZONE_CODE" class="form-control"
-													onchange="getDistrict()">
-
-													<c:forEach var="user3" items="${levelcontrollist}" >
-
-														<option value="${user3.ZONE_CODE}" selected="selected">${user3.ZONE}</option>
-
-
-													</c:forEach>
-
-
-												</select>
-
-											</c:when>
-											<c:otherwise>
-												<select id="ZONE_CODE" name="ZONE_CODE"
-													onchange="return getDistrict()" class="form-control">
-
-													<option value="">Select Zone</option>
-
-												</select>
-											</c:otherwise>
-										</c:choose>
-
-
-
-
-									</div>
-
-									<div class="col-md-2">
-										<c:choose>
-											<c:when test="${USER_LEVEL=='4'}">
-
-												<select id="DISTRICT_CODE" name="DISTRICT_CODE"
-													onchange="return getOffice()" class="form-control">
-													
-													<c:forEach var="user3" items="${levelcontrollist}" >
-
-														<option value="${user3.DISTRICT_CODE}" selected="selected">${user3.DISTRICT}</option>
-
-													</c:forEach>
-
-												</select>
-
-
-											</c:when>
-
-											<c:when test="${USER_LEVEL=='5'}">
-
-												<select id="DISTRICT_CODE" name="DISTRICT_CODE"
-													onchange="return getOffice()" class="form-control">
-
-													<c:forEach var="user3" items="${levelcontrollist}" >
-
-														<option value="${user3.DISTRICT_CODE}" selected="selected">${user3.DISTRICT}</option>
-
-													</c:forEach>
-
-												</select>
-
-
-											</c:when>
-
-											<c:otherwise>
-												<select id="DISTRICT_CODE" name="DISTRICT_CODE"
-													onchange="return getOffice()" class="form-control">
-													<option value="">Select District</option>
-												</select>
-
-											</c:otherwise>
-										</c:choose>
-
-
-
-									</div>
-
-
-									<div class="col-md-2">
-
-										<c:choose>
-											<c:when test="${USER_LEVEL=='5'}">
-
-												<select id="OFFICE_CODE" name="OFFICE_CODE"
-													onchange="return getOLT()" class="form-control">
-												
-
-													<c:forEach var="user3" items="${levelcontrollist}">
-
-														<option value="${user3.OFFICE_CODE}" selected="selected">${user3.OFFICE}</option>
-
-													</c:forEach>
-
-
-												</select>
-
-
-											</c:when>
-											<c:otherwise>
-												<select id="OFFICE_CODE" name="OFFICE_CODE"
-													onchange="getfdcteam()" class="form-control">
-													<option value="">Select Office</option>
-
-
-												</select>
-
-											</c:otherwise>
-										</c:choose>
-
-
-									</div>
-
-
-
 
 
 
@@ -298,13 +302,26 @@
 
 									</div>
 
+									<div class="col-md-2">
+
+										<select id="reportname" name="reportname" class="form-control">
+											<option value="FTTHDispatch">One Time Print</option>
+											<option value="FTTHDispatchReprint">Re-Print Again</option>
+
+											
+
+
+										</select>
+
+									</div>
+
 
 
 
 
 									<!--                                        to here -->
 									<div class='table'>
-										<input type="hidden" name="reportname" value="FTTHDispatch">
+
 										<table class="table-condensed">
 											<tr>
 												<td>Export Type</td>
@@ -317,10 +334,10 @@
 
 											<tr>
 												<td><button class="btn btn-default" type="submit"
-														formaction="../ReportView" formtarget="_blank">View
+														formaction="../ReportView" formtarget="_blank">Print
 													</button>
 													<button class="btn btn-default" type="submit"
-														formaction="../Report">Export</button></td>
+														formaction="../Report">View/Export</button></td>
 											</tr>
 										</table>
 									</div>

@@ -176,7 +176,7 @@ public class UserController {
 		UserDao userdao = new UserDao();
 		String msg = null;
 		try {
-			msg = userdao.passWordChange(request.getParameter("pass"), usercode);
+			msg = userdao.passWordChange(request.getParameter("pass"), usercode,user.getUSER_ID());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -378,7 +378,7 @@ public class UserController {
 	        
 	        String msg = null;
 	        try {
-	            msg = dao.passWordChange(PASSWORD,USER_ID);
+	            msg = dao.passWordChange(PASSWORD,USER_ID,USER_ID);
 	        } catch (SQLException e) {
 	            // TODO Auto-generated catch block
 	            e.printStackTrace();
