@@ -595,6 +595,9 @@ public class ComplainDao {
 		} catch (Exception e) {
 			con.rollback();
 			e.printStackTrace();
+			if(e.getMessage().contains("\"MAIN_TOKEN_MASTER\".\"FDC_CODE\"")) {
+				return "Failed to Save : " + "Contact administrator to import new list of FDC. Current FDC isn't mapped in database";
+			}	
 			return "Failed to Save : " + e.getMessage();
 		} finally {
 			con.close();
@@ -1125,7 +1128,7 @@ public class ComplainDao {
 					+ "            FROM MAIN_TOKEN_MASTER MTM, TOKEN_MASTER TM\r\n"
 					+ "           WHERE     MTM.TOKEN_ID = TM.TOKEN_ID\r\n" + "           and mtm.token_id=?\r\n"
 					+ "                ) TOKENS\r\n" + "ORDER BY token_ID, create_dt DESC";
-
+			System.out.println(qry);
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, TokenID);
 

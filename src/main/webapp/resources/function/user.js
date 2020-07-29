@@ -121,19 +121,22 @@ function editUser(code,officeCode) {
         if (response.lock_FLAG == 'Y') {
             $('input:radio[name="EDITLOCK_FLAG"][value=Y]').attr('checked', true);
         } else if (response.lock_FLAG == 'N') {
-            $('input:radio[name=EDITLOCK_FLAG][value=N]').attr('checked', true);
+          //  $('input:radio[name=EDITLOCK_FLAG][value=N]').attr('checked', true);
+            document.getElementsByName('EDITLOCK_FLAG')[1].checked = true;
         }
 
         if (response.super_FLAG == 'Y') {
             $('input:radio[name="EDITSUPER_FLAG"][value=Y]').attr('checked', true);
         } else if (response.super_FLAG == 'N') {
-            $('input:radio[name="EDITSUPER_FLAG"][value=N]').attr('checked', true);
+       //     $('input:radio[name="EDITSUPER_FLAG"][value=N]').attr('checked', true);
+            document.getElementsByName('EDITSUPER_FLAG')[1].checked = true;
         }
 
         if (response.disable_FLAG == 'Y') {
             $('input:radio[name="EDITDISABLE_FLAG"][value=Y]').attr('checked', true);
         } else if (response.disable_FLAG == 'N') {
-            $('input:radio[name="EDITDISABLE_FLAG"][value=N]').attr('checked', true);
+         //   $('input:radio[name="EDITDISABLE_FLAG"][value=N]').attr('checked', true);
+            document.getElementsByName('EDITDISABLE_FLAG')[1].checked = true;
         }        
         $("#EDITLOCATION_CODE").val(response.location_CODE);
              
