@@ -670,7 +670,7 @@
 	<jsp:include page="${request.contextPath}/complain/dialog"></jsp:include>
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 	<script
-		src="<c:url value="/resources/function/Complain/NewComplain.js?verdt=614" />"></script>
+		src="<c:url value="/resources/function/Complain/NewComplain.js?verdt=615" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 

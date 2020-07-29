@@ -373,7 +373,11 @@ function getSubsInfo(subsinfo) {
 			$('#status'+index).html(value.status);
 
 			$.each(value.vasName, function (indexvas, valuevas) {
+				if(valuevas.substring(0,7)=='Install'){
+					$('#subsinfotable'+index+' tr:last').after('<tr><td><label>CPE Install VAS</label></td><td>'+valuevas+'</td></tr>');
+				}else
 				$('#subsinfotable'+index+' tr:last').after('<tr><td><label>FTTH Package</label></td><td>'+valuevas+'</td></tr>');
+				
 			});	 
 			
 			// getting CRMS balance resource
@@ -408,7 +412,7 @@ getQueryFreeResource(value.serviceNumber,index);
 				});
 				
 				var detaillink='<a target="_blank" href="../troubleticket/list?token_id='+response[0].TOKEN_ID+'" class="btn bg-green"> <i class="fa fa-info-circle"></i> View All In Detail </a>';
-				detaillink=detaillink+'<br><a target="_blank" href="../ticket-history/fetch?srv_no='+response[0].MAIN_SRV_NO+'" class="btn bg-blue"> <i class="fa fa-history"></i> View CPE History Detail</a>';
+				detaillink=detaillink+'<br><a target="_blank" href="../ticket-history/fetch?MAIN_SRV_NO='+response[0].MAIN_SRV_NO+'" class="btn bg-blue"> <i class="fa fa-history"></i> View CPE History Detail</a>';
 				
 				$("#divforsubsinfo").append(detaillink);
 			
@@ -706,6 +710,21 @@ function getCRMSServiceBalance(serviceNo,index){
 		        		}
 	        		} 
 	        		
+	        // if data type no need to check balance
+	        		if(serviceNo.substring(0,6)=='NTFTTH'){
+//	        		 javexpdt=stringToDate(state[1].substring(0,10),"yyyy-mm-dd","-");
+//	        	     			var today = new Date();
+//	        		// incase of postpiad there is no date instead remaning
+			// credit in state[1]
+//	        			if(today<=javexpdt){
+//	        			$('#balanceOfCreditLimit'+index).css('background-color','#9FF781');
+//	        		}
+//	        		 
+	        		// marking balance as green as it is based on package
+					// validity
+	        		$('#balanceOfCreditLimit'+index).css('background-color','#9FF781');
+	        		
+	        		}
 	        		
 	        			        		$('#balanceOfCreditLimit'+index).html(statestatus);
 
@@ -715,6 +734,44 @@ function getCRMSServiceBalance(serviceNo,index){
 	     });
 		
 	}
+
+//we will call this function if validity is expired calling it again since its not async
+function getCRMSServiceBalanceifvalidityexp(serviceNo,index){
+		 $.ajax({
+	         url: '../complain/getCRMSServiceBalance',
+	        // global: false,
+	         type: 'get',
+	         data: {MDN:serviceNo},
+	       // async: false, //blocks window close
+	         success: function(response) {
+	        		var state=response.split('!');
+	        		var statestatus;			
+	        		$('#balanceOfCreditLimit'+index).css('background-color','#FE2E2E');
+	        		if($('#servicetype'+index).html().substring(0,3)=='Pos'){
+	        			// postpaid
+	        			$('#labelbalanceid'+index).html("Credit Limit");
+	        						statestatus='Due Amt:'+(state[1]/100)+' &nbsp  &nbsp  &nbsp  &nbsp'+'Rem Credit:'+(state[0]/100);
+	        						if(state[0]>0){
+	        		        			$('#balanceOfCreditLimit'+index).css('background-color','#9FF781');
+	        		        		}			
+	        		
+	        		}
+	        		else if($('#servicetype'+index).html().substring(0,3)=='Pre'){
+			 // prepaid
+	        			$('#labelbalanceid'+index).html("Balance");
+	        			statestatus='Balance:'+(state[0]/100)+' &nbsp  &nbsp  &nbsp'+'Expiry Dt of Subs:'+state[1];
+	        			if(state[0]>0){
+		        			$('#balanceOfCreditLimit'+index).css('background-color','#9FF781');
+		        		}
+	        		} 
+	        			        		$('#balanceOfCreditLimit'+index).html(statestatus);
+
+	         }
+	     });
+		
+	}
+
+
 
 function getQueryFreeResource(serviceNo,index){
 	// alert(serviceNo);
@@ -746,6 +803,8 @@ function getQueryFreeResource(serviceNo,index){
 	        			var today = new Date();
 	        		if(today>javexpdt){
 	        			$('#FRIExpdt'+index).css('background-color','#FE2E2E');
+	        			//if FRI exipired check balance then mark it red if balance less than 0
+	        			getCRMSServiceBalanceifvalidityexp(serviceNo,index);
 	        		}
 		 
 	        		}
@@ -755,6 +814,8 @@ function getQueryFreeResource(serviceNo,index){
 	        			var today = new Date();
 	        			if(today>javexpdt){
 		        			$('#FRIExpdt'+index).css('background-color','#FE2E2E');
+		        			//if FRI exipired check balance then mark it red if balance less than 0
+		        			getCRMSServiceBalanceifvalidityexp(serviceNo,index);
 		        			
 		        		}			
 	        			

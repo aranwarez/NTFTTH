@@ -51,11 +51,11 @@ public class ExcelImportDao {
                 pst.executeUpdate();
                 index = index + 1;
             }
-            
+            con.commit();     
 //            ExcelImportDao dao=new ExcelImportDao();
            String msg= postExcelImportData();
             
-            con.commit();
+       
             return "Sucessfully imported Excel Data "+msg;
         } catch (Exception e) {
         	con.rollback();
@@ -96,22 +96,47 @@ public class ExcelImportDao {
         return null;
     }
     
-    public String postExcelImportData() throws SQLException {
-        Connection con = DbCon.getConnection();
-        try {
-            String getDBUSERByUserIdSql = "{call FTTH_INSERT_UPDATE_EXCEL2(?)}";
-            CallableStatement pst = con.prepareCall(getDBUSERByUserIdSql);
-            pst.registerOutParameter(1, java.sql.Types.VARCHAR);
-            pst.executeUpdate();
-            String result = pst.getString(1);
-            return "Sucessfully Posted Excel imported Data "+result;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Failed to save " + e.getMessage();
-        } finally {
-            con.close();
-        }
-    }
-    
+	public String postExcelImportData() throws SQLException {
+		Connection con = DbCon.getConnection();
+		con.setAutoCommit(false);
+		try {
+			String getDBUSERByUserIdSql = "{call FTTH_INSERT_UPDATE_EXCEL2(?)}";
+			CallableStatement pst = con.prepareCall(getDBUSERByUserIdSql);
+			pst.registerOutParameter(1, java.sql.Types.VARCHAR);
+			pst.executeUpdate();
+			String result = pst.getString(1);
+			
+			// Syncronizing new FDC to users for office mapped users
+			if (result.equals("Y")) {
+				System.out.println("Syncing FDC user according to office mapped users");
+				PreparedStatement qryloop = con.prepareStatement("select distinct(user_id) from WEB_USER_OFFICE_MAP");
+				ResultSet rs = qryloop.executeQuery();
+				while (rs.next()) {
+					PreparedStatement pst6 = con.prepareStatement("delete from WEB_USER_FDC_MAP where USER_ID=?");
+
+					pst6.setString(1, rs.getString(1));
+					pst6.executeUpdate();
+
+					PreparedStatement pst7 = con.prepareStatement(
+							"insert into WEB_USER_FDC_MAP (WUTM_ID, USER_ID, FDC_CODE, ACTIVE_DT, DEACTIVE_DT, CREATE_BY, CREATE_DT) (\r\n"
+									+ "select WUTM_ID.nextval WUTM_ID,? USER_ID ,FDC_CODE,sysdate ACTIVE_DT,sysdate DEACTIVE_DT ,'SYSTEM' CREATE_BY ,sysdate CREATE_DT  from VW_FTTH_ALL_FDC vfaf  where EXISTS  (select office_code from WEB_USER_OFFICE_MAP where vfaf.office_code=WEB_USER_OFFICE_MAP.office_code and WEB_USER_OFFICE_MAP.user_id=?))");
+
+					pst7.setString(1, rs.getString(1));
+					pst7.setString(2, rs.getString(1));
+					pst7.executeUpdate();
+				}
+			}
+			//
+			con.commit();
+			return "Result:" + result;
+		} catch (Exception e) {
+			con.rollback();
+			e.printStackTrace();
+			
+			return "Failed to save " + e.getMessage();
+		} finally {
+			con.close();
+		}
+	}    
 
 }

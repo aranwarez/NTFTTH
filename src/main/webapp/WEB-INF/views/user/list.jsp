@@ -105,7 +105,7 @@
 											<th>EMP_CODE</th>										
 											<th>LOCK</th>
 											<th>SUPER</th>
-											<th>Scheduled SMS Disable Flag</th>
+											<th>SMS Flag</th>
 											
 											<th>LOCATION</th>
 											
@@ -235,7 +235,7 @@
 			
 		})
 	</script>
-	<script src="<c:url value="/resources/function/user.js?a=156" />"></script>
+	<script src="<c:url value="/resources/function/user.js?ver_dt=614" />"></script>
    <script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 </body>

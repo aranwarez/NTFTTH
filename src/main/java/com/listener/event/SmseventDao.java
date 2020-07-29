@@ -16,7 +16,7 @@ public class SmseventDao {
 		Connection con = DbCon.getConnection();
 		// con.setAutoCommit(false);
 		try {
-			String qry = "select user_id,role_code,mobile_no,user_level from web_user where REGEXP_LIKE(mobile_no, '^[[:digit:]]+$')";
+			String qry = "select user_id,role_code,mobile_no,user_level from web_user where REGEXP_LIKE(mobile_no, '^[[:digit:]]+$') and DISABLE_FLAG='N'";
 			PreparedStatement pst = con.prepareStatement(qry);
 			ResultSet rsuser = pst.executeQuery();
 			while (rsuser.next()) {
