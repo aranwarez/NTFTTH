@@ -154,7 +154,9 @@ function getCustomerInfo() {
 			
 			// get AAA data
 			getstatusInfo(); 
-			
+			//In the end check if work order exist for selected customer
+			checkworkorder();
+
 			
 		
 		}catch (e) {
@@ -165,6 +167,7 @@ function getCustomerInfo() {
 		
 
 	}); // closing function(responseJson)
+
 
 }
 
@@ -950,6 +953,44 @@ function gettimediff(adate, bdate){
 	var ss = Math.floor(msec / 1000);
 	msec -= ss * 1000;
 	return (hh + ":" + mm + ":" + ss);
+}
+
+//function to check if work order exist
+function checkworkorder(){
+	$.get('../workorder/getActiveWorkOrder', {
+		
+	}, function(response) {
+		console.log(response);
+		 $.each(response, function (index, value) {
+			 debugger;
+			 if(value.ELEMENT_TYPE===1 && value.ELEMENT_VALUE===$('#fapName').html()){
+				 alert('Work Order Already Exist For FAP '+value.ELEMENT_VALUE+'\nRemarks:'+value.REMARKS);
+			 }
+			 if(value.ELEMENT_TYPE===2 && value.ELEMENT_VALUE===$('#fdcName').html()){
+				 alert('Work Order Already Exist For FDC '+value.ELEMENT_VALUE+'\nRemarks:'+value.REMARKS);
+			 }
+			 if(value.ELEMENT_TYPE===3 && value.ELEMENT_VALUE===$('#odfName').html()){
+				 alert('Work Order Already Exist For ODF '+value.ELEMENT_VALUE+'\nRemarks:'+value.REMARKS);
+			 }
+			 if(value.ELEMENT_TYPE===6 && value.ELEMENT_VALUE===$('#oltInfo').html()){
+				 alert('Work Order Already Exist For OLT PORT '+value.ELEMENT_VALUE+'\nRemarks:'+value.REMARKS);
+			 }
+			 if(value.ELEMENT_TYPE===5){
+				 if($('#oltInfo').html().substring(0,value.ELEMENT_VALUE.length)===value.ELEMENT_VALUE){
+				 alert('Work Order Already Exist For OLT CARD '+value.ELEMENT_VALUE+'\nRemarks:'+value.REMARKS);
+				 }
+			 }
+			 if(value.ELEMENT_TYPE===4 && value.ELEMENT_VALUE===$('#oltName').html()){
+				 alert('Work Order Already Exist For OLT '+value.ELEMENT_VALUE+'\nRemarks:'+value.REMARKS);
+			 }
+			 
+		 });
+			   
+		
+		
+	});
+	
+	
 }
 
 

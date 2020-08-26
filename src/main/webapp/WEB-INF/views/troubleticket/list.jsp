@@ -351,7 +351,7 @@
 						</div>
 					</div>
 
-					<div class="col-md-1" id="closebuttondiv" style="display: none;">
+					<div class="col-md-2" id="closebuttondiv" style="display: none;">
 						<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteallModal">Close All Tickets</button>
 
 					</div>

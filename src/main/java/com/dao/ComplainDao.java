@@ -248,7 +248,7 @@ public class ComplainDao {
 					}
 
 					// just resolving tickets
-					
+
 					else {
 
 						tokenrs = con.prepareStatement(cqry).executeQuery();
@@ -590,14 +590,15 @@ public class ComplainDao {
 				}
 			}
 			con.commit();
-			return "New Trouble Ticket Generated, Token ID : "+tOKEN_ID;
+			return "New Trouble Ticket Generated, Token ID : " + tOKEN_ID;
 
 		} catch (Exception e) {
 			con.rollback();
 			e.printStackTrace();
-			if(e.getMessage().contains("\"MAIN_TOKEN_MASTER\".\"FDC_CODE\"")) {
-				return "Failed to Save : " + "Contact administrator to import new list of FDC. Current FDC isn't mapped in database";
-			}	
+			if (e.getMessage().contains("\"MAIN_TOKEN_MASTER\".\"FDC_CODE\"")) {
+				return "Failed to Save : "
+						+ "Contact administrator to import new list of FDC. Current FDC isn't mapped in database";
+			}
 			return "Failed to Save : " + e.getMessage();
 		} finally {
 			con.close();
@@ -693,40 +694,59 @@ public class ComplainDao {
 		Connection con = DbCon.getConnection();
 
 		try {
-			String qry = "SELECT TOKENS.*,\r\n" + "         (SELECT DESCRIPTION\r\n"
-					+ "            FROM M_SERVICE_TYPE\r\n"
-					+ "           WHERE SERVICE_TYPE_ID = TOKENS.SERVICE_TYPE_ID)    SERVICE_DESC,\r\n"
-					+ "         (SELECT DESCRIPTION\r\n" + "            FROM M_PROBLEM\r\n"
-					+ "           WHERE PROBLEM_ID = TOKENS.PROBLEM_ID)              PROBLEM_DESC,\r\n"
-					+ "           (SELECT DESCRIPTION||' '||FDC_LOCATION\r\n" + "            FROM M_FDC \r\n"
-					+ "           WHERE FDC_CODE  = TOKENS.FDC_CODE )              FDC_DESC\r\n"
-					+ "    FROM (SELECT TM.TOKEN_ID,\r\n" + "                 SUB_TOKEN_ID,\r\n"
-					+ "                 SERVICE_ID,\r\n" + "                 SRV_NO,\r\n"
-					+ "                 COMPLAIN_NO,\r\n" + "                 CONTACT_NAME,\r\n"
-					+ "                 TM.PROBLEM_ID,\r\n" + "                 TM.REMARKS,\r\n"
-					+ "                 FDC_CODE,\r\n" + "                 TM.SUB_TEAM_CODE,\r\n"
-					+ "                 TM.SOLVE_FLAG,\r\n" + "                 SERVICE_TYPE_ID,\r\n"
-					+ "                 TM.CREATE_DT,\r\n" + "                 MTM.TEAM_ID\r\n"
-					+ "            FROM MAIN_TOKEN_MASTER MTM, TOKEN_MASTER TM\r\n"
-					+ "           WHERE     MTM.TOKEN_ID = TM.TOKEN_ID\r\n" + "                 ) TOKENS\r\n"
-					+ "   WHERE     EXISTS\r\n" + "                 (SELECT *\r\n"
-					+ "                    FROM WEB_USER_TEAM_MAP\r\n" + "                   WHERE     USER_ID = ?\r\n"
-					+ "                         AND TOKENS.SUB_TEAM_CODE =\r\n"
-					+ "                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + "         AND EXISTS\r\n"
-					+ "                 (SELECT FDC_CODE\r\n" + "                    FROM VW_FTTH_ALL_FDC\r\n"
-					+ "                   WHERE     TOKENS.fdc_code = VW_FTTH_ALL_FDC.fdc_code\r\n"
-					+ "                         AND REGION_CODE = NVL (?, REGION_CODE)\r\n"
-					+ "                         AND ZONE_CODE = NVL (?, ZONE_CODE)\r\n"
-					+ "                         AND DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n"
-					+ "                         AND OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n"
-					+ "                         AND OLT_CODE = NVL (?, OLT_CODE))\r\n"
-					+ "         AND TOKENS.SUB_TEAM_CODE = NVL (?, SUB_TEAM_CODE)\r\n"
-					+ "         AND TOKENS.SERVICE_TYPE_ID = NVL (?, SERVICE_TYPE_ID)\r\n"
-					+ "         AND TOKENS.SOLVE_FLAG = NVL (?, SOLVE_FLAG)\r\n"
-					+ "         AND TOKENS.CREATE_DT BETWEEN NVL (common.TO_AD (?), SYSDATE - 30)\r\n"
-					+ "                                  AND NVL (common.TO_AD (?), SYSDATE)\r\n"
-					+ "          AND TOKENS.TEAM_ID=NVL(?,TEAM_ID)\r\n" + "ORDER BY token_ID, create_dt DESC";
+			String qry = "SELECT TOKENS.*,\r\n" + 
+					"         (SELECT DESCRIPTION\r\n" + 
+					"            FROM M_SERVICE_TYPE\r\n" + 
+					"           WHERE SERVICE_TYPE_ID = TOKENS.SERVICE_TYPE_ID)    SERVICE_DESC,\r\n" + 
+					"         (SELECT DESCRIPTION\r\n" + 
+					"            FROM M_PROBLEM\r\n" + 
+					"           WHERE PROBLEM_ID = TOKENS.PROBLEM_ID)              PROBLEM_DESC,\r\n" + 
+					"           (SELECT DESCRIPTION||' '||FDC_LOCATION\r\n" + 
+					"            FROM M_FDC \r\n" + 
+					"           WHERE FDC_CODE  = TOKENS.FDC_CODE )              FDC_DESC\r\n" + 
+					"    FROM (SELECT TM.TOKEN_ID,\r\n" + 
+					"                 TM.SERVICE_NO,   \r\n" + 
+					"                 SUB_TOKEN_ID,\r\n" + 
+					"                 SERVICE_ID,\r\n" + 
+					"                 SRV_NO,\r\n" + 
+					"                 COMPLAIN_NO,\r\n" + 
+					"                 CONTACT_NAME,\r\n" + 
+					"                 CUSTOMER_NAME,\r\n" + 
+					"                 TM.PROBLEM_ID,\r\n" + 
+					"                 TM.REMARKS,\r\n" + 
+					"                 FDC_CODE,\r\n" + 
+					"                 TM.SUB_TEAM_CODE,\r\n" + 
+					"                 TM.SOLVE_FLAG,\r\n" + 
+					"                 SERVICE_TYPE_ID,\r\n" + 
+					"                 TM.CREATE_DT,\r\n" + 
+					"                 MTM.TEAM_ID\r\n" + 
+					"            FROM MAIN_TOKEN_MASTER MTM, TOKEN_MASTER TM,CUSTOMER_INFO CI\r\n" + 
+					"           WHERE     MTM.TOKEN_ID = TM.TOKEN_ID and CI.TOKEN_ID = MTM.TOKEN_ID\r\n" + 
+					"                 ) TOKENS\r\n" + 
+					"   WHERE     EXISTS\r\n" + 
+					"                 (SELECT *\r\n" + 
+					"                    FROM WEB_USER_TEAM_MAP\r\n" + 
+					"                   WHERE     USER_ID = ?\r\n" + 
+					"                         AND TOKENS.SUB_TEAM_CODE =\r\n" + 
+					"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
+					"         AND EXISTS\r\n" + 
+					"                 (SELECT FDC_CODE\r\n" + 
+					"                    FROM VW_FTTH_ALL_FDC\r\n" + 
+					"                   WHERE     TOKENS.fdc_code = VW_FTTH_ALL_FDC.fdc_code\r\n" + 
+					"                         AND REGION_CODE = NVL (?, REGION_CODE)\r\n" + 
+					"                         AND ZONE_CODE = NVL (?, ZONE_CODE)\r\n" + 
+					"                         AND DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
+					"                         AND OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
+					"                         AND OLT_CODE = NVL (?, OLT_CODE))\r\n" + 
+					"         AND TOKENS.SUB_TEAM_CODE = NVL (?, SUB_TEAM_CODE)\r\n" + 
+					"         AND TOKENS.SERVICE_TYPE_ID = NVL (?, SERVICE_TYPE_ID)\r\n" + 
+					"         AND TOKENS.SOLVE_FLAG = NVL (?, SOLVE_FLAG)\r\n" + 
+					"         AND TOKENS.CREATE_DT BETWEEN NVL (common.TO_AD (?), SYSDATE - 30)\r\n" + 
+					"                                  AND NVL (common.TO_AD (?), SYSDATE)\r\n" + 
+					"          AND TOKENS.TEAM_ID=NVL(?,TEAM_ID)\r\n" + 
+					"ORDER BY token_ID, create_dt DESC";
 
+			//System.out.println(qry);
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, User);
 			pst.setString(2, Region);
@@ -772,16 +792,17 @@ public class ComplainDao {
 		con.setAutoCommit(false);
 		PreparedStatement pst = null;
 		try {
-			//check validate if forwardtoken team is assigned to session user
-			pst = con.prepareStatement("select sub_team_code from token_master where sub_token_id=? and exists (select SUB_TEAM_CODE from WEB_USER_TEAM_MAP where USER_ID=? and token_master.SUB_TEAM_CODE = WEB_USER_TEAM_MAP.SUB_TEAM_CODE)");
+			// check validate if forwardtoken team is assigned to session user
+			pst = con.prepareStatement(
+					"select sub_team_code from token_master where sub_token_id=? and exists (select SUB_TEAM_CODE from WEB_USER_TEAM_MAP where USER_ID=? and token_master.SUB_TEAM_CODE = WEB_USER_TEAM_MAP.SUB_TEAM_CODE)");
 			pst.setString(1, forwardtoken);
 			pst.setString(2, User);
-			ResultSet rsvalidateteam=pst.executeQuery();
-			if(!rsvalidateteam.next()) {
+			ResultSet rsvalidateteam = pst.executeQuery();
+			if (!rsvalidateteam.next()) {
 				return ("Forbidden: Current Ticket Team isn't assigned to User!!!");
-			
+
 			}
-			//validation till here
+			// validation till here
 
 			pst = con.prepareStatement("INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n"
 					+ "                               SUB_TOKEN_ID,\r\n"
@@ -828,17 +849,17 @@ public class ComplainDao {
 		con.setAutoCommit(false);
 		PreparedStatement pst = null;
 		try {
-			//check validate if forwardtoken team is assigned to session user
-			pst = con.prepareStatement("select sub_team_code from token_master where sub_token_id=? and exists (select SUB_TEAM_CODE from WEB_USER_TEAM_MAP where USER_ID=? and token_master.SUB_TEAM_CODE = WEB_USER_TEAM_MAP.SUB_TEAM_CODE)");
+			// check validate if forwardtoken team is assigned to session user
+			pst = con.prepareStatement(
+					"select sub_team_code from token_master where sub_token_id=? and exists (select SUB_TEAM_CODE from WEB_USER_TEAM_MAP where USER_ID=? and token_master.SUB_TEAM_CODE = WEB_USER_TEAM_MAP.SUB_TEAM_CODE)");
 			pst.setString(1, forwardtoken);
 			pst.setString(2, User);
-			ResultSet rsvalidateteam=pst.executeQuery();
-			if(!rsvalidateteam.next()) {
+			ResultSet rsvalidateteam = pst.executeQuery();
+			if (!rsvalidateteam.next()) {
 				return ("Forbidden: Current Ticket Team isn't assigned to User!!!");
-			
-			}
-			//validation till here
 
+			}
+			// validation till here
 
 			pst = con.prepareStatement("INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n"
 					+ "                               SUB_TOKEN_ID,\r\n"
@@ -885,17 +906,17 @@ public class ComplainDao {
 		con.setAutoCommit(false);
 		PreparedStatement pst = null;
 		try {
-			//check validate if ticket team is assigned to session user
-			pst = con.prepareStatement("select sub_team_code from token_master where sub_token_id=? and exists (select SUB_TEAM_CODE from WEB_USER_TEAM_MAP where USER_ID=? and token_master.SUB_TEAM_CODE = WEB_USER_TEAM_MAP.SUB_TEAM_CODE)");
+			// check validate if ticket team is assigned to session user
+			pst = con.prepareStatement(
+					"select sub_team_code from token_master where sub_token_id=? and exists (select SUB_TEAM_CODE from WEB_USER_TEAM_MAP where USER_ID=? and token_master.SUB_TEAM_CODE = WEB_USER_TEAM_MAP.SUB_TEAM_CODE)");
 			pst.setString(1, closetoken);
 			pst.setString(2, User);
-			ResultSet rsvalidateteam=pst.executeQuery();
-			if(!rsvalidateteam.next()) {
+			ResultSet rsvalidateteam = pst.executeQuery();
+			if (!rsvalidateteam.next()) {
 				return ("Forbidden: Current Ticket Team isn't assigned to User!!!");
-			
-			}
-			//validation till here
 
+			}
+			// validation till here
 
 			pst = con.prepareStatement("INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n"
 					+ "                               SUB_TOKEN_ID,\r\n"
@@ -965,19 +986,20 @@ public class ComplainDao {
 		PreparedStatement pst = null;
 		try {
 			for (String var : closetokenarray) {
-				//check validate if ticket team is assigned to session user
-				pst = con.prepareStatement("select sub_team_code from token_master where sub_token_id=? and exists (select SUB_TEAM_CODE from WEB_USER_TEAM_MAP where USER_ID=? and token_master.SUB_TEAM_CODE = WEB_USER_TEAM_MAP.SUB_TEAM_CODE)");
+				// check validate if ticket team is assigned to session user
+				pst = con.prepareStatement(
+						"select sub_team_code from token_master where sub_token_id=? and exists (select SUB_TEAM_CODE from WEB_USER_TEAM_MAP where USER_ID=? and token_master.SUB_TEAM_CODE = WEB_USER_TEAM_MAP.SUB_TEAM_CODE)");
 				pst.setString(1, var);
 				pst.setString(2, User);
-				ResultSet rsvalidateteam=pst.executeQuery();
-				if(!rsvalidateteam.next()) {
+				ResultSet rsvalidateteam = pst.executeQuery();
+				if (!rsvalidateteam.next()) {
 					con.rollback();
 					return ("Forbidden: Current Ticket Team isn't assigned to User!!!");
-				
-				}
-				//validation till here
 
-				String closetoken=var;
+				}
+				// validation till here
+
+				String closetoken = var;
 				pst = con.prepareStatement(
 						"INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n" + "                               SUB_TOKEN_ID,\r\n"
 								+ "                               FROM_SUB_TEAM_CODE,\r\n"
@@ -1128,7 +1150,7 @@ public class ComplainDao {
 					+ "            FROM MAIN_TOKEN_MASTER MTM, TOKEN_MASTER TM\r\n"
 					+ "           WHERE     MTM.TOKEN_ID = TM.TOKEN_ID\r\n" + "           and mtm.token_id=?\r\n"
 					+ "                ) TOKENS\r\n" + "ORDER BY token_ID, create_dt DESC";
-			System.out.println(qry);
+		//	System.out.println(qry);
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, TokenID);
 

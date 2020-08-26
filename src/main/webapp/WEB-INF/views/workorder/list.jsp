@@ -14,22 +14,6 @@
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
 	name="viewport">
 <jsp:include page="${request.contextPath}/headCss"></jsp:include>
-<style>
-.example-modal .modal {
-	position: relative;
-	top: auto;
-	bottom: auto;
-	right: auto;
-	left: auto;
-	display: block;
-	z-index: 1;
-}
-
-.example-modal .modal {
-	background: transparent !important;
-}
-</style>
-	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -39,22 +23,26 @@
 		</header>
 		<!-- Left side column. contains the logo and sidebar -->
 		<aside class="main-sidebar">
-			
-					<jsp:include page="${request.contextPath}/leftmenu"></jsp:include>
-				
+
+			<jsp:include page="${request.contextPath}/leftmenu"></jsp:include>
+
 		</aside>
 
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<h1>User Team - Map List</h1>
+				<h1>Work Order Entry</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li><a href="#">Tables</a></li>
 					<li class="active">Data tables</li>
-
 				</ol>
+				<c:if test="${menuaccess.getADD_FLAG() == 'Y'}">
+					<a href="#" class="btn btn-primary pull-right" data-toggle="modal"
+						data-target="#myModal"> <i class="fa fa-plus"></i> Add
+					</a>
+				</c:if>
 
 			</section>
 
@@ -62,18 +50,6 @@
 			<section class="content">
 				<div class="row">
 					<div class="col-xs-12">
-						<select id="USER_ID" onchange="return getEditMode()" class="form-control">
-							<option>Select User</option>
-						<c:forEach var="user3" items="${userteam_list}">
-												
-						   <c:if test = "${user3.LOCK_FLAG == 'N'}">				
-	
-						 <option value="${user3.USER_ID}">${user3.USER_ID}-${user3.FULL_NAME}-${user3.EMPLOYEE_CODE}-${user3.ROLE_CODE}-${user3.OFFICE_CODE}-${user3.MOBILE_NO}</option>
-						</c:if>
-						</c:forEach>								
-							
-						</select>
-
 
 						<!-- /.box -->
 
@@ -103,18 +79,59 @@
 								}
 							%>
 
-		<div class="overlay">
-  			<i class="fa fa-refresh fa-spin"></i>
-		</div>
-
-
 							<!-- /.box-header -->
-							<div class="box-body ">
-							
-							<jsp:include page="${request.contextPath}/userteambody"></jsp:include>
-							
-							
-							
+							<div class="box-body">
+							<div class="overlay">
+									<i class="fa fa-refresh fa-spin"></i>
+								</div>
+								<table id="example1" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>Type</th>
+											<th>Description</th>
+											<th>Remarks</th>
+											<th>StartTime</th>
+											<th>EndTime</th>
+											<th>Active</th>
+
+											<th>Edit</th>
+											<th>Delete</th>
+
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach var="user" items="${data_list}">
+
+											<tr>
+
+												<td>${user.DESCRIPTION}</td>
+												<td>${user.ELEMENT_VALUE}</td>
+												<td>${user.REMARKS}</td>
+												<td>${user.STARTTIME}</td>
+												<td>${user.ENDTIME}</td>
+												<td>${user.ACTIVE_FLAG}</td>
+												<td>
+													<div class="btn-group">
+														<a href="#" class="btn btn-info" data-toggle="modal"
+															data-target="#editModal"
+															onclick="return editTeam('${user.ID}')"> <i
+															class="fa fa-edit"></i> Edit
+														</a>
+													</div>
+												</td>
+												<td>
+													<div>
+														<a href="" class="btn btn-default" data-toggle="modal"
+															data-target="#deleteModal"
+															onclick="return deleteTeam('${user.ID}')"> <i
+															class="fa fa-trash"></i> Delete
+														</a>
+													</div>
+												</td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
 							</div>
 							<!-- /.box-body -->
 						</div>
@@ -149,17 +166,17 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialogmenuaccess"></jsp:include>
-
+	<jsp:include page="${request.contextPath}/dialogworkorder"></jsp:include>
+	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
 	<script>
 		$(function() {
 
 			$('#example1').DataTable()
-			$("#USER_ID").select2();
+
 		})
 	</script>
-	<script src="<c:url value="/resources/function/userteam.js?a=15" />"></script>
+	<script src="<c:url value="/resources/function/WorkOrder/workorder.js" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 

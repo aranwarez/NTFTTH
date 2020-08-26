@@ -284,7 +284,7 @@ function fetchView() {
 							$('#closebuttondiv').fadeOut();
 						}
 
-						console.log(data);
+						//console.log(data);
 						// $('#example1').DataTable();
 
 						var table = $('#example1').DataTable({
@@ -297,6 +297,12 @@ function fetchView() {
 								.each(
 										data,
 										function(key, value) {
+											if(Statusflag==='' && value.SOLVE_FLAG==='C' ){
+												//console.log(value);
+												return;
+												
+											}
+											
 											var date = new Date(value.CREATE_DT)
 													.toDateString("yyyy-MM-dd");
 											;
@@ -328,14 +334,13 @@ function fetchView() {
 															[
 																	value.TOKEN_ID,
 																	value.SRV_NO,
-																	value.SERVICE_DESC,
-
+																	value.SERVICE_DESC+'-'+value.SERVICE_NO,
 																	javadate(value.CREATE_DT),
 																	value.SUB_TEAM_CODE,
 																	value.PROBLEM_DESC,
 																	value.FDC_DESC,
 																	value.COMPLAIN_NO,
-																	value.CONTACT_NAME,
+																	value.CUSTOMER_NAME,
 																	'<div class="btn=group">'
 																			+ forwardflag
 																			+ solveflag
@@ -429,7 +434,7 @@ function viewdetail(subtokenid) {
 		SUBTOKEN : subtokenid
 
 	}, function(data) {
-		console.log(data);
+		//console.log(data);
 		// $('#example1').DataTable();
 		var table = $('#viewdetailtable').DataTable();
 
