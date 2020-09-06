@@ -1,6 +1,7 @@
 package com.ftth.controller;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -19,13 +20,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.dao.CommonDateDao;
 import com.dao.CommonMenuDao;
 import com.dao.FDCDao;
 import com.dao.OLTDao;
+import com.dao.RegionDao;
 import com.dao.TeamDao;
+import com.dao.UserDao;
 import com.dao.WorkOrderDao;
 import com.model.MenuAccess;
+import com.model.Region;
 import com.model.UserInformationModel;
+import com.smpp.SendSMS;
 import com.soap.dao.WorkOrderAPI;
 
 @Controller
@@ -49,6 +55,31 @@ public class WorkOrderController {
 			return "/home";
 		}
 
+//		adding query component
+		RegionDao rdao = new RegionDao();
+		List<Region> regionlist = null;
+
+		CommonDateDao DAT = new CommonDateDao();
+
+		List<Map<String, Object>> levelcontrollist = null;
+
+		try {
+			regionlist = rdao.getlistByUserFDC(user.getUSER_ID(), user.getUSER_LEVEL());
+
+			// model.addAttribute("Date_list", DAT.getDateList());
+
+			levelcontrollist = UserDao.getUserDetailByOfficeCode(user.getOFFICE_CODE());
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		model.addAttribute("regionlist", regionlist);
+		model.addAttribute("USER_LEVEL", user.getUSER_LEVEL());
+		model.addAttribute("levelcontrollist", levelcontrollist);
+
+		// /adding query
+
 		WorkOrderDao dao = new WorkOrderDao();
 		List<Map<String, Object>> list = null;
 		List<Map<String, Object>> elementlist = null;
@@ -57,7 +88,7 @@ public class WorkOrderController {
 
 		try {
 			elementlist = dao.getWorkOrderElementList();
-			list = dao.getWorkOrderList();
+			list = dao.getActiveWorkOrder();
 			fdclist = FDCDao.getFDCList();
 			oltlist = OLTDao.getOLTList();
 
@@ -71,8 +102,37 @@ public class WorkOrderController {
 		model.addAttribute("menuaccess", menuaccess);
 		model.addAttribute("fx", "Work Order");
 		model.addAttribute("data_list", list);
+		model.addAttribute("Date_list", DAT.getDateList());
 
 		return "workorder/list";
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/workorder/getJSListWorkOrder", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Map<String, Object>> getJSListWorkOrder(Locale locale, Model model, HttpSession session,
+			String REGION_CODE, String ZONE_CODE, String DISTRICT_CODE, String OFFICE_CODE, String QFROM_DT,
+			String QTO_DT, String qtype, String ACTIVE_FLAG) throws SQLException {
+
+
+		// ADD_FLAG
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+
+		WorkOrderDao dao = new WorkOrderDao();
+		try {
+			return dao.getWorkOrderList(REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, QFROM_DT, QTO_DT, qtype,
+					ACTIVE_FLAG);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+
 	}
 
 	@ResponseBody
@@ -157,7 +217,7 @@ public class WorkOrderController {
 	@RequestMapping(value = "/workorder/saveworkorder", method = RequestMethod.POST)
 	@ResponseBody
 	public String saveJSService(String type, String value, String starttime, String active_flag, String remarks,
-			HttpSession session, Model model, Locale locale,String fdc,String olt) throws SQLException {
+			HttpSession session, Model model, Locale locale, String fdc, String olt) throws SQLException {
 
 		logger.info("Save Work Order {}.", locale);
 
@@ -172,20 +232,24 @@ public class WorkOrderController {
 		}
 		WorkOrderDao dao = new WorkOrderDao();
 		WorkOrderAPI APIdao = new WorkOrderAPI();
+		SendSMS smsdao=new SendSMS();
 		String USER = user.getUSER_ID();
 		String msg = null;
+		String smsmsg="Dear Customer, \n We are going to have maintenance work at your area. Your service might be interrupted for few hours. We'll keep you updated \n Nepal Telecom ";
 		try {
-			msg = dao.saveWorkOrder(type, value, remarks, starttime, active_flag, USER,olt,fdc);
+			msg = dao.saveWorkOrder(type, value, remarks, starttime, active_flag, USER, olt, fdc);
 			if (active_flag.equals("Y")) {
 				try {
-					List<String> MDN=APIdao.getFTTHNumberInfo(type, value);
-					for (String mdn:MDN) {
-						//send sms to these number regarding work order
-						System.out.println(APIdao.getContactNumber(mdn));
+					List<String> MDN = APIdao.getFTTHNumberInfo(type, value);
+					for (String mdn : MDN) {
+						// send sms to these number regarding work order
+					//	System.out.println(APIdao.getContactNumber(mdn));
+						smsdao.sendsms(APIdao.getContactNumber(mdn), smsmsg , "WORKORDER", USER, msg);
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					return "Failed Exception:"+e.getLocalizedMessage();
 				}
 			}
 
@@ -193,13 +257,13 @@ public class WorkOrderController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return msg;
+		return "Sucessfuly Saved Work Order";
 	}
-	
+
 	@RequestMapping(value = "/workorder/complete", method = RequestMethod.POST)
 	@ResponseBody
-	public String completeService(String ID, String endtime,  String remarks,
-			HttpSession session, Model model, Locale locale) throws SQLException {
+	public String completeService(String ID, String endtime, String remarks, HttpSession session, Model model,
+			Locale locale) throws SQLException {
 
 		logger.info("Save Work Order {}.", locale);
 
@@ -218,7 +282,6 @@ public class WorkOrderController {
 		String msg = null;
 		try {
 			msg = dao.completeWorkOrder(ID, USER, remarks, endtime);
-		
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -226,8 +289,6 @@ public class WorkOrderController {
 		}
 		return msg;
 	}
-
-	
 
 	@RequestMapping(value = "/workorder/update", method = RequestMethod.POST)
 	@ResponseBody

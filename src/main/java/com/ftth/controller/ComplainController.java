@@ -138,7 +138,7 @@ public class ComplainController {
 	public String Complainregister(String JSON, String Complain_no, String Remarks, String SRV_NO, String contactName,
 			String fdcname, String teamname, String Supervisorname, String SupervisorContno, String Teamleader,
 			String TeamleaderNo, Boolean solved, String CUSTOMER_NAME, String CONTACT_NO, String OLT_PORT,
-			String FAP_LOCATION, String FAP_PORT, String CPE_RX_LVL, Model model, Locale locale, HttpSession session)
+			String FAP_LOCATION, String FAP_PORT, String CPE_RX_LVL,String ODF_PORT, Model model, Locale locale, HttpSession session)
 			throws SQLException {
 		logger.info("Registering new service for", locale);
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
@@ -158,11 +158,11 @@ public class ComplainController {
 			if (solved) {
 				msg = dao.solveProblem(myObjects, "1", SRV_NO, Complain_no, contactName, Remarks, user.getUSER_ID(),
 						fdcname, teamname, Supervisorname, SupervisorContno, Teamleader, TeamleaderNo, CUSTOMER_NAME,
-						CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL);
+						CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL,ODF_PORT);
 			} else
 				msg = dao.saveProblem(myObjects, "1", SRV_NO, Complain_no, contactName, Remarks, user.getUSER_ID(),
 						fdcname, teamname, Supervisorname, SupervisorContno, Teamleader, TeamleaderNo, CUSTOMER_NAME,
-						CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL);
+						CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL,ODF_PORT);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

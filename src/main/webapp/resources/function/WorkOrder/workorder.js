@@ -1,4 +1,15 @@
 $(document).ready(function() {
+	
+	 // -- till here
+	 //disable double click 
+	 	    $(".submitbutton").on("click", function() {
+		        $(this).attr("disabled", "disabled");
+		        //auto enable button after delay
+		        setTimeout('$(".submitbutton").removeAttr("disabled")', 5000);
+		    });
+	// -till here disable double click
+	
+	
 	// $(".js-example-basic-single").select2();
 	$('.nepali-calendar').nepaliDatePicker();
 	$.fn.dataTable.ext.errMode = 'none';
@@ -39,7 +50,6 @@ $(document).ready(function() {
 });
 
 function elementtype() {
-	debugger;
 	var type = $('#type').val();
 	if (type === '1') {
 		// type FAP
@@ -273,3 +283,203 @@ function del() {
 		
 	});
 }
+
+
+//function for query parameter components
+
+function getZone() {
+
+	var REGION_CODE = $("#REGION_CODE").val();
+
+	$.get("../getZoneByRegion", {
+		REGION_CODE : REGION_CODE
+	}, function(data) {
+
+		var select = $('#ZONE_CODE');
+		select.find('option').remove();
+		$('<option>').val("").text("SELECT Zone").appendTo(select);
+		$('#DISTRICT_CODE').find('option:not(:first)').remove();
+		$('#OFFICE_CODE').find('option:not(:first)').remove();
+		$('#OLT_CODE').find('option:not(:first)').remove();
+
+		$.each(data, function(index, value) {
+			$('<option>').val(value.ZONE_CODE).text(value.DESCRIPTION)
+					.appendTo(select);
+
+		});
+
+	});
+
+}
+
+function getDistrict() {
+
+	var ZONE_CODE = $("#ZONE_CODE").val();
+
+	$.get("../getDistrictByZone", {
+		ZONE_CODE : ZONE_CODE
+	}, function(data) {
+
+		var select = $('#DISTRICT_CODE');
+		select.find('option').remove();
+		$('<option>').val("").text("SELECT District").appendTo(select);
+
+		$('#OFFICE_CODE').find('option:not(:first)').remove();
+		$('#OLT_CODE').find('option:not(:first)').remove();
+
+		if (data.length == 0 || data.length == undefined) {
+
+			clearDataTable();
+			return;
+		}
+
+		$.each(data, function(index, value) {
+			$('<option>').val(value.DISTRICT_CODE).text(value.DESCRIPTION)
+					.appendTo(select);
+
+		});
+
+	});
+
+}
+
+function getOffice() {
+
+	var DISTRICT_CODE = $("#DISTRICT_CODE").val();
+
+	$.get("../getOfficeByDistrict", {
+		DISTRICT_CODE : DISTRICT_CODE
+	}, function(data) {
+
+		var select = $('#OFFICE_CODE');
+		select.find('option').remove();
+		$('<option>').val("").text("SELECT Office").appendTo(select);
+
+		$('#OLT_CODE').find('option:not(:first)').remove();
+		if (data.length == 0 || data.length == undefined) {
+
+			clearDataTable();
+			return;
+		}
+
+		$.each(data, function(index, value) {
+			$('<option>').val(value.OFFICE_CODE).text(value.DESCRIPTION)
+					.appendTo(select);
+
+		});
+
+	});
+
+}
+
+function loadLevelWise(level) {
+	if (level == '1') {
+		return;
+	} else if (level == '2') {
+		getZone();
+		return;
+	} else if (level == '3') {
+		getDistrict();
+		return;
+
+	} else if (level == '4') {
+		getOffice();
+		return;
+	}
+
+}
+
+//  till here function for query p c
+
+
+
+
+function fetchView() {
+
+	var REGION_CODE = $("#REGION_CODE").val();
+	var ZONE_CODE = $("#ZONE_CODE").val();
+	var DISTRICT_CODE = $("#DISTRICT_CODE").val();
+	var OFFICE_CODE = $("#OFFICE_CODE").val();
+
+	var qtype = $('#qtype').val();
+	var FRM_DT = $('#QFROM_DT').val();
+	var TO_DT = $('#QTO_DT').val();
+	var Statusflag = $('#ACTIVE_FLAG').val();
+
+	$
+			.get(
+					"../workorder/getJSListWorkOrder",
+					{
+						REGION_CODE : REGION_CODE,
+						ZONE_CODE : ZONE_CODE,
+						DISTRICT_CODE : DISTRICT_CODE,
+						OFFICE_CODE : OFFICE_CODE,
+						qtype : qtype,
+						QFROM_DT : FRM_DT,
+						QTO_DT : TO_DT,
+						ACTIVE_FLAG : Statusflag
+						
+					},
+					function(data) {
+
+						
+
+						console.log(data);
+						// $('#example1').DataTable();
+
+						var table = $('#example1').DataTable({
+							"bDestroy" : true
+						});
+
+						table.clear().draw();
+
+						$
+								.each(
+										data,
+										function(key, value) {
+											if(Statusflag==='' && value.ACTIVE_FLAG==='C' ){
+												//console.log(value);
+												return;
+												
+											}
+											
+											var STARTTIME = new Date(value.STARTTIME);
+													
+											
+											var ENDTIME = new Date(value.ENDTIME);
+											
+									
+											var solveflag = 'Disabled';
+											var edit = '<button type="button" title="Edit" class="btn bg-purple" data-toggle="modal" data-target="#editModal" onclick="editTeam=(\''
+												+ value.ID
+												+ '\')"> <i class="fa fa-edit"></i>Edit</button>';
+											if (value.ACTIVE_FLAG == 'Y') {
+												solveflag = '<button type="button" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="deleteTeam(\''
+														+ value.ID
+														+ '\')"> <i class="fa fa-trash"></i> Complete</button>';
+												
+											} else if (value.ACTIVE_FLAG == 'C') {
+												solveflag = 'Completed';
+												edit='';
+											}
+
+											$("#example1")
+													.dataTable()
+													.fnAddData(
+															[
+																	value.DESCRIPTION,
+																	value.ELEMENT_VALUE,
+																	value.REMARKS,
+																	STARTTIME,
+																	ENDTIME,
+																	value.ACTIVE_FLAG,
+																	edit,
+																	solveflag
+
+															]);
+										});
+
+					});
+
+}
+

@@ -30,8 +30,13 @@ $(document).ready(function() {
 
 	 
 	 // -- till here
-	 
-	 
+	 //disable double click 
+	 	    $(".submitbutton").on("click", function() {
+		        $(this).attr("disabled", "disabled");
+		        //auto enable button after delay
+		        setTimeout('$(".submitbutton").removeAttr("disabled")', 2000);
+		    });
+	// -till here disable double click
 
 });
 
@@ -294,7 +299,7 @@ function getAAAAccountinglog(){
 			    .draw();
 				$.each(response, function (index, value) {
 					var result;
-					 debugger;
+					// debugger;
 					if(value.terminate_cause=="1" || value.terminate_cause=="2" || value.terminate_cause=="3"){
 						result='User Side: Line SNR or Router Power Problem';
 					}
@@ -631,7 +636,8 @@ function PostRegister(solved){
 				 OLT_PORT:$('#oltInfo').html(),
 				 FAP_LOCATION:$('#faplocation').html(),
 				 FAP_PORT:$('#fapPortName').html(),
-				 CPE_RX_LVL:$('#onuRxPower').html()
+				 CPE_RX_LVL:$('#onuRxPower').html(),
+				 ODF_PORT:$('#odfInPortOdfOutPort').html()
 					 	 }, function(response) {
 					 		if(response.substr(0,55)=="Resolving Service Complain while Complain Already Exist"){
 					 			if (confirm(response+'. Do you want to Resolve service to provided token?')) {
@@ -962,7 +968,7 @@ function checkworkorder(){
 	}, function(response) {
 		console.log(response);
 		 $.each(response, function (index, value) {
-			 debugger;
+		//	 debugger;
 			 if(value.ELEMENT_TYPE===1 && value.ELEMENT_VALUE===$('#fapName').html()){
 				 alert('Work Order Already Exist For FAP '+value.ELEMENT_VALUE+'\nRemarks:'+value.REMARKS);
 			 }
@@ -970,6 +976,10 @@ function checkworkorder(){
 				 alert('Work Order Already Exist For FDC '+value.ELEMENT_VALUE+'\nRemarks:'+value.REMARKS);
 			 }
 			 if(value.ELEMENT_TYPE===3 && value.ELEMENT_VALUE===$('#odfName').html()){
+				 if($('#odfInfo').html().substring(0,value.ELEMENT_VALUE.length)===value.ELEMENT_VALUE){
+					 alert('Work Order Already Exist For OLT CARD '+value.ELEMENT_VALUE+'\nRemarks:'+value.REMARKS);
+					 }
+				 
 				 alert('Work Order Already Exist For ODF '+value.ELEMENT_VALUE+'\nRemarks:'+value.REMARKS);
 			 }
 			 if(value.ELEMENT_TYPE===6 && value.ELEMENT_VALUE===$('#oltInfo').html()){

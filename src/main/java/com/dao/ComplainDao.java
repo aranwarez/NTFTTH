@@ -21,7 +21,7 @@ public class ComplainDao {
 			String Complain_no, String contactName, String Remarks, String USER, String FDCName, String teamname,
 			String Supervisorname, String SupervisorContno, String Teamleader, String TeamleaderNo,
 			String CUSTOMER_NAME, String CONTACT_NO, String OLT_PORT, String FAP_LOCATION, String FAP_PORT,
-			String CPE_RX_LVL) throws SQLException {
+			String CPE_RX_LVL,String ODF_PORT) throws SQLException {
 		Connection con = DbCon.getConnection();
 		con.setAutoCommit(false);
 		try {
@@ -82,9 +82,9 @@ public class ComplainDao {
 			pst.executeUpdate();
 
 			// adding customer infomation
-			qry = "INSERT INTO FTTH.CUSTOMER_INFO (\r\n" + "   TOKEN_ID, CUSTOMER_NAME, CONTACT_NO, \r\n"
-					+ "   OLT_PORT, FAP_LOCATION, FAP_PORT, \r\n" + "   CPE_RX_LVL) \r\n" + "VALUES ( ?,\r\n"
-					+ " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ? )";
+			qry = "INSERT INTO CUSTOMER_INFO (\r\n" + "   TOKEN_ID, CUSTOMER_NAME, CONTACT_NO, \r\n"
+					+ "   OLT_PORT, FAP_LOCATION, FAP_PORT, \r\n" + "   CPE_RX_LVL,ODF_PORT) \r\n" + "VALUES ( ?,\r\n"
+					+ " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,? )";
 			pst = con.prepareStatement(qry);
 			pst.setString(1, tOKEN_ID);
 			pst.setString(2, CUSTOMER_NAME);
@@ -93,12 +93,13 @@ public class ComplainDao {
 			pst.setString(5, FAP_LOCATION);
 			pst.setString(6, FAP_PORT);
 			pst.setString(7, CPE_RX_LVL);
+			pst.setString(8, ODF_PORT);
 			pst.executeUpdate();
 
 			// for multiple services - token master
 			cqry = "select TM_SUB_TOKEN_ID.NEXTVAL from dual";
 
-			String subqry = "INSERT INTO FTTH.TOKEN_MASTER (SUB_TOKEN_ID,\r\n"
+			String subqry = "INSERT INTO TOKEN_MASTER (SUB_TOKEN_ID,\r\n"
 					+ "                               TOKEN_ID,\r\n"
 					+ "                               SUB_TEAM_CODE,\r\n"
 					+ "                               SOLVE_FLAG,\r\n"
@@ -137,7 +138,7 @@ public class ComplainDao {
 					while (tokenrs.next()) {
 						seqqry = tokenrs.getString(1);
 					}
-					String detailqry = "INSERT INTO FTTH.TOKEN_DETAIL (\r\n"
+					String detailqry = "INSERT INTO TOKEN_DETAIL (\r\n"
 							+ "   TD_ID, SUB_TOKEN_ID, FROM_SUB_TEAM_CODE, \r\n"
 							+ "   TO_SUB_TEAM_CODE, SOLVE_FLAG, PROBLEM_ID, \r\n"
 							+ "   REMARKS, CREATE_BY, CREATE_DT \r\n" + "   ) \r\n"
@@ -226,7 +227,7 @@ public class ComplainDao {
 						while (tokenrs.next()) {
 							seqqry = tokenrs.getString(1);
 						}
-						String detailqry = "INSERT INTO FTTH.TOKEN_DETAIL (\r\n"
+						String detailqry = "INSERT INTO TOKEN_DETAIL (\r\n"
 								+ "   TD_ID, SUB_TOKEN_ID, FROM_SUB_TEAM_CODE, \r\n"
 								+ "   TO_SUB_TEAM_CODE, SOLVE_FLAG, PROBLEM_ID, \r\n"
 								+ "   REMARKS, CREATE_BY, CREATE_DT \r\n" + "   ) \r\n"
@@ -274,7 +275,7 @@ public class ComplainDao {
 						while (tokenrs.next()) {
 							seqqry = tokenrs.getString(1);
 						}
-						String detailqry = "INSERT INTO FTTH.TOKEN_DETAIL (\r\n"
+						String detailqry = "INSERT INTO TOKEN_DETAIL (\r\n"
 								+ "   TD_ID, SUB_TOKEN_ID, FROM_SUB_TEAM_CODE, \r\n"
 								+ "   TO_SUB_TEAM_CODE, SOLVE_FLAG, PROBLEM_ID, \r\n"
 								+ "   REMARKS, CREATE_BY, CREATE_DT \r\n" + "   ) \r\n"
@@ -321,7 +322,7 @@ public class ComplainDao {
 
 			String cqry = "select TM_SUB_TOKEN_ID.NEXTVAL from dual";
 
-			String subqry = "INSERT INTO FTTH.TOKEN_MASTER (SUB_TOKEN_ID,\r\n"
+			String subqry = "INSERT INTO TOKEN_MASTER (SUB_TOKEN_ID,\r\n"
 					+ "                               TOKEN_ID,\r\n"
 					+ "                               SUB_TEAM_CODE,\r\n"
 					+ "                               SOLVE_FLAG,\r\n"
@@ -363,7 +364,7 @@ public class ComplainDao {
 						while (tokenrs.next()) {
 							seqqry = tokenrs.getString(1);
 						}
-						String detailqry = "INSERT INTO FTTH.TOKEN_DETAIL (\r\n"
+						String detailqry = "INSERT INTO TOKEN_DETAIL (\r\n"
 								+ "   TD_ID, SUB_TOKEN_ID, FROM_SUB_TEAM_CODE, \r\n"
 								+ "   TO_SUB_TEAM_CODE, SOLVE_FLAG, PROBLEM_ID, \r\n"
 								+ "   REMARKS, CREATE_BY, CREATE_DT \r\n" + "   ) \r\n"
@@ -411,7 +412,7 @@ public class ComplainDao {
 						while (tokenrs.next()) {
 							seqqry = tokenrs.getString(1);
 						}
-						String detailqry = "INSERT INTO FTTH.TOKEN_DETAIL (\r\n"
+						String detailqry = "INSERT INTO TOKEN_DETAIL (\r\n"
 								+ "   TD_ID, SUB_TOKEN_ID, FROM_SUB_TEAM_CODE, \r\n"
 								+ "   TO_SUB_TEAM_CODE, SOLVE_FLAG, PROBLEM_ID, \r\n"
 								+ "   REMARKS, CREATE_BY, CREATE_DT \r\n" + "   ) \r\n"
@@ -453,7 +454,7 @@ public class ComplainDao {
 			String Complain_no, String contactName, String Remarks, String USER, String FDCName, String teamname,
 			String Supervisorname, String SupervisorContno, String Teamleader, String TeamleaderNo,
 			String CUSTOMER_NAME, String CONTACT_NO, String OLT_PORT, String FAP_LOCATION, String FAP_PORT,
-			String CPE_RX_LVL) throws SQLException {
+			String CPE_RX_LVL,String ODF_PORT) throws SQLException {
 		Connection con = DbCon.getConnection();
 		con.setAutoCommit(false);
 		try {
@@ -512,9 +513,9 @@ public class ComplainDao {
 			pst.executeUpdate();
 
 			// adding customer infomation
-			qry = "INSERT INTO FTTH.CUSTOMER_INFO (\r\n" + "   TOKEN_ID, CUSTOMER_NAME, CONTACT_NO, \r\n"
-					+ "   OLT_PORT, FAP_LOCATION, FAP_PORT, \r\n" + "   CPE_RX_LVL) \r\n" + "VALUES ( ?,\r\n"
-					+ " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ? )";
+			qry = "INSERT INTO CUSTOMER_INFO (\r\n" + "   TOKEN_ID, CUSTOMER_NAME, CONTACT_NO, \r\n"
+					+ "   OLT_PORT, FAP_LOCATION, FAP_PORT, \r\n" + "   CPE_RX_LVL,ODF_PORT) \r\n" + "VALUES ( ?,\r\n"
+					+ " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,\r\n" + " ?,? )";
 			pst = con.prepareStatement(qry);
 			pst.setString(1, tOKEN_ID);
 			pst.setString(2, CUSTOMER_NAME);
@@ -523,12 +524,13 @@ public class ComplainDao {
 			pst.setString(5, FAP_LOCATION);
 			pst.setString(6, FAP_PORT);
 			pst.setString(7, CPE_RX_LVL);
+			pst.setString(8, ODF_PORT);
 			pst.executeUpdate();
 
 			// for multiple services - token master
 			cqry = "select TM_SUB_TOKEN_ID.NEXTVAL from dual";
 
-			String subqry = "INSERT INTO FTTH.TOKEN_MASTER (SUB_TOKEN_ID,\r\n"
+			String subqry = "INSERT INTO TOKEN_MASTER (SUB_TOKEN_ID,\r\n"
 					+ "                               TOKEN_ID,\r\n"
 					+ "                               SUB_TEAM_CODE,\r\n"
 					+ "                               SOLVE_FLAG,\r\n"
@@ -567,7 +569,7 @@ public class ComplainDao {
 					while (tokenrs.next()) {
 						seqqry = tokenrs.getString(1);
 					}
-					String detailqry = "INSERT INTO FTTH.TOKEN_DETAIL (\r\n"
+					String detailqry = "INSERT INTO TOKEN_DETAIL (\r\n"
 							+ "   TD_ID, SUB_TOKEN_ID, FROM_SUB_TEAM_CODE, \r\n"
 							+ "   TO_SUB_TEAM_CODE, SOLVE_FLAG, PROBLEM_ID, \r\n"
 							+ "   REMARKS, CREATE_BY, CREATE_DT \r\n" + "   ) \r\n"
@@ -804,7 +806,7 @@ public class ComplainDao {
 			}
 			// validation till here
 
-			pst = con.prepareStatement("INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n"
+			pst = con.prepareStatement("INSERT INTO TOKEN_DETAIL (TD_ID,\r\n"
 					+ "                               SUB_TOKEN_ID,\r\n"
 					+ "                               FROM_SUB_TEAM_CODE,\r\n"
 					+ "                               TO_SUB_TEAM_CODE,\r\n"
@@ -861,7 +863,7 @@ public class ComplainDao {
 			}
 			// validation till here
 
-			pst = con.prepareStatement("INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n"
+			pst = con.prepareStatement("INSERT INTO TOKEN_DETAIL (TD_ID,\r\n"
 					+ "                               SUB_TOKEN_ID,\r\n"
 					+ "                               FROM_SUB_TEAM_CODE,\r\n"
 					+ "                               TO_SUB_TEAM_CODE,\r\n"
@@ -918,7 +920,7 @@ public class ComplainDao {
 			}
 			// validation till here
 
-			pst = con.prepareStatement("INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n"
+			pst = con.prepareStatement("INSERT INTO TOKEN_DETAIL (TD_ID,\r\n"
 					+ "                               SUB_TOKEN_ID,\r\n"
 					+ "                               FROM_SUB_TEAM_CODE,\r\n"
 					+ "                               TO_SUB_TEAM_CODE,\r\n"
@@ -1001,7 +1003,7 @@ public class ComplainDao {
 
 				String closetoken = var;
 				pst = con.prepareStatement(
-						"INSERT INTO FTTH.TOKEN_DETAIL (TD_ID,\r\n" + "                               SUB_TOKEN_ID,\r\n"
+						"INSERT INTO TOKEN_DETAIL (TD_ID,\r\n" + "                               SUB_TOKEN_ID,\r\n"
 								+ "                               FROM_SUB_TEAM_CODE,\r\n"
 								+ "                               TO_SUB_TEAM_CODE,\r\n"
 								+ "                               SOLVE_FLAG,\r\n"

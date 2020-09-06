@@ -42,7 +42,7 @@ public class WebTeamDao {
 						&& rsTEAMLEADERNAME.equals(Teamleader))) {
 					// changes found in team details
 
-					qry = "UPDATE FTTH.WEB_TEAM\r\n" + "SET    TEAMSUPERVISORCONTACTNUMBER = ?,\r\n"
+					qry = "UPDATE WEB_TEAM\r\n" + "SET    TEAMSUPERVISORCONTACTNUMBER = ?,\r\n"
 							+ "       TEAMSUPERVISORNAME          = ?,\r\n"
 							+ "       TEAMLEADERCONTACTNUMBER     = ?,\r\n"
 							+ "       TEAMLEADERNAME              = ?,\r\n"
@@ -61,7 +61,7 @@ public class WebTeamDao {
 			} else {
 				System.err.println("NOT found");
 
-				qry = "INSERT INTO FTTH.WEB_TEAM (\r\n" + "   TEAM_ID, TEAMNAME, TEAMSUPERVISORCONTACTNUMBER, \r\n"
+				qry = "INSERT INTO WEB_TEAM (\r\n" + "   TEAM_ID, TEAMNAME, TEAMSUPERVISORCONTACTNUMBER, \r\n"
 						+ "   TEAMSUPERVISORNAME, TEAMLEADERCONTACTNUMBER, TEAMLEADERNAME, \r\n"
 						+ "   OFFICE_CODE, CREATE_BY, CREATE_DT\r\n" + "  ) \r\n" + "VALUES ( WT_TEAM_ID.nextval,\r\n"
 						+ " ?,\r\n" + " ?,\r\n" + "?,\r\n" + " ?,\r\n" + " ?,\r\n"

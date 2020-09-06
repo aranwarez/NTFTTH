@@ -38,11 +38,6 @@
 					<li><a href="#">Tables</a></li>
 					<li class="active">Data tables</li>
 				</ol>
-				<c:if test="${menuaccess.getADD_FLAG() == 'Y'}">
-					<a href="#" class="btn btn-primary pull-right" data-toggle="modal"
-						data-target="#myModal"> <i class="fa fa-plus"></i> Add
-					</a>
-				</c:if>
 
 			</section>
 
@@ -50,14 +45,286 @@
 			<section class="content">
 				<div class="row">
 					<div class="col-xs-12">
+						<!-- query components here -->
+						<div class="row">
 
+							<!--                                        from here -->
+							<div class="col-md-2">
+								<c:choose>
+									<c:when test="${USER_LEVEL=='1'}">
+
+										<select id="REGION_CODE" name="REGION_CODE"
+											onchange="return getZone()" class="form-control">
+											<option value="">Select Region</option>
+
+											<c:forEach var="user3" items="${regionlist}">
+												<c:if test="${user3.ACTIVE_STATUS == 'Y'}">
+													<option value="${user3.REGION_CODE}">${user3.DESCRIPTION}</option>
+												</c:if>
+											</c:forEach>
+										</select>
+									</c:when>
+									<c:when test="${USER_LEVEL=='6'}">
+
+										<select id="REGION_CODE" onchange="return getZone()"
+											class="form-control">
+											<option value="">Select Region</option>
+
+											<c:forEach var="user3" items="${regionlist}">
+												<c:if test="${user3.ACTIVE_STATUS == 'Y'}">
+													<option value="${user3.REGION_CODE}">${user3.DESCRIPTION}</option>
+												</c:if>
+											</c:forEach>
+										</select>
+									</c:when>
+									<c:otherwise>
+										<select id="REGION_CODE" name="REGION_CODE"
+											class="form-control" onchange="return getZone()">
+
+											<c:forEach var="user3" items="${levelcontrollist}">
+
+
+												<option value="${user3.REGION_CODE}" selected="selected">${user3.REGION}</option>
+
+											</c:forEach>
+
+										</select>
+
+									</c:otherwise>
+								</c:choose>
+
+							</div>
+
+
+							<div class="col-md-2">
+
+
+								<c:choose>
+
+									<c:when test="${USER_LEVEL=='3'}">
+
+										<select id="ZONE_CODE" name="ZONE_CODE" class="form-control"
+											onchange="getDistrict()">
+
+
+											<c:forEach var="user3" items="${levelcontrollist}">
+
+												<option value="${user3.ZONE_CODE}" selected="selected">${user3.ZONE}</option>
+
+											</c:forEach>
+
+										</select>
+
+									</c:when>
+
+									<c:when test="${USER_LEVEL=='4'}">
+
+										<select id="ZONE_CODE" name="ZONE_CODE" class="form-control"
+											onchange="getDistrict()">
+
+											<c:forEach var="user3" items="${levelcontrollist}">
+
+												<option value="${user3.ZONE_CODE}" selected="selected">${user3.ZONE}</option>
+
+
+											</c:forEach>
+
+
+										</select>
+
+									</c:when>
+									<c:when test="${USER_LEVEL=='5'}">
+
+										<select id="ZONE_CODE" name="ZONE_CODE" class="form-control"
+											onchange="getDistrict()">
+
+											<c:forEach var="user3" items="${levelcontrollist}">
+
+												<option value="${user3.ZONE_CODE}" selected="selected">${user3.ZONE}</option>
+
+
+											</c:forEach>
+
+
+										</select>
+
+									</c:when>
+									<c:otherwise>
+										<select id="ZONE_CODE" name="ZONE_CODE"
+											onchange="return getDistrict()" class="form-control">
+
+											<option value="">Select Zone</option>
+
+										</select>
+									</c:otherwise>
+								</c:choose>
+
+
+
+
+							</div>
+
+							<div class="col-md-2">
+								<c:choose>
+									<c:when test="${USER_LEVEL=='4'}">
+
+										<select id="DISTRICT_CODE" name="DISTRICT_CODE"
+											onchange="return getOffice()" class="form-control">
+
+											<c:forEach var="user3" items="${levelcontrollist}">
+
+												<option value="${user3.DISTRICT_CODE}" selected="selected">${user3.DISTRICT}</option>
+
+											</c:forEach>
+
+										</select>
+
+
+									</c:when>
+
+									<c:when test="${USER_LEVEL=='5'}">
+
+										<select id="DISTRICT_CODE" name="DISTRICT_CODE"
+											onchange="return getOffice()" class="form-control">
+
+											<c:forEach var="user3" items="${levelcontrollist}">
+
+												<option value="${user3.DISTRICT_CODE}" selected="selected">${user3.DISTRICT}</option>
+
+											</c:forEach>
+
+										</select>
+
+
+									</c:when>
+
+									<c:otherwise>
+										<select id="DISTRICT_CODE" name="DISTRICT_CODE"
+											onchange="return getOffice()" class="form-control">
+											<option value="">Select District</option>
+										</select>
+
+									</c:otherwise>
+								</c:choose>
+
+
+
+							</div>
+
+
+							<div class="col-md-2">
+
+								<c:choose>
+									<c:when test="${USER_LEVEL=='5'}">
+
+										<select id="OFFICE_CODE" name="OFFICE_CODE"
+											onchange="return getOLT()" class="form-control">
+
+
+											<c:forEach var="user3" items="${levelcontrollist}">
+
+												<option value="${user3.OFFICE_CODE}" selected="selected">${user3.OFFICE}</option>
+
+											</c:forEach>
+
+
+										</select>
+
+
+									</c:when>
+									<c:otherwise>
+										<select id="OFFICE_CODE" name="OFFICE_CODE"
+											onchange="getfdcteam()" class="form-control">
+											<option value="">Select Office</option>
+
+
+										</select>
+
+									</c:otherwise>
+								</c:choose>
+
+
+							</div>
+
+
+
+
+
+
+
+							<c:forEach var="DAT" items="${Date_list}">
+
+								<div class="col-md-2">
+
+									<input type="text" value="${DAT.NEP_FROM_DATE}"
+										class="nepali-calendar form-control" name="QFROM_DT"
+										id="QFROM_DT" placeholder="From Date">
+								</div>
+								<div class="col-md-2">
+
+									<input type="text" value="${DAT.NEP_TODAY_DATE}"
+										class="nepali-calendar form-control" name="QTO_DT" id="QTO_DT"
+										placeholder="To Date">
+
+								</div>
+
+
+							</c:forEach>
+
+
+
+
+							<div class="col-md-2">
+								<select id="qtype" name="role_code" class="form-control">
+									<option value="">Work Type</option>
+									<c:forEach var="role" items="${workorder_element}">
+
+										<option value="${role.ID}">${role.DESCRIPTION}</option>
+
+									</c:forEach>
+
+								</select>
+
+							</div>
+							<div class="col-md-2">
+								<select id="ACTIVE_FLAG" name="role_code" class="form-control">
+									<option value="">ALL</option>
+									<option value="Y">Active</option>
+									<option value="N">Disable</option>
+									<option value="C">Complete</option>
+
+
+								</select>
+
+							</div>
+							<div class="col-md-1">
+								<div class="align-middle">
+									<button type="submit" class="btn btn-primary"
+										onclick="return fetchView()">View</button>
+								</div>
+							</div>
+
+							<c:if test="${menuaccess.getADD_FLAG() == 'Y'}">
+								<a href="#" class="btn btn-primary pull-right"
+									data-toggle="modal" data-target="#myModal"> <i
+									class="fa fa-plus"></i> Add
+								</a>
+							</c:if>
+
+						</div>
+
+
+						<!--  /.query components  -->
 						<!-- /.box -->
 
 						<div class="box">
+
 							<div class="box-header">
 								<h3 class="box-title">${fx}</h3>
 							</div>
-
+							<div class="overlay">
+								<i class="fa fa-refresh fa-spin"></i>
+							</div>
 							<%
 								if (request.getParameter("sucess") != null) {
 							%>>
@@ -81,9 +348,7 @@
 
 							<!-- /.box-header -->
 							<div class="box-body">
-							<div class="overlay">
-									<i class="fa fa-refresh fa-spin"></i>
-								</div>
+
 								<table id="example1" class="table table-bordered table-striped">
 									<thead>
 										<tr>
@@ -95,40 +360,40 @@
 											<th>Active</th>
 
 											<th>Edit</th>
-											<th>Delete</th>
+											<th>Complete</th>
 
 										</tr>
 									</thead>
 									<tbody>
 										<c:forEach var="user" items="${data_list}">
-
-											<tr>
-
-												<td>${user.DESCRIPTION}</td>
-												<td>${user.ELEMENT_VALUE}</td>
-												<td>${user.REMARKS}</td>
-												<td>${user.STARTTIME}</td>
-												<td>${user.ENDTIME}</td>
-												<td>${user.ACTIVE_FLAG}</td>
-												<td>
-													<div class="btn-group">
-														<a href="#" class="btn btn-info" data-toggle="modal"
-															data-target="#editModal"
-															onclick="return editTeam('${user.ID}')"> <i
-															class="fa fa-edit"></i> Edit
-														</a>
-													</div>
-												</td>
-												<td>
-													<div>
-														<a href="" class="btn btn-default" data-toggle="modal"
-															data-target="#deleteModal"
-															onclick="return deleteTeam('${user.ID}')"> <i
-															class="fa fa-trash"></i> Delete
-														</a>
-													</div>
-												</td>
-											</tr>
+											<c:if test="${user.ACTIVE_FLAG == 'Y'}">
+												<tr>
+													<td>${user.DESCRIPTION}</td>
+													<td>${user.ELEMENT_VALUE}</td>
+													<td>${user.REMARKS}</td>
+													<td>${user.STARTTIME}</td>
+													<td>${user.ENDTIME}</td>
+													<td>${user.ACTIVE_FLAG}</td>
+													<td>
+														<div class="btn-group">
+															<a href="#" class="btn btn-info" data-toggle="modal"
+																data-target="#editModal"
+																onclick="return editTeam('${user.ID}')"> <i
+																class="fa fa-edit"></i> Edit
+															</a>
+														</div>
+													</td>
+													<td>
+														<div>
+															<a href="" class="btn btn-default" data-toggle="modal"
+																data-target="#deleteModal"
+																onclick="return deleteTeam('${user.ID}')"> <i
+																class="fa fa-trash"></i> Complete
+															</a>
+														</div>
+													</td>
+												</tr>
+											</c:if>
 										</c:forEach>
 									</tbody>
 								</table>
@@ -176,7 +441,8 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/WorkOrder/workorder.js" />"></script>
+	<script
+		src="<c:url value="/resources/function/WorkOrder/workorder.js" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 

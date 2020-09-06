@@ -29,10 +29,10 @@
 
 
 			<div class="modal-footer">
-				<button type="submit" class="btn btn-success pull-left"
+				<button type="submit" class="btn btn-success pull-left submitbutton"
 					onclick="PostRegister(true)">Solved</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary"
+				<button type="submit" class="btn btn-primary submitbutton"
 					onclick="PostRegister(false)">Register</button>
 
 			</div>

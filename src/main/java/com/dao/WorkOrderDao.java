@@ -12,15 +12,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.smpp.SendSMS;
+import com.soap.dao.WorkOrderAPI;
+
 import util.DbCon;
 
 public class WorkOrderDao {
-	public List<Map<String, Object>> getWorkOrderList() throws SQLException {
+	public List<Map<String, Object>> getWorkOrderList(String REGION_CODE, String ZONE_CODE, String DISTRICT_CODE,
+			String OFFICE_CODE, String QFROM_DT, String QTO_DT, String qtype, String ACTIVE_FLAG) throws SQLException {
 		Connection con = DbCon.getConnection();
 
 		try {
-			PreparedStatement pst = con.prepareStatement(
-					"select woe.DESCRIPTION,wo.* from workorder wo,WORK_ORDER_ELEMENT woe where wo.ELEMENT_TYPE=woe.ID order by wo.ID");
+			String qry="SELECT *\r\n" + "  FROM WORKORDER WO, VW_FTTH_ALL_OLT VFAD, WORK_ORDER_ELEMENT WOE\r\n"
+					+ " WHERE     WO.OLT = VFAD.OLT\r\n" + "       AND WO.ELEMENT_TYPE = woe.id\r\n"
+					+ "       AND element_type = NVL (?, element_type)\r\n"
+					+ "       AND region_code = NVL (?,region_code)\r\n"
+					+ "       AND zone_code = NVL (?, zone_code)\r\n"
+					+ "       AND district_code = NVL (?,district_code)\r\n"
+					+ "       AND office_code = NVL (?, office_code)\r\n"
+					+ "       AND active_flag = NVL (?, active_flag)\r\n"
+					+ "       AND create_dt BETWEEN NVL (common.to_ad(?), SYSDATE - 30) AND NVL (common.to_ad(?), SYSDATE)";
+			PreparedStatement pst = con.prepareStatement(qry);
+			
+			pst.setString(1, qtype);
+			pst.setString(2, REGION_CODE);
+			pst.setString(3, ZONE_CODE);
+			pst.setString(4, DISTRICT_CODE);
+			pst.setString(5, OFFICE_CODE);
+			pst.setString(6, ACTIVE_FLAG);
+			pst.setString(7, QFROM_DT);
+			pst.setString(8, QTO_DT);
+
 			ResultSet rs = pst.executeQuery();
 
 			List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
@@ -108,15 +130,23 @@ public class WorkOrderDao {
 		Connection con = DbCon.getConnection();
 		con.setAutoCommit(false);
 		try {
+			String getseq="select WO_ID.NEXTVAL from dual";
+			ResultSet seqrs=con.createStatement().executeQuery(getseq);
+			String seq=null;
+			while(seqrs.next()) {
+				seq=seqrs.getString(1);
+			}
+			
+			
 			String modifier = "?";
 
 			if (!fdc.isEmpty()) {
 				modifier = "(select olt from VW_FTTH_ALL_FDC where fdc=?)";
 			}
-			String qry = "INSERT INTO FTTH.WORKORDER (ID,\r\n" + "                            ELEMENT_TYPE,\r\n"
+			String qry = "INSERT INTO WORKORDER (ID,\r\n" + "                            ELEMENT_TYPE,\r\n"
 					+ "                            ELEMENT_VALUE,\r\n" + "                            REMARKS,\r\n"
 					+ "                            STARTTIME,\r\n" + "                            CREATE_BY,\r\n"
-					+ "                            ACTIVE_FLAG,OLT,FDC)\r\n" + "     VALUES (WO_ID.NEXTVAL,\r\n"
+					+ "                            ACTIVE_FLAG,OLT,FDC)\r\n" + "     VALUES (?,\r\n"
 					+ "             ?,\r\n" + "             ?,\r\n" + "             ?,\r\n" + "             ?,\r\n"
 					+ "             ?,\r\n" + "             ?," + modifier + ",?)";
 
@@ -127,22 +157,24 @@ public class WorkOrderDao {
 
 			Date sqldateDate = (java.util.Date) formatter.parse(starttime.replace("T", " "));
 			java.sql.Date sqlStartDate = new java.sql.Date(sqldateDate.getTime());
-			pst.setString(1, type);
-			pst.setString(2, value);
-			pst.setString(3, remarks);
+			pst.setString(1, seq);
+			
+			pst.setString(2, type);
+			pst.setString(3, value);
+			pst.setString(4, remarks);
 			// pst.setDate(4, starttime.valueOf(datetimeLocal.replace("T"," ")));
-			pst.setDate(4, sqlStartDate);
-			pst.setString(5, USER);
-			pst.setString(6, active_flag);
+			pst.setDate(5, sqlStartDate);
+			pst.setString(6, USER);
+			pst.setString(7, active_flag);
 			if (fdc.isEmpty()) {
-				pst.setString(7, olt);
+				pst.setString(8, olt);
 			} else
-				pst.setString(7, fdc);
-			pst.setString(8, fdc);
+				pst.setString(8, fdc);
+			pst.setString(9, fdc);
 
 			pst.executeUpdate();
 
-			return "Succesfully Saved Item";
+			return seq;
 
 		} catch (Exception e) {
 			con.rollback();
@@ -183,15 +215,20 @@ public class WorkOrderDao {
 					pst.setString(2, rs.getString("ELEMENT_VALUE"));
 					pst.setDate(3, rs.getDate("STARTTIME"));
 					pst.setDate(4, sqlendtime);
-				}
-				else if ((rs.getInt("ELEMENT_TYPE") == 2)) {
+				} else if ((rs.getInt("ELEMENT_TYPE") == 2)) {
 					qry = "select * from VW_TOKEN_MASTER_ONLY where main_solve_flag<>'C' and FDC=?  and main_create_dt between ? and ?";
 					pst = con.prepareStatement(qry);
 					pst.setString(1, rs.getString("ELEMENT_VALUE"));
 					pst.setDate(2, rs.getDate("STARTTIME"));
 					pst.setDate(3, sqlendtime);
-				}
-				else {
+				} else if ((rs.getInt("ELEMENT_TYPE") == 3)) {
+					qry = "select * from VW_TOKEN_MASTER_ONLY where main_solve_flag<>'C' and substr(ODF_PORT,0,?)=?  and main_create_dt between ? and ?";
+					pst = con.prepareStatement(qry);
+					pst.setInt(1, rs.getString("ELEMENT_VALUE").length());
+					pst.setString(2, rs.getString("ELEMENT_VALUE"));
+					pst.setDate(3, rs.getDate("STARTTIME"));
+					pst.setDate(4, sqlendtime);
+				} else {
 					qry = "select * from VW_TOKEN_MASTER_ONLY where main_solve_flag<>'C' and substr(OLT_PORT,0,?)=?  and main_create_dt between ? and ?";
 					pst = con.prepareStatement(qry);
 					pst.setInt(1, rs.getString("ELEMENT_VALUE").length());
@@ -205,10 +242,36 @@ public class WorkOrderDao {
 
 				while (tokenrs.next()) {
 					System.out.println(tokenrs.getString("MASTER_SERVICE_NO"));
+					String closeticketreport = Closeticket(tokenrs.getString("SUB_TOKEN_ID"), USER,
+							"Ref WorkOrder:" + ID);
+					qry = "INSERT INTO WORKORDER_TOKEN_LOG (WO_ID, SUB_TOKEN_ID, RESULT)\r\n" + "     VALUES (?, ?, ?)";
+					pst = con.prepareStatement(qry);
+					pst.setString(1, ID);
+					pst.setString(2, tokenrs.getString("SUB_TOKEN_ID"));
+					pst.setString(3, closeticketreport);
+					pst.executeUpdate();
+
 				}
 
-				// sending sms
+				// sending sms to all customer
+				WorkOrderAPI APIdao = new WorkOrderAPI();
+				SendSMS smsdao=new SendSMS();
+				String smsmsg="Dear Customer, \n We are pleased to inform about the restoration of your FTTH servies. Please dail 198 incase of further problems. \n -Nepal Telecom";
+				List<String> MDN = APIdao.getFTTHNumberInfo(rs.getString("ELEMENT_TYPE"),
+						rs.getString("ELEMENT_VALUE"));
+				for (String mdn : MDN) {
+					try {
 
+						// send sms to these number regarding work order
+				//		System.out.println(APIdao.getContactNumber(mdn));
+						smsdao.sendsms(APIdao.getContactNumber(mdn), smsmsg , "WORKORDER", USER, ID);
+						
+
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 
 			return "Succesfully Completed Work Order";
@@ -292,6 +355,85 @@ public class WorkOrderDao {
 			con.close();
 		}
 		return null;
+	}
+
+	// close tickets dao
+	public String Closeticket(String closetoken, String User, String Remarks) throws SQLException {
+		Connection con = DbCon.getConnection();
+		con.setAutoCommit(false);
+		PreparedStatement pst = null;
+		try {
+			// check validate if ticket team is assigned to session user
+//				pst = con.prepareStatement(
+//						"select sub_team_code from token_master where sub_token_id=? and exists (select SUB_TEAM_CODE from WEB_USER_TEAM_MAP where USER_ID=? and token_master.SUB_TEAM_CODE = WEB_USER_TEAM_MAP.SUB_TEAM_CODE)");
+//				pst.setString(1, closetoken);
+//				pst.setString(2, User);
+//				ResultSet rsvalidateteam = pst.executeQuery();
+//				if (!rsvalidateteam.next()) {
+//					return ("Forbidden: Current Ticket Team isn't assigned to User!!!");
+//
+//				}
+			// validation till here
+
+			pst = con.prepareStatement("INSERT INTO TOKEN_DETAIL (TD_ID,\r\n"
+					+ "                               SUB_TOKEN_ID,\r\n"
+					+ "                               FROM_SUB_TEAM_CODE,\r\n"
+					+ "                               TO_SUB_TEAM_CODE,\r\n"
+					+ "                               SOLVE_FLAG,\r\n"
+					+ "                               PROBLEM_ID,\r\n" + "                               REMARKS,\r\n"
+					+ "                               CREATE_BY)\r\n"
+					+ "     VALUES (TM_SUB_TOKEN_DETAIL_ID.NEXTVAL,\r\n" + "             ?,\r\n"
+					+ "             (select sub_team_code from TOKEN_MASTER where SUB_TOKEN_ID=?),\r\n"
+					+ "             (select sub_team_code from TOKEN_MASTER where SUB_TOKEN_ID=?),\r\n" +
+
+					"             'C',\r\n" + "             (SELECT PROBLEM_ID\r\n"
+					+ "                FROM TOKEN_MASTER\r\n" + "               WHERE SUB_TOKEN_ID = ?),\r\n"
+					+ "             ?,\r\n" + "             ?)");
+			pst.setString(1, closetoken);
+			pst.setString(2, closetoken);
+			pst.setString(3, closetoken);
+			pst.setString(4, closetoken);
+			pst.setString(5, Remarks);
+			pst.setString(6, User);
+			pst.executeUpdate();
+
+			// after closing ticket updating flag in token master
+			pst = con.prepareStatement(
+					"UPDATE TOKEN_MASTER SET SOLVE_FLAG= 'C',SOLVE_DT=sysdate,SOLVE_BY=?, UPDATE_BY=?,UPDATE_DT=sysdate WHERE  SUB_TOKEN_ID= ?");
+			pst.setString(3, closetoken);
+			pst.setString(2, User);
+			pst.setString(1, User);
+
+			pst.executeUpdate();
+
+			// checking if all tickets are resolved
+
+			pst = con.prepareStatement(
+					"select * from token_master where solve_flag<>'C' and token_id=(select token_id from token_master where sub_token_id=?)");
+			pst.setString(1, closetoken);
+			ResultSet qsolveflag = pst.executeQuery();
+			if (!qsolveflag.next()) {
+				pst = con.prepareStatement("UPDATE MAIN_TOKEN_MASTER\r\n" + "   SET SOLVE_FLAG = 'C',\r\n"
+						+ "       SOLVE_DT = SYSDATE,\r\n" + "       SOLVE_BY = ?,\r\n" +
+
+						"       UPDATE_BY = ?,\r\n" + "       UPDATE_DT = SYSDATE\r\n"
+						+ " WHERE token_id = (SELECT token_id\r\n" + "                     FROM token_master\r\n"
+						+ "                    WHERE sub_token_id = ?)");
+				pst.setString(1, User);
+
+				pst.setString(2, User);
+				pst.setString(3, closetoken);
+				pst.executeUpdate();
+			}
+			con.commit();
+		} catch (Exception e) {
+			con.rollback();
+			e.printStackTrace();
+			return "Failed " + e;
+		} finally {
+			con.close();
+		}
+		return "Successfully Trouble Ticket has been Resolved";
 	}
 
 }

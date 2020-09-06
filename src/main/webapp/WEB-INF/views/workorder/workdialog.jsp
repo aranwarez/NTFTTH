@@ -110,7 +110,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary"
+				<button type="submit" class="btn btn-primary submitbutton"
 					onclick="return saveWorkOrder()">
 					Save changes
 					<div class="overlay">
@@ -143,18 +143,18 @@
 
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="TEAM_CODE">TEAM_CODE</label> <input type="text"
-							class="form-control" name="EDITTEAM_CODE" id="EDITTEAM_CODE"
-							placeholder="Enter TEAM_CODE" readonly="readonly">
+						<label for="DESCRIPTION">Remarks</label>
+						<textarea id="eremarks" class="form-control" rows="3"
+							placeholder="Enter Remarks"></textarea>
 					</div>
-
 					<div class="form-group">
-						<label for="DESCRIPTION">DESCRIPTION</label> <input type="text"
-							class="form-control" name="EDITDESCRIPTION" id="EDITDESCRIPTION"
-							placeholder="Enter DESCRIPTION">
-
+						<label for="DESCRIPTION">Start Time</label> <input
+							type="datetime-local" id="estarttime">
 					</div>
-
+					<div class="form-group">
+						<label for="DESCRIPTION">Enable Flag</label> <input
+							type="checkbox" id="eactive_flag">
+					</div>
 
 
 				</div>
@@ -188,7 +188,9 @@
 			</div>
 
 			<div class="modal-body">
-				<p>Are you sure you want to complete this work order. Please make sure date and time is correct. This will close all the ticket related to work-order from start time to completion time</p>
+				<p>Are you sure you want to complete this work order. Please
+					make sure date and time is correct. This will close all the ticket
+					related to work-order from start time to completion time</p>
 			</div>
 
 			<div class="modal-footer">
@@ -203,9 +205,11 @@
 							type="datetime-local" id="endtime">
 					</div>
 
-					<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-					<button type="button" class="btn btn-primary"
-						onclick="return del()">Yes</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary submitbutton"
+						onclick="return del()">Complete <div class="overlay">
+						<i class="fa fa-refresh fa-spin"></i>
+					</div></button>
 				</form>
 			</div>
 		</div>
