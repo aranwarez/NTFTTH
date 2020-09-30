@@ -442,20 +442,20 @@ function fetchView() {
 												return;
 												
 											}
-											
+											if(value.STARTTIME!=null)
 											var STARTTIME = new Date(value.STARTTIME);
 													
-											
+											if(value.ENDTIME!=null)
 											var ENDTIME = new Date(value.ENDTIME);
 											
 									
 											var solveflag = 'Disabled';
 											var edit = '<button type="button" title="Edit" class="btn bg-purple" data-toggle="modal" data-target="#editModal" onclick="editTeam=(\''
-												+ value.ID
+												+ value.WOID
 												+ '\')"> <i class="fa fa-edit"></i>Edit</button>';
 											if (value.ACTIVE_FLAG == 'Y') {
 												solveflag = '<button type="button" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="deleteTeam(\''
-														+ value.ID
+														+ value.WOID
 														+ '\')"> <i class="fa fa-trash"></i> Complete</button>';
 												
 											} else if (value.ACTIVE_FLAG == 'C') {

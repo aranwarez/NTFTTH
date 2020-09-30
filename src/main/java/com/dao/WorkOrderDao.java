@@ -18,12 +18,77 @@ import com.soap.dao.WorkOrderAPI;
 import util.DbCon;
 
 public class WorkOrderDao {
+	
+	public List<Map<String, Object>> getlowlvlWorkOrderList(String REGION_CODE, String ZONE_CODE, String DISTRICT_CODE,
+			String OFFICE_CODE, String QFROM_DT, String QTO_DT, String qtype, String ACTIVE_FLAG,String User) throws SQLException {
+		Connection con = DbCon.getConnection();
+
+		try {
+			String qry="\r\n" + 
+					"SELECT wo.*,\r\n" + 
+					"       vfad.*,\r\n" + 
+					"       woe.*,\r\n" + 
+					"       wo.id     WOID\r\n" + 
+					"  FROM WORKORDER WO, VW_FTTH_ALL_OLT VFAD, WORK_ORDER_ELEMENT WOE\r\n" + 
+					" WHERE     EXISTS\r\n" + 
+					"               (SELECT DISTINCT (VFAF.OLT)\r\n" + 
+					"                  FROM WEB_USER_FDC_MAP WUFM, VW_FTTH_ALL_FDC VFAF\r\n" + 
+					"                 WHERE     WUFM.FDC_CODE = VFAF.FDC_CODE\r\n" + 
+					"                       AND WUFM.user_id = ?\r\n" + 
+					"                       AND VFAF.OLT = WO.OLT)\r\n" + 
+					"       AND WO.OLT = VFAD.OLT\r\n" + 
+					"       AND WO.ELEMENT_TYPE = woe.id\r\n" + 
+					"       AND element_type = NVL (?, element_type)\r\n" + 
+					"       AND region_code = NVL (?, region_code)\r\n" + 
+					"       AND zone_code = NVL (?, zone_code)\r\n" + 
+					"       AND district_code = NVL (?, district_code)\r\n" + 
+					"       AND office_code = NVL (?, office_code)\r\n" + 
+					"       AND active_flag = NVL (?, active_flag)\r\n" + 
+					"       AND create_dt BETWEEN NVL (common.to_ad (?), SYSDATE - 30)\r\n" + 
+					"                         AND NVL (common.to_ad (?), SYSDATE)";
+			PreparedStatement pst = con.prepareStatement(qry);
+			//System.out.println(qry);
+			pst.setString(1, User);
+			pst.setString(2, qtype);
+			pst.setString(3, REGION_CODE);
+			pst.setString(4, ZONE_CODE);
+			pst.setString(5, DISTRICT_CODE);
+			pst.setString(6, OFFICE_CODE);
+			pst.setString(7, ACTIVE_FLAG);
+			pst.setString(8, QFROM_DT);
+			pst.setString(9, QTO_DT);
+
+			ResultSet rs = pst.executeQuery();
+
+			List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+			Map<String, Object> row = null;
+
+			ResultSetMetaData metaData = rs.getMetaData();
+			Integer columnCount = metaData.getColumnCount();
+
+			while (rs.next()) {
+				row = new HashMap<String, Object>();
+				for (int i = 1; i <= columnCount; i++) {
+					row.put(metaData.getColumnName(i), rs.getObject(i));
+				}
+				resultList.add(row);
+			}
+			return resultList;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			con.close();
+		}
+		return null;
+	}
+
+	
 	public List<Map<String, Object>> getWorkOrderList(String REGION_CODE, String ZONE_CODE, String DISTRICT_CODE,
 			String OFFICE_CODE, String QFROM_DT, String QTO_DT, String qtype, String ACTIVE_FLAG) throws SQLException {
 		Connection con = DbCon.getConnection();
 
 		try {
-			String qry="SELECT *\r\n" + "  FROM WORKORDER WO, VW_FTTH_ALL_OLT VFAD, WORK_ORDER_ELEMENT WOE\r\n"
+			String qry="SELECT wo.*,vfad.*,woe.*, wo.id WOID\r\n" + "  FROM WORKORDER WO, VW_FTTH_ALL_OLT VFAD, WORK_ORDER_ELEMENT WOE\r\n"
 					+ " WHERE     WO.OLT = VFAD.OLT\r\n" + "       AND WO.ELEMENT_TYPE = woe.id\r\n"
 					+ "       AND element_type = NVL (?, element_type)\r\n"
 					+ "       AND region_code = NVL (?,region_code)\r\n"

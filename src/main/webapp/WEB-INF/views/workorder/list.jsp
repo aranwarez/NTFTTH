@@ -364,38 +364,7 @@
 
 										</tr>
 									</thead>
-									<tbody>
-										<c:forEach var="user" items="${data_list}">
-											<c:if test="${user.ACTIVE_FLAG == 'Y'}">
-												<tr>
-													<td>${user.DESCRIPTION}</td>
-													<td>${user.ELEMENT_VALUE}</td>
-													<td>${user.REMARKS}</td>
-													<td>${user.STARTTIME}</td>
-													<td>${user.ENDTIME}</td>
-													<td>${user.ACTIVE_FLAG}</td>
-													<td>
-														<div class="btn-group">
-															<a href="#" class="btn btn-info" data-toggle="modal"
-																data-target="#editModal"
-																onclick="return editTeam('${user.ID}')"> <i
-																class="fa fa-edit"></i> Edit
-															</a>
-														</div>
-													</td>
-													<td>
-														<div>
-															<a href="" class="btn btn-default" data-toggle="modal"
-																data-target="#deleteModal"
-																onclick="return deleteTeam('${user.ID}')"> <i
-																class="fa fa-trash"></i> Complete
-															</a>
-														</div>
-													</td>
-												</tr>
-											</c:if>
-										</c:forEach>
-									</tbody>
+									
 								</table>
 							</div>
 							<!-- /.box-body -->

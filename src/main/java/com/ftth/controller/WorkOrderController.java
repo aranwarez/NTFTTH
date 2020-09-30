@@ -81,14 +81,14 @@ public class WorkOrderController {
 		// /adding query
 
 		WorkOrderDao dao = new WorkOrderDao();
-		List<Map<String, Object>> list = null;
+		//List<Map<String, Object>> list = null;
 		List<Map<String, Object>> elementlist = null;
 		List<Map<String, Object>> fdclist = null;
 		List<Map<String, Object>> oltlist = null;
 
 		try {
 			elementlist = dao.getWorkOrderElementList();
-			list = dao.getActiveWorkOrder();
+		//	list = dao.getActiveWorkOrder();
 			fdclist = FDCDao.getFDCList();
 			oltlist = OLTDao.getOLTList();
 
@@ -101,7 +101,7 @@ public class WorkOrderController {
 		model.addAttribute("oltlist", oltlist);
 		model.addAttribute("menuaccess", menuaccess);
 		model.addAttribute("fx", "Work Order");
-		model.addAttribute("data_list", list);
+	//	model.addAttribute("data_list", list);
 		model.addAttribute("Date_list", DAT.getDateList());
 
 		return "workorder/list";
@@ -114,6 +114,7 @@ public class WorkOrderController {
 			String QTO_DT, String qtype, String ACTIVE_FLAG) throws SQLException {
 
 
+		
 		// ADD_FLAG
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
@@ -125,8 +126,20 @@ public class WorkOrderController {
 
 		WorkOrderDao dao = new WorkOrderDao();
 		try {
-			return dao.getWorkOrderList(REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, QFROM_DT, QTO_DT, qtype,
-					ACTIVE_FLAG);
+			if(user.getUSER_LEVEL().equals("6")) {
+				return dao.getlowlvlWorkOrderList(REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, QFROM_DT, QTO_DT, qtype,
+						ACTIVE_FLAG,user.getUSER_ID());
+			
+				}
+				else {
+					return dao.getWorkOrderList(REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, QFROM_DT, QTO_DT, qtype,
+							ACTIVE_FLAG);
+								
+					
+				}
+			
+			
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
