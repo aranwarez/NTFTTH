@@ -1,9 +1,13 @@
-
+teamtroubleticket();
 
 // ------------------------------------------
+function teamtroubleticket(fromdate,todate){
+
+	//Team Trouble Tickets
 $.ajax({
 	url : "../charts/srvreveneue",
 	method : "GET",
+	data: { fromdate: fromdate, todate : todate} ,
 	success : function(data) {
 		console.log(data);
 		var ict_unit = [];
@@ -39,6 +43,7 @@ $.ajax({
 		};
 
 		var ctx = $("#areaChart");
+		
 		var barGraph = new Chart(ctx, {
 			type : 'pie',
 			data : chartData
@@ -54,6 +59,7 @@ $.ajax({
 $.ajax({
 	url : "../charts/srvpayable",
 	method : "GET",
+	data: { fromdate: fromdate, todate : todate} ,
 	success : function(data) {
 		console.log(data);
 		var ict_unit = [];
@@ -303,6 +309,7 @@ $.ajax({
 $.ajax({
 	url : "../charts/srvmonthly",
 	method : "GET",
+	data: { fromdate: fromdate, todate : todate} ,
 	success : function(data) {
 		console.log(data);
 		var ict_unit = [];
@@ -359,3 +366,4 @@ $.ajax({
 });
 
 
+}

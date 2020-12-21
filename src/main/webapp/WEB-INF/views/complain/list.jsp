@@ -153,7 +153,7 @@
 
 								<div class="box-header with-border">
 									<h3 class="box-title">
-										<i class="fa fa-signal"></i>CPE OLT STATUS
+										<i class="fa fa-signal"></i> CPE OLT STATUS
 									</h3>
 
 									<div class="box-tools pull-right">
@@ -214,7 +214,7 @@
 						<div class="box box-primary">
 							<div class="box-header with-border">
 								<h3 class="box-title">
-									<i class="fa fa-calendar"></i>Subscription Information
+									<i class="fa fa-calendar"></i> Subscription Information
 								</h3>
 
 								<div class="box-tools pull-right">
@@ -232,6 +232,287 @@
 
 
 					</div>
+					
+					
+										<!-- 					IPTV row -->
+
+
+					<div class="col-md-12">
+						<!-- AREA CHART -->
+						<div class="box box-primary collapsed-box">
+							<div class="box-header with-border">
+								<h3 class="box-title">
+									<i class="fa fa-tv"></i> IPTV Information : <span class="IPTV" id="IPTVID"><select id="NTTVID"></select></span>
+								</h3>
+
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="collapse">
+										<i class="fa fa-plus"></i>
+									</button>
+									<button type="button" class="btn btn-box-tool"
+											onclick="getIPTVDetail()">
+											<i class="fa fa-refresh"></i>
+										</button>
+									
+									
+								</div>
+							</div>
+							<div id="nettvdivspan" class="box-body">
+								<div class="col-md-6">
+								
+									<table class="table table-condensed">
+									<thead><tr><td colspan="2">
+										<label class="label-primary">Active Package</label>
+										</td></tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><label>ID</label></td>
+												<td><span id="IPTVIDinfo"></span></td>
+											</tr>
+											<tr>
+												<td><label>subscriber_stb_id </label></td>
+												<td><span id="iptvsubscriber_stb_id"></span></td>
+											</tr>
+											<tr>
+												<td><label>name </label></td>
+												<td><span id="iptvname"></span></td>
+											</tr>
+										
+											<tr>
+												<td><label>subscribed_id </label></td>
+												<td><span id="iptvsubscribed_id"></span></td>
+											</tr>
+											<tr>
+												<td><label>subscribed_type </label></td>
+												<td><span id="iptvsubscribed_type"></span></td>
+											</tr>
+											<tr>
+												<td><label>transaction_id </label></td>
+												<td><span id="iptvtransaction_id"></span></td>
+											</tr>
+											<tr>
+												<td><label>purchase_type </label></td>
+												<td><span id="iptvpurchase_type"></span></td>
+											</tr>
+											
+											<tr>
+												<td><label>user_type </label></td>
+												<td><span id="iptvuser_type"></span></td>
+											</tr>
+											<tr>
+												<td><label>Amount </label></td>
+												<td><span id="iptvamount"></span></td>
+											</tr>
+											<tr>
+												<td><label>iptvis_cancel </label></td>
+												<td><span id="iptvis_cancel"></span></td>
+											</tr>
+											<tr>
+												<td><label>POS</label></td>
+												<td><span id="iptvpos"></span></td>
+											</tr>
+											<tr>
+												<td><label>payment_method </label></td>
+												<td><span id="iptvpayment_method"></span></td>
+											</tr>
+											<tr>
+												<td><label>Notes </label></td>
+												<td><span id="iptvnotes"></span></td>
+											</tr>
+											<tr>
+												<td><label>Wall Transaction ID </label></td>
+												<td><span id="iptvwalltransid"></span></td>
+											</tr>
+											<tr>
+												<td><label>QTY </label></td>
+												<td><span id="iptvqty"></span></td>
+											</tr>
+											<tr>
+												<td><label>Created By </label></td>
+												<td><span id="iptvcreateby"></span></td>
+											</tr>
+											<tr>
+												<td><label>Cancel By </label></td>
+												<td><span id="iptvcancelby"></span></td>
+											</tr>
+											<tr>
+												<td><label>Description </label></td>
+												<td><span id="iptvdescription"></span></td>
+											</tr>
+											<tr>
+												<td><label>Meta </label></td>
+												<td><span id="iptvmeta"></span></td>
+											</tr>
+											<tr>
+												<td><label>Credit Note ID </label></td>
+												<td><span id="iptvcreditnoteid"></span></td>
+											</tr>
+											<tr>
+												<td><label>Created At</label></td>
+												<td><span id="iptvcreatedat"></span></td>
+											</tr>
+											<tr>
+												<td><label>Updated At</label></td>
+												<td><span id="iptvupdatedat"></span></td>
+											</tr>
+											<tr>
+												<td><label>STB ID</label></td>
+												<td><span id="iptvstb_id"></span></td>
+											</tr>
+											<tr>
+												<td><label>PACKAGE ID </label></td>
+												<td><span id="iptvpackageid"></span></td>
+											</tr>
+											<tr>
+												<td><label>APP </label></td>
+												<td><span id="iptvapp"></span></td>
+											</tr>
+											<tr>
+												<td><label>Status </label></td>
+												<td><span id="iptvstatus"></span></td>
+											</tr>
+											<tr>
+												<td colspan="2"><label class="label-info">Subscriber Order Detail </label></td>
+											</tr>
+											<tr>
+												<td><label>ID </label></td>
+												<td><span id="iptvsodid"></span></td>
+											</tr>
+											<tr>
+												<td><label>Subscriber Type </label></td>
+												<td><span id="iptvsodsubscribertype"></span></td>
+											</tr>
+											<tr>
+												<td><label>Expiry Date</label></td>
+												<td><span id="iptvsodexpdt"></span></td>
+											</tr>
+											<tr>
+												<td><label>Duration </label></td>
+												<td><span id="iptvsodduration"></span></td>
+											</tr>
+											<tr>
+												<td><label>Unit</label></td>
+												<td><span id="iptvsodunit"></span></td>
+											</tr>
+											<tr>
+												<td><label>Subscriber Order ID</label></td>
+												<td><span id="iptvsodsoid"></span></td>
+											</tr>
+											<tr>
+												<td><label>Service ID</label></td>
+												<td><span id="iptvsodserviceid"></span></td>
+											</tr>
+										</tbody>
+									</table>
+
+								</div>
+								<div class="col-md-6">
+								
+									<table class="table table-condensed">
+									<thead><tr><td colspan="2">
+										<label class="label-primary">Subscribed Package</label>
+										</td></tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><label>ID</label></td>
+												<td><span id="iptv_sp_id"></span></td>
+											</tr>
+											<tr>
+												<td><label>subscriber_stb_id</label></td>
+												<td><span id="iptv_sp_sub_stb_id"></span></td>
+											</tr>
+											<tr>
+												<td><label>Package ID</label></td>
+												<td><span id="iptv_pkg_id"></span></td>
+											</tr>
+											<tr>
+												<td><label>Package Config ID</label></td>
+												<td><span id="iptv_pkg_cfg_id"></span></td>
+											</tr>
+											<tr>
+												<td><label>Package Config Name</label></td>
+												<td><span id="iptv_pkg_cfg_name"></span></td>
+											</tr>
+											<tr>
+												<td><label>Description</label></td>
+												<td><span id="iptv_sp_desc"></span></td>
+											</tr>
+											<tr>
+												<td><label>Create At</label></td>
+												<td><span id="iptv_sp_createat"></span></td>
+											</tr>
+											<tr>
+												<td><label>Update At</label></td>
+												<td><span id="iptv_sp_updateat"></span></td>
+											</tr>
+											<tr>
+												<td><label>stb_id</label></td>
+												<td><span id="iptv_sp_stb_id"></span></td>
+											</tr>
+											<tr>
+												<td><label class="label-info">Package Subscription Detail</label></td>
+												
+											</tr>
+											<tr>
+												<td><label>ID</label></td>
+												<td><span id="iptv_pkg_sub_det_id"></span></td>
+											</tr>
+											<tr>
+												<td><label>Package Subscription ID</label></td>
+												<td><span id="iptv_pkg_sub_id"></span></td>
+											</tr>
+											<tr>
+												<td><label>Expiry Date</label></td>
+												<td><span id="iptv_pkg_expdt"></span></td>
+											</tr>
+											<tr>
+												<td><label class="label-info" >Services</label></td>
+											
+											</tr>
+											<tr>
+												<td><label>ID</label></td>
+													<td><span id="iptv_pkg_services_id"></span></td>
+											</tr>
+											<tr>
+												<td><label>Name</label></td>
+													<td><span id="iptv_pkg_name"></span></td>
+											</tr>
+											
+											
+<!-- 											from another api , app details -->
+											<tr>
+												<td><label class="label-info">APP Details</label></td>
+											</tr>
+											<tr><td>
+												<button type="button" class="btn bg-green" data-toggle="modal" data-target="#nettvappmodal">
+									<i class="fa fa-info"></i>NETTV APP Info
+								</button></td>
+											</tr>
+																					
+<!-- till here											from another api , app details -->											
+										</tbody>
+									</table>
+
+
+
+								</div>
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+
+
+					</div>
+
+
+					<!-- 	  end				IPTV row -->
+					
+					
+					
+					
 
 					<!-- 					AAA status from here -->
 
@@ -241,7 +522,7 @@
 						<div class="box box-primary collapsed-box">
 							<div class="box-header with-border">
 								<h3 class="box-title">
-									<i class="fa fa-server"></i>AAA STATUS : <span class="AAAinfield" id="AAAuserid"></span>
+									<i class="fa fa-server"></i> AAA STATUS : <span class="AAAinfield" id="AAAuserid"></span>
 								</h3>
 
 								<div class="box-tools pull-right">
@@ -322,7 +603,7 @@
 						<div class="box box-primary">
 							<div class="box-header with-border">
 								<h3 class="box-title">
-									<i class="fa fa-tachometer"></i>CPE TMS STATUS
+									<i class="fa fa-tachometer"></i> CPE TMS STATUS
 								</h3>
 
 								<div class="box-tools pull-right">
@@ -361,7 +642,7 @@
 						<div class="box box-primary collapsed-box">
 							<div class="box-header with-border">
 								<h3 class="box-title">
-									<i class="fa fa-info-circle"></i>CPE / FAP Information
+									<i class="fa fa-info-circle"></i> CPE / FAP Information
 								</h3>
 
 								<div class="box-tools pull-right">
@@ -483,7 +764,7 @@
 						<div class="box box-primary collapsed-box">
 							<div class="box-header with-border">
 								<h3 class="box-title">
-									<i class="fa fa-exchange"></i>OLT/OLE Information
+									<i class="fa fa-exchange"></i> OLT/OLE Information
 								</h3>
 
 								<div class="box-tools pull-right">
@@ -568,7 +849,7 @@
 						<div class="box box-primary collapsed-box">
 							<div class="box-header with-border">
 								<h3 class="box-title">
-									<i class="fa fa-users"></i>Team Information
+									<i class="fa fa-users"></i> Team Information
 								</h3>
 
 								<div class="box-tools pull-right">
@@ -628,6 +909,7 @@
 
 
 					<!-- 	  end				team row -->
+
 
 
 

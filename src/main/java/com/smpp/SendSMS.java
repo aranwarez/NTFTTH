@@ -6,6 +6,7 @@ package com.smpp;
  */
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 
 import org.jsmpp.InvalidResponseException;
@@ -58,6 +59,13 @@ public class SendSMS {
 					message.getBytes());
 
 			System.out.println("Message submitted, message_id is " + messageId);
+			try {
+				smsdao.ADDSMSLOG(messageId, null, null,null, message.substring(200), null, REMARKS, USER, REF_TOKEN,Number);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 
 		} catch (PDUException e) {
 			// Invalid PDU parameter
@@ -94,7 +102,7 @@ public class SendSMS {
 						try {
 							java.sql.Date submitDate = new java.sql.Date(delReceipt.getSubmitDate().getTime());
 							java.sql.Date DoneDate = new java.sql.Date(delReceipt.getDoneDate().getTime());
-							smsdao.ADDSMSLOG(messageId, delReceipt.getId(), submitDate,DoneDate, delReceipt.getText(), delReceipt.getFinalStatus().toString(), REMARKS, USER, REF_TOKEN);
+							smsdao.UPDATESMSLOG(messageId, delReceipt.getId(), submitDate,DoneDate, delReceipt.getText(), delReceipt.getFinalStatus().toString(), REMARKS, USER, REF_TOKEN,deliverSm.getSourceAddr());
 				
 						} catch (Exception e) {
 							e.printStackTrace();

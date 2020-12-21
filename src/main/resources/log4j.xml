@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.privaten.lesson1">
+	<logger name="com.ftth.controller">
 		<level value="info" />
 	</logger>
 	

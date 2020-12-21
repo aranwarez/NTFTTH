@@ -23,7 +23,7 @@
 							    
         <!--//Div that will hold the pie chart-->
 							
-								<div class="chart">
+								<div id="ticketvsubteam"class="chart">
 								<canvas id="subTeamSolveUnsolve" width="800" height="450"></canvas>
 								
 								</div>

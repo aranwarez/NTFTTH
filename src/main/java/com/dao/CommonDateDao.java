@@ -101,5 +101,28 @@ public class CommonDateDao {
 		return null;
 
 	}
+	
+	public  List<String> convertDateADstring(String fromdate,String todate) throws SQLException {
+		Connection con = DbCon.getConnection();
+		List<String> string=new ArrayList<String>();
+		try {
+			PreparedStatement pst = con.prepareStatement("select to_char(common.to_ad(?),'dd-mon-yyyy'),to_char(common.to_ad(?),'dd-mon-yyyy') from dual");
+			pst.setString(1, fromdate);
+			pst.setString(2, todate);
+			ResultSet rs = pst.executeQuery();
+			if (rs.next()) {
+				string.add(rs.getString(1));
+				string.add(rs.getString(2));
+			}
+			return string;
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			con.close();
+		}
+		return null;
+
+	}
 
 }

@@ -13,11 +13,11 @@ import java.util.Map;
 import util.DbCon;
 
 public class dashboardquery {
-	public List<Map<String, Object>> getTicketwiseTeam(String username,String userlvl,String region,String zone,String district,String office) throws SQLException {
+	public List<Map<String, Object>> getTicketwiseTeam(String username,String userlvl,String region,String zone,String district,String office,String fromdate,String todate) throws SQLException {
 		Connection con = DbCon.getConnection();
 
 		try {
-			String qry="/* Formatted on 5/25/2020 9:47:03 PM (QP5 v5.354) */\r\n" + 
+			String qry="/* Formatted on 12/8/2020 8:17:24 PM (QP5 v5.354) */\r\n" + 
 					"  SELECT COUNT (VTM.MASTER_SUB_TEAM_CODE)                     SCOUNT,\r\n" + 
 					"         (SELECT DESCRIPTION\r\n" + 
 					"            FROM M_SUB_TEAM\r\n" + 
@@ -29,15 +29,16 @@ public class dashboardquery {
 					"                   WHERE     USER_ID = ?\r\n" + 
 					"                         AND VTM.MASTER_SUB_TEAM_CODE =\r\n" + 
 					"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
-					"   --      AND VTM.MASTER_SUB_TEAM_CODE = NVL (NULL, MASTER_SUB_TEAM_CODE)\r\n" + 
-					"   --      AND VTM.SERVICE_TYPE_ID = NVL (NULL, SERVICE_TYPE_ID)\r\n" + 
-					"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (NULL, SYSDATE - 30)\r\n" + 
-					"                                      AND NVL (NULL, SYSDATE)\r\n" + 
-					"         AND VTM.REGION_CODE=NVL (?, REGION_CODE)\r\n" + 
-					"         AND VTM.ZONE_CODE=NVL (?, ZONE_CODE)\r\n" + 
-					"         AND VTM.DISTRICT_CODE=NVL (?, DISTRICT_CODE)\r\n" + 
-					"         AND VTM.OFFICE_CODE=NVL (?, OFFICE_CODE)\r\n" + 
+					"         --      AND VTM.MASTER_SUB_TEAM_CODE = NVL (NULL, MASTER_SUB_TEAM_CODE)\r\n" + 
+					"         --      AND VTM.SERVICE_TYPE_ID = NVL (NULL, SERVICE_TYPE_ID)\r\n" + 
+					"         AND VTM.REGION_CODE = NVL (?, REGION_CODE)\r\n" + 
+					"         AND VTM.ZONE_CODE = NVL (?, ZONE_CODE)\r\n" + 
+					"         AND VTM.DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
+					"         AND VTM.OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
+					"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (?, SYSDATE - 30)\r\n" + 
+					"                                      AND NVL (?, SYSDATE)\r\n" + 
 					"GROUP BY VTM.MASTER_SUB_TEAM_CODE";
+		//	System.out.println(qry);
 			
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, username);
@@ -45,6 +46,8 @@ public class dashboardquery {
 			pst.setString(3, zone);
 			pst.setString(4, district);
 			pst.setString(5, office);
+			pst.setString(6, fromdate);
+			pst.setString(7, todate);
 			
 			
 			//for lvl 6 custom officewise report
@@ -70,16 +73,20 @@ public class dashboardquery {
 						"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
 						"         --      AND VTM.MASTER_SUB_TEAM_CODE = NVL (NULL, MASTER_SUB_TEAM_CODE)\r\n" + 
 						"         --      AND VTM.SERVICE_TYPE_ID = NVL (NULL, SERVICE_TYPE_ID)\r\n" + 
-						"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (NULL, SYSDATE - 30)\r\n" + 
-						"                                      AND NVL (NULL, SYSDATE)\r\n" + 
+						"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (?, SYSDATE - 30)\r\n" + 
+						"                                      AND NVL (?, SYSDATE)\r\n" + 
 						"         --AND VTM.REGION_CODE = NVL (null, REGION_CODE)\r\n" + 
 						"         --AND VTM.ZONE_CODE = NVL (NULL, ZONE_CODE)\r\n" + 
 						"         --AND VTM.DISTRICT_CODE = NVL (NULL, DISTRICT_CODE)\r\n" + 
 						"         --AND VTM.OFFICE_CODE = NVL (NULL, OFFICE_CODE)\r\n" + 
 						"GROUP BY VTM.MASTER_SUB_TEAM_CODE";
+			
 				pst = con.prepareStatement(qry);
 				pst.setString(1, username);
 				pst.setString(2, username);
+				pst.setString(3, fromdate);
+				pst.setString(4, todate);
+				
 				
 			}
 			
@@ -107,19 +114,17 @@ public class dashboardquery {
 		return null;
 	}
 
-
-	public List<Map<String, Object>> getSRVwiseTeam(String username,String userlvl,String region,String zone,String district,String office) throws SQLException {
+	//query for Service Wise Trouble Ticket
+	public List<Map<String, Object>> getSRVwiseTeam(String username,String userlvl,String region,String zone,String district,String office,String fromdate,String todate) throws SQLException {
 		Connection con = DbCon.getConnection();
 
 		try {
-			String qry="/* Formatted on 5/26/2020 12:43:12 AM (QP5 v5.354) */\r\n" + 
-					"  SELECT COUNT (VTM.SERVICE_TYPE_ID)                     SCOUNT,\r\n" + 
+			String qry="/* Formatted on 12/15/2020 11:25:10 AM (QP5 v5.354) */\r\n" + 
+					"  SELECT COUNT (VTM.SERVICE_TYPE_ID)                       SCOUNT,\r\n" + 
 					"         (SELECT DESCRIPTION\r\n" + 
 					"            FROM M_SERVICE_TYPE\r\n" + 
 					"           WHERE SERVICE_TYPE_ID = VTM.SERVICE_TYPE_ID)    SERVICE_DESC\r\n" + 
-					"    FROM (SELECT *\r\n" + 
-					"            FROM VW_TOKEN_MASTER_ONLY\r\n" + 
-					"          ) VTM\r\n" + 
+					"    FROM (SELECT * FROM VW_TOKEN_MASTER_ONLY) VTM\r\n" + 
 					"   WHERE     EXISTS\r\n" + 
 					"                 (SELECT *\r\n" + 
 					"                    FROM WEB_USER_TEAM_MAP\r\n" + 
@@ -128,19 +133,23 @@ public class dashboardquery {
 					"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
 					"         --      AND VTM.MASTER_SUB_TEAM_CODE = NVL (NULL, MASTER_SUB_TEAM_CODE)\r\n" + 
 					"         --      AND VTM.SERVICE_TYPE_ID = NVL (NULL, SERVICE_TYPE_ID)\r\n" + 
-					"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (NULL, SYSDATE - 30)\r\n" + 
-					"                                      AND NVL (NULL, SYSDATE)\r\n" + 
 					"         AND VTM.REGION_CODE = NVL (?, REGION_CODE)\r\n" + 
 					"         AND VTM.ZONE_CODE = NVL (?, ZONE_CODE)\r\n" + 
 					"         AND VTM.DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
 					"         AND VTM.OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
+					"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (?, SYSDATE - 30)\r\n" + 
+					"                                      AND NVL (?, SYSDATE)\r\n" + 
 					"GROUP BY VTM.SERVICE_TYPE_ID";
+		
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, username);
 			pst.setString(2, region);
 			pst.setString(3, zone);
 			pst.setString(4, district);
 			pst.setString(5, office);
+			pst.setString(6, fromdate);
+			pst.setString(7, todate);
+			
 			//for lvl 6 custom officewise report
 			if(userlvl.equals("6")) {
 				qry="/* Formatted on 5/26/2020 12:43:12 AM (QP5 v5.354) */\r\n" + 
@@ -164,16 +173,20 @@ public class dashboardquery {
 						"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
 						"         --      AND VTM.MASTER_SUB_TEAM_CODE = NVL (NULL, MASTER_SUB_TEAM_CODE)\r\n" + 
 						"         --      AND VTM.SERVICE_TYPE_ID = NVL (NULL, SERVICE_TYPE_ID)\r\n" + 
-						"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (NULL, SYSDATE - 30)\r\n" + 
-						"                                      AND NVL (NULL, SYSDATE)\r\n" + 
+						"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (?, SYSDATE - 30)\r\n" + 
+						"                                      AND NVL (?, SYSDATE)\r\n" + 
 						"         --AND VTM.REGION_CODE = NVL (null, REGION_CODE)\r\n" + 
 						"         --AND VTM.ZONE_CODE = NVL (NULL, ZONE_CODE)\r\n" + 
 						"         --AND VTM.DISTRICT_CODE = NVL (NULL, DISTRICT_CODE)\r\n" + 
 						"         --AND VTM.OFFICE_CODE = NVL (NULL, OFFICE_CODE)\r\n" + 
 						"GROUP BY VTM.SERVICE_TYPE_ID";
+				
 				pst = con.prepareStatement(qry);
 				pst.setString(1, username);
 				pst.setString(2, username);
+				pst.setString(3, fromdate);
+				pst.setString(4, todate);
+				
 				
 			}
 
@@ -268,12 +281,12 @@ public class dashboardquery {
 		return null;
 	}
 
-	
-	public List<Map<String, Object>> getSolvedvsUnsovled(String username,String userlvl,String region,String zone,String district,String office) throws SQLException {
+	//query for status of tickets
+	public List<Map<String, Object>> getSolvedvsUnsovled(String username,String userlvl,String region,String zone,String district,String office,String fromdate,String todate) throws SQLException {
 		Connection con = DbCon.getConnection();
 
 		try {
-			String qry="/* Formatted on 5/26/2020 1:00:40 AM (QP5 v5.354) */\r\n" + 
+			String qry="/* Formatted on 12/15/2020 12:01:01 PM (QP5 v5.354) */\r\n" + 
 					"  SELECT COUNT (VTM.MASTER_SOLVE_FLAG)    SCOUNT,\r\n" + 
 					"         DECODE (MASTER_SOLVE_FLAG,\r\n" + 
 					"                 'N', 'NEW',\r\n" + 
@@ -289,20 +302,22 @@ public class dashboardquery {
 					"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
 					"         --      AND VTM.MASTER_SUB_TEAM_CODE = NVL (NULL, MASTER_SUB_TEAM_CODE)\r\n" + 
 					"         --      AND VTM.SERVICE_TYPE_ID = NVL (NULL, SERVICE_TYPE_ID)\r\n" + 
-					"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (NULL, SYSDATE - 30)\r\n" + 
-					"                                      AND NVL (NULL, SYSDATE)\r\n" + 
 					"         AND VTM.REGION_CODE = NVL (?, REGION_CODE)\r\n" + 
 					"         AND VTM.ZONE_CODE = NVL (?, ZONE_CODE)\r\n" + 
 					"         AND VTM.DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
 					"         AND VTM.OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
+					"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (?, SYSDATE - 30)\r\n" + 
+					"                                      AND NVL (?, SYSDATE)\r\n" + 
 					"GROUP BY VTM.MASTER_SOLVE_FLAG";
-		//	System.out.println(qry);
+			//System.out.println(qry);
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, username);
 			pst.setString(2, region);
 			pst.setString(3, zone);
 			pst.setString(4, district);
 			pst.setString(5, office);
+			pst.setString(6, fromdate);
+			pst.setString(7, todate);
 		
 			if(userlvl.equals("6")) {
 				qry="/* Formatted on 5/26/2020 1:04:15 AM (QP5 v5.354) */\r\n" + 
@@ -328,16 +343,20 @@ public class dashboardquery {
 						"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
 						"         --      AND VTM.MASTER_SUB_TEAM_CODE = NVL (NULL, MASTER_SUB_TEAM_CODE)\r\n" + 
 						"         --      AND VTM.SERVICE_TYPE_ID = NVL (NULL, SERVICE_TYPE_ID)\r\n" + 
-						"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (NULL, SYSDATE - 30)\r\n" + 
-						"                                      AND NVL (NULL, SYSDATE)\r\n" + 
+						"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (?, SYSDATE - 30)\r\n" + 
+						"                                      AND NVL (?, SYSDATE)\r\n" + 
 						"--  AND VTM.REGION_CODE = NVL (?, REGION_CODE)\r\n" + 
 						"--  AND VTM.ZONE_CODE = NVL (?, ZONE_CODE)\r\n" + 
 						"--  AND VTM.DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
 						"--  AND VTM.OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
 						"GROUP BY VTM.MASTER_SOLVE_FLAG";
+				System.out.println(qry);
 				pst = con.prepareStatement(qry);
 				pst.setString(1, username);
 				pst.setString(2, username);
+				pst.setString(3, fromdate);
+				pst.setString(4, todate);
+				
 				
 			}
 
@@ -367,50 +386,50 @@ public class dashboardquery {
 	}
 	
 
-	public List<Map<String, Object>> subTeamSolveUnsolve(String username,String userlvl,String region,String zone,String district,String office) throws SQLException {
+	public List<Map<String, Object>> subTeamSolveUnsolve(String username,String userlvl,String region,String zone,String district,String office,String fromdate,String todate) throws SQLException {
 		Connection con = DbCon.getConnection();
 
 		try {
-			String qry="/* Formatted on 5/26/2020 1:04:15 AM (QP5 v5.354) */\r\n" + 
+			String qry="/* Formatted on 12/15/2020 12:16:05 PM (QP5 v5.354) */\r\n" + 
 					"  SELECT COUNT (VTM.MASTER_SOLVE_FLAG)    SCOUNT,\r\n" + 
-					"  MASTER_SUB_TEAM_CODE sub_team_code,\r\n" + 
+					"         MASTER_SUB_TEAM_CODE             sub_team_code,\r\n" + 
 					"         DECODE (MASTER_SOLVE_FLAG,\r\n" + 
 					"                 'N', 'NEW',\r\n" + 
 					"                 'Y', 'SOLVED',\r\n" + 
 					"                 'F', 'FORWARDED',\r\n" + 
 					"                 'C', 'CLOSED')           SOLVE_FLAG\r\n" + 
-					"    FROM (SELECT *\r\n" + 
-					"            FROM VW_TOKEN_MASTER_ONLY\r\n" + 
-					"--           WHERE EXISTS\r\n" + 
-					"--                     (SELECT fdc_code\r\n" + 
-					"--                        FROM WEB_USER_FDC_MAP\r\n" + 
-					"--                       WHERE     user_id = ?\r\n" + 
-					"--                             AND VW_TOKEN_MASTER_ONLY.FDC_CODE =\r\n" + 
-					"--                                 WEB_USER_FDC_MAP.FDC_CODE)\r\n" + 
-					"                                 ) \r\n" + 
-					"                                 VTM\r\n" + 
+					"    FROM (SELECT * FROM VW_TOKEN_MASTER_ONLY--           WHERE EXISTS\r\n" + 
+					"                                            --                     (SELECT fdc_code\r\n" + 
+					"                                            --                        FROM WEB_USER_FDC_MAP\r\n" + 
+					"                                            --                       WHERE     user_id = ?\r\n" + 
+					"                                            --                             AND VW_TOKEN_MASTER_ONLY.FDC_CODE =\r\n" + 
+					"                                            --                                 WEB_USER_FDC_MAP.FDC_CODE)\r\n" + 
+					"                                            ) VTM\r\n" + 
 					"   WHERE     EXISTS\r\n" + 
 					"                 (SELECT *\r\n" + 
 					"                    FROM WEB_USER_TEAM_MAP\r\n" + 
 					"                   WHERE     USER_ID = ?\r\n" + 
 					"                         AND VTM.MASTER_SUB_TEAM_CODE =\r\n" + 
 					"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
-					"              AND VTM.MASTER_SUB_TEAM_CODE = NVL (NULL, MASTER_SUB_TEAM_CODE)\r\n" + 
-					"               AND VTM.SERVICE_TYPE_ID = NVL (NULL, SERVICE_TYPE_ID)\r\n" + 
-					"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (NULL, SYSDATE - 30)\r\n" + 
-					"                                      AND NVL (NULL, SYSDATE)\r\n" + 
-					"  AND VTM.REGION_CODE = NVL (?, REGION_CODE)\r\n" + 
-					"  AND VTM.ZONE_CODE = NVL (?, ZONE_CODE)\r\n" + 
-					"  AND VTM.DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
-					"  AND VTM.OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
-					"GROUP BY  MASTER_SUB_TEAM_CODE,VTM.MASTER_SOLVE_FLAG order by MASTER_SUB_TEAM_CODE,VTM.MASTER_SOLVE_FLAG";
-			//System.out.println(qry);
+					"         AND VTM.MASTER_SUB_TEAM_CODE = NVL (NULL, MASTER_SUB_TEAM_CODE)\r\n" + 
+					"         AND VTM.SERVICE_TYPE_ID = NVL (NULL, SERVICE_TYPE_ID)\r\n" + 
+					"         AND VTM.REGION_CODE = NVL (?, REGION_CODE)\r\n" + 
+					"         AND VTM.ZONE_CODE = NVL (?, ZONE_CODE)\r\n" + 
+					"         AND VTM.DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
+					"         AND VTM.OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
+					"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (?, SYSDATE - 30)\r\n" + 
+					"                                      AND NVL (?, SYSDATE)\r\n" + 
+					"GROUP BY MASTER_SUB_TEAM_CODE, VTM.MASTER_SOLVE_FLAG\r\n" + 
+					"ORDER BY MASTER_SUB_TEAM_CODE, VTM.MASTER_SOLVE_FLAG";
+			
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, username);
 			pst.setString(2, region);
 			pst.setString(3, zone);
 			pst.setString(4, district);
 			pst.setString(5, office);
+			pst.setString(6, fromdate);
+			pst.setString(7, todate);
 		
 			if(userlvl.equals("6")) {
 				qry="/* Formatted on 5/26/2020 1:04:15 AM (QP5 v5.354) */\r\n" + 
@@ -438,17 +457,20 @@ public class dashboardquery {
 						"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
 						"              AND VTM.MASTER_SUB_TEAM_CODE = NVL (NULL, MASTER_SUB_TEAM_CODE)\r\n" + 
 						"               AND VTM.SERVICE_TYPE_ID = NVL (NULL, SERVICE_TYPE_ID)\r\n" + 
-						"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (NULL, SYSDATE - 30)\r\n" + 
-						"                                      AND NVL (NULL, SYSDATE)\r\n" + 
+						"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (?, SYSDATE - 30)\r\n" + 
+						"                                      AND NVL (?, SYSDATE)\r\n" + 
 						"--  AND VTM.REGION_CODE = NVL (?, REGION_CODE)\r\n" + 
 						"--  AND VTM.ZONE_CODE = NVL (?, ZONE_CODE)\r\n" + 
 						"--  AND VTM.DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
 						"--  AND VTM.OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
 						"GROUP BY  MASTER_SUB_TEAM_CODE,VTM.MASTER_SOLVE_FLAG order by MASTER_SUB_TEAM_CODE,VTM.MASTER_SOLVE_FLAG";
 				
+			//	System.out.println(qry);
 				pst = con.prepareStatement(qry);
 				pst.setString(1, username);
 				pst.setString(2, username);
+				pst.setString(3, fromdate);
+				pst.setString(4, todate);
 				
 			}
 			
@@ -480,46 +502,50 @@ public class dashboardquery {
 	}
 	
 	
-	public List<Map<String, Object>> subTeamServiceType(String username,String userlvl,String region,String zone,String district,String office) throws SQLException {
+	//query for Ticket Type Vs Sub Team
+	public List<Map<String, Object>> subTeamServiceType(String username,String userlvl,String region,String zone,String district,String office,String fromdate,String todate) throws SQLException {
 		Connection con = DbCon.getConnection();
 
 		try {
-			String qry="/* Formatted on 5/26/2020 1:04:15 AM (QP5 v5.354) */\r\n" + 
-					"  SELECT COUNT (VTM.MASTER_SOLVE_FLAG)    SCOUNT,\r\n" + 
-					"  MASTER_SUB_TEAM_CODE sub_team_code,\r\n" + 
-					"         (select DESCRIPTION  from M_SERVICE_TYPE where SERVICE_TYPE_ID=VTM.SERVICE_TYPE_ID) SERVICE_TYPE\r\n" + 
-					"    FROM (SELECT *\r\n" + 
-					"            FROM VW_TOKEN_MASTER_ONLY\r\n" + 
-					"--           WHERE EXISTS\r\n" + 
-					"--                     (SELECT fdc_code\r\n" + 
-					"--                        FROM WEB_USER_FDC_MAP\r\n" + 
-					"--                       WHERE     user_id = ?\r\n" + 
-					"--                             AND VW_TOKEN_MASTER_ONLY.FDC_CODE =\r\n" + 
-					"--                                 WEB_USER_FDC_MAP.FDC_CODE)\r\n" + 
-					"                                 ) \r\n" + 
-					"                                 VTM\r\n" + 
+			String qry="/* Formatted on 12/15/2020 12:39:35 PM (QP5 v5.354) */\r\n" + 
+					"  SELECT COUNT (VTM.MASTER_SOLVE_FLAG)                     SCOUNT,\r\n" + 
+					"         MASTER_SUB_TEAM_CODE                              sub_team_code,\r\n" + 
+					"         (SELECT DESCRIPTION\r\n" + 
+					"            FROM M_SERVICE_TYPE\r\n" + 
+					"           WHERE SERVICE_TYPE_ID = VTM.SERVICE_TYPE_ID)    SERVICE_TYPE\r\n" + 
+					"    FROM (SELECT * FROM VW_TOKEN_MASTER_ONLY--           WHERE EXISTS\r\n" + 
+					"                                            --                     (SELECT fdc_code\r\n" + 
+					"                                            --                        FROM WEB_USER_FDC_MAP\r\n" + 
+					"                                            --                       WHERE     user_id = ?\r\n" + 
+					"                                            --                             AND VW_TOKEN_MASTER_ONLY.FDC_CODE =\r\n" + 
+					"                                            --                                 WEB_USER_FDC_MAP.FDC_CODE)\r\n" + 
+					"                                            ) VTM\r\n" + 
 					"   WHERE     EXISTS\r\n" + 
 					"                 (SELECT *\r\n" + 
 					"                    FROM WEB_USER_TEAM_MAP\r\n" + 
 					"                   WHERE     USER_ID = ?\r\n" + 
 					"                         AND VTM.MASTER_SUB_TEAM_CODE =\r\n" + 
 					"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
-					"              AND VTM.MASTER_SUB_TEAM_CODE = NVL (NULL, MASTER_SUB_TEAM_CODE)\r\n" + 
-					"               AND VTM.SERVICE_TYPE_ID = NVL (NULL, SERVICE_TYPE_ID)\r\n" + 
-					"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (NULL, SYSDATE - 30)\r\n" + 
-					"                                      AND NVL (NULL, SYSDATE)\r\n" + 
-					"  AND VTM.REGION_CODE = NVL (?, REGION_CODE)\r\n" + 
-					"  AND VTM.ZONE_CODE = NVL (?, ZONE_CODE)\r\n" + 
-					"  AND VTM.DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
-					"  AND VTM.OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
-					"GROUP BY  MASTER_SUB_TEAM_CODE,VTM.SERVICE_TYPE_ID order by MASTER_SUB_TEAM_CODE";
-			//System.out.println(qry);
+					"         AND VTM.MASTER_SUB_TEAM_CODE = NVL (NULL, MASTER_SUB_TEAM_CODE)\r\n" + 
+					"         AND VTM.SERVICE_TYPE_ID = NVL (NULL, SERVICE_TYPE_ID)\r\n" + 
+					"         AND VTM.REGION_CODE = NVL (?, REGION_CODE)\r\n" + 
+					"         AND VTM.ZONE_CODE = NVL (?, ZONE_CODE)\r\n" + 
+					"         AND VTM.DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
+					"         AND VTM.OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
+					"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (?, SYSDATE - 30)\r\n" + 
+					"                                      AND NVL (?, SYSDATE)\r\n" + 
+					"GROUP BY MASTER_SUB_TEAM_CODE, VTM.SERVICE_TYPE_ID\r\n" + 
+					"ORDER BY MASTER_SUB_TEAM_CODE";
+			
 			PreparedStatement pst = con.prepareStatement(qry);
 			pst.setString(1, username);
 			pst.setString(2, region);
 			pst.setString(3, zone);
 			pst.setString(4, district);
 			pst.setString(5, office);
+			pst.setString(6, fromdate);
+			pst.setString(7, todate);
+			
 		
 			if(userlvl.equals("6")) {
 				qry="/* Formatted on 5/26/2020 1:04:15 AM (QP5 v5.354) */\r\n" + 
@@ -544,17 +570,19 @@ public class dashboardquery {
 						"                             WEB_USER_TEAM_MAP.SUB_TEAM_CODE)\r\n" + 
 						"              AND VTM.MASTER_SUB_TEAM_CODE = NVL (NULL, MASTER_SUB_TEAM_CODE)\r\n" + 
 						"               AND VTM.SERVICE_TYPE_ID = NVL (NULL, SERVICE_TYPE_ID)\r\n" + 
-						"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (NULL, SYSDATE - 30)\r\n" + 
-						"                                      AND NVL (NULL, SYSDATE)\r\n" + 
+						"         AND VTM.MASTER_CREATE_DT BETWEEN NVL (?, SYSDATE - 30)\r\n" + 
+						"                                      AND NVL (?, SYSDATE)\r\n" + 
 						"--  AND VTM.REGION_CODE = NVL (?, REGION_CODE)\r\n" + 
 						"--  AND VTM.ZONE_CODE = NVL (?, ZONE_CODE)\r\n" + 
 						"--  AND VTM.DISTRICT_CODE = NVL (?, DISTRICT_CODE)\r\n" + 
 						"--  AND VTM.OFFICE_CODE = NVL (?, OFFICE_CODE)\r\n" + 
 						"GROUP BY  MASTER_SUB_TEAM_CODE,VTM.SERVICE_TYPE_ID order by MASTER_SUB_TEAM_CODE";
-				
+				//System.out.println(qry);
 				pst = con.prepareStatement(qry);
 				pst.setString(1, username);
 				pst.setString(2, username);
+				pst.setString(3, fromdate);
+				pst.setString(4, todate);
 				
 			}
 			

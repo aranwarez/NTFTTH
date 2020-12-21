@@ -30,10 +30,10 @@ $(document).ready(function() {
 
 	 
 	 // -- till here
-	 //disable double click 
+	 // disable double click
 	 	    $(".submitbutton").on("click", function() {
 		        $(this).attr("disabled", "disabled");
-		        //auto enable button after delay
+		        // auto enable button after delay
 		        setTimeout('$(".submitbutton").removeAttr("disabled")', 2000);
 		    });
 	// -till here disable double click
@@ -159,7 +159,7 @@ function getCustomerInfo() {
 			
 			// get AAA data
 			getstatusInfo(); 
-			//In the end check if work order exist for selected customer
+			// In the end check if work order exist for selected customer
 			checkworkorder();
 
 			
@@ -182,8 +182,11 @@ function clearformcontains(){
 	
 	// clearing complain cart
 	$('#complainservcies').empty();
-	// clearing AAA values
 	
+	//clearing IPTV
+	$("#nettvdivspan").find("span").empty();
+
+	// clearing AAA values
 	$('.AAAinfield').html("");
 	Date.prototype.toDateInputValue = (function() {
 	    var local = new Date(this);
@@ -339,14 +342,30 @@ function getSubsInfo(subsinfo) {
 		try{
 			
 			$('#divforsubsinfo').empty();
+			$("#NTTVID").empty();
+			
 			
 			$.each(subsinfo, function (index, value) {
 				// checking if DATA service available in subsinfo and calling
 				// AAA status
+				
+				// if service number is null or empty
+				if(value.serviceNumber.length===0){
+					return;
+						}	
+				
+				
 				if(value.serviceNumber.substr(0,6)==='NTFTTH'){
 				datanum=value.serviceNumber;
 					getAAAstatus();
 						}
+				
+				// adding NTVID in NTV drop down menu
+				if(value.serviceNumber.substr(0,4)==='NTTV'){
+					$('#NTTVID').append( '<option value="'+value.serviceNumber+'">'+value.serviceNumber+'</option>' );
+					
+							}
+				
 				
 				
 				// till herechecking if DATA service available in subsinfo and
@@ -403,7 +422,7 @@ getQueryFreeResource(value.serviceNumber,index);
 			$.get('../complain/getComplainServiceInfo', {
 				cpeSn:$('#cpeSN').html()
 			}, function(response) {
-			console.log(response);
+// console.log(response);
 			if(response.length>0){
 				if(getURLParameter('CPE')==null){
 				alert('Complain Already exist for this CPE Serial');
@@ -544,12 +563,13 @@ function addservicecomplain(serno){
 	else if(serno.substr(0,6)==='NTFTTH'){
 		servicetype=1;
 	}
-	else if(serno.substr(0,6)==='NTTV'){
+	else if(serno.substr(0,4)==='NTTV'){
 		servicetype=3;
 	}
 
-	
+	// debugger;
 	 $.each(servicetypelist, function (index, value) {
+		 
 	if(servicetype==value.SERVICE_TYPE_ID)	 
 		 var appenddiv="<DIV class='input-group "+serno+"'><span class='input-group-addon'><input value="+value.SERVICE_TYPE_ID+" class='cproblemid' id='cproblemid"+serno+"' type='checkbox' checked=checked></span><label>"+value.DESCRIPTION+"("+serno+")</label><select class='form-control' id='servicetypeid"+serno+"'></select><input type='text' id='remarksid"+serno+"' class='form-control' placeholder='Remarks for "+value.DESCRIPTION+"'></DIV>";
 		 $('#complainservcies').append(appenddiv);	 
@@ -721,13 +741,13 @@ function getCRMSServiceBalance(serviceNo,index){
 	        		
 	        // if data type no need to check balance
 	        		if(serviceNo.substring(0,6)=='NTFTTH'){
-//	        		 javexpdt=stringToDate(state[1].substring(0,10),"yyyy-mm-dd","-");
-//	        	     			var today = new Date();
-//	        		// incase of postpiad there is no date instead remaning
+// javexpdt=stringToDate(state[1].substring(0,10),"yyyy-mm-dd","-");
+// var today = new Date();
+// // incase of postpiad there is no date instead remaning
 			// credit in state[1]
-//	        			if(today<=javexpdt){
-//	        			$('#balanceOfCreditLimit'+index).css('background-color','#9FF781');
-//	        		}
+// if(today<=javexpdt){
+// $('#balanceOfCreditLimit'+index).css('background-color','#9FF781');
+// }
 //	        		 
 	        		// marking balance as green as it is based on package
 					// validity
@@ -744,7 +764,8 @@ function getCRMSServiceBalance(serviceNo,index){
 		
 	}
 
-//we will call this function if validity is expired calling it again since its not async
+// we will call this function if validity is expired calling it again since its
+// not async
 function getCRMSServiceBalanceifvalidityexp(serviceNo,index){
 		 $.ajax({
 	         url: '../complain/getCRMSServiceBalance',
@@ -791,7 +812,7 @@ function getQueryFreeResource(serviceNo,index){
 	         data: {MDN:serviceNo},
 	       // async: false, //blocks window close
 	         success: function(response) {
-	        	 console.log(response);
+// console.log(response);
 	        	 
 	        	 	        		if(response!='-1'){
 	        			var state=response.split('!');
@@ -812,7 +833,8 @@ function getQueryFreeResource(serviceNo,index){
 	        			var today = new Date();
 	        		if(today>javexpdt){
 	        			$('#FRIExpdt'+index).css('background-color','#FE2E2E');
-	        			//if FRI exipired check balance then mark it red if balance less than 0
+	        			// if FRI exipired check balance then mark it red if
+						// balance less than 0
 	        			getCRMSServiceBalanceifvalidityexp(serviceNo,index);
 	        		}
 		 
@@ -823,7 +845,8 @@ function getQueryFreeResource(serviceNo,index){
 	        			var today = new Date();
 	        			if(today>javexpdt){
 		        			$('#FRIExpdt'+index).css('background-color','#FE2E2E');
-		        			//if FRI exipired check balance then mark it red if balance less than 0
+		        			// if FRI exipired check balance then mark it red if
+							// balance less than 0
 		        			getCRMSServiceBalanceifvalidityexp(serviceNo,index);
 		        			
 		        		}			
@@ -961,14 +984,14 @@ function gettimediff(adate, bdate){
 	return (hh + ":" + mm + ":" + ss);
 }
 
-//function to check if work order exist
+// function to check if work order exist
 function checkworkorder(){
 	$.get('../workorder/getActiveWorkOrder', {
 		
 	}, function(response) {
-		console.log(response);
+// console.log(response);
 		 $.each(response, function (index, value) {
-		//	 debugger;
+		// debugger;
 			 if(value.ELEMENT_TYPE===1 && value.ELEMENT_VALUE===$('#fapName').html()){
 				 alert('Work Order Already Exist For FAP '+value.ELEMENT_VALUE+'\nRemarks:'+value.REMARKS);
 			 }
@@ -1003,7 +1026,166 @@ function checkworkorder(){
 	
 }
 
+function getIPTVDetail(){
+	// test
+// fillIPTVdetail(['D49AA013772C']);
+// fillIPTVappdetail(['18937F8202D9']);
+// return;
+	$("#nettvdivspan").find("span").empty();
+	if($('#CPEserial').html().length==0 || $('#NTTVID').val().length==0){
+		alert('CPE Serial or NTV service Not found ');
+	return;
+	}
+	
+	$.ajax({
+         url: '../complain/getIPTVCPEMAP',
+        // global: false,
+         type: 'get',
+         data: {CPE:$('#CPEserial').html()},
+        async: false, // blocks window close
+         success: function(response) {
+// console.log(response);
+        	 if(response.length==0){
+        		 alert('Response Code 500 :Server internal Error. Please try again after 5-10 seconds');
+        	 }
+        	   $.each(response, function (index, value) {
+        		   if(Object.keys(response[index])==$('#NTTVID').val()){
+        			   // console.log(value);
+        			   fillIPTVdetail(Object.values(value));
+        			   fillIPTVappdetail(Object.values(value));
+        		   
+        		   }
+        		   
+        		   
+        	   });
+        	 
+        		         }
+     });
+	
+	
+	// get APP DETAILS FOR NETTV
+	
+	
+		
+}
 
+function fillIPTVdetail(sno){
+	$.ajax({
+        url: '../complain/getIPTVDetail',
+       // global: false,
+        type: 'get',
+        data: {IPTV:sno.toString()},
+       async: false, // blocks window close
+        success: function(response) {
+       // console.log(response);
+//        	debugger;
+        	if(typeof(response.active_package[0])!='undefined'){        	
+       	 $('#IPTVIDinfo').html(response.active_package[0].id);
+       	$('#iptvsubscriber_stb_id').html(response.active_package[0].subscriber_stb_id);
+       	$('#iptvname').html(response.active_package[0].name);
+       	$('#iptvsubscribed_id').html(response.active_package[0].subscribed_id);
+       	$('#iptvsubscribed_type').html(response.active_package[0].subscribed_type);
+       	$('#iptvtransaction_id').html(response.active_package[0].transaction_id);
+       	$('#iptvpurchase_type').html(response.active_package[0].purchase_type);
+       	$('#iptvuser_type').html(response.active_package[0].user_type);
+       	$('#iptvamount').html(response.active_package[0].amount);
+       	$('#iptvis_cancel').html(response.active_package[0].is_cancel);
+       	$('#iptvpos').html(response.active_package[0].pos);
+       	$('#iptvpayment_method').html(response.active_package[0].payment_method);
+       	$('#iptvnotes').html(response.active_package[0].notes);
+       	
+       	$('#iptvwalltransid').html(response.active_package[0].wallet_transaction_id);
+       	$('#iptvqty').html(response.active_package[0].qty);
+       	$('#iptvcreateby').html(response.active_package[0].created_by);
+       	$('#iptvcancelby').html(response.active_package[0].cancel_by);
+       	$('#iptvdescription').html(response.active_package[0].description);
+       	
+       	$('#iptvmeta').html(response.active_package[0].meta);
+       	$('#iptvcreditnoteid').html(response.active_package[0].credit_note_id);
+       	$('#iptvcreatedat').html(response.active_package[0].created_at);
+       	$('#iptvupdatedat').html(response.active_package[0].updated_at);
+       	$('#iptvstb_id').html(response.active_package[0].stb_id);
+       	$('#iptvpackageid').html(response.active_package[0].package_id);
+       	$('#iptvapp').html(response.active_package[0].app);
+       	$('#iptvstatus').html(response.active_package[0].status);
+       	// subscriber order
+       	$('#iptvsodid').html(response.active_package[0].subscriber_order_detail[0].id);
+       	$('#iptvsodsubscribertype').html(response.active_package[0].subscriber_order_detail[0].subscribed_type);
+       	$('#iptvsodexpdt').html(response.active_package[0].subscriber_order_detail[0].expiry_date);
+       	$('#iptvsodduration').html(response.active_package[0].subscriber_order_detail[0].duration);
+       	$('#iptvsodunit').html(response.active_package[0].subscriber_order_detail[0].unit);
+       	$('#iptvsodsoid').html(response.active_package[0].subscriber_order_detail[0].subscriber_order_id);
+       	$('#iptvsodserviceid').html(response.active_package[0].subscriber_order_detail[0].service_id);
+        }
+        	else{alert('Warning!! No active package found of NETTV');}
+       	
+       	
+       	// subscribe pkg info
+        	if(typeof(response.subscribed_packages[0])!='undefined'){      
+    	$('#iptv_sp_id').html(response.subscribed_packages[0].id);
+    	$('#iptv_sp_createat').html(response.subscribed_packages[0].created_at);
+    	$('#iptv_sp_desc').html(response.subscribed_packages[0].description);
+    	$('#iptv_pkg_cfg_id').html(response.subscribed_packages[0].package_config_id);
+    	$('#iptv_pkg_cfg_name').html(response.subscribed_packages[0].package_config_name);
+    	$('#iptv_pkg_id').html(response.subscribed_packages[0].package_id);
+    	$('#iptv_sp_stb_id').html(response.subscribed_packages[0].stb_id);
+    	$('#iptv_sp_sub_stb_id').html(response.subscribed_packages[0].subscriber_stb_id);
+    	$('#iptv_sp_updateat').html(response.subscribed_packages[0].updated_at);
+    	
+    	// sub pkg detial
+    	$('#iptv_pkg_sub_det_id').html(response.subscribed_packages[0].package_subscription_details[0].id);
+    	$('#iptv_pkg_sub_id').html(response.subscribed_packages[0].package_subscription_details[0].package_subscription_id);
+    	$('#iptv_pkg_expdt').html(response.subscribed_packages[0].package_subscription_details[0].expiry_date);
+    	$('#iptv_pkg_services_id').html(response.subscribed_packages[0].package_subscription_details[0].services.id);
+    	$('#iptv_pkg_name').html(response.subscribed_packages[0].package_subscription_details[0].services.name);
+        	}else{alert('Warning!! No subscriobed package found of NETTV');}
+       	       		         }
+    });
+	
+	
+}
 
+function fillIPTVappdetail(sno){
+	$.ajax({
+        url: '../complain/getIPTVAPPDETAIL',
+       // global: false,
+        type: 'get',
+        data: {IPTV:sno.toString()},
+       async: false, // blocks window close
+        success: function(response) {
+       	 console.log(response);
+       	
+       	 
+       	 var appendtxt;
+		 $('#nettvappdetail').empty();
+			var div="";
+				var count= 1;
+	   	 $.each(response.stats.app_details, function (index, value) {
+       		 div=div+'<div class="col-md-6"><table class="table table-condensed"><tbody>';						
+ 			
+       		 $.each(value, function (index2, value2) {
+       			 if(index2.includes('time')){
+       				 console.log(value2);
+       				 value2=jsondatetonormale(Number(value2));
+       			 }
+       			 
+       		 div=div+'<tr><td>'+index2+'</td><td>'+value2+'</td>  </tr>';
+       				
+       		});
+       			div=div+'</tbody></table></div>';	 
+       		 
+       	 });
+       	 
+		 $('#nettvappdetail').append(div);	 
+
+       	 
+       	       		         }
+    });
+	
+
+	
+	
+	
+}
 
 
