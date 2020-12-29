@@ -41,13 +41,23 @@ public class SendSMS {
 
 	private static final String SERVICE_TYPE = "CMT";
 
-	public  void sendsms(String Number,String message,String REMARKS,String USER,String REF_TOKEN) {
+	public static void sendsms(String Number, String message, String REMARKS, String USER, String REF_TOKEN) {
 		// bind(connect)
 		SMPPSession session = SmsSession.getSession();
 		// send Message
-		
-		SMSDao smsdao=new SMSDao();
+
+		String msglogid = null;
+		String msglog = null;
+		if (message.length() > 200) {
+			msglog = message.substring(0, 200);
+		} else
+			msglog = message;
+
+		SMSDao smsdao = new SMSDao();
 		try {
+
+			// taking only 200 character for message
+
 			// set RegisteredDelivery
 			final RegisteredDelivery registeredDelivery = new RegisteredDelivery();
 			registeredDelivery.setSMSCDeliveryReceipt(SMSCDeliveryReceipt.SUCCESS_FAILURE);
@@ -57,15 +67,8 @@ public class SendSMS {
 					Number, new ESMClass(), (byte) 0, (byte) 1, timeFormatter.format(new Date()), null,
 					registeredDelivery, (byte) 0, new GeneralDataCoding(Alphabet.ALPHA_DEFAULT, null, false), (byte) 0,
 					message.getBytes());
-
+			msglogid = messageId;
 			System.out.println("Message submitted, message_id is " + messageId);
-			try {
-				smsdao.ADDSMSLOG(messageId, null, null,null, message.substring(200), null, REMARKS, USER, REF_TOKEN,Number);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
 
 		} catch (PDUException e) {
 			// Invalid PDU parameter
@@ -88,11 +91,11 @@ public class SendSMS {
 			e.printStackTrace();
 		}
 
-		
 		// Set listener to receive deliver_sm
 		session.setMessageReceiverListener(new MessageReceiverListener() {
 
 			public void onAcceptDeliverSm(DeliverSm deliverSm) throws ProcessRequestException {
+				System.out.println("Testing inside listener");
 				if (MessageType.SMSC_DEL_RECEIPT.containedIn(deliverSm.getEsmClass())) {
 					// delivery receipt
 					try {
@@ -100,10 +103,17 @@ public class SendSMS {
 						long id = Long.parseLong(delReceipt.getId()) & 0xffffffff;
 						String messageId = Long.toString(id, 16).toUpperCase();
 						try {
+							String msglog = null;
+							if (message.length() > 200) {
+								msglog = message.substring(0, 200);
+							} else
+								msglog = message;
 							java.sql.Date submitDate = new java.sql.Date(delReceipt.getSubmitDate().getTime());
 							java.sql.Date DoneDate = new java.sql.Date(delReceipt.getDoneDate().getTime());
-							smsdao.UPDATESMSLOG(messageId, delReceipt.getId(), submitDate,DoneDate, delReceipt.getText(), delReceipt.getFinalStatus().toString(), REMARKS, USER, REF_TOKEN,deliverSm.getSourceAddr());
-				
+
+							smsdao.UPDATESMSLOG(messageId, delReceipt.getId(), submitDate, DoneDate, msglog,
+									delReceipt.getFinalStatus().toString(), REMARKS, USER, REF_TOKEN, Number);
+
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -127,19 +137,22 @@ public class SendSMS {
 				return null;
 			}
 		});
-
-		// wait 3 second
 		try {
 			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} finally {
+			try {
+				smsdao.ADDIFNOTEXISTSMSLOG(msglogid, null, null, null, msglog, null, REMARKS, USER, REF_TOKEN, Number);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			session.unbindAndClose();
 		}
-
-		// unbind(disconnect)
-		session.unbindAndClose();
-
-		//return ("Send");
-	
 	}
+
+	// return ("Send");
 
 }

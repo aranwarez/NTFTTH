@@ -225,20 +225,20 @@
 
 
 	<script
-		src="<c:url value="/resources/function/Dashboard/srvwiserevenue.js" />"></script>
+		src="<c:url value="/resources/function/Dashboard/srvwiserevenue.js?ver=1229" />"></script>
 
 	<script
-		src="<c:url value="/resources/function/Dashboard/dashboard.js" />"></script>
+		src="<c:url value="/resources/function/Dashboard/dashboard.js?ver=1229" />"></script>
 	
 	
 	<script
-		src="<c:url value="/resources/function/chart/bar/subTeamSolveUnsolve.js?a=527" />"></script>
+		src="<c:url value="/resources/function/chart/bar/subTeamSolveUnsolve.js?ver=1229" />"></script>
 
 	<script
-		src="<c:url value="/resources/function/chart/bar/subTeamServieType.js?a=527" />"></script>
+		src="<c:url value="/resources/function/chart/bar/subTeamServieType.js?ver=1229" />"></script>
 
 	<script
-		src="<c:url value="/resources/function/firsttimepassword.js?verdt=527" />"></script>
+		src="<c:url value="/resources/function/firsttimepassword.js?ver=1229" />"></script>
 	<%-- 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script> --%>
 
 
