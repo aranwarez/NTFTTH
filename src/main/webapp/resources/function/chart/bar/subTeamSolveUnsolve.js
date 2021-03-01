@@ -69,12 +69,16 @@ Chart.controllers.groupableBar = Chart.controllers.bar.extend({
   },
 });
 
+//start on load
+subteamsolveflag();
 
 
+function subteamsolveflag(fromdate,todate){
 //sevice wise payable
 $.ajax({
 	url : "../bar-charts/subTeamSolveUnsolve",
 	method : "GET",
+	data: { fromdate: fromdate, todate : todate} ,
 	success : function(data) {
 		console.log(data);		
 		
@@ -198,8 +202,8 @@ $.ajax({
 		    scales: {
 		      yAxes: [{
 		        ticks: {
-		        	beginAtZero: true,
-		        	stepSize: 5,
+		        	beginAtZero: true
+		        	//stepSize: 50,
 		        },
 		        stacked: true,
 		      }]
@@ -215,6 +219,7 @@ $.ajax({
 		console.log(data);
 	},
 });
+}
 
 
 

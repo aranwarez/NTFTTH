@@ -70,11 +70,15 @@ Chart.controllers.groupableBar = Chart.controllers.bar.extend({
 });
 
 
+//load on startup
+tickettypevssubtype();
 
 //sevice wise payable
+function tickettypevssubtype(fromdate,todate){
 $.ajax({
 	url : "../bar-charts/subTeamServiceType",
 	method : "GET",
+	data: { fromdate: fromdate, todate : todate} ,
 	success : function(data) {
 		console.log(data);		
 		
@@ -176,13 +180,14 @@ $.ajax({
 		      backgroundColor: forcolor,
 		      data: closed,
 		      stack: 3
-		    },
-		    {
-		        label: "IPTV",
-		        backgroundColor: solvecolor,
-		        data: solved,
-		        stack: 4
-		      }
+		    }
+//		    ,
+//		    {
+//		        label: "IPTV",
+//		        backgroundColor: solvecolor,
+//		        data: solved,
+//		        stack: 4
+//		      }
 		    
 		  ]
 		};
@@ -195,8 +200,8 @@ $.ajax({
 		    scales: {
 		      yAxes: [{
 		        ticks: {
-		        	beginAtZero: true,
-		        	stepSize: 5,
+		        	beginAtZero: true
+		        //	stepSize: 50,
 		        },
 		        stacked: true,
 		      }]
@@ -212,6 +217,7 @@ $.ajax({
 		console.log(data);
 	},
 });
+}
 
 
 

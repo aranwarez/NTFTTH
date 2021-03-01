@@ -351,7 +351,7 @@
 						</div>
 					</div>
 
-					<div class="col-md-1" id="closebuttondiv" style="display: none;">
+					<div class="col-md-2" id="closebuttondiv" style="display: none;">
 						<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteallModal">Close All Tickets</button>
 
 					</div>
@@ -442,7 +442,7 @@
 
 
 	<script
-		src="<c:url value="/resources/function/Complain/TroubleTickets.js?verdt=614" />"></script>
+		src="<c:url value="/resources/function/Complain/TroubleTickets.js?version=201234" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 	<script>

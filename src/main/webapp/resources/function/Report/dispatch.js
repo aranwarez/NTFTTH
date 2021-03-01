@@ -1,13 +1,25 @@
 
+$(document)
+		.ready(
+				function() {
+					// $(".js-example-basic-single").select2();
+					$('.nepali-calendar').nepaliDatePicker();
 
-$(document).ready(function() {
-	// $(".js-example-basic-single").select2();
-	$('.nepali-calendar').nepaliDatePicker();
+					// do not submit form if office not selected for one time print
+					$('#submit')
+							.submit(
+									function() {
+										// your code here
 
-	
-});
+										if ($('#OFFICE_CODE').val().length === 0
+												&& $('#reportname').val() === 'FTTHDispatch') {
+											alert('Office needs to be selected for One Time Print. You may proceed with report type set to Reprint Again');
+											return false;
+										}
 
+									});
 
+				});
 
 function getZone() {
 
@@ -24,7 +36,6 @@ function getZone() {
 		$('#OFFICE_CODE').find('option:not(:first)').remove();
 		$('#OLT_CODE').find('option:not(:first)').remove();
 
-	
 		$.each(data, function(index, value) {
 			$('<option>').val(value.ZONE_CODE).text(value.DESCRIPTION)
 					.appendTo(select);
@@ -113,39 +124,32 @@ function getfdcteam() {
 			clearDataTable();
 			return;
 		}
-		
+		console.log(data);
 		$.each(data, function(index, value) {
-			if(value.OFFICE_CODE==OFFICE_CODE || OFFICE_CODE=="" ){
-			$('<option>').val(value.OLT_CODE).text(
-					value.DESCRIPTION + "-" + value.TEAMNAME).appendTo(select);
+			if (value.OFFICE_CODE == OFFICE_CODE || OFFICE_CODE == "") {
+				$('<option>').val(value.TEAM_ID).text(
+						value.DESCRIPTION + "-" + value.TEAMNAME).appendTo(
+						select);
 			}
 		});
-		
 
 	});
 
 }
 
-
-
-function loadLevelWise(level){
-	if(level=='1'){
-	return;
-	}
-	else if(level=='2'){
+function loadLevelWise(level) {
+	if (level == '1') {
+		return;
+	} else if (level == '2') {
 		getZone();
 		return;
-	}
-	else if(level=='3'){
-	getDistrict();
-	return;
-	
-	}
-	else if(level=='4'){
-	getOffice();
-	return;
-}
+	} else if (level == '3') {
+		getDistrict();
+		return;
 
-	
-}
+	} else if (level == '4') {
+		getOffice();
+		return;
+	}
 
+}

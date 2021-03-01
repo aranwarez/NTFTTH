@@ -68,7 +68,7 @@
 												
 						   <c:if test = "${user3.LOCK_FLAG == 'N'}">				
 	
-						 <option value="${user3.USER_ID}">${user3.FULL_NAME}-${user3.EMPLOYEE_CODE}-${user3.ROLE_CODE}-${user3.OFFICE_CODE}-${user3.MOBILE_NO}</option>
+						 <option value="${user3.USER_ID}">${user3.USER_ID}-${user3.FULL_NAME}-${user3.EMPLOYEE_CODE}-${user3.ROLE_CODE}-${user3.OFFICE_CODE}-${user3.MOBILE_NO}</option>
 						</c:if>
 						</c:forEach>								
 							

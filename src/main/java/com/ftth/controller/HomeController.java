@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dao.CommonDateDao;
 import com.dao.UserDao;
 import com.model.UserInformationModel;
 
@@ -149,7 +150,15 @@ public class HomeController {
 	@RequestMapping(value = "/dashboard/list", method = RequestMethod.GET)
 	public String dashboard(Locale locale, Model model) {
 
+		CommonDateDao DAT = new CommonDateDao();
+		
 		model.addAttribute("fx", "Dashboard");
+		try {
+			model.addAttribute("Date_list", DAT.getDateList());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// return "NTC/dashboard/index";
 		return "dashboard";

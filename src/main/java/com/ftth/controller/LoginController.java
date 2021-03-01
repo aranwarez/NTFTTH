@@ -34,7 +34,7 @@ public class LoginController {
 		
 		if (level != null && level.getLOCK_FLAG().equals("N")) {
 			HttpSession session = request.getSession();
-			session.setMaxInactiveInterval(15 * 60);
+			session.setMaxInactiveInterval(30 * 60);
 			session.setAttribute("UserList", level);		
 			
 			ProfileDao.loginLog(level.getUSER_ID());

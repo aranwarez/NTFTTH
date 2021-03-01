@@ -26,9 +26,9 @@
 		</header>
 		<!-- Left side column. contains the logo and sidebar -->
 		<aside class="main-sidebar">
-			
-					<jsp:include page="${request.contextPath}/leftmenu"></jsp:include>
-			
+
+			<jsp:include page="${request.contextPath}/leftmenu"></jsp:include>
+
 		</aside>
 
 		<!-- Content Wrapper. Contains page content -->
@@ -36,12 +36,26 @@
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>${fx}</h1>
+
+
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li><a href="#">Report</a></li>
 					<li class="active">Ledger</li>
 				</ol>
 
+				<c:forEach var="DAT" items="${Date_list}">
+					<input type="text" value="${DAT.NEP_FROM_DATE}"
+						class="nepali-calendar" name="QFROM_DT" id="QFROM_DT"
+						placeholder="From Date" onchange="getenglishdate(this)">
+
+
+					<input type="text" value="${DAT.NEP_TODAY_DATE}"
+						class="nepali-calendar" id="QTO_DT"
+						placeholder="To Date">
+
+				</c:forEach>
+				<button class="btn btn-default" onclick="getdashboard()"><i class="fa fa-calendar"></i></button>
 
 
 
@@ -68,22 +82,23 @@
 								</div>
 							</div>
 							<div class="box-body">
-							    
-        <!--//Div that will hold the pie chart-->
-							
-								<div class="chart">
-									<canvas id="areaChart" style="height: 174px; width: 348px;" height="217" width="435"></canvas>
+
+								<!--//Div that will hold the pie chart-->
+
+								<div id="teamtrouble-container" class="chart">
+									<canvas id="areaChart" style="height: 174px; width: 348px;"
+										height="217" width="435"></canvas>
 								</div>
 							</div>
 							<!-- /.box-body -->
 						</div>
 						<!-- /.box -->
 
-						
+
 					</div>
-					
-						<div class="col-md-6">
-						
+
+					<div class="col-md-6">
+
 						<div class="box box-primary">
 							<div class="box-header with-border">
 								<h3 class="box-title">Service Wise Trouble Ticket</h3>
@@ -100,74 +115,78 @@
 								</div>
 							</div>
 							<div class="box-body">
-							    
-        <!--//Div that will hold the pie chart-->
-							
-								<div class="chart">
-									<canvas id="pieChart" style="height: 174px; width: 348px;" height="217" width="435"></canvas>
+
+								<!--//Div that will hold the pie chart-->
+
+								<div id="srvwisetroubleticket" class="chart">
+									<canvas id="pieChart" style="height: 174px; width: 348px;"
+										height="217" width="435"></canvas>
 								</div>
 							</div>
 							<!-- /.box-body -->
 						</div>
-			
-				</div>
-				
-				
-<!-- 				2nd row  -->
-<div class="col-md-6">
-<div class="box">
-					
-<!-- 					<div id="barprtoverlay" class="overlay"> -->
-<!-- 								<i class="fa fa-refresh fa-spin"></i> -->
-<!-- 							</div>	 -->
-						<div class="box box-danger">
-							<div class="box-header with-border">
-								<h3 class="box-title">Status of Ticket</h3>
 
-								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool"
-										data-widget="collapse">
-										<i class="fa fa-minus"></i>
-									</button>
-									<button type="button" class="btn btn-box-tool"
-										data-widget="remove">
-										<i class="fa fa-times"></i>
-									</button>
+					</div>
+
+
+					<!-- 				2nd row  -->
+					<div class="col-md-6">
+						<div class="box">
+
+							<!-- 					<div id="barprtoverlay" class="overlay"> -->
+							<!-- 								<i class="fa fa-refresh fa-spin"></i> -->
+							<!-- 							</div>	 -->
+							<div class="box box-danger">
+								<div class="box-header with-border">
+									<h3 class="box-title">Status of Ticket</h3>
+
+									<div class="box-tools pull-right">
+										<button type="button" class="btn btn-box-tool"
+											data-widget="collapse">
+											<i class="fa fa-minus"></i>
+										</button>
+										<button type="button" class="btn btn-box-tool"
+											data-widget="remove">
+											<i class="fa fa-times"></i>
+										</button>
+									</div>
 								</div>
-							</div>
-							<div class="box-body">
-							    
-        <!--//Div that will hold the pie chart-->
-							
-								<div class="chart">
-									<canvas id="barmonthly" style="height: 174px; width: 348px;" height="217" width="435"></canvas>
-								
+								<div class="box-body">
+
+									<!--//Div that will hold the pie chart-->
+
+									<div id="groupbysolveflag" class="chart">
+										<canvas id="barmonthly" style="height: 174px; width: 348px;"
+											height="217" width="435"></canvas>
+
+									</div>
 								</div>
+								<!-- /.box-body -->
 							</div>
-							<!-- /.box-body -->
+
 						</div>
-			
-				</div>
-				</div>
-<!-- close 2nd row -->
+					</div>
+					<!-- close 2nd row -->
 
-<!-- close 2nd row -->
+					<!-- close 2nd row -->
 
-<div class="col-md-6">
+					<div class="col-md-6">
 
-<jsp:include page="${request.contextPath}/dashboard/subTeamSolveUnsolve"></jsp:include>
+						<jsp:include
+							page="${request.contextPath}/dashboard/subTeamSolveUnsolve"></jsp:include>
 
-				</div>
-				
-				<div class="col-md-6">
+					</div>
 
-<jsp:include page="${request.contextPath}/dashboard/subTeamServiceType"></jsp:include>
+					<div class="col-md-6">
 
-				</div>
-				
-				<!-- /./ -->
+						<jsp:include
+							page="${request.contextPath}/dashboard/subTeamServiceType"></jsp:include>
 
-					
+					</div>
+
+					<!-- /./ -->
+
+
 				</div>
 				<!-- /.row -->
 			</section>
@@ -199,20 +218,29 @@
 	<%--         <jsp:include page="${request.contextPath}/cashsale/dialog"></jsp:include> --%>
 
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
-	 
-	 	<script src="<c:url value="/resources/adminltd/js/Chart.bundle.js" />"></script>
-	 
+
+	<script src="<c:url value="/resources/adminltd/js/Chart.bundle.js" />"></script>
+
+
+
+
+	<script
+		src="<c:url value="/resources/function/Dashboard/srvwiserevenue.js?ver=1229" />"></script>
+
+	<script
+		src="<c:url value="/resources/function/Dashboard/dashboard.js?ver=1229" />"></script>
 	
-	 
 	
-   	<script src="<c:url value="/resources/function/Dashboard/srvwiserevenue.js" />"></script>
-   	
-   	
-   	<script src="<c:url value="/resources/function/chart/bar/subTeamSolveUnsolve.js?a=527" />"></script>
-   	
-   	<script src="<c:url value="/resources/function/chart/bar/subTeamServieType.js?a=527" />"></script>
-   	
-   		<script src="<c:url value="/resources/function/firsttimepassword.js?verdt=527" />"></script>
-<%-- 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script> --%>
+	<script
+		src="<c:url value="/resources/function/chart/bar/subTeamSolveUnsolve.js?ver=1229" />"></script>
+
+	<script
+		src="<c:url value="/resources/function/chart/bar/subTeamServieType.js?ver=1229" />"></script>
+
+	<script
+		src="<c:url value="/resources/function/firsttimepassword.js?ver=1229" />"></script>
+	<%-- 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script> --%>
+
+
 </body>
 </html>

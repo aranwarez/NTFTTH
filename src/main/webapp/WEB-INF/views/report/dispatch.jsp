@@ -61,7 +61,7 @@
 							</div>
 							<!-- /.box-header -->
 							<div class="box-body">
-								<form method="post">
+								<form id="submit" method="post">
 									<div class="row">
 
 										<!--                                        from here -->

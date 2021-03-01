@@ -84,6 +84,7 @@
 											<th>Sub_Team_CODE</th>
 											<th>Description</th>
 											<th>TEAM</th>
+											<th>ACTIVE</th>
 											<th>Edit</th>
 											<th>Delete</th>
 
@@ -95,7 +96,8 @@
 											<tr>
 												<td>${user.SUB_TEAM_CODE}</td>																							
 												<td>${user.DESCRIPTION}</td>		
-												<td>${user.TEAM_CODE}</td>										
+												<td>${user.TEAM_CODE}</td>
+												<td>${user.ACTIVE_FLAG}</td>										
 												<td>
 													<div class="btn-group">
 														<a href="#" class="btn btn-info" data-toggle="modal"
@@ -162,7 +164,7 @@
 
 		})
 	</script>
-	<script src="<c:url value="/resources/function/subteam.js" />"></script>
+	<script src="<c:url value="/resources/function/subteam.js?ver=1231" />"></script>
     <script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 </body>

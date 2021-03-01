@@ -1,12 +1,11 @@
 ﻿(function($){$.fn.nepaliDatePicker = function(){this.each(function(){var id = $(this).attr('id'); $(this).addClass('ndp-nepali-calendar'); $(this).attr('onfocus', "showCalendarBox('" + id + "')"); $("body").append(calendarDivString); }); $('.ndp-nepali-calendar, #ndp-nepali-box').hover(function(){mouse_is_inside = true; }, function(){mouse_is_inside = false; }); $("html").mouseup(function(){if (!mouse_is_inside){hideCalendarBox(); }}); }; })(jQuery); var mouse_is_inside = false; var calendarDivString = '<div id="ndp-nepali-box" class="ndp-corner-all" style="display:none">'; calendarDivString += '<span id="ndp-target-id" style="display:none"></span>'; calendarDivString += '<div class="ndp-corner-all ndp-header">'; calendarDivString += '<a href="javascript:void(0)" id="prev" title="Previous Month" class="ndp-prev"></a>'; calendarDivString += '<a href="javascript:void(0)" id="next" title="Next Month" class="ndp-next"></a>'; calendarDivString += '<span id="currentMonth"></span>'; calendarDivString += '</div>'; calendarDivString += '<table>'; calendarDivString += '<tr class="ndp-days">'
         calendarDivString += '<th>आ</th>'; calendarDivString += '<th>सो</th>'; calendarDivString += '<th>मं</th>'; calendarDivString += '<th>बु</th>'; calendarDivString += '<th>बि</th>'; calendarDivString += '<th>शु</th>'; calendarDivString += '<th>श</th>'; calendarDivString += '</tr>'; calendarDivString += '</table>'; calendarDivString += '</div>'; function showCalendarBox(id){var val = $('#' + id).val(); $('#ndp-target-id').html(id); var idPosition = $('#' + id).offset(); $('#ndp-nepali-box').css('top', idPosition.top + $('#' + id).outerHeight()); $('#ndp-nepali-box').css('left', idPosition.left); showCalendar(val); }
 function setSelectedDay(value){
-if (typeof checkTransDt == 'function') {
-checkTransDt(value);
-}
-else{
 var ndp_target_id = $('#ndp-target-id').html(); $('#' + ndp_target_id).val(value); hideCalendarBox();
-}        }
+if (typeof checkTransDt == 'function') {
+	checkTransDt(value);
+}
+}
 function showCalendar(val){$("#ndp-nepali-box table").find("tr:gt(0)").remove(); if (val == ""){$('#ndp-nepali-box table').append(getDateTable('')); } else{$('#ndp-nepali-box table').append(getDateTable(val)); }
 if ($('#ndp-nepali-box').css('display') == 'block')$('#ndp-nepali-box').hide(); $('#ndp-nepali-box').fadeIn(100); var mouse_is_inside = false; }
 function getDateTable(date){if (date == ""){var currentNepaliDate = getNepaliDate(); var monthParameters = getMonthParameters(currentNepaliDate); var returnString = getDateRows(monthParameters[0], monthParameters[1], monthParameters[2], monthParameters[3], monthParameters[4]); return returnString; } else{var monthParameters = getMonthParameters(date); var returnString = getDateRows(monthParameters[0], monthParameters[1], monthParameters[2], monthParameters[3], monthParameters[4]); return returnString; }}

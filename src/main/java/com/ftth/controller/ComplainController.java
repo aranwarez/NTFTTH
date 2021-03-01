@@ -31,6 +31,7 @@ import com.model.UserInformationModel;
 import com.soap.dao.AAADao;
 import com.soap.dao.CPEAPI;
 import com.soap.dao.CRMSBalanceDao;
+import com.soap.dao.IPTV;
 
 @Controller
 public class ComplainController {
@@ -138,7 +139,7 @@ public class ComplainController {
 	public String Complainregister(String JSON, String Complain_no, String Remarks, String SRV_NO, String contactName,
 			String fdcname, String teamname, String Supervisorname, String SupervisorContno, String Teamleader,
 			String TeamleaderNo, Boolean solved, String CUSTOMER_NAME, String CONTACT_NO, String OLT_PORT,
-			String FAP_LOCATION, String FAP_PORT, String CPE_RX_LVL, Model model, Locale locale, HttpSession session)
+			String FAP_LOCATION, String FAP_PORT, String CPE_RX_LVL,String ODF_PORT, Model model, Locale locale, HttpSession session)
 			throws SQLException {
 		logger.info("Registering new service for", locale);
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
@@ -158,11 +159,11 @@ public class ComplainController {
 			if (solved) {
 				msg = dao.solveProblem(myObjects, "1", SRV_NO, Complain_no, contactName, Remarks, user.getUSER_ID(),
 						fdcname, teamname, Supervisorname, SupervisorContno, Teamleader, TeamleaderNo, CUSTOMER_NAME,
-						CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL);
+						CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL,ODF_PORT);
 			} else
 				msg = dao.saveProblem(myObjects, "1", SRV_NO, Complain_no, contactName, Remarks, user.getUSER_ID(),
 						fdcname, teamname, Supervisorname, SupervisorContno, Teamleader, TeamleaderNo, CUSTOMER_NAME,
-						CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL);
+						CONTACT_NO, OLT_PORT, FAP_LOCATION, FAP_PORT, CPE_RX_LVL,ODF_PORT);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -412,6 +413,76 @@ public class ComplainController {
 		}
 
 	}
+	
+	// IPTV detail information
+	@ResponseBody
+	@RequestMapping(value = "/complain/getIPTVDetail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String getIPTVDetail(String IPTV, Locale locale, Model model, HttpSession session) throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		IPTV obj= new IPTV();
+
+		try {
+			String msg = obj.getIPTVINFO(IPTV);
+			return msg;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+	
+	
+	// IPTV app detail information
+	@ResponseBody
+	@RequestMapping(value = "/complain/getIPTVAPPDETAIL", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String getIPTVAPPDETAIL(String IPTV, Locale locale, Model model, HttpSession session) throws SQLException {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		IPTV obj= new IPTV();
+
+		try {
+			String msg = obj.getIPTVAPPDETAIL(IPTV);
+			return msg;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+	
+	// IPTV Serial Number information from CRM
+		@ResponseBody
+		@RequestMapping(value = "/complain/getIPTVCPEMAP", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		public List<Map<String, String>> getIPTVCPEMAP(String CPE, Locale locale, Model model, HttpSession session) throws SQLException {
+			UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+
+			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+			if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+			}
+			CRMSBalanceDao obj=new CRMSBalanceDao();
+
+			try {
+				return obj.getIPTVID(CPE);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+
+		}
+
 
 
 	

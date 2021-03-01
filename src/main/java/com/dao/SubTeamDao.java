@@ -79,18 +79,19 @@ public class SubTeamDao {
     }
 	
 	
-	public String saveSubTeam(String SUB_TEAM_CODE, String DESCRIPTION,String TEAM_CODE, String USER) throws SQLException {
+	public String saveSubTeam(String SUB_TEAM_CODE, String DESCRIPTION,String TEAM_CODE, String USER,String ACTIVE_FLAG) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
 
-            String qry = "insert into m_sub_team (SUB_TEAM_CODE,DESCRIPTION,TEAM_CODE,CREATE_BY,CREATE_DT)\r\n" + 
-            		"values(?,?,?,?,sysdate)";
+            String qry = "insert into m_sub_team (SUB_TEAM_CODE,DESCRIPTION,TEAM_CODE,CREATE_BY,CREATE_DT,ACTIVE_FLAG)\r\n" + 
+            		"values(?,?,?,?,sysdate,?)";
 
             PreparedStatement pst = con.prepareStatement(qry);
             pst.setString(1, SUB_TEAM_CODE);            
             pst.setString(2, DESCRIPTION);
             pst.setString(3, TEAM_CODE); 
             pst.setString(4, USER);
+            pst.setString(5, ACTIVE_FLAG);
            
 
             pst.executeUpdate();
@@ -105,19 +106,20 @@ public class SubTeamDao {
             con.close();
         }
     }
-	public String updateSubTeam(String SUB_TEAM_CODE,String DESCRIPTION,String TEAM_CODE, String USER) throws SQLException {
+	public String updateSubTeam(String SUB_TEAM_CODE,String DESCRIPTION,String TEAM_CODE, String USER,String ACTIVE_FLAG) throws SQLException {
         Connection con = DbCon.getConnection();
         try {
 
-            String qry = "update m_sub_team set DESCRIPTION=?,TEAM_CODE=?,UPDATE_BY=?,UPDATE_DT=sysdate\r\n" + 
+            String qry = "update m_sub_team set DESCRIPTION=?,TEAM_CODE=?,UPDATE_BY=?,UPDATE_DT=sysdate,ACTIVE_FLAG=?\r\n" + 
             		"where SUB_TEAM_CODE=?";
 
             PreparedStatement pst = con.prepareStatement(qry);
 
             pst.setString(1, DESCRIPTION);        
             pst.setString(2, TEAM_CODE);            
-            pst.setString(3, USER);          
-            pst.setString(4, SUB_TEAM_CODE);
+            pst.setString(3, USER);      
+            pst.setString(4, ACTIVE_FLAG);
+            pst.setString(5, SUB_TEAM_CODE);
 
             pst.executeUpdate();
 

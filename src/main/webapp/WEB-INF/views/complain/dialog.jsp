@@ -29,10 +29,10 @@
 
 
 			<div class="modal-footer">
-				<button type="submit" class="btn btn-success pull-left"
+				<button type="submit" class="btn btn-success pull-left submitbutton"
 					onclick="PostRegister(true)">Solved</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary"
+				<button type="submit" class="btn btn-primary submitbutton"
 					onclick="PostRegister(false)">Register</button>
 
 			</div>
@@ -124,4 +124,39 @@
 	</div>
 </div>
 
+<!-- List all app detail -->
 
+<div class="modal fade" id="nettvappmodal" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel">
+
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="overlay">
+				<i class="fa fa-refresh fa-spin"></i>
+			</div>
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">NET TV APP Detail</h4>
+			</div>
+			
+			<div id="nettvappdetail" class="modal-body">
+
+				
+
+				
+
+			</div>
+
+
+			<div class="modal-footer">
+				
+				<button type="button" class="btn bg-red" data-dismiss="modal">Close</button>
+
+			</div>
+		</div>
+	</div>
+</div>
