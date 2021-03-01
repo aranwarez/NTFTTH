@@ -84,9 +84,10 @@
 											<option value="cpeSN">CPE Serial No.</option>
 											<option value="ftthDataNum">FTTH Data No.</option>
 											<option value="ftthVoiceNum">FTTH Voice No.</option>
+											<option value="IPTVNum">IP TV Number</option>
+											<option value="STBMAC">STB MAC ID</option>
 											<option value="custId">Customer ID</option>
 											<option value="contactNum">Contact No.</option>
-
 										</select>
 
 									</div>
@@ -952,7 +953,7 @@
 	<jsp:include page="${request.contextPath}/complain/dialog"></jsp:include>
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 	<script
-		src="<c:url value="/resources/function/Complain/NewComplain.js?ver=1229" />"></script>
+		src="<c:url value="/resources/function/Complain/NewComplain.js?ver=1231" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 

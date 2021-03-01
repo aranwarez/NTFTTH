@@ -91,7 +91,7 @@ public class SubTeamController {
 
 	    @RequestMapping(value = "/subteam/saveJS", method = RequestMethod.POST)
 	    @ResponseBody
-	    public String saveJSService(String SUB_TEAM_CODE, String DESCRIPTION,String TEAM_CODE,HttpServletRequest request, HttpSession session, Model model, Locale locale) throws SQLException {
+	    public String saveJSService(String SUB_TEAM_CODE, String DESCRIPTION,String TEAM_CODE,String ACTIVE_FLAG,HttpServletRequest request, HttpSession session, Model model, Locale locale) throws SQLException {
 
 	        logger.info("Save subteam {}.", locale);
 	        
@@ -113,7 +113,7 @@ public class SubTeamController {
 	        model.addAttribute("userName", "NEPal");
 	        String msg = null;
 	        try {
-	            msg = dao.saveSubTeam(SUB_TEAM_CODE,DESCRIPTION,TEAM_CODE,USER);
+	            msg = dao.saveSubTeam(SUB_TEAM_CODE,DESCRIPTION,TEAM_CODE,USER,ACTIVE_FLAG);
 	        } catch (SQLException e) {
 	            // TODO Auto-generated catch block
 	            e.printStackTrace();
@@ -124,9 +124,9 @@ public class SubTeamController {
 	    
 	    @RequestMapping(value = "/subteam/update", method = RequestMethod.POST)
 	    @ResponseBody
-	    public String updateService(String SUB_TEAM_CODE,String DESCRIPTION,String TEAM_CODE,HttpServletRequest request, HttpSession session, Model model, Locale locale) throws SQLException {
+	    public String updateService(String SUB_TEAM_CODE,String DESCRIPTION,String TEAM_CODE,String ACTIVE_FLAG,HttpServletRequest request, HttpSession session, Model model, Locale locale) throws SQLException {
 
-	        logger.info("Updata Service {}.", locale);
+	        logger.info("Updata Subteam {}.", locale);
 	        
 	    //  EDIT_FLAG
 	        
@@ -147,7 +147,7 @@ public class SubTeamController {
 	        model.addAttribute("userName", USER);
 	        String msg = null;
 	        try {
-	            msg = dao.updateSubTeam(SUB_TEAM_CODE, DESCRIPTION,TEAM_CODE, USER);
+	            msg = dao.updateSubTeam(SUB_TEAM_CODE, DESCRIPTION,TEAM_CODE, USER,ACTIVE_FLAG);
 	        } catch (SQLException e) {
 	            // TODO Auto-generated catch block
 	            e.printStackTrace();

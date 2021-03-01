@@ -442,7 +442,7 @@
 
 
 	<script
-		src="<c:url value="/resources/function/Complain/TroubleTickets.js?ver=1229" />"></script>
+		src="<c:url value="/resources/function/Complain/TroubleTickets.js?version=201234" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 	<script>

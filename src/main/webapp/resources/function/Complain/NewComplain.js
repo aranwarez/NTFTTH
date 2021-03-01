@@ -1042,7 +1042,7 @@ function getIPTVDetail(){
         // global: false,
          type: 'get',
          data: {CPE:$('#CPEserial').html()},
-        async: false, // blocks window close
+ //       async: false, // blocks window close
          success: function(response) {
 // console.log(response);
         	 if(response.length==0){
@@ -1075,7 +1075,7 @@ function fillIPTVdetail(sno){
        // global: false,
         type: 'get',
         data: {IPTV:sno.toString()},
-       async: false, // blocks window close
+ //      async: false, // blocks window close
         success: function(response) {
        // console.log(response);
 //        	debugger;
@@ -1151,7 +1151,7 @@ function fillIPTVappdetail(sno){
        // global: false,
         type: 'get',
         data: {IPTV:sno.toString()},
-       async: false, // blocks window close
+   //    async: false, // blocks window close
         success: function(response) {
        	 console.log(response);
        	
@@ -1160,6 +1160,9 @@ function fillIPTVappdetail(sno){
 		 $('#nettvappdetail').empty();
 			var div="";
 				var count= 1;
+				if(typeof (response.stats)=='undefined'){
+					return;
+				}
 	   	 $.each(response.stats.app_details, function (index, value) {
        		 div=div+'<div class="col-md-6"><table class="table table-condensed"><tbody>';						
  			

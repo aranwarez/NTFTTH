@@ -3,8 +3,10 @@ var glbUser;
 var token_id;
 var closeflag;
 var closeticketarray;
+var subteam_id;
 $(document).ready(
 		function() {
+			$.fn.dataTable.ext.errMode = 'none';
 			if (getURLParameter('token_id') != null
 					&& getURLParameter('token_id').length > 0) {
 				getTokenDetailbyID(getURLParameter('token_id'));
@@ -38,17 +40,17 @@ function getTokenDetailbyID(token) {
 													+ 'Y'
 													+ '\');"> <i class="fa fa-trash"></i>Resolved</button>';
 											var forwardflag = '<button type="button" title="Forward" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
-													+ value.SUB_TOKEN_ID
-													+ '\')"> <i class="fa fa-mail-forward"></i>Fordward</button>';
+												+ value.SUB_TOKEN_ID
+												+ '\');subteam_id=(\''
+												+ value.SUB_TEAM_CODE
+												+ '\');"> <i class="fa fa-mail-forward"></i>Fordward</button>';
 											if (value.SOLVE_FLAG == 'Y') {
 												solveflag = '<button type="button" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
 														+ value.SUB_TOKEN_ID
 														+ '\');closeflag=(\''
 														+ 'C'
 														+ '\');"> <i class="fa fa-trash"></i> Close</button>';
-												forwardflag = '<button type="button" title="Forward" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
-													+ value.SUB_TOKEN_ID
-													+ '\')"> <i class="fa fa-mail-forward"></i>Fordward</button>';
+												
 										
 											} else if (value.SOLVE_FLAG == 'C') {
 												solveflag = 'Closed-';
@@ -313,16 +315,16 @@ function fetchView() {
 													+ '\');"> <i class="fa fa-trash"></i>Resolved</button>';
 											var forwardflag = '<button type="button" title="Forward" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
 													+ value.SUB_TOKEN_ID
-													+ '\')"> <i class="fa fa-mail-forward"></i>Fordward</button>';
+													+ '\');subteam_id=(\''
+													+ value.SUB_TEAM_CODE
+													+ '\');"> <i class="fa fa-mail-forward"></i>Fordward</button>';
 											if (value.SOLVE_FLAG == 'Y') {
 												solveflag = '<button type="button" class="btn bg-red" data-toggle="modal" data-target="#deleteModal" onclick="token_id=(\''
 														+ value.SUB_TOKEN_ID
 														+ '\');closeflag=(\''
 														+ 'C'
 														+ '\');"> <i class="fa fa-trash"></i> Close</button>';
-												forwardflag = '<button type="button" title="Forward" class="btn bg-purple" data-toggle="modal" data-target="#myModal" onclick="token_id=(\''
-														+ value.SUB_TOKEN_ID
-														+ '\')"> <i class="fa fa-mail-forward"></i>Fordward</button>';
+												
 											} else if (value.SOLVE_FLAG == 'C') {
 												solveflag = 'Closed-';
 												forwardflag = "";
@@ -369,10 +371,11 @@ function getSubTeamList() {
 		select.find('option').remove();
 		$('<option>').val("").text("SELECT Sub Team ").appendTo(select);
 		$.each(response, function(index, value) {
+			if(value.ACTIVE_FLAG==='Y'){
 			$('<option>').val(value.SUB_TEAM_CODE).text(
 					value.DESCRIPTION + '-' + value.SUB_TEAM_CODE).appendTo(
 					select);
-
+			}
 		});
 
 	});
@@ -383,6 +386,12 @@ function ForwardTeam() {
 		alert('Warning Sub team is invalid or remark length exceeded!!!');
 		return false;
 	}
+	if (subteam_id===$('#SUB_TEAM_CODE').val()) {
+		alert('Warning: Cant forward to same team. Select Different Team');
+		return false;
+	}
+	
+	
 
 	$.post('../troubleticket/Forward', {
 		Remarks : $('#remarks').val(),

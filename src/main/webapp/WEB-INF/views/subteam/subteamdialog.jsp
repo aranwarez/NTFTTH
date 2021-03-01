@@ -37,6 +37,13 @@
                                                 
                         </select>        
                     </div>
+                    <div class="form-group">
+                        <label for="ACTIVE_FLAG">ACTIVE_FLAG</label> 
+                        <select  name="ACTIVE_FLAG" id="ACTIVE_FLAG" class="form-control chosen-select" style="width:350px;">
+                                                <option value="Y">Yes</option>
+                                                <option value="N">No</option>
+                        </select>        
+                    </div>
                     
                     
                     
@@ -82,6 +89,13 @@
                         <label for="TEAM_CODE">TEAM_CODE</label> 
                         <select  name="EDITTEAM_CODE" id="EDITTEAM_CODE" class="form-control chosen-select" style="width:350px;">
                                                 
+                        </select>        
+                    </div>
+                    <div class="form-group">
+                        <label for="ACTIVE_FLAG">ACTIVE_FLAG</label> 
+                        <select  name="ACTIVE_FLAG" id="EDITACTIVE_FLAG" class="form-control chosen-select" style="width:350px;">
+                                                <option value="Y">Yes</option>
+                                                <option value="N">No</option>
                         </select>        
                     </div>
                  
