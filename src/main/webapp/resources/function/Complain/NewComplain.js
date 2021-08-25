@@ -206,7 +206,7 @@ function getAAAstatus(){
 		$.get('../complain/getAAAstatus1', {
 		FTTHDatanum : datanum
 			}, function(response) {
-				console.log(response);
+			//	console.log(response);
 				$('#planAAA').html(response.plan);
 				$('#calleridAAA').html(response.fcallerid);
 				$('#loginIPAAA').html(response.loginip);
@@ -264,7 +264,8 @@ function getAAAAuthenticationlog(){
 					}
 					else result=value.result;
 				      
-				      
+//check  if data is for current seleted year from date picker
+					if(value.accesstime.substr(0,4)==asd.substr(0,4)){
 					$("#AAAviewlogtable")
 					.dataTable()
 					.fnAddData(
@@ -272,9 +273,8 @@ function getAAAAuthenticationlog(){
 								value.accesstime,
 								value.calling_station_id,
 								result
-								 ]);
-					
-					
+								 ]);	
+					}
 				});
 				
 			});
@@ -314,21 +314,24 @@ function getAAAAccountinglog(){
 						
 					}
 					else result="Other";
-				      
-				     
-					$("#AAAviewlogtable")
-					.dataTable()
-					.fnAddData(
-							[
-								jsondatetonormale(value.starttime)
-								,
-								jsondatetonormale(value.stoptime),
-								gettimediff(value.starttime,value.stoptime),
-								
-								(Number(value.total_volume)/(1024*1024)).toFixed(2),
-								result
-								 ]);
-					
+				    //checking date year from input parameter
+					var currentTime = new Date(value.starttime);
+					var year = currentTime.getFullYear();
+					if (year == asd.substr(0, 4)) {
+
+						$("#AAAviewlogtable")
+							.dataTable()
+							.fnAddData(
+								[
+									jsondatetonormale(value.starttime)
+									,
+									jsondatetonormale(value.stoptime),
+									gettimediff(value.starttime, value.stoptime),
+
+									(Number(value.total_volume) / (1024 * 1024)).toFixed(2),
+									result
+								]);
+					}
 					
 				});
 				
@@ -407,12 +410,23 @@ function getSubsInfo(subsinfo) {
 				
 			});	 
 			
-			// getting CRMS balance resource
-getservicestatus(value.serviceNumber,index);
-// getting balance;
-getCRMSServiceBalance(value.serviceNumber,index);
-// getting resource FRi date
-getQueryFreeResource(value.serviceNumber,index);
+				// getting CRMS balance resource
+				getservicestatus(value.serviceNumber, index);
+				// getting balance;
+				getCRMSServiceBalance(value.serviceNumber, index);
+				// getting resource FRi date
+				getQueryFreeResource(value.serviceNumber, index);
+				//getting STB serial number for NTTV case only
+				if (value.serviceNumber.substr(0, 4) === 'NTTV') {
+					//adding delay so we can get this label at last
+					var delayInMilliseconds = 500; //0.5 second
+					setTimeout(function() {
+						getSTBSerialNofromIPTV(value.serviceNumber, index);
+					}, delayInMilliseconds);
+					
+				}
+
+
 
 			 });	
 			
@@ -905,6 +919,21 @@ function getservicestatus(serviceNo,index){
      });
 	
 }
+
+
+function getSTBSerialNofromIPTV(serviceNo, index) {
+	$.get('../complain/getSTBfrmIPTV', {
+		IPTV: serviceNo
+	}, function(response) {
+		try {
+			$('#subsinfotable'  + index + ' tr:last').after('<tr><td><label>STB SNO FROM NT CRM</label></td><td>' + response + '</td></tr>');
+		} catch (e) { console.log(e); }
+	});
+
+}
+	
+
+
 
 
 function refreshtmsstatus(){

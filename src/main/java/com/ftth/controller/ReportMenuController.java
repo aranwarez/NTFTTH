@@ -117,5 +117,52 @@ public class ReportMenuController {
 		return "report/complainsummary";
 
 	}
+	
+	
+	@RequestMapping(value = "/report/newreport", method = RequestMethod.GET)
+	public String newreports(Locale locale, Model model, HttpServletRequest request) throws Exception {
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		logger.info("/complain-summary/report by user" + user.getUSER_ID(), locale);
+
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), "../report/complainsummary");
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
+
+		RegionDao dao = new RegionDao();
+		List<Region> regionlist = null;
+
+		CommonDateDao DAT = new CommonDateDao();
+		TeamDao teamdao = new TeamDao();
+		MServiceTypeDao ServiceTypedao= new MServiceTypeDao();
+		List<Map<String, Object>> servicetypelist=null;
+	
+		List<Map<String, Object>> webteamlist = null;
+		List<Map<String, Object>> levelcontrollist = null;
+
+		try {
+			regionlist = dao.getlistByUserFDC(user.getUSER_ID(), user.getUSER_LEVEL());
+			servicetypelist=ServiceTypedao.getServiceTypeList();
+			webteamlist = teamdao.getWebTeamList();
+
+			model.addAttribute("Date_list", DAT.getDateList());
+			model.addAttribute("webteamlist", webteamlist);
+
+			levelcontrollist = UserDao.getUserDetailByOfficeCode(user.getOFFICE_CODE());
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		model.addAttribute("fx", "FTTH Customized Report");
+		model.addAttribute("regionlist", regionlist);
+		model.addAttribute("servicetypelist", servicetypelist);
+		model.addAttribute("USER_LEVEL", user.getUSER_LEVEL());
+		model.addAttribute("levelcontrollist", levelcontrollist);
+
+		return "report/Newreports";
+
+	}
 
 }

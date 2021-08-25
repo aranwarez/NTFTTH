@@ -217,6 +217,10 @@ public class ReportController {
 			filterparam = filterparam + "TO_MONTH : " + request.getParameter("TO_MONTH").toString();
 			parameters.put("pm_to_month", request.getParameter("TO_MONTH"));
 		}
+		if (request.getParameter("pm_within_days") != null) {
+			filterparam = filterparam + "Within days : " + request.getParameter("pm_within_days").toString();
+			parameters.put("pm_within_days", request.getParameter("pm_within_days"));
+		}
 
 		if (request.getParameter("QFROM_DT") != null && !request.getParameter("QFROM_DT").isEmpty()) {
 			Date FROM_DATE = CommonDateDao.convertDateAD(request.getParameter("QFROM_DT"));

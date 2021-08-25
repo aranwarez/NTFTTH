@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="UserReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="fc565034-ab42-4130-b62c-636f311996c0">
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.10.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="UserReport" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="fc565034-ab42-4130-b62c-636f311996c0">
 	<property name="ireport.zoom" value="3.5369215365000035"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="373"/>
@@ -52,71 +52,104 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select WU.*,(SELECT LISTAGG (SUB_TEAM_CODE, '/') WITHIN GROUP (ORDER BY SUB_TEAM_CODE)
+		<![CDATA[select WU.*,
+(case WU.USER_LEVEL
+when 1 then 'SUPER'
+when 2 then 'REGION'
+when 3 then 'ZONE'
+when 4 then 'DISTRICT'
+when 5 then 'OFFICE'
+when 6 then 'CUSTOMIZED'
+else 'X' end )USER_LVL,
+(select M_OFFICE.DESCRIPTION from M_OFFICE where M_OFFICE.OFFICE_CODE=WU.OFFICE_CODE ) MAIN_OFFICE 
+,(SELECT LISTAGG (SUB_TEAM_CODE, '/') WITHIN GROUP (ORDER BY SUB_TEAM_CODE)
         FROM WEB_USER_TEAM_MAP  where user_id=WU.user_id) subteam
 ,(SELECT LISTAGG (MO.DESCRIPTION, '/') WITHIN GROUP (ORDER BY MO.OFFICE_CODE)
         FROM WEB_USER_OFFICE_MAP WUOM,M_OFFICE MO where WUOM.OFFICE_CODE = MO.OFFICE_CODE and WUOM.user_id=WU.user_id) office        
- from WEB_USER WU order by wu.user_id
-
-
-
-]]>
+ from WEB_USER WU order by wu.user_id]]>
 	</queryString>
 	<field name="USER_ID" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="USER_ID"/>
 		<property name="com.jaspersoft.studio.field.label" value="USER_ID"/>
 	</field>
 	<field name="FULL_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FULL_NAME"/>
 		<property name="com.jaspersoft.studio.field.label" value="FULL_NAME"/>
 	</field>
 	<field name="PASSWORD" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PASSWORD"/>
 		<property name="com.jaspersoft.studio.field.label" value="PASSWORD"/>
 	</field>
 	<field name="EMPLOYEE_CODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="EMPLOYEE_CODE"/>
 		<property name="com.jaspersoft.studio.field.label" value="EMPLOYEE_CODE"/>
 	</field>
 	<field name="LOCK_FLAG" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LOCK_FLAG"/>
 		<property name="com.jaspersoft.studio.field.label" value="LOCK_FLAG"/>
 	</field>
 	<field name="SUPER_FLAG" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SUPER_FLAG"/>
 		<property name="com.jaspersoft.studio.field.label" value="SUPER_FLAG"/>
 	</field>
 	<field name="DISABLE_FLAG" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DISABLE_FLAG"/>
 		<property name="com.jaspersoft.studio.field.label" value="DISABLE_FLAG"/>
 	</field>
 	<field name="LOCATION_CODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LOCATION_CODE"/>
 		<property name="com.jaspersoft.studio.field.label" value="LOCATION_CODE"/>
 	</field>
 	<field name="USER_LEVEL" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="USER_LEVEL"/>
 		<property name="com.jaspersoft.studio.field.label" value="USER_LEVEL"/>
 	</field>
 	<field name="ROLE_CODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ROLE_CODE"/>
 		<property name="com.jaspersoft.studio.field.label" value="ROLE_CODE"/>
 	</field>
 	<field name="OFFICE_CODE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="OFFICE_CODE"/>
 		<property name="com.jaspersoft.studio.field.label" value="OFFICE_CODE"/>
 	</field>
 	<field name="MOBILE_NO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MOBILE_NO"/>
 		<property name="com.jaspersoft.studio.field.label" value="MOBILE_NO"/>
 	</field>
 	<field name="CREATED_BY" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CREATED_BY"/>
 		<property name="com.jaspersoft.studio.field.label" value="CREATED_BY"/>
 	</field>
 	<field name="CREATED_DATE" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="CREATED_DATE"/>
 		<property name="com.jaspersoft.studio.field.label" value="CREATED_DATE"/>
 	</field>
 	<field name="UPDATE_BY" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UPDATE_BY"/>
 		<property name="com.jaspersoft.studio.field.label" value="UPDATE_BY"/>
 	</field>
 	<field name="UPDATE_DT" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="UPDATE_DT"/>
 		<property name="com.jaspersoft.studio.field.label" value="UPDATE_DT"/>
 	</field>
 	<field name="PASS_UPDATE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PASS_UPDATE"/>
 		<property name="com.jaspersoft.studio.field.label" value="PASS_UPDATE"/>
 	</field>
+	<field name="USER_LVL" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="USER_LVL"/>
+		<property name="com.jaspersoft.studio.field.label" value="USER_LVL"/>
+	</field>
+	<field name="MAIN_OFFICE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MAIN_OFFICE"/>
+		<property name="com.jaspersoft.studio.field.label" value="MAIN_OFFICE"/>
+	</field>
 	<field name="SUBTEAM" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SUBTEAM"/>
 		<property name="com.jaspersoft.studio.field.label" value="SUBTEAM"/>
 	</field>
 	<field name="OFFICE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OFFICE"/>
 		<property name="com.jaspersoft.studio.field.label" value="OFFICE"/>
 	</field>
 	<background>
@@ -156,14 +189,14 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA['Print By: '+$P{pm_user}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Print By: "+$P{pm_user}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy h.mm a">
 				<reportElement x="557" y="37" width="208" height="15" uuid="cc2ab8c8-e24a-403a-9593-61b95f882f4c"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA['Print Dt:' +new java.util.Date()]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Print Dt:" +new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="1" y="69" width="802" height="1" uuid="2c30fc61-d9ec-4cf6-826a-d08b4ffa57a1"/>
@@ -171,53 +204,68 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="31">
+		<band height="21">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
-				<reportElement x="0" y="0" width="102" height="30" uuid="37455727-6757-4039-a300-dd6c1ad755f5">
+				<reportElement x="0" y="0" width="102" height="20" uuid="37455727-6757-4039-a300-dd6c1ad755f5">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e28c18b-4ce5-47b6-af48-3bc450bcb480"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<text><![CDATA[USER_ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="102" y="0" width="100" height="30" uuid="4bbd0d60-9399-43ec-9684-800e9e2e7daf">
+				<reportElement x="102" y="0" width="100" height="20" uuid="4bbd0d60-9399-43ec-9684-800e9e2e7daf">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2de9c4bb-122e-4c63-ba46-443f54cfaf39"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<text><![CDATA[FULL_NAME]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="202" y="0" width="58" height="30" uuid="0380b7e9-35d9-4e5d-b08f-bcb25e7775f3">
+				<reportElement x="202" y="0" width="58" height="20" uuid="0380b7e9-35d9-4e5d-b08f-bcb25e7775f3">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cd0abbba-af90-450d-b39f-9bc46ab8ecd8"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<text><![CDATA[USER_LVL]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="260" y="0" width="100" height="30" uuid="f8801434-140a-4d71-93d1-aa5c673bf55e">
+				<reportElement x="327" y="0" width="60" height="20" uuid="f8801434-140a-4d71-93d1-aa5c673bf55e">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e28821e4-38d4-492d-9b9c-588ac8eeb1c2"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<text><![CDATA[ROLE_CODE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="361" y="0" width="100" height="30" uuid="5afa513a-eb43-4fb8-84ce-a8ceae7dba99">
+				<reportElement x="390" y="0" width="71" height="20" uuid="5afa513a-eb43-4fb8-84ce-a8ceae7dba99">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="85354b08-a4e7-4fe6-ac53-8345c251699b"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<text><![CDATA[MOBILE_NO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="462" y="0" width="100" height="30" uuid="ea1ec0c9-22e9-4937-a9ee-0afd04339eac">
+				<reportElement x="462" y="0" width="100" height="20" uuid="ea1ec0c9-22e9-4937-a9ee-0afd04339eac">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e02581c0-4930-46b5-a65c-b9d680845bb9"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<text><![CDATA[SUBTEAM]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="568" y="0" width="212" height="30" uuid="d4f8e6ff-05c0-441d-9a87-d8fff71835cb">
+				<reportElement x="568" y="0" width="212" height="20" uuid="d4f8e6ff-05c0-441d-9a87-d8fff71835cb">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a2c9dbdd-2279-4326-86a3-a153db6f8e49"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<text><![CDATA[OFFICE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="261" y="1" width="66" height="20" uuid="e903e930-ecfe-4e7b-9897-3643196f5a27">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e28821e4-38d4-492d-9b9c-588ac8eeb1c2"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[MAIN OFFICE]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Immediate">
+		<band height="21" splitType="Immediate">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField>
 				<reportElement x="0" y="0" width="102" height="20" uuid="0c36b175-9e50-4948-a70f-3c04299ddc6d">
@@ -245,10 +293,10 @@
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{USER_LEVEL}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{USER_LVL}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="260" y="0" width="100" height="20" uuid="c0da5c86-058a-4d73-b2a6-f0ad75c8679b">
+				<reportElement x="327" y="0" width="60" height="20" uuid="c0da5c86-058a-4d73-b2a6-f0ad75c8679b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e28821e4-38d4-492d-9b9c-588ac8eeb1c2"/>
 				</reportElement>
 				<textElement>
@@ -257,7 +305,7 @@
 				<textFieldExpression><![CDATA[$F{ROLE_CODE}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="361" y="0" width="100" height="20" uuid="aafd6c36-c628-41ee-97e2-88389f36483e">
+				<reportElement x="390" y="0" width="71" height="20" uuid="aafd6c36-c628-41ee-97e2-88389f36483e">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="85354b08-a4e7-4fe6-ac53-8345c251699b"/>
 				</reportElement>
 				<textElement>
@@ -265,7 +313,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{MOBILE_NO}]]></textFieldExpression>
 			</textField>
-			<textField textAdjust="StretchHeight">
+			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToTallestObject" x="462" y="0" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="3cf07e56-f65f-4108-bc55-e6ca66f0441d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e02581c0-4930-46b5-a65c-b9d680845bb9"/>
 				</reportElement>
@@ -274,7 +322,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{SUBTEAM}]]></textFieldExpression>
 			</textField>
-			<textField textAdjust="StretchHeight">
+			<textField isStretchWithOverflow="true">
 				<reportElement key="" stretchType="RelativeToTallestObject" x="568" y="0" width="212" height="20" isPrintWhenDetailOverflows="true" uuid="59aa5d45-46ef-41c1-be24-25274f5535a5">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a2c9dbdd-2279-4326-86a3-a153db6f8e49"/>
 				</reportElement>
@@ -282,6 +330,15 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{OFFICE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="1" width="67" height="20" uuid="34a3eaec-600b-4246-926e-bf9419d4ca00">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cd0abbba-af90-450d-b39f-9bc46ab8ecd8"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MAIN_OFFICE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
