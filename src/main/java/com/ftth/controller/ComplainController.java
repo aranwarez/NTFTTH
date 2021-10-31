@@ -326,7 +326,7 @@ public class ComplainController {
 
 	@ResponseBody
 	@RequestMapping(value = "/complain/getCRMSQueryFreeResource", method = RequestMethod.GET)
-	public String getCRMSQueryFreeResource(String MDN, Locale locale, Model model, HttpSession session)
+	public String getCRMSQueryFreeResource(String MDN,String FUP, Locale locale, Model model, HttpSession session)
 			throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
@@ -336,7 +336,7 @@ public class ComplainController {
 		CRMSBalanceDao cbd = new CRMSBalanceDao();
 
 		try {
-			String msg = cbd.getMDNQueryFreeResource(MDN);
+			String msg = cbd.getMDNQueryFreeResource(MDN,FUP);
 			return msg;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
