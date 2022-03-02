@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +18,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.dao.ProfileDao;
 import com.dashboard.dao.dashboardquery;
+import com.model.CDRDATAModel;
 import com.model.UserInformationModel;
+import com.soap.dao.CRMSBalanceDao;
 
 /**
  * Handles requests for the application home page.
@@ -43,40 +47,43 @@ public class DashboardController {
 
 	@ResponseBody
 	@RequestMapping(value = "/charts/srvreveneue", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Map<String, Object>> srvwiserevenue(Locale locale, Model model, HttpSession session,String fromdate,String todate)
-			throws SQLException {
+	public List<Map<String, Object>> srvwiserevenue(Locale locale, Model model, HttpSession session, String fromdate,
+			String todate) throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		Map<String, String> regionmap=	ProfileDao.getSessionRegion(user.getUSER_ID(), user.getUSER_LEVEL());
+		Map<String, String> regionmap = ProfileDao.getSessionRegion(user.getUSER_ID(), user.getUSER_LEVEL());
 		dashboardquery dao = new dashboardquery();
-		return dao.getTicketwiseTeam(user.getUSER_ID(), user.getUSER_LEVEL(),regionmap.get("Region"),regionmap.get("Zone"),regionmap.get("District"),regionmap.get("Office"),fromdate,todate );
+		return dao.getTicketwiseTeam(user.getUSER_ID(), user.getUSER_LEVEL(), regionmap.get("Region"),
+				regionmap.get("Zone"), regionmap.get("District"), regionmap.get("Office"), fromdate, todate);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/charts/srvpayable", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Map<String, Object>> srvwisepayable(Locale locale, Model model, HttpSession session,String fromdate,String todate)
-			throws SQLException {
+	public List<Map<String, Object>> srvwisepayable(Locale locale, Model model, HttpSession session, String fromdate,
+			String todate) throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
-		
+
 		dashboardquery dao = new dashboardquery();
-		Map<String, String> regionmap=	ProfileDao.getSessionRegion(user.getUSER_ID(), user.getUSER_LEVEL());
-		return dao.getSRVwiseTeam(user.getUSER_ID(), user.getUSER_LEVEL(),regionmap.get("Region"),regionmap.get("Zone"),regionmap.get("District"),regionmap.get("Office"),fromdate,todate );
+		Map<String, String> regionmap = ProfileDao.getSessionRegion(user.getUSER_ID(), user.getUSER_LEVEL());
+		return dao.getSRVwiseTeam(user.getUSER_ID(), user.getUSER_LEVEL(), regionmap.get("Region"),
+				regionmap.get("Zone"), regionmap.get("District"), regionmap.get("Office"), fromdate, todate);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/charts/srvmonthly", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Map<String, Object>> srvwisemonthly(Locale locale, Model model, HttpSession session,String fromdate,String todate)
-			throws SQLException {
+	public List<Map<String, Object>> srvwisemonthly(Locale locale, Model model, HttpSession session, String fromdate,
+			String todate) throws SQLException {
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 
 		dashboardquery dao = new dashboardquery();
-		Map<String, String> regionmap=	ProfileDao.getSessionRegion(user.getUSER_ID(), user.getUSER_LEVEL());
-		return dao.getSolvedvsUnsovled(user.getUSER_ID(), user.getUSER_LEVEL(),regionmap.get("Region"),regionmap.get("Zone"),regionmap.get("District"),regionmap.get("Office"),fromdate,todate );
+		Map<String, String> regionmap = ProfileDao.getSessionRegion(user.getUSER_ID(), user.getUSER_LEVEL());
+		return dao.getSolvedvsUnsovled(user.getUSER_ID(), user.getUSER_LEVEL(), regionmap.get("Region"),
+				regionmap.get("Zone"), regionmap.get("District"), regionmap.get("Office"), fromdate, todate);
 	}
 
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET, value = "bar-charts/subTeamSolveUnsolve", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Map<String, Object>> subTeamSolveUnsolve(HttpServletRequest request, HttpSession session,String fromdate,String todate)
-			throws SQLException {
+	public List<Map<String, Object>> subTeamSolveUnsolve(HttpServletRequest request, HttpSession session,
+			String fromdate, String todate) throws SQLException {
 
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 
@@ -87,16 +94,18 @@ public class DashboardController {
 //		String FROM_DT = request.getParameter("FROM_DT");
 //		String TO_DT = request.getParameter("TO_DT");
 
-		//return dao.subTeamSolveUnsolve(user.getUSER_ID(), SUB_TEAM_CODE, SERVICE_TYPE_ID, FROM_DT, TO_DT);
+		// return dao.subTeamSolveUnsolve(user.getUSER_ID(), SUB_TEAM_CODE,
+		// SERVICE_TYPE_ID, FROM_DT, TO_DT);
 
-		Map<String, String> regionmap=	ProfileDao.getSessionRegion(user.getUSER_ID(), user.getUSER_LEVEL());
-		return dao.subTeamSolveUnsolve(user.getUSER_ID(), user.getUSER_LEVEL(),regionmap.get("Region"),regionmap.get("Zone"),regionmap.get("District"),regionmap.get("Office"),fromdate,todate );
+		Map<String, String> regionmap = ProfileDao.getSessionRegion(user.getUSER_ID(), user.getUSER_LEVEL());
+		return dao.subTeamSolveUnsolve(user.getUSER_ID(), user.getUSER_LEVEL(), regionmap.get("Region"),
+				regionmap.get("Zone"), regionmap.get("District"), regionmap.get("Office"), fromdate, todate);
 	}
 
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET, value = "bar-charts/subTeamServiceType", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Map<String, Object>> subTeamServiceType(HttpServletRequest request, HttpSession session,String fromdate,String todate)
-			throws SQLException {
+	public List<Map<String, Object>> subTeamServiceType(HttpServletRequest request, HttpSession session,
+			String fromdate, String todate) throws SQLException {
 
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 
@@ -107,10 +116,25 @@ public class DashboardController {
 //		String FROM_DT = request.getParameter("FROM_DT");
 //		String TO_DT = request.getParameter("TO_DT");
 
-	//	return dao.subTeamServiceType(user.getUSER_ID(), SUB_TEAM_CODE, SERVICE_TYPE_ID, FROM_DT, TO_DT);
-		Map<String, String> regionmap=	ProfileDao.getSessionRegion(user.getUSER_ID(), user.getUSER_LEVEL());
-		return dao.subTeamServiceType(user.getUSER_ID(), user.getUSER_LEVEL(),regionmap.get("Region"),regionmap.get("Zone"),regionmap.get("District"),regionmap.get("Office"),fromdate,todate );
-	
+		// return dao.subTeamServiceType(user.getUSER_ID(), SUB_TEAM_CODE,
+		// SERVICE_TYPE_ID, FROM_DT, TO_DT);
+		Map<String, String> regionmap = ProfileDao.getSessionRegion(user.getUSER_ID(), user.getUSER_LEVEL());
+		return dao.subTeamServiceType(user.getUSER_ID(), user.getUSER_LEVEL(), regionmap.get("Region"),
+				regionmap.get("Zone"), regionmap.get("District"), regionmap.get("Office"), fromdate, todate);
+
+	}
+
+	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET, value = "bar-charts/getCDRDATA", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<CDRDATAModel> getCDRDATA(HttpServletRequest request, HttpSession session, String fromdate,
+			String todate) throws Exception {
+		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+		if (user.getUSER_ID() == null) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+		}
+		CRMSBalanceDao dao = new CRMSBalanceDao();
+		return dao.getCDRDATA(request.getParameter("DATANUMBER"));
+
 	}
 
 }

@@ -481,6 +481,14 @@
 												<td><label>Name</label></td>
 													<td><span id="iptv_pkg_name"></span></td>
 											</tr>
+											<tr>
+												<td><label class="label-info" >Stats</label></td>
+											
+											</tr>
+											<tr>
+												<td><label>Private IP</label></td>
+													<td><span id="iptv_stats_private_ip"></span></td>
+											</tr>
 											
 											
 <!-- 											from another api , app details -->
@@ -578,6 +586,11 @@
 								<button type="button" class="btn bg-green" data-toggle="modal"
 									data-target="#AAAstatusModal">
 									<i class="fa fa-times"></i>View log
+								</button>
+								
+								<button type="button" class="btn bg-purple" data-toggle="modal"
+									data-target="#WifiModal">
+									<i class="fa fa-wifi"></i>Change Wifi Setting
 								</button>
 <!-- 								<a href="#" class="btn btn-primary pull-right" -->
 <!-- 									data-toggle="modal" data-target="#AAAstatusModal"> <i -->
@@ -911,9 +924,47 @@
 
 					<!-- 	  end				team row -->
 
+					
+					<!-- 					CDRDATA row -->
+					<div class="col-md-12">
+
+						<!-- AREA CHART -->
+						<div class="box box-primary collapsed-box">
+							<div class="box-header with-border">
+								<h3 class="box-title">
+									<i class="fa fa-pie-chart"></i> CDR DATA Information
+								</h3>
+								
+								
+
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="collapse">
+										<i class="fa fa-plus"></i>
+									</button>
+									<button type="button" class="btn btn-box-tool"
+										onclick="removeoldcanvas('CDRDATA','div_CDRDATA');tickettypevssubtype(datanum)">
+										<i class="fa fa-refresh"></i>
+									</button>
+								</div>
+							</div>
+							<div class="overlay" id="CDRDATAoverlay">
+								<i class="fa fa-refresh fa-spin"></i>
+							</div>
+							<div id="divforCDRDATA" class="box-body">
+							<div id="div_CDRDATA" class="chart">
+								<canvas id="CDRDATA" width="800" height="200"></canvas>
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+
+
+					</div>
 
 
 
+					<!-- 	  end				CDRDATA row -->
 
 
 				</div>
@@ -955,6 +1006,12 @@
 	<script
 		src="<c:url value="/resources/function/Complain/NewComplain.js?ver=1231" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
+	
+	<script src="<c:url value="/resources/adminltd/js/Chart.bundle.js" />"></script>
+	
+	<script
+		src="<c:url value="/resources/function/chart/bar/CDRDATA.js" />"></script>
+	
 
 
 

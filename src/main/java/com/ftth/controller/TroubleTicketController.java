@@ -112,16 +112,28 @@ public class TroubleTicketController {
 		
 //		String REGION_CODE = request.getParameter("REGION_CODE");
 		
+		//getting english date from nepali date
+		List<String> engdate=null;
+		CommonController getengdate=new CommonController();
+		try {
+			engdate=	getengdate.Englishdate(FRM_DT, TO_DT, null, session);
+					} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		
 		
 		List<Map<String, Object>> list = null;
 		ComplainDao dao=new ComplainDao();
 		
 		try {
 			if(user.getUSER_LEVEL().equals("6")) {
-			list = dao.getComplainListlowlvl(user.getUSER_ID(), REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE, Sub_Team, Service_Type, FRM_DT, TO_DT,Statusflag,Teamid);
+			list = dao.getComplainListlowlvl(user.getUSER_ID(), REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE, Sub_Team, Service_Type, engdate.get(0), engdate.get(1),Statusflag,Teamid);
 			}
 			else {
-				list = dao.getComplainList(user.getUSER_ID(), REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE, Sub_Team, Service_Type, FRM_DT, TO_DT,Statusflag,Teamid);
+				list = dao.getComplainList(user.getUSER_ID(), REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE, Sub_Team, Service_Type, engdate.get(0), engdate.get(1),Statusflag,Teamid);
 					
 				
 			}

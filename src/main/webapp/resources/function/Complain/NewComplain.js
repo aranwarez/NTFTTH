@@ -1189,6 +1189,7 @@ function fillIPTVdetail(sno) {
 				$('#iptvsodunit').html(response.active_package[0].subscriber_order_detail[0].unit);
 				$('#iptvsodsoid').html(response.active_package[0].subscriber_order_detail[0].subscriber_order_id);
 				$('#iptvsodserviceid').html(response.active_package[0].subscriber_order_detail[0].service_id);
+				
 			}
 			else { alert('Warning!! No active package found of NETTV'); }
 
@@ -1253,15 +1254,51 @@ function fillIPTVappdetail(sno) {
 			});
 
 			$('#nettvappdetail').append(div);
+			
+			
+			//stats for PRIVATE IP
+			$('#iptv_stats_private_ip').html(response.stats.private_ip);
 
 
 		}
 	});
 
 
-
-
-
 }
+
+function changewifiname() {
+	if ($('#cpeSN').html() == null || $('#cpeSN').html().length < 1) {
+		alert('CPE Serial Not Selected!!!! Please refresh this page');
+		return false;
+	}
+	if ($('#wifiname').val() == null || $('#wifiname').val().length < 1) {
+		alert('Wifi Name is not valid');
+		return false;
+	}
+	$.post('../complain/changeWiFiName', {
+		CPESNO: $('#cpeSN').html(),Wifiname:$('#wifiname').val()
+		
+	}, function(response) {
+		alert(response);
+	}); // closing function(responseJson)
+}
+
+function changewifipassword() {
+	if ($('#cpeSN').html() == null || $('#cpeSN').html().length < 1) {
+		alert('CPE Serial Not Selected!!!! Please refresh this page');
+		return false;
+	}
+	if ($('#wifipassword').val() == null || $('#wifipassword').val().length < 1) {
+		alert('Wifi Password is not valid');
+		return false;
+	}
+	$.post('../complain/changewifiPassword', {
+		CPESNO: $('#cpeSN').html(),Password:$('#wifipassword').val()
+		
+	}, function(response) {
+		alert(response);
+	}); // closing function(responseJson)
+}
+
 
 

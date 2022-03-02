@@ -662,8 +662,8 @@ public class ComplainDao {
 					"         AND TOKENS.SUB_TEAM_CODE = NVL (?, SUB_TEAM_CODE)\r\n" + 
 					"         AND TOKENS.SERVICE_TYPE_ID = NVL (?, SERVICE_TYPE_ID)\r\n" + 
 					"         AND TOKENS.SOLVE_FLAG = NVL (?, SOLVE_FLAG)\r\n" + 
-					"         AND TOKENS.CREATE_DT BETWEEN NVL (common.TO_AD (?), SYSDATE - 30)\r\n" + 
-					"                                  AND NVL (common.TO_AD (?), SYSDATE)\r\n" + 
+					"         AND TOKENS.CREATE_DT BETWEEN NVL (?, SYSDATE - 30)\r\n" + 
+					"                                  AND NVL (?, SYSDATE)\r\n" + 
 					"          AND TOKENS.TEAM_ID=NVL(?,TEAM_ID)\r\n" + 
 					"ORDER BY token_ID, create_dt DESC";
 
@@ -760,8 +760,8 @@ public class ComplainDao {
 					"         AND TOKENS.SUB_TEAM_CODE = NVL (?, SUB_TEAM_CODE)\r\n" + 
 					"         AND TOKENS.SERVICE_TYPE_ID = NVL (?, SERVICE_TYPE_ID)\r\n" + 
 					"         AND TOKENS.SOLVE_FLAG = NVL (?, SOLVE_FLAG)\r\n" + 
-					"         AND TOKENS.CREATE_DT BETWEEN NVL (common.TO_AD (?), SYSDATE - 30)\r\n" + 
-					"                                  AND NVL (common.TO_AD (?), SYSDATE)\r\n" + 
+					"         AND TOKENS.CREATE_DT BETWEEN NVL (?, SYSDATE - 30)\r\n" + 
+					"                                  AND NVL (?, SYSDATE)\r\n" + 
 					"          AND TOKENS.TEAM_ID=NVL(?,TEAM_ID)\r\n" + 
 					"ORDER BY token_ID, create_dt DESC";
 

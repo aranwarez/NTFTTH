@@ -505,5 +505,51 @@ public class ComplainController {
 			}
 
 		}
+		
+		// Change Wifi Name
+		@ResponseBody
+		@RequestMapping(value = "/complain/changeWiFiName", method = RequestMethod.POST)
+		public String changeWiFiName(String CPESNO,String Wifiname, Locale locale, Model model, HttpSession session) throws SQLException {
+			UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+
+			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+			if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+			}
+			CRMSBalanceDao obj = new CRMSBalanceDao();
+
+			try {
+				return obj.changeWiFiName(CPESNO, Wifiname);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return e.getLocalizedMessage();
+			}
+
+		}
+		
+		// Change Wifi Password
+		@ResponseBody
+		@RequestMapping(value = "/complain/changewifiPassword", method = RequestMethod.POST)
+		public String changewifiPassword(String CPESNO,String Password, Locale locale, Model model, HttpSession session) throws SQLException {
+			UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+
+			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+			if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+			}
+			CRMSBalanceDao obj = new CRMSBalanceDao();
+
+			try {
+				return obj.changePassword(CPESNO, Password);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return e.getLocalizedMessage();
+			}
+
+		}
 	
+
+
 }

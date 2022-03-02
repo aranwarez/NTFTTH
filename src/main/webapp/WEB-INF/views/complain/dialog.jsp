@@ -41,6 +41,42 @@
 </div>
 
 
+<!-- Wifi modal -->
+<div class="modal fade" id="WifiModal" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel"><i class="fa fa-wifi"></i>Change Wifi Setting</h4>
+			</div>
+			<div id="complainservcies" class="modal-body"></div>
+			<div class="modal-body">
+				<input type="text" class="form-control" id="wifiname"
+					placeholder="Wifi Name / SSID">
+					 <input type="password"
+					class="form-control" id="wifipassword" 
+					placeholder="Enter Wifi Password">
+
+			</div>
+
+
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-success pull-left submitbutton"
+					onclick="changewifiname()">Change Wifi Name</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-primary submitbutton"
+					onclick="changewifipassword()">Change Wifi Password</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End of wifi modal -->
+
 
 <!-- List of all service modal -->
 <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog"
