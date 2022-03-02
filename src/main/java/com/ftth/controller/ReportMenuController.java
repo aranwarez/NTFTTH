@@ -164,5 +164,51 @@ public class ReportMenuController {
 		return "report/Newreports";
 
 	}
+	
+	
+	@RequestMapping(value = "/report/officeclearance", method = RequestMethod.GET)
+	public String officeclearance(Locale locale, Model model, HttpServletRequest request) throws Exception {
+		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
+		logger.info("/officeclearance/report by user" + user.getUSER_ID(), locale);
+
+		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), "../report/officeclearance");
+		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+			model.addAttribute("fx", "Unauthorized Page for this role!!");
+			return "/home";
+		}
+		
+		
+
+		RegionDao dao = new RegionDao();
+		List<Region> regionlist = null;
+
+		CommonDateDao DAT = new CommonDateDao();
+		MServiceTypeDao ServiceTypedao= new MServiceTypeDao();
+		List<Map<String, Object>> servicetypelist=null;
+	
+		List<Map<String, Object>> levelcontrollist = null;
+
+		try {
+			regionlist = dao.getlistByUserFDC(user.getUSER_ID(), user.getUSER_LEVEL());
+			servicetypelist=ServiceTypedao.getServiceTypeList();
+			
+			model.addAttribute("Date_list", DAT.getDateList());
+			
+			levelcontrollist = UserDao.getUserDetailByOfficeCode(user.getOFFICE_CODE());
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		model.addAttribute("fx", "FTTH Complain Clearance Report OLT wise");
+		model.addAttribute("regionlist", regionlist);
+		model.addAttribute("servicetypelist", servicetypelist);
+		model.addAttribute("USER_LEVEL", user.getUSER_LEVEL());
+		model.addAttribute("levelcontrollist", levelcontrollist);
+
+		return "report/officeclearancerpt";
+
+	}
+
 
 }

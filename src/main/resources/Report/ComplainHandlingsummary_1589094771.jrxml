@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ComplainHandlingsummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fc565034-ab42-4130-b62c-636f311996c0">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="22"/>
@@ -256,7 +257,7 @@ ORDER BY 1,2,3]]>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement x="2" y="54" width="797" height="15" uuid="62e3d312-b722-4e82-8729-7eb006a147d4"/>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
@@ -316,7 +317,7 @@ ORDER BY 1,2,3]]>
 	</columnHeader>
 	<detail>
 		<band height="19" splitType="Stretch">
-			<textField isStretchWithOverflow="true" pattern="">
+			<textField textAdjust="StretchHeight" pattern="">
 				<reportElement x="1" y="2" width="75" height="17" uuid="2c2627c9-f147-4514-b875-d6e5dd86e176"/>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
