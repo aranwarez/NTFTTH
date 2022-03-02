@@ -272,29 +272,29 @@ public class WorkOrderDao {
 				java.sql.Date sqlendtime = new java.sql.Date(sqldateDate.getTime());
 				pst.setDate(2, sqlendtime);
 				pst.executeUpdate();
-				// close all the ticket solved by work_order
+				// close all the ticket solved by work_order only for network problems
 				if (rs.getInt("ELEMENT_TYPE") == 1) {
-					qry = "select * from VW_TOKEN_MASTER_ONLY where main_solve_flag<>'C' and substr(FAP_PORT,0,?)=?  and main_create_dt between ? and ?";
+					qry = "select * from VW_TOKEN_MASTER_ONLY where main_solve_flag<>'C' and master_problem_id in (8,19,43) and substr(FAP_PORT,0,?)=?  and main_create_dt between ? and ?";
 					pst = con.prepareStatement(qry);
 					pst.setInt(1, rs.getString("ELEMENT_VALUE").length());
 					pst.setString(2, rs.getString("ELEMENT_VALUE"));
 					pst.setDate(3, rs.getDate("STARTTIME"));
 					pst.setDate(4, sqlendtime);
 				} else if ((rs.getInt("ELEMENT_TYPE") == 2)) {
-					qry = "select * from VW_TOKEN_MASTER_ONLY where main_solve_flag<>'C' and FDC=?  and main_create_dt between ? and ?";
+					qry = "select * from VW_TOKEN_MASTER_ONLY where main_solve_flag<>'C' and master_problem_id in (8,19,43) and FDC=?  and main_create_dt between ? and ?";
 					pst = con.prepareStatement(qry);
 					pst.setString(1, rs.getString("ELEMENT_VALUE"));
 					pst.setDate(2, rs.getDate("STARTTIME"));
 					pst.setDate(3, sqlendtime);
 				} else if ((rs.getInt("ELEMENT_TYPE") == 3)) {
-					qry = "select * from VW_TOKEN_MASTER_ONLY where main_solve_flag<>'C' and substr(ODF_PORT,0,?)=?  and main_create_dt between ? and ?";
+					qry = "select * from VW_TOKEN_MASTER_ONLY where main_solve_flag<>'C' and master_problem_id in (8,19,43) and substr(ODF_PORT,0,?)=?  and main_create_dt between ? and ?";
 					pst = con.prepareStatement(qry);
 					pst.setInt(1, rs.getString("ELEMENT_VALUE").length());
 					pst.setString(2, rs.getString("ELEMENT_VALUE"));
 					pst.setDate(3, rs.getDate("STARTTIME"));
 					pst.setDate(4, sqlendtime);
 				} else {
-					qry = "select * from VW_TOKEN_MASTER_ONLY where main_solve_flag<>'C' and substr(OLT_PORT,0,?)=?  and main_create_dt between ? and ?";
+					qry = "select * from VW_TOKEN_MASTER_ONLY where main_solve_flag<>'C' and master_problem_id in (8,19,43) and substr(OLT_PORT,0,?)=?  and main_create_dt between ? and ?";
 					pst = con.prepareStatement(qry);
 					pst.setInt(1, rs.getString("ELEMENT_VALUE").length());
 					pst.setString(2, rs.getString("ELEMENT_VALUE"));

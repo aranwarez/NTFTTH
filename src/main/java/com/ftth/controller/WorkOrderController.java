@@ -248,7 +248,7 @@ public class WorkOrderController {
 		SendSMS smsdao=new SendSMS();
 		String USER = user.getUSER_ID();
 		String msg = null;
-		String smsmsg="Dear Customer, \n We are going to have maintenance work at your area. Your service might be interrupted for few hours. We'll keep you updated \n Nepal Telecom ";
+		String smsmsg="Dear Customer,\nWe are having maintenance work at your area. Your service might be interrupted for few hours. Sorry for the inconvenience caused.\nNepal Telecom";
 		try {
 			msg = dao.saveWorkOrder(type, value, remarks, starttime, active_flag, USER, olt, fdc);
 			if (active_flag.equals("Y")) {
