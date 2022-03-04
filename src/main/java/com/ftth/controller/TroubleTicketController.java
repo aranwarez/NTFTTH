@@ -246,7 +246,7 @@ public class TroubleTicketController {
 
 	 @RequestMapping(value = "/troubleticket/Resolved", method = RequestMethod.POST)
 	    @ResponseBody
-	    public String Resolved(String Remarks,String token,Locale locale,HttpSession session) throws SQLException {
+	    public String Resolved(String Remarks,String token,String solution_id,Locale locale,HttpSession session) throws SQLException {
 	        logger.info("Resolved Ticket", locale);
 	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
@@ -258,7 +258,7 @@ public class TroubleTicketController {
 	    	
 	        String msg = null;
 	        try {
-	        msg=	dao.Resolved(token, user.getUSER_ID(), Remarks);
+	        msg=	dao.Resolved(token, user.getUSER_ID(), Remarks,solution_id);
 	         } catch (Exception e) {
 	            // TODO Auto-generated catch block
 	            e.printStackTrace();

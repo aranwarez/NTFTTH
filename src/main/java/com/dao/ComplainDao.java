@@ -863,7 +863,7 @@ public class ComplainDao {
 	}
 
 	// forward dao
-	public String Resolved(String forwardtoken, String User, String Remarks) throws SQLException {
+	public String Resolved(String forwardtoken, String User, String Remarks,String Solution) throws SQLException {
 		Connection con = DbCon.getConnection();
 		con.setAutoCommit(false);
 		PreparedStatement pst = null;
@@ -886,18 +886,19 @@ public class ComplainDao {
 					+ "                               TO_SUB_TEAM_CODE,\r\n"
 					+ "                               SOLVE_FLAG,\r\n"
 					+ "                               PROBLEM_ID,\r\n" + "                               REMARKS,\r\n"
-					+ "                               CREATE_BY)\r\n"
+					+ "                               CREATE_BY,SOLUTION_ID)\r\n"
 					+ "     VALUES (TM_SUB_TOKEN_DETAIL_ID.NEXTVAL,\r\n" + "             ?,\r\n"
 					+ "             (select sub_team_code from TOKEN_MASTER where SUB_TOKEN_ID=?),\r\n"
 					+ "             ?,\r\n" + "             'Y',\r\n" + "             (SELECT PROBLEM_ID\r\n"
 					+ "                FROM TOKEN_MASTER\r\n" + "               WHERE SUB_TOKEN_ID = ?),\r\n"
-					+ "             ?,\r\n" + "             ?)");
+					+ "             ?,\r\n" + "             ?,?)");
 			pst.setString(1, forwardtoken);
 			pst.setString(2, forwardtoken);
 			pst.setString(3, "FLMTA");
 			pst.setString(4, forwardtoken);
 			pst.setString(5, Remarks);
 			pst.setString(6, User);
+			pst.setString(7, Solution);
 			pst.executeUpdate();
 			// after forwarding team updating subcode in token master
 			pst = con.prepareStatement(
@@ -1088,7 +1089,8 @@ public class ComplainDao {
 
 		try {
 			PreparedStatement pst = con
-					.prepareStatement("select * from TOKEN_DETAIL where SUB_TOKEN_ID=? order by td_id");
+					.prepareStatement("select td.*,nvl(ms.DESCRIPTION ,'-') SOLUTION from TOKEN_DETAIL td,m_solution ms where\r\n"
+							+ " td.SOLUTION_ID=ms.SOLUTION_ID(+) and SUB_TOKEN_ID=? order by td_id");
 			pst.setString(1, SUB_TOKEN_ID);
 
 			ResultSet rs = pst.executeQuery();

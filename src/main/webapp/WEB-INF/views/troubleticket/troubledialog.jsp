@@ -52,7 +52,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" onclick="return ForwardTeam()">Forward Team</button>
+                    <button type="submit" class="btn btn-primary submitbutton" onclick="return ForwardTeam()">Forward Team</button>
                 </div>
            
         </div>
@@ -76,6 +76,17 @@
                 <h4 class="modal-title" id="myModalLabel">Closing Trouble Ticket</h4>
             </div>
 
+			<div class="modal-body">
+                     <div class="form-group">
+                        <label for="name">Solution</label> 
+                        
+            <select id="solution_CODE" class="form-control">
+									<option value="-1">Others</option>
+									</select>
+                        </div>
+           
+            </div>
+
             <div class="modal-body">
                      <div class="form-group">
                         <label for="name">Remarks</label> 
@@ -85,11 +96,17 @@
            
             </div>
 
+			 
+                       
+           
+            
+            
+
             <div class="modal-footer">
                 <form action="#" method="post"
                       acceptCharset="UTF-8">
                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-primary" onclick="CloseTicket()">Yes</button>
+                    <button type="button" class="btn btn-primary submitbutton" onclick="CloseTicket()">Yes</button>
                 </form>
             </div>
         </div>
@@ -126,7 +143,7 @@
             <div class="modal-footer">
                 
                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-primary" onclick="Closealltickets()">Yes</button>
+                    <button type="button" class="btn btn-primary submitbutton" onclick="Closealltickets()">Yes</button>
                 
             </div>
         </div>
