@@ -5,7 +5,7 @@ $(document).ready(function() {
 
 	$('#checkDatatable').dataTable({
 		//		"paging" : false,
-		"searching": false,
+	//	"searching": false,
 		"info": false,
 		"ordering": false,
 		"fixedHeader": true,
@@ -202,7 +202,9 @@ function viewFDC(REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE) {
 			$("#checkDatatable")
 				.dataTable()
 				.fnAddData(
-					[
+					[	value.REGION,
+					value.DISTRICT,
+					value.OFFICE,
 						value.OLT,
 						value.CONTACT_NO,
 						value.CONTACT_NAME,

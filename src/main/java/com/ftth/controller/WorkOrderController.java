@@ -81,17 +81,23 @@ public class WorkOrderController {
 		// /adding query
 
 		WorkOrderDao dao = new WorkOrderDao();
-		//List<Map<String, Object>> list = null;
+		// List<Map<String, Object>> list = null;
 		List<Map<String, Object>> elementlist = null;
 		List<Map<String, Object>> fdclist = null;
 		List<Map<String, Object>> oltlist = null;
 
 		try {
 			elementlist = dao.getWorkOrderElementList();
-		//	list = dao.getActiveWorkOrder();
-			fdclist = FDCDao.getFDCList();
-			oltlist = OLTDao.getOLTList();
+			// list = dao.getActiveWorkOrder();
+			if (user.getUSER_LEVEL().contains("6")) {
+				fdclist = FDCDao.getFDCListlowlvl(user.getUSER_ID());
+				oltlist = OLTDao.getOLTListlowlvl(user.getUSER_ID());
+			}
 
+			else {
+				fdclist = FDCDao.getFDCList();
+				oltlist = OLTDao.getOLTList();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -101,7 +107,7 @@ public class WorkOrderController {
 		model.addAttribute("oltlist", oltlist);
 		model.addAttribute("menuaccess", menuaccess);
 		model.addAttribute("fx", "Work Order");
-	//	model.addAttribute("data_list", list);
+		// model.addAttribute("data_list", list);
 		model.addAttribute("Date_list", DAT.getDateList());
 
 		return "workorder/list";
@@ -113,8 +119,6 @@ public class WorkOrderController {
 			String REGION_CODE, String ZONE_CODE, String DISTRICT_CODE, String OFFICE_CODE, String QFROM_DT,
 			String QTO_DT, String qtype, String ACTIVE_FLAG) throws SQLException {
 
-
-		
 		// ADD_FLAG
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
@@ -126,20 +130,16 @@ public class WorkOrderController {
 
 		WorkOrderDao dao = new WorkOrderDao();
 		try {
-			if(user.getUSER_LEVEL().equals("6")) {
-				return dao.getlowlvlWorkOrderList(REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, QFROM_DT, QTO_DT, qtype,
-						ACTIVE_FLAG,user.getUSER_ID());
-			
-				}
-				else {
-					return dao.getWorkOrderList(REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, QFROM_DT, QTO_DT, qtype,
-							ACTIVE_FLAG);
-								
-					
-				}
-			
-			
-			
+			if (user.getUSER_LEVEL().equals("6")) {
+				return dao.getlowlvlWorkOrderList(REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, QFROM_DT, QTO_DT,
+						qtype, ACTIVE_FLAG, user.getUSER_ID());
+
+			} else {
+				return dao.getWorkOrderList(REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, QFROM_DT, QTO_DT, qtype,
+						ACTIVE_FLAG);
+
+			}
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -245,10 +245,10 @@ public class WorkOrderController {
 		}
 		WorkOrderDao dao = new WorkOrderDao();
 		WorkOrderAPI APIdao = new WorkOrderAPI();
-		SendSMS smsdao=new SendSMS();
+		SendSMS smsdao = new SendSMS();
 		String USER = user.getUSER_ID();
 		String msg = null;
-		String smsmsg="Dear Customer,\nWe are having maintenance work at your area. Your service might be interrupted for few hours. Sorry for the inconvenience caused.\nNepal Telecom";
+		String smsmsg = "Dear Customer,\nWe are having maintenance work at your area. Your service might be interrupted for few hours. Sorry for the inconvenience caused.\nNepal Telecom";
 		try {
 			msg = dao.saveWorkOrder(type, value, remarks, starttime, active_flag, USER, olt, fdc);
 			if (active_flag.equals("Y")) {
@@ -256,13 +256,18 @@ public class WorkOrderController {
 					List<String> MDN = APIdao.getFTTHNumberInfo(type, value);
 					for (String mdn : MDN) {
 						// send sms to these number regarding work order
-					//	System.out.println(APIdao.getContactNumber(mdn));
-						smsdao.sendsms(APIdao.getContactNumber(mdn), smsmsg , "WORKORDER", USER, msg);
+						// System.out.println(APIdao.getContactNumber(mdn));
+
+						String contactno = APIdao.getContactNumber(mdn);
+						// send sms to only nt mobile number.. taking 10 digit no for now.
+						if (contactno.length() == 10) {
+							smsdao.sendsms(contactno, smsmsg, "WORKORDER", USER, msg);
+						}
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					return "Failed Exception:"+e.getLocalizedMessage();
+					return "Failed Exception:" + e.getLocalizedMessage();
 				}
 			}
 

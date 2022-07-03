@@ -9,6 +9,10 @@
 			<table id="checkDatatable" class="table table-striped example1">
 			<thead>
 				<tr>
+				<th>Region</th>
+				<th>District</th>
+				<th>Office</th>
+				
 				<th>OLT</th>
 				<th>Contact Number</th>
 				<th>Contact Name</th>

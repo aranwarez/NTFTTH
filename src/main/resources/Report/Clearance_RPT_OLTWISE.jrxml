@@ -2,7 +2,7 @@
 <!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 5.5.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="clearance_oltwise" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="90613804-eb55-4a7b-9708-fe0d1e7689fb">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FTTH"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FTTH NEW SERVER"/>
 	<parameter name="pm_to_dt" class="java.util.Date"/>
 	<parameter name="pm_frm_dt" class="java.util.Date"/>
 	<parameter name="pm_region" class="java.lang.String"/>
@@ -11,35 +11,44 @@
 	<parameter name="pm_office" class="java.lang.String"/>
 	<parameter name="pm_filter" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select region,zone,district,office,OLT,count(token_id) REG,sum(case when SOLVE_FLAG ='Y' then 1 else 0 end) SOLVED,sum(case when SOLVE_FLAG ='C' then 1 else 0 end) CLOSED,sum(case when SOLVE_FLAG not in ('Y','C') then 1 else 0 end) PENDING
+		<![CDATA[select region,zone,district,office,OLT,count(token_id) TOTAL,(
+select count(1) from (select token_id from VW_TOKEN_ALL where VW_TOKEN_ALL.OLT=BASEQUERY.OLT and PROBLEM_ID in (8,19,43)  and solve_flag='N' and create_dt  between  $P{pm_frm_dt} and   $P{pm_to_dt}   group by token_id)
+) REG,sum(case when SOLVE_FLAG ='N' then 1 else 0 end) PREG,
+sum(case when SOLVE_FLAG ='Y' then 1 else 0 end) SOLVED,sum(case when SOLVE_FLAG ='C' then 1 else 0 end) CLOSED,sum(case when SOLVE_FLAG= 'F' and pending='Y' then 1 else 0 end) PENDING
 ,sum(SOLVEDW1) SOLVEDW1
-,sum(SOLVEDW2) SOLVEDW2,
-sum(SOLVEDW3) SOLVEDW3,
+,sum(SOLVEDW2) SOLVEDW2
+,sum(SOLVEDW3) SOLVEDW3,
 max(API.DISTRIBUTE) DISTRIBUTE,max(API.EQPT_CAPACITY) EQPT_CAPACITY
 from 
+(select firstqry.*,(case when SOLVE_FLAG='Y' or SOLVE_FLAG='C' then
+SOLVEDWITHIN1(create_dt,solve_dt)else 0 end) SOLVEDW1,
+(case when SOLVE_FLAG='Y' or SOLVE_FLAG='C' then
+SOLVEDWITHIN2(create_dt,solve_dt)else 0 end) SOLVEDW2,
+(case when SOLVE_FLAG='Y' or SOLVE_FLAG='C' then
+SOLVEDABOVE2(create_dt,solve_dt)else 0 end) SOLVEDW3
+ from  
+(select region,zone,district,office,OLT,token_id,
+(select solve_flag from (select  solve_flag  from VW_TOKEN_ALL where token_id=vta.token_id and problem_id in (8,19,43) and create_dt<= $P{pm_to_dt}  order by CREATE_DT desc nulls last )  where rownum=1) SOLVE_FLAG,
+(select min(create_dt) from VW_TOKEN_ALL where token_id=vta.token_id and problem_id in (8,19,43) and solve_flag='N') create_dt,
+(select min(create_dt) from VW_TOKEN_ALL where token_id=vta.token_id and problem_id in (8,19,43) and solve_flag='Y') solve_dt,
+(case when (select solve_flag from (select  solve_flag  from VW_TOKEN_ALL where token_id=vta.token_id and problem_id in (8,19,43) and create_dt<=sysdate order by CREATE_DT desc nulls last )  where rownum=1)='F' and
+ ((select  min(create_dt)  from VW_TOKEN_ALL where token_id=vta.token_id and problem_id in (8,19,43)   ) >= $P{pm_frm_dt} )  then 'Y' else 'N' end) Pending
 
-(select region,zone,district,office,OLT,token_id
-,(select solve_flag from (select  solve_flag from token_master where token_id=tm.token_id order by update_dt desc nulls last ) where rownum=1) SOLVE_FLAG,
- SOLVEDWITHIN1(min(TM.MAIN_CREATE_DT),(select MAX(VW_TOKEN_ALL.CREATE_DT)
- from VW_TOKEN_ALL where SOLVE_FLAG='Y' and token_id=tm.token_id )) SOLVEDW1,
- SOLVEDWITHIN2(min(TM.MAIN_CREATE_DT),(select MAX(VW_TOKEN_ALL.CREATE_DT)
- from VW_TOKEN_ALL where SOLVE_FLAG='Y' and token_id=tm.token_id )) SOLVEDW2,
- SOLVEDWITHIN3(min(TM.MAIN_CREATE_DT),(select MAX(VW_TOKEN_ALL.CREATE_DT)
- from VW_TOKEN_ALL where SOLVE_FLAG='Y' and token_id=tm.token_id )) SOLVEDW3
+
+
+ from VW_TOKEN_ALL VTA  where VTA.PROBLEM_ID in (8,19,43) 
+ and VTA.CREATE_DT between    $P{pm_frm_dt}  and  $P{pm_to_dt} 
+ and VTA.REGION_CODE=nvl( $P{pm_region} ,REGION_CODE ) and VTA.ZONE_CODE=nvl( $P{pm_zone},ZONE_CODE )
+ and VTA.DISTRICT_CODE=nvl( $P{pm_district},DISTRICT_CODE ) and VTA.OFFICE_CODE=nvl( $P{pm_office},OFFICE_CODE )
+ 
+ group by region,zone,district,office,OLT,token_id
+ ) firstqry
+ )BASEQUERY
  
  
-
-
- from FTTH.VW_TOKEN_MASTER_ONLY TM where TM.MASTER_PROBLEM_ID in (8,19,43) 
- and TM.MASTER_CREATE_DT between   $P{pm_frm_dt} and  $P{pm_to_dt} 
- and TM.REGION_CODE=nvl( $P{pm_region} ,region_code) and TM.ZONE_CODE=nvl( $P{pm_zone} ,zone_code)
- and TM.DISTRICT_CODE=nvl( $P{pm_district} ,district_code) and TM.OFFICE_CODE=nvl( $P{pm_office} ,office_code)
- 
---and token_id=297
-group by region,zone,district,office,OLT,token_id
-)BASEQUERY,
+,
 --EXTERNAL DBLINK QUERY
-(select ORS.OLT_NAME,ORS.EQPT_CAPACITY,DISTRIBUTE from ORS.OLT_NETWORK_CAPACITY@FTTHCMS ORS,(select OLT_NAME,count(OLT_NAME) DISTRIBUTE from ORS.OLT_WORKING_LINES@FTTHCMS where CPE_FIRST_SUBSCRIPTION_DATE<= $P{pm_to_dt}   group by OLT_NAME) Dist where ORS.OLT_NAME = Dist.OLT_NAME) API
+(select ORS.OLT_NAME,ORS.EQPT_CAPACITY,DISTRIBUTE from ORS.OLT_NETWORK_CAPACITY@FTTHCMS ORS,(select OLT_NAME,count(OLT_NAME) DISTRIBUTE from ORS.OLT_WORKING_LINES@FTTHCMS where CPE_FIRST_SUBSCRIPTION_DATE<=  $P{pm_to_dt}    group by OLT_NAME) Dist where ORS.OLT_NAME = Dist.OLT_NAME) API
 where BASEQUERY.OLT=API.OLT_NAME
 
  group by region,zone,district,office,OLT order by region,zone,district,office,OLT desc]]>
@@ -64,9 +73,17 @@ where BASEQUERY.OLT=API.OLT_NAME
 		<property name="com.jaspersoft.studio.field.name" value="OLT"/>
 		<property name="com.jaspersoft.studio.field.label" value="OLT"/>
 	</field>
+	<field name="TOTAL" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TOTAL"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOTAL"/>
+	</field>
 	<field name="REG" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="REG"/>
 		<property name="com.jaspersoft.studio.field.label" value="REG"/>
+	</field>
+	<field name="PREG" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PREG"/>
+		<property name="com.jaspersoft.studio.field.label" value="PREG"/>
 	</field>
 	<field name="SOLVED" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="SOLVED"/>
@@ -230,7 +247,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[Total Complain Solved within 2 day]]></text>
+				<text><![CDATA[Total Complain Solved in 2 day]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="681" y="0" width="40" height="60" uuid="15d1c040-1083-4745-880c-cad23ff85b04">
@@ -241,7 +258,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[Total Complain Solved within 3 day]]></text>
+				<text><![CDATA[Total Complain Solved in 3 day & above]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="281" y="0" width="40" height="60" uuid="2b1ce7c8-f48f-4d7a-a14a-46e9d817d39a">
@@ -285,7 +302,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[% Complain Solved within 2day]]></text>
+				<text><![CDATA[% Complain Solved in 2day]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="721" y="0" width="40" height="60" uuid="3fbd813d-e185-416e-abb4-21d306187f0b">
@@ -296,7 +313,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[% Complain Solved within 3 day]]></text>
+				<text><![CDATA[% Complain Solved in 3 day & above]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="761" y="0" width="40" height="60" uuid="033ce984-0487-473c-ac7c-19ea4390c64a">
@@ -307,7 +324,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[No. of Active FTTH Maintaned (Dis+Reg+Sol)]]></text>
+				<text><![CDATA[No. of Active FTTH Maintaned (Dis-Reg+Sol)]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -364,7 +381,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				</textElement>
 				<textFieldExpression><![CDATA[$F{OLT}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="###0">
 				<reportElement x="361" y="0" width="40" height="20" uuid="e1ef901a-cbe5-459b-b934-7be8591f74b6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0ed941a5-4cb4-4214-8bc6-d3d647b5811f"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -375,7 +392,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				</textElement>
 				<textFieldExpression><![CDATA[$F{REG}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="###0">
 				<reportElement x="401" y="0" width="40" height="20" uuid="f41819fc-bedd-459b-b567-b27329e692cc">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f0c5886d-8d57-477a-9c77-4465c272b9bb"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -384,7 +401,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{SOLVED}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{SOLVED}.doubleValue()+$F{CLOSED}.doubleValue()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="441" y="0" width="40" height="20" uuid="9ef547e7-b2eb-4e9e-a239-d714c5bdcf54">
@@ -397,7 +414,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CLOSED}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="###0">
 				<reportElement x="481" y="0" width="40" height="20" uuid="5928ece7-b52c-4ac9-9f21-951593983dc9">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f036cd32-23b2-4ab3-98e5-5898292ff488"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -406,7 +423,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{PENDING}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{PENDING}.doubleValue()+$F{PREG}.doubleValue()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="521" y="0" width="40" height="20" uuid="841071ef-3376-4157-ac78-35b350c1346e">
@@ -472,7 +489,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.math.BigDecimal(( $F{SOLVEDW1}.doubleValue() / $F{REG}.doubleValue() ) * 100).setScale(2, BigDecimal.ROUND_CEILING)]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{CLOSED}.doubleValue()+$F{SOLVED}.doubleValue())==0?0:new java.math.BigDecimal(( $F{SOLVEDW1}.doubleValue() / ($F{CLOSED}.doubleValue()+$F{SOLVED}.doubleValue()) ) * 100).setScale(2, BigDecimal.ROUND_CEILING)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="641" y="0" width="40" height="20" uuid="aff194cb-75a0-447e-ab98-87adbecfe4ca">
@@ -483,7 +500,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.math.BigDecimal(( $F{SOLVEDW2}.doubleValue() / $F{REG}.doubleValue() ) * 100).setScale(2, BigDecimal.ROUND_CEILING)]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{CLOSED}.doubleValue()+$F{SOLVED}.doubleValue())==0?0:new java.math.BigDecimal(( $F{SOLVEDW2}.doubleValue() / ($F{CLOSED}.doubleValue()+$F{SOLVED}.doubleValue()) ) * 100).setScale(2, BigDecimal.ROUND_CEILING)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="721" y="0" width="40" height="20" uuid="f30219bd-f507-4641-993b-765c4462c546">
@@ -494,7 +511,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.math.BigDecimal(( $F{SOLVEDW3}.doubleValue() / $F{REG}.doubleValue() ) * 100).setScale(2, BigDecimal.ROUND_CEILING)]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{CLOSED}.doubleValue()+$F{SOLVED}.doubleValue())==0?0:new java.math.BigDecimal(( $F{SOLVEDW3}.doubleValue() / ($F{CLOSED}.doubleValue()+$F{SOLVED}.doubleValue()) ) * 100).setScale(2, BigDecimal.ROUND_CEILING)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="761" y="0" width="40" height="20" uuid="c2ba4c9d-cb40-4937-ac76-8e691226041f">
@@ -505,7 +522,7 @@ where BASEQUERY.OLT=API.OLT_NAME
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.math.BigDecimal(( $F{DISTRIBUTE}.doubleValue() + $F{REG}.doubleValue() + $F{SOLVED}.doubleValue() ) )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new java.math.BigDecimal(( $F{DISTRIBUTE}.doubleValue() - $F{REG}.doubleValue() - $F{PENDING}.doubleValue()+ $F{SOLVED}.doubleValue()+$F{CLOSED}.doubleValue() ) )]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

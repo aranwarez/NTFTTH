@@ -28,7 +28,34 @@
                                                                      class="form-control"  id=CONTACT_NO placeholder="Enter Contact_No">
                          
                     </div>
-                 
+                    <div class="form-group">
+                        <label for="TEAM_CODE">OFFICE_NAME  </label> <input type="text"
+                                                                     class="form-control" name="OFFICE_NAME" id="OFFICE_NAME" placeholder="Enter OFFICE   Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="TEAM_CODE">AREA_NAME</label> <input type="text"
+                                                                     class="form-control" name="AREA_NAME  " id="AREA_NAME" placeholder="Enter AREA   Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="TEAM_CODE">Name  </label> <input type="text"
+                                                                     class="form-control" name="SECTION  " id="SECTION" placeholder="Enter  Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="TEAM_CODE">LANDLINE_NO  </label> <input type="text"
+                                                                     class="form-control" name="LANDLINE_NO" id="LANDLINE_NO" placeholder="Enter LANDLINE_NO  Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="TEAM_CODE">MOBILE_NO  </label> <input type="text"
+                                                                     class="form-control" name="MOBILE_NO" id="MOBILE_NO" placeholder="Enter MOBILE_NO">
+                    </div>
+                    <div class="form-group">
+                        <label for="TEAM_CODE">REMARKS1  </label> <input type="text"
+                                                                     class="form-control" name="REMARKS1" id="REMARKS1" placeholder="Enter REMARKS1">
+                    </div>
+                    <div class="form-group">
+                        <label for="TEAM_CODE">REMARKS2 </label> <input type="text"
+                                                                     class="form-control" name="REMARKS2" id="REMARKS2" placeholder="Enter REMARKS2">
+                    </div>
                     
                     
                     
@@ -66,6 +93,34 @@
                          <label for="DESCRIPTION">Contact No</label> <input type="text"
                                                                      class="form-control" name="eCONTACTNO" id="eCONTACTNO" placeholder="Enter Contact NO">
                          
+                    </div>
+                    <div class="form-group">
+                        <label for="TEAM_CODE">OFFICE_NAME  </label> <input type="text"
+                                                                     class="form-control" name="eOFFICE_NAME" id="eOFFICE_NAME" placeholder="Enter OFFICE   Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="TEAM_CODE">AREA_NAME</label> <input type="text"
+                                                                     class="form-control" name="eAREA_NAME  " id="eAREA_NAME" placeholder="Enter AREA   Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="TEAM_CODE">Name  </label> <input type="text"
+                                                                     class="form-control" name="eSECTION  " id="eSECTION" placeholder="Enter    Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="TEAM_CODE">LANDLINE_NO  </label> <input type="text"
+                                                                     class="form-control" name="eLANDLINE_NO" id="eLANDLINE_NO" placeholder="Enter LANDLINE_NO  Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="TEAM_CODE">MOBILE_NO  </label> <input type="text"
+                                                                     class="form-control" name="eMOBILE_NO" id="eMOBILE_NO" placeholder="Enter MOBILE_NO">
+                    </div>
+                    <div class="form-group">
+                        <label for="TEAM_CODE">REMARKS1  </label> <input type="text"
+                                                                     class="form-control" name="eREMARKS1" id="eREMARKS1" placeholder="Enter REMARKS1">
+                    </div>
+                    <div class="form-group">
+                        <label for="TEAM_CODE">REMARKS2 </label> <input type="text"
+                                                                     class="form-control" name="eREMARKS2" id="eREMARKS2" placeholder="Enter REMARKS2">
                     </div>
                  
                     

@@ -180,5 +180,44 @@ public class OLTDao {
 		}
 		// return null;
 	}
+	
+	
+	public static List<Map<String, Object>> getOLTListlowlvl(String user) throws SQLException {
+		Connection con = DbCon.getConnection();
+		try {
+			PreparedStatement pst = con.prepareStatement("SELECT distinct(OLT) DESCRIPTION\r\n"
+					+ "  FROM vw_ftth_all_fdc VFAF\r\n"
+					+ " WHERE EXISTS\r\n"
+					+ "           (SELECT fdc_code\r\n"
+					+ "              FROM WEB_USER_FDC_MAP\r\n"
+					+ "             WHERE     user_id = ?\r\n"
+					+ "                   AND VFAF.FDC_CODE = WEB_USER_FDC_MAP.FDC_CODE)\r\n"
+					+ "");
+//            DISTRICT_CODE
+			pst.setString(1, user);
+			ResultSet rs = pst.executeQuery();
+
+			List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+			Map<String, Object> row = null;
+
+			ResultSetMetaData metaData = rs.getMetaData();
+			Integer columnCount = metaData.getColumnCount();
+
+			while (rs.next()) {
+				row = new HashMap<String, Object>();
+				for (int i = 1; i <= columnCount; i++) {
+					row.put(metaData.getColumnName(i), rs.getObject(i));
+				}
+				resultList.add(row);
+			}
+			return resultList;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			con.close();
+		}
+		return null;
+	}
+
 
 }

@@ -48,7 +48,7 @@ public class TicketHistroyController {
 				model.addAttribute("fx", "Unauthorized Page for this role!!");
 				return "/home";
 			}
-			model.addAttribute("fx", "Trouble Ticket histry by Service No");
+			model.addAttribute("fx", "Trouble Ticket History by CPE Serial Number");
 			
 	        
 			return "troubleticket/history";
@@ -62,7 +62,7 @@ public class TicketHistroyController {
 		    UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 				//	MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 					
-		    model.addAttribute("fx", "History By CPESN");
+		    model.addAttribute("fx", "Trouble Ticket History by CPE Serial Number");
 			
 			String MAIN_SRV_NO = request.getParameter("MAIN_SRV_NO").trim();
 			

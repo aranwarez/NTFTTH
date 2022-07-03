@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 5.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="clearance_day_fdcteam" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="90613804-eb55-4a7b-9708-fe0d1e7689fb">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FTTH LIVE NEW SERVER (PROD)"/>
+	<parameter name="pm_to_dt" class="java.util.Date"/>
+	<parameter name="pm_frm_dt" class="java.util.Date"/>
+	<parameter name="pm_servicetype" class="java.lang.String"/>
+	<parameter name="pm_within_days" class="java.lang.String"/>
+	<parameter name="pm_region" class="java.lang.String"/>
+	<parameter name="pm_zone" class="java.lang.String"/>
+	<parameter name="pm_district" class="java.lang.String"/>
+	<parameter name="pm_office" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT max(region) REGION,max(ZONE) ZONE,max(DISTRICT) DISTRICT, max(office) OFFICE,max(TEAMNAME) TEAMNAME,
+             SUM (CASE WHEN VTDDS.REG_DT>= NVL($P{pm_frm_dt},SYSDATE-30) AND VTDDS.REG_DT<= NVL($P{pm_to_dt},SYSDATE) THEN 1 ELSE 0 END) total,
+             SUM (CASE WHEN VTMO.MASTER_SOLVE_FLAG in ('Y','C') AND VTDDS.SOLVE_DT>= NVL($P{pm_frm_dt},SYSDATE-30) AND VTDDS.SOLVE_DT<= NVL($P{pm_to_dt},SYSDATE) THEN 1 ELSE 0 END)
+             Solved,
+         
+         SUM (CASE WHEN VTMO.MASTER_SOLVE_FLAG = 'C' AND VTDDS.CLOSE_DT>= NVL($P{pm_frm_dt},SYSDATE-30) AND VTDDS.CLOSE_DT<= NVL($P{pm_to_dt},SYSDATE) AND VTDDS.CLOSE_DT>= NVL($P{pm_frm_dt},SYSDATE-30) AND VTDDS.CLOSE_DT<= NVL($P{pm_to_dt},SYSDATE) THEN 1 ELSE 0 END)
+             Closed,
+             
+             SUM (
+             CASE
+                 WHEN     VTMO.MASTER_SOLVE_FLAG in ('Y','C') AND VTDDS.SOLVE_DT>= NVL($P{pm_frm_dt},SYSDATE-30) AND VTDDS.SOLVE_DT<= NVL($P{pm_to_dt},SYSDATE)
+                      AND (SOLVE_DT-REG_DT) < 1
+                 THEN
+                     1
+                 ELSE
+                     0
+             END)
+             solvedewithin1days
+             ,
+             
+             SUM (
+             CASE
+                 WHEN     VTMO.MASTER_SOLVE_FLAG in ('Y','C') AND VTDDS.SOLVE_DT>= NVL($P{pm_frm_dt},SYSDATE-30) AND VTDDS.SOLVE_DT<= NVL($P{pm_to_dt},SYSDATE)
+                      AND (SOLVE_DT-REG_DT) < 2
+                 THEN
+                     1
+                 ELSE
+                     0
+             END)
+             solvedewithin2days
+             ,
+             
+             SUM (
+             CASE
+                 WHEN     VTMO.MASTER_SOLVE_FLAG in ('Y','C') AND VTDDS.SOLVE_DT>= NVL($P{pm_frm_dt},SYSDATE-30) AND VTDDS.SOLVE_DT<= NVL($P{pm_to_dt},SYSDATE)
+                      AND (SOLVE_DT-REG_DT) < 3
+                 THEN
+                     1
+                 ELSE
+                     0
+             END)
+             solvedewithin3days
+             ,
+             
+             SUM (
+             CASE
+                 WHEN     VTMO.MASTER_SOLVE_FLAG in ('Y','C') AND VTDDS.SOLVE_DT>= NVL($P{pm_frm_dt},SYSDATE-30) AND VTDDS.SOLVE_DT<= NVL($P{pm_to_dt},SYSDATE)
+                      AND (SOLVE_DT-REG_DT) >=3
+                 THEN
+                     1
+                 ELSE
+                     0
+             END)
+             solvedmore3days
+             ,    
+         SUM (
+             CASE
+                 WHEN     VTMO.MASTER_SOLVE_FLAG = 'C' AND VTDDS.CLOSE_DT>= NVL($P{pm_frm_dt},SYSDATE-30) AND VTDDS.CLOSE_DT<= NVL($P{pm_to_dt},SYSDATE)
+                      AND (CLOSE_DT-REG_DT) <  1
+                 THEN
+                     1
+                 ELSE
+                     0
+             END)
+             closewithin1days
+             ,    
+             
+         SUM (
+             CASE
+                 WHEN     VTMO.MASTER_SOLVE_FLAG = 'C' AND VTDDS.CLOSE_DT>= NVL($P{pm_frm_dt},SYSDATE-30) AND VTDDS.CLOSE_DT<= NVL($P{pm_to_dt},SYSDATE)
+                      AND (CLOSE_DT-REG_DT) <  2
+                 THEN
+                     1
+                 ELSE
+                     0
+             END)
+             closewithin2days
+             ,    
+         SUM (
+             CASE
+                 WHEN     VTMO.MASTER_SOLVE_FLAG = 'C' AND VTDDS.CLOSE_DT>= NVL($P{pm_frm_dt},SYSDATE-30) AND VTDDS.CLOSE_DT<= NVL($P{pm_to_dt},SYSDATE)
+                      AND (CLOSE_DT-REG_DT) <  3
+                 THEN
+                     1
+                 ELSE
+                     0
+             END)
+             closewithin3days
+             ,    
+         SUM (
+             CASE
+                 WHEN     VTMO.MASTER_SOLVE_FLAG = 'C' AND VTDDS.CLOSE_DT>= NVL($P{pm_frm_dt},SYSDATE-30) AND VTDDS.CLOSE_DT<= NVL($P{pm_to_dt},SYSDATE)
+                      AND (CLOSE_DT-REG_DT) >=  3
+                 THEN
+                     1
+                 ELSE
+                     0
+             END)
+             closemore3days
+             
+   FROM VW_TOKEN_MASTER_ONLY VTMO,VW_TOKEN_DETAIL_DATE_STATUS VTDDS
+    where VTMO.SUB_TOKEN_ID=VTDDS.SUB_TOKEN_ID
+     and VTMO.SERVICE_TYPE_ID=nvl( $P{pm_servicetype}   ,SERVICE_TYPE_ID)
+     
+     and REGION_CODE=nvl($P{pm_region},REGION_CODE)
+and ZONE_CODE=nvl($P{pm_zone},ZONE_CODE)
+and DISTRICT_CODE=nvl($P{pm_district},DISTRICT_CODE)
+and OFFICE_CODE=nvl($P{pm_office},OFFICE_CODE)
+    
+GROUP BY team_id,office_code
+order by office_code]]>
+	</queryString>
+	<field name="REGION" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="REGION"/>
+		<property name="com.jaspersoft.studio.field.label" value="REGION"/>
+	</field>
+	<field name="ZONE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ZONE"/>
+		<property name="com.jaspersoft.studio.field.label" value="ZONE"/>
+	</field>
+	<field name="DISTRICT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DISTRICT"/>
+		<property name="com.jaspersoft.studio.field.label" value="DISTRICT"/>
+	</field>
+	<field name="OFFICE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OFFICE"/>
+		<property name="com.jaspersoft.studio.field.label" value="OFFICE"/>
+	</field>
+	<field name="TEAMNAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TEAMNAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="TEAMNAME"/>
+	</field>
+	<field name="TOTAL" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TOTAL"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOTAL"/>
+	</field>
+	<field name="SOLVED" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SOLVED"/>
+		<property name="com.jaspersoft.studio.field.label" value="SOLVED"/>
+	</field>
+	<field name="CLOSED" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CLOSED"/>
+		<property name="com.jaspersoft.studio.field.label" value="CLOSED"/>
+	</field>
+	<field name="SOLVEDEWITHIN1DAYS" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SOLVEDEWITHIN1DAYS"/>
+		<property name="com.jaspersoft.studio.field.label" value="SOLVEDEWITHIN1DAYS"/>
+	</field>
+	<field name="SOLVEDEWITHIN2DAYS" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SOLVEDEWITHIN2DAYS"/>
+		<property name="com.jaspersoft.studio.field.label" value="SOLVEDEWITHIN2DAYS"/>
+	</field>
+	<field name="SOLVEDEWITHIN3DAYS" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SOLVEDEWITHIN3DAYS"/>
+		<property name="com.jaspersoft.studio.field.label" value="SOLVEDEWITHIN3DAYS"/>
+	</field>
+	<field name="SOLVEDMORE3DAYS" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SOLVEDMORE3DAYS"/>
+		<property name="com.jaspersoft.studio.field.label" value="SOLVEDMORE3DAYS"/>
+	</field>
+	<field name="CLOSEWITHIN1DAYS" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CLOSEWITHIN1DAYS"/>
+		<property name="com.jaspersoft.studio.field.label" value="CLOSEWITHIN1DAYS"/>
+	</field>
+	<field name="CLOSEWITHIN2DAYS" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CLOSEWITHIN2DAYS"/>
+		<property name="com.jaspersoft.studio.field.label" value="CLOSEWITHIN2DAYS"/>
+	</field>
+	<field name="CLOSEWITHIN3DAYS" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CLOSEWITHIN3DAYS"/>
+		<property name="com.jaspersoft.studio.field.label" value="CLOSEWITHIN3DAYS"/>
+	</field>
+	<field name="CLOSEMORE3DAYS" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CLOSEMORE3DAYS"/>
+		<property name="com.jaspersoft.studio.field.label" value="CLOSEMORE3DAYS"/>
+	</field>
+	<title>
+		<band height="52">
+			<staticText>
+				<reportElement x="320" y="0" width="260" height="30" uuid="a4522490-220d-41a6-8034-be744babfdc2"/>
+				<textElement>
+					<font size="19"/>
+				</textElement>
+				<text><![CDATA[Clearance Day Team Wise]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="0" y="0" width="52" height="30" uuid="08f9d6a0-624d-4d80-89b6-79a468de2611">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6291b844-8e45-421c-a588-77fdfbf48cf1"/>
+				</reportElement>
+				<text><![CDATA[REGION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="52" y="0" width="50" height="30" uuid="cd0d6011-63f7-4d05-8a31-00bc706461a7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9de76de1-fddb-4258-a47e-7f8793372e41"/>
+				</reportElement>
+				<text><![CDATA[ZONE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="102" y="0" width="50" height="30" uuid="717b3e72-2463-4672-ad5d-54d01fa032de">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c7d8c1f8-302e-4f8a-8894-734bc433e5c9"/>
+				</reportElement>
+				<text><![CDATA[DISTRICT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="152" y="0" width="50" height="30" uuid="0b9f9eb0-ded4-4dea-9765-8cc32edfc25d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="391fba48-0078-4089-8ea9-65691ab7aeec"/>
+				</reportElement>
+				<text><![CDATA[OFFICE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="202" y="0" width="50" height="30" uuid="8e9bd5c4-76d3-410d-9273-ddd5dd83dffa">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7b687589-5269-4fb7-9adb-a83ec8713c37"/>
+				</reportElement>
+				<text><![CDATA[TEAMNAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="0" width="50" height="30" uuid="dc7c0180-f0b0-4a8c-810c-0b5b7a80f762">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="09dba3f8-70a7-43b8-a661-0c24a8f1181e"/>
+				</reportElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="302" y="0" width="50" height="30" uuid="a88f34c2-99ba-455b-ba4b-98313b21ff8e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="abd8f3f4-8588-4d61-9e5e-c8bd19f33970"/>
+				</reportElement>
+				<text><![CDATA[SOLVED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="352" y="0" width="50" height="30" uuid="f0194235-6552-454b-a947-0af8ff56ee21">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bd9164ba-971f-4f38-8295-ad2b10bfb093"/>
+				</reportElement>
+				<text><![CDATA[CLOSED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="402" y="0" width="50" height="30" uuid="7ccc5b54-1d3b-42e7-ace3-5be634686e37">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c8fa0052-e9a8-4c7e-b398-9afdedc0db08"/>
+				</reportElement>
+				<text><![CDATA[SOLVEDEWITHIN1DAYS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="452" y="0" width="50" height="30" uuid="f98e2a15-a47b-4e7f-870b-78b633313882">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4bd65937-8b78-45cd-8dae-9128b0e189b3"/>
+				</reportElement>
+				<text><![CDATA[SOLVEDEWITHIN2DAYS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="502" y="0" width="50" height="30" uuid="6b017da0-d61b-4b36-af7f-1190628d1f64">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="82b3a073-3ee3-4272-9682-055a4003985d"/>
+				</reportElement>
+				<text><![CDATA[SOLVEDEWITHIN3DAYS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="552" y="0" width="50" height="30" uuid="2070feed-fa1f-4c26-b719-5899e65e5b58">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8deecbbe-db73-40ef-8639-5f6d36d48098"/>
+				</reportElement>
+				<text><![CDATA[SOLVEDMORE3DAYS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="602" y="0" width="50" height="30" uuid="6dcac220-09ca-45cf-a38b-016d6802a5dd">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8c49d5de-62a4-4730-aabd-6cc8ed010f33"/>
+				</reportElement>
+				<text><![CDATA[CLOSEWITHIN1DAYS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="652" y="0" width="50" height="30" uuid="52d29400-36f0-4236-9929-51cb8560bca7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a55a5fd-a981-472e-9bed-b5ccb002b4fa"/>
+				</reportElement>
+				<text><![CDATA[CLOSEWITHIN2DAYS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="702" y="0" width="50" height="30" uuid="45a7b52a-31f9-488a-95bd-e66acfb2b887">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ec5d4a44-b92b-420d-9c3c-d5300c4e2496"/>
+				</reportElement>
+				<text><![CDATA[CLOSEWITHIN3DAYS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="752" y="0" width="50" height="30" uuid="281c9fea-d026-441f-9551-ea46b0cf43a7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cd649c05-a40a-4ac3-8c03-d89992a604ed"/>
+				</reportElement>
+				<text><![CDATA[CLOSEMORE3DAYS]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="0" y="0" width="52" height="30" uuid="79995659-3105-4b7d-83bb-094c70efdcee">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6291b844-8e45-421c-a588-77fdfbf48cf1"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{REGION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="52" y="0" width="50" height="30" uuid="3d97fbea-a9df-4c38-85b3-a3989db38ffd">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9de76de1-fddb-4258-a47e-7f8793372e41"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{ZONE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="102" y="0" width="50" height="30" uuid="ee30ea13-b812-467e-9e2b-3843105f076d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c7d8c1f8-302e-4f8a-8894-734bc433e5c9"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{DISTRICT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="152" y="0" width="50" height="30" uuid="646401ef-2c5a-42a3-8932-4e0b275a48f3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="391fba48-0078-4089-8ea9-65691ab7aeec"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{OFFICE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="202" y="0" width="50" height="30" uuid="10557e19-b1f2-45a5-b62e-b378326efca8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7b687589-5269-4fb7-9adb-a83ec8713c37"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{TEAMNAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="252" y="0" width="50" height="30" uuid="08795eda-cbc6-4f22-8d69-b2729392b936">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="09dba3f8-70a7-43b8-a661-0c24a8f1181e"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="302" y="0" width="50" height="30" uuid="85b9b790-a138-4efa-8e01-4602b14e83d1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="abd8f3f4-8588-4d61-9e5e-c8bd19f33970"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{SOLVED}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="352" y="0" width="50" height="30" uuid="d5bce1a5-65e7-49ea-baea-5802fc6a9285">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bd9164ba-971f-4f38-8295-ad2b10bfb093"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{CLOSED}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="402" y="0" width="50" height="30" uuid="829e08ad-a725-49f8-9520-d65888ba9532">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c8fa0052-e9a8-4c7e-b398-9afdedc0db08"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{SOLVEDEWITHIN1DAYS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="452" y="0" width="50" height="30" uuid="e171143e-d483-43e5-b0c4-673e56614a39">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4bd65937-8b78-45cd-8dae-9128b0e189b3"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{SOLVEDEWITHIN2DAYS}.doubleValue()-$F{SOLVEDEWITHIN1DAYS}.doubleValue()]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="502" y="0" width="50" height="30" uuid="fa59d2b7-776a-4253-833d-8d2c230bc4d0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="82b3a073-3ee3-4272-9682-055a4003985d"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{SOLVEDEWITHIN3DAYS}.doubleValue()-$F{SOLVEDEWITHIN2DAYS}.doubleValue()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="552" y="0" width="50" height="30" uuid="61b2fa03-be26-40a0-80f8-88b2269553f7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8deecbbe-db73-40ef-8639-5f6d36d48098"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{SOLVEDMORE3DAYS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="602" y="0" width="50" height="30" uuid="737f7c5f-e73b-4063-8acc-8497a6770727">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8c49d5de-62a4-4730-aabd-6cc8ed010f33"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{CLOSEWITHIN1DAYS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="652" y="0" width="50" height="30" uuid="d89f817a-8c97-4a67-8af8-40d860b5506c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a55a5fd-a981-472e-9bed-b5ccb002b4fa"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{CLOSEWITHIN2DAYS}.doubleValue()-$F{CLOSEWITHIN1DAYS}.doubleValue()]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="702" y="0" width="50" height="30" uuid="67b7b1a2-1735-4a06-9c5b-1d238a5f7f5d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ec5d4a44-b92b-420d-9c3c-d5300c4e2496"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{CLOSEWITHIN3DAYS}.doubleValue()-$F{CLOSEWITHIN2DAYS}.doubleValue()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="752" y="0" width="50" height="30" uuid="68afa37f-2323-4807-ad2d-ce088b2f556e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cd649c05-a40a-4ac3-8c03-d89992a604ed"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{CLOSEMORE3DAYS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

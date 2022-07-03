@@ -20,89 +20,95 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.dao.CommonMenuDao;
-import com.dao.DepartmentDao;
-import com.dao.TeamDao;
+import com.dao.RemarksDao;
 import com.model.MenuAccess;
 import com.model.UserInformationModel;
 
 @Controller
-public class DepartmentController {
+public class RemarksController {
+	private static final Logger logger = LoggerFactory.getLogger(ServiceTypeController.class);
+	private static final String classname = "../remarks/list";
+	
+	@RequestMapping(value = "/remarks/list", method = RequestMethod.GET)
+	public String solutionlist(Locale locale, Model model,HttpServletRequest request) throws SQLException {
+	//	logger.info("Getting Problem List", locale);	
+		
 
-	private static final Logger logger = LoggerFactory.getLogger(DepartmentController.class);
-	private static final String classname = "../department/list";
-
-	@RequestMapping(value = "/department/list", method = RequestMethod.GET)
-	public String teamlist(Locale locale, Model model, HttpServletRequest request) throws SQLException {
-
-		logger.info("Getting department List", locale);
-
-		// LIST_FLAG
 		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 
 		if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
-
+			
 			model.addAttribute("fx", "Unauthorized Page for this role!!");
 			return "/home";
 		}
 
-		DepartmentDao dao = new DepartmentDao();
+		RemarksDao dao = new RemarksDao();
+		
+		
 		List<Map<String, Object>> list = null;
+		
+		
 		try {
-			list = dao.getDepartmentList();
+			list = dao.getProblemList();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		model.addAttribute("fx", "Department Information");
+		model.addAttribute("fx", "Remarks List for Problems");
 		model.addAttribute("data_list", list);
+		
 
-		return "department/list";
+		return "remarks/list";
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/department/jsonlist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Map<String, Object>> getSPtargetist(Locale locale, Model model, HttpSession session)
-			throws SQLException {
-		DepartmentDao dao = new DepartmentDao();
-		return dao.getDepartmentList();
+	@RequestMapping(value = "/remarks/JSlist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Map<String, Object>> serviceTypelist() throws SQLException {
 
+		RemarksDao dao = new RemarksDao();
+		List<Map<String, Object>> list = null;
+		try {
+			list = dao.getProblemList();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "dialogdepartment")
+	@RequestMapping(method = RequestMethod.GET, value = "dialogremarks")
 	public String dialogservice(Model model, Locale locale) {
-		return "department/teamdialog";
+
+		return "remarks/remarksdialog";
 
 	}
 
-	@RequestMapping(value = "/department/saveJS", method = RequestMethod.POST)
+	@RequestMapping(value = "/remarks/saveJS", method = RequestMethod.POST)
 	@ResponseBody
-	public String saveJSService(String DEPARTMENT_CODE, String ContactNo, String OFFICE_NAME, String AREA_NAME,
-			String SECTION, String LANDLINE_NO, String MOBILE_NO, String REMARKS1, String REMARKS2,
-			HttpServletRequest request, HttpSession session, Model model, Locale locale) throws SQLException {
+	public String saveJSService(String DESCRIPTION, String SERVICE_TYPE_ID, String PROBLEM_ID,
+			String ACTIVE_STATUS,HttpServletRequest request, HttpSession session, Model model, Locale locale) throws SQLException {
 
-		logger.info("Save department {}.", locale);
-
-		// ADD_FLAG
 		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
-
+		
 		if (menuaccess == null || menuaccess.getADD_FLAG().equals("N")) {
-
+			
 			model.addAttribute("fx", "Unauthorized Page for this role!!");
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 		}
 
-		DepartmentDao dao = new DepartmentDao();
+		
+		RemarksDao dao = new RemarksDao();
 
 		UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
 		String USER = userinfo.getUSER_ID();
-		model.addAttribute("fx", "Team controller list ");
-		model.addAttribute("userName", USER);
+
+		model.addAttribute("fx", "Problem list ");
 		String msg = null;
 		try {
-			msg = dao.saveDepartment(DEPARTMENT_CODE, ContactNo,  OFFICE_NAME, AREA_NAME, SECTION, LANDLINE_NO,
-					MOBILE_NO, REMARKS1, REMARKS2,USER);
+			msg = dao.saveRemarks(DESCRIPTION, SERVICE_TYPE_ID, ACTIVE_STATUS, USER, PROBLEM_ID);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -110,33 +116,30 @@ public class DepartmentController {
 		return msg;
 	}
 
-	@RequestMapping(value = "/department/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/remarks/update", method = RequestMethod.POST)
 	@ResponseBody
-	public String updateService(String ID, String Department, String ContactNo, String OFFICE_NAME, String AREA_NAME,
-			String SECTION, String LANDLINE_NO, String MOBILE_NO, String REMARKS1, String REMARKS2,
-			HttpServletRequest request, HttpSession session, Model model, Locale locale) throws SQLException {
+	public String updateProblem(String PROBLEM_ID, String DESCRIPTION, String SERVICE_TYPE_ID, String SOLUTION_ID,
+			String ACTIVE_STATUS, HttpServletRequest request,HttpSession session, Model model, Locale locale) throws SQLException {
 
 		logger.info("Updata Service {}.", locale);
 
-		// EDIT_FLAG
-
 		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
-		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+				MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
 
-		if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
+				if (menuaccess == null || menuaccess.getEDIT_FLAG().equals("N")) {
+					
+					model.addAttribute("fx", "Unauthorized Page for this role!!");
+					throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+				}
 
-			model.addAttribute("fx", "Unauthorized Page for this role!!");
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
-		}
-
-		DepartmentDao dao = new DepartmentDao();
+		RemarksDao dao = new RemarksDao();
 
 		UserInformationModel userinfo = (UserInformationModel) session.getAttribute("UserList");
 		String USER = userinfo.getUSER_ID();
+		model.addAttribute("fx", "Service controller list ");
 		String msg = null;
 		try {
-			msg = dao.updateDepartment(Department, ContactNo,   OFFICE_NAME, AREA_NAME, SECTION, LANDLINE_NO,
-					MOBILE_NO, REMARKS1, REMARKS2,USER,ID);
+			msg = dao.updateRemarks(PROBLEM_ID, DESCRIPTION, SERVICE_TYPE_ID, SOLUTION_ID, ACTIVE_STATUS, USER);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -144,25 +147,28 @@ public class DepartmentController {
 		return msg;
 	}
 
-	@RequestMapping(value = "/department/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/remarks/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public String DepartmentDelete(String ID, HttpServletRequest request, Model model, Locale locale)
-			throws SQLException {
+	public String problemDelete(String PROBLEM_ID, Model model,HttpServletRequest request, Locale locale) throws SQLException {
 		logger.info("delete service", locale);
-
+		
+		
 		UserInformationModel user = (UserInformationModel) request.getSession().getAttribute("UserList");
 		MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
-
+	
 		if (menuaccess == null || menuaccess.getDELETE_FLAG().equals("N")) {
-
+			
 			model.addAttribute("fx", "Unauthorized Page for this role!!");
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
 		}
-		DepartmentDao dao = new DepartmentDao();
+
+		
+		
+		RemarksDao dao = new RemarksDao();
 
 		String msg = null;
 		try {
-			msg = dao.DeleteDepartment(ID);
+			msg = dao.DeleteProblem(PROBLEM_ID);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

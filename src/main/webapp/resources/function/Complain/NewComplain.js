@@ -1,6 +1,7 @@
 var datanum;
 var problemlist;
 var servicetypelist;
+var remarkslist;
 $(document).ready(function() {
 
 	getservicetypes();
@@ -466,6 +467,14 @@ function getSubsInfo(subsinfo) {
 
 
 			}
+			else {
+				//still display history button
+				var detaillink = '<a target="_blank" href="../ticket-history/fetch?MAIN_SRV_NO=' + $('#cpeSN').html() + '" class="btn bg-blue"> <i class="fa fa-history"></i> View CPE History Detail</a>';
+
+				$("#divforsubsinfo").append(detaillink);
+
+
+			}
 
 		});
 
@@ -560,6 +569,12 @@ function getservicetypes() {
 
 	});
 
+	//load solution list
+	$.get('../remarks/JSlist', {
+	}, function(response) {
+		remarkslist = response;
+	});
+
 
 }
 
@@ -591,12 +606,21 @@ function addservicecomplain(serno) {
 		// debugger;
 		$.each(servicetypelist, function(index, value) {
 
-			if (servicetype == value.SERVICE_TYPE_ID)
-				var appenddiv = "<DIV class='input-group " + serno + "'><span class='input-group-addon'><input value=" + value.SERVICE_TYPE_ID + " class='cproblemid' id='cproblemid" + serno + "' type='checkbox' checked=checked></span><label>" + value.DESCRIPTION + "(" + serno + ")</label><select class='form-control' id='servicetypeid" + serno + "'></select><input type='text' id='remarksid" + serno + "' class='form-control' placeholder='Remarks for " + value.DESCRIPTION + "'></DIV>";
-			$('#complainservcies').append(appenddiv);
+			if (servicetype == value.SERVICE_TYPE_ID) {
+		//		var appenddiv = "<DIV class='input-group " + serno + "'><span class='input-group-addon'><input value=" + value.SERVICE_TYPE_ID + " class='cproblemid' id='cproblemid" + serno + "' type='checkbox' checked=checked></span><label>" + value.DESCRIPTION + "(" + serno + ")</label><select class='form-control' id='servicetypeid" + serno + "'></select><input type='text' id='remarksid" + serno + "' class='form-control' placeholder='Remarks for " + value.DESCRIPTION + "'></DIV>";
+				var appenddiv = "<DIV class='input-group " + serno + "'><span class='input-group-addon'><input value=" + value.SERVICE_TYPE_ID + " class='cproblemid' id='cproblemid" + serno + "' type='checkbox' checked=checked></span><label>" + value.DESCRIPTION + "(" + serno + ")</label><select class='form-control' id='servicetypeid" + serno + "'></select><select class='form-control' id='remarksid" + serno + "'><option value='-1'>Others</option></select><input type='text' id='inputremarksid" + serno + "' class='form-control' placeholder='Remarks for " + value.DESCRIPTION + ". Incase your remarks is not in above dropdown.'></DIV>";
+				$('#complainservcies').append(appenddiv);
 
-			getProblemlist(servicetype, serno);
+				getProblemlist(servicetype, serno);
 
+				//onchage adding trigger for problem type
+				$("#servicetypeid" + serno).change(function() {
+					changeremarkslist(this.value, serno, servicetype);
+				});
+				
+				$("#servicetypeid" + serno).trigger("change");
+
+			}
 
 
 
@@ -648,7 +672,11 @@ function PostRegister(solved) {
 		myobject.SERVICE_NO = $(this).attr('id').substring(10);
 		myobject.SERVICE_ID = $('#cproblemid' + myobject.SERVICE_NO).val();
 		myobject.PROBLEM_ID = $('#servicetypeid' + myobject.SERVICE_NO).val();
+		//if remarks is others select it from input field
 		myobject.REMARKS = $('#remarksid' + myobject.SERVICE_NO).val();
+		if($('#remarksid' + myobject.SERVICE_NO).val()=='-1'){
+			myobject.REMARKS = "OTHERS:"+$('#inputremarksid' + myobject.SERVICE_NO).val();
+		}
 
 		transnop.push(myobject);
 	});
@@ -1189,7 +1217,7 @@ function fillIPTVdetail(sno) {
 				$('#iptvsodunit').html(response.active_package[0].subscriber_order_detail[0].unit);
 				$('#iptvsodsoid').html(response.active_package[0].subscriber_order_detail[0].subscriber_order_id);
 				$('#iptvsodserviceid').html(response.active_package[0].subscriber_order_detail[0].service_id);
-				
+
 			}
 			else { alert('Warning!! No active package found of NETTV'); }
 
@@ -1254,8 +1282,8 @@ function fillIPTVappdetail(sno) {
 			});
 
 			$('#nettvappdetail').append(div);
-			
-			
+
+
 			//stats for PRIVATE IP
 			$('#iptv_stats_private_ip').html(response.stats.private_ip);
 
@@ -1276,8 +1304,8 @@ function changewifiname() {
 		return false;
 	}
 	$.post('../complain/changeWiFiName', {
-		CPESNO: $('#cpeSN').html(),Wifiname:$('#wifiname').val()
-		
+		CPESNO: $('#cpeSN').html(), Wifiname: $('#wifiname').val()
+
 	}, function(response) {
 		alert(response);
 	}); // closing function(responseJson)
@@ -1293,12 +1321,57 @@ function changewifipassword() {
 		return false;
 	}
 	$.post('../complain/changewifiPassword', {
-		CPESNO: $('#cpeSN').html(),Password:$('#wifipassword').val()
-		
+		CPESNO: $('#cpeSN').html(), Password: $('#wifipassword').val()
+
 	}, function(response) {
 		alert(response);
 	}); // closing function(responseJson)
 }
 
+function CPEReboot() {
+	if ($('#cpeSN').html() == null || $('#cpeSN').html().length < 1) {
+		alert('CPE Serial Not Selected!!!! Please refresh this page');
+		return false;
+	}
 
+	$.post('../complain/cpereset', {
+		CPESNO: $('#cpeSN').html()
+
+	}, function(response) {
+		alert(response);
+	}); // closing function(responseJson)
+}
+
+function portBindReset() {
+	if ($('#AAAuserid').html() == null || $('#AAAuserid').html() == "") {
+		alert('UserID not found for NTDATA');
+		return;
+	}
+
+	$.post('../complain/portbindreset', {
+		Datanum: $('#AAAuserid').html()
+
+	}, function(response) {
+		alert(response);
+	}); // closing function(responseJson)
+}
+
+function changeremarkslist(problemid, serno, servicetype) {
+	
+	var select = $('#remarksid' + serno);
+
+	select.find('option').remove();
+	 $('<option>').val("-1").text("Others").appendTo(select);
+	$.each(remarkslist, function(index, value) {
+		// alert(value.SERVICE_TYPE_ID);
+		if (value.PROBLEM_ID == problemid) {
+			$('<option>').val(value.DESCRIPTION).text(value.DESCRIPTION).appendTo(select);
+		}
+	});
+	
+	
+	
+
+
+}
 

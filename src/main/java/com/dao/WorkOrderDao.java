@@ -18,36 +18,31 @@ import com.soap.dao.WorkOrderAPI;
 import util.DbCon;
 
 public class WorkOrderDao {
-	
+
 	public List<Map<String, Object>> getlowlvlWorkOrderList(String REGION_CODE, String ZONE_CODE, String DISTRICT_CODE,
-			String OFFICE_CODE, String QFROM_DT, String QTO_DT, String qtype, String ACTIVE_FLAG,String User) throws SQLException {
+			String OFFICE_CODE, String QFROM_DT, String QTO_DT, String qtype, String ACTIVE_FLAG, String User)
+			throws SQLException {
 		Connection con = DbCon.getConnection();
 
 		try {
-			String qry="\r\n" + 
-					"SELECT wo.*,\r\n" + 
-					"       vfad.*,\r\n" + 
-					"       woe.*,\r\n" + 
-					"       wo.id     WOID\r\n" + 
-					"  FROM WORKORDER WO, VW_FTTH_ALL_OLT VFAD, WORK_ORDER_ELEMENT WOE\r\n" + 
-					" WHERE     EXISTS\r\n" + 
-					"               (SELECT DISTINCT (VFAF.OLT)\r\n" + 
-					"                  FROM WEB_USER_FDC_MAP WUFM, VW_FTTH_ALL_FDC VFAF\r\n" + 
-					"                 WHERE     WUFM.FDC_CODE = VFAF.FDC_CODE\r\n" + 
-					"                       AND WUFM.user_id = ?\r\n" + 
-					"                       AND VFAF.OLT = WO.OLT)\r\n" + 
-					"       AND WO.OLT = VFAD.OLT\r\n" + 
-					"       AND WO.ELEMENT_TYPE = woe.id\r\n" + 
-					"       AND element_type = NVL (?, element_type)\r\n" + 
-					"       AND region_code = NVL (?, region_code)\r\n" + 
-					"       AND zone_code = NVL (?, zone_code)\r\n" + 
-					"       AND district_code = NVL (?, district_code)\r\n" + 
-					"       AND office_code = NVL (?, office_code)\r\n" + 
-					"       AND active_flag = NVL (?, active_flag)\r\n" + 
-					"       AND create_dt BETWEEN NVL (common.to_ad (?), SYSDATE - 30)\r\n" + 
-					"                         AND NVL (common.to_ad (?), SYSDATE)";
+			String qry = "\r\n" + "SELECT wo.*,\r\n" + "       vfad.*,\r\n" + "       woe.*,\r\n"
+					+ "       wo.id     WOID\r\n"
+					+ "  FROM WORKORDER WO, VW_FTTH_ALL_OLT VFAD, WORK_ORDER_ELEMENT WOE\r\n" + " WHERE     EXISTS\r\n"
+					+ "               (SELECT DISTINCT (VFAF.OLT)\r\n"
+					+ "                  FROM WEB_USER_FDC_MAP WUFM, VW_FTTH_ALL_FDC VFAF\r\n"
+					+ "                 WHERE     WUFM.FDC_CODE = VFAF.FDC_CODE\r\n"
+					+ "                       AND WUFM.user_id = ?\r\n"
+					+ "                       AND VFAF.OLT = WO.OLT)\r\n" + "       AND WO.OLT = VFAD.OLT\r\n"
+					+ "       AND WO.ELEMENT_TYPE = woe.id\r\n" + "       AND element_type = NVL (?, element_type)\r\n"
+					+ "       AND region_code = NVL (?, region_code)\r\n"
+					+ "       AND zone_code = NVL (?, zone_code)\r\n"
+					+ "       AND district_code = NVL (?, district_code)\r\n"
+					+ "       AND office_code = NVL (?, office_code)\r\n"
+					+ "       AND active_flag = NVL (?, active_flag)\r\n"
+					+ "       AND create_dt BETWEEN NVL (common.to_ad (?), SYSDATE - 30)\r\n"
+					+ "                         AND NVL (common.to_ad (?), SYSDATE)";
 			PreparedStatement pst = con.prepareStatement(qry);
-			//System.out.println(qry);
+			// System.out.println(qry);
 			pst.setString(1, User);
 			pst.setString(2, qtype);
 			pst.setString(3, REGION_CODE);
@@ -82,13 +77,13 @@ public class WorkOrderDao {
 		return null;
 	}
 
-	
 	public List<Map<String, Object>> getWorkOrderList(String REGION_CODE, String ZONE_CODE, String DISTRICT_CODE,
 			String OFFICE_CODE, String QFROM_DT, String QTO_DT, String qtype, String ACTIVE_FLAG) throws SQLException {
 		Connection con = DbCon.getConnection();
 
 		try {
-			String qry="SELECT wo.*,vfad.*,woe.*, wo.id WOID\r\n" + "  FROM WORKORDER WO, VW_FTTH_ALL_OLT VFAD, WORK_ORDER_ELEMENT WOE\r\n"
+			String qry = "SELECT wo.*,vfad.*,woe.*, wo.id WOID\r\n"
+					+ "  FROM WORKORDER WO, VW_FTTH_ALL_OLT VFAD, WORK_ORDER_ELEMENT WOE\r\n"
 					+ " WHERE     WO.OLT = VFAD.OLT\r\n" + "       AND WO.ELEMENT_TYPE = woe.id\r\n"
 					+ "       AND element_type = NVL (?, element_type)\r\n"
 					+ "       AND region_code = NVL (?,region_code)\r\n"
@@ -98,7 +93,7 @@ public class WorkOrderDao {
 					+ "       AND active_flag = NVL (?, active_flag)\r\n"
 					+ "       AND create_dt BETWEEN NVL (common.to_ad(?), SYSDATE - 30) AND NVL (common.to_ad(?), SYSDATE)";
 			PreparedStatement pst = con.prepareStatement(qry);
-			
+
 			pst.setString(1, qtype);
 			pst.setString(2, REGION_CODE);
 			pst.setString(3, ZONE_CODE);
@@ -195,14 +190,13 @@ public class WorkOrderDao {
 		Connection con = DbCon.getConnection();
 		con.setAutoCommit(false);
 		try {
-			String getseq="select WO_ID.NEXTVAL from dual";
-			ResultSet seqrs=con.createStatement().executeQuery(getseq);
-			String seq=null;
-			while(seqrs.next()) {
-				seq=seqrs.getString(1);
+			String getseq = "select WO_ID.NEXTVAL from dual";
+			ResultSet seqrs = con.createStatement().executeQuery(getseq);
+			String seq = null;
+			while (seqrs.next()) {
+				seq = seqrs.getString(1);
 			}
-			
-			
+
 			String modifier = "?";
 
 			if (!fdc.isEmpty()) {
@@ -223,7 +217,7 @@ public class WorkOrderDao {
 			Date sqldateDate = (java.util.Date) formatter.parse(starttime.replace("T", " "));
 			java.sql.Date sqlStartDate = new java.sql.Date(sqldateDate.getTime());
 			pst.setString(1, seq);
-			
+
 			pst.setString(2, type);
 			pst.setString(3, value);
 			pst.setString(4, remarks);
@@ -320,17 +314,21 @@ public class WorkOrderDao {
 
 				// sending sms to all customer
 				WorkOrderAPI APIdao = new WorkOrderAPI();
-				SendSMS smsdao=new SendSMS();
-				String smsmsg="Dear Customer, \n We are pleased to inform about the restoration of your FTTH servies. Please dail 198 incase of further problems. \n -Nepal Telecom";
+				SendSMS smsdao = new SendSMS();
+				String smsmsg = "Dear Customer,\nWe are pleased to inform about the restoration of your FTTH services. Please dail 198(and choose 4) incase of further problems. \nNepal Telecom";
 				List<String> MDN = APIdao.getFTTHNumberInfo(rs.getString("ELEMENT_TYPE"),
 						rs.getString("ELEMENT_VALUE"));
 				for (String mdn : MDN) {
 					try {
 
 						// send sms to these number regarding work order
-				//		System.out.println(APIdao.getContactNumber(mdn));
-						smsdao.sendsms(APIdao.getContactNumber(mdn), smsmsg , "WORKORDER", USER, ID);
+						// System.out.println(APIdao.getContactNumber(mdn));
+						String contactno = APIdao.getContactNumber(mdn);
 						
+						//send sms to only nt mobile number.. taking 10 digit no for now.
+						if (contactno.length() == 10) {
+							smsdao.sendsms(contactno, smsmsg, "WORKORDER", USER, ID);
+						}
 
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -439,7 +437,32 @@ public class WorkOrderDao {
 //
 //				}
 			// validation till here
+			
+			//first solve the ticket 
+			pst = con.prepareStatement("INSERT INTO TOKEN_DETAIL (TD_ID,\r\n"
+					+ "                               SUB_TOKEN_ID,\r\n"
+					+ "                               FROM_SUB_TEAM_CODE,\r\n"
+					+ "                               TO_SUB_TEAM_CODE,\r\n"
+					+ "                               SOLVE_FLAG,\r\n"
+					+ "                               PROBLEM_ID,\r\n" + "                               REMARKS,\r\n"
+					+ "                               CREATE_BY)\r\n"
+					+ "     VALUES (TM_SUB_TOKEN_DETAIL_ID.NEXTVAL,\r\n" + "             ?,\r\n"
+					+ "             (select sub_team_code from TOKEN_MASTER where SUB_TOKEN_ID=?),\r\n"
+					+ "             (select sub_team_code from TOKEN_MASTER where SUB_TOKEN_ID=?),\r\n" +
 
+					"             'Y',\r\n" + "             (SELECT PROBLEM_ID\r\n"
+					+ "                FROM TOKEN_MASTER\r\n" + "               WHERE SUB_TOKEN_ID = ?),\r\n"
+					+ "             ?,\r\n" + "             ?)");
+			pst.setString(1, closetoken);
+			pst.setString(2, closetoken);
+			pst.setString(3, closetoken);
+			pst.setString(4, closetoken);
+			pst.setString(5, Remarks);
+			pst.setString(6, User);
+			pst.executeUpdate();
+			
+			
+			//then close the solve tickets in token details
 			pst = con.prepareStatement("INSERT INTO TOKEN_DETAIL (TD_ID,\r\n"
 					+ "                               SUB_TOKEN_ID,\r\n"
 					+ "                               FROM_SUB_TEAM_CODE,\r\n"

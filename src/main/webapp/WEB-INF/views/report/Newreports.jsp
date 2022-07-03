@@ -337,6 +337,16 @@
 												<option value="TicketClearance">Ticket Clearance</option>
 												<option value="clearance_day_office">Office Clearance</option>
 												<option value="clearance_day_fdcteam">FDC Team Clearance</option>
+												
+<!-- 												new report -->
+		
+												<option value="clearance_day_office_format">Clearance_day_in office</option>
+												<option value="clearance_day_fdcteam_reformat"> Clearance_day_Team_wise</option>
+												<option value="Fault_Repetition">Fault Repetition report</option>
+												<option value="Fault_Repetition_Customer">Fault Repetition Customer report</option>
+												<option value="User_Log">User Log Report</option>
+												
+												
 											</select>
 
 										</div>

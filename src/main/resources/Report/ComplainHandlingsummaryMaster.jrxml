@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 5.5.2  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ComplainHandlingsummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fc565034-ab42-4130-b62c-636f311996c0">
 	<property name="ireport.zoom" value="2.143588810000002"/>
 	<property name="ireport.x" value="300"/>
 	<property name="ireport.y" value="224"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FTTH"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FTTH LIVE NEW SERVER (PROD)"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="pm_frm_dt" class="java.util.Date">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -45,68 +45,83 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT region_code, region, office_code, office,
-master_sub_team_code,(select description from m_service_type where SERVICE_TYPE_ID  =z.service_type_id) service_desc,
-new, pending, closed, solved from(
-select distinct region_code, region, office_code, office, master_sub_team_code, service_type_id,
-(select description from m_service where service_id=a.service_id) serv_desc,
-(select count(*) from vw_token_master_only
-WHERE region_code=a.region_code AND office_code=a.office_code and
-zone_code=a.zone_code and
-district_code=a.district_code
-AND master_sub_team_code=a.master_sub_team_code
-AND service_type_id=a.service_type_id
-and MASTER_SOLVE_FLAG='N'
-AND trunc(MASTER_CREATE_DT) BETWEEN  NVL($P{pm_frm_dt}, SYSDATE - 30)  and NVL ($P{pm_to_dt}, SYSDATE)
-) new,
-(select count(*) from vw_token_master_only
-WHERE region_code=a.region_code AND office_code=a.office_code
-and zone_code=a.zone_code
-and district_code=a.district_code AND master_sub_team_code=a.master_sub_team_code
-AND service_type_id=a.service_type_id
-and MASTER_SOLVE_FLAG='F'
-AND trunc(MASTER_CREATE_DT) BETWEEN NVL($P{pm_frm_dt}, SYSDATE - 30)  and NVL ($P{pm_to_dt}, SYSDATE)
-) pending,
-(select count(*) from vw_token_master_only
-WHERE region_code=a.region_code AND office_code=a.office_code
-and
-zone_code=a.zone_code and
-district_code=a.district_code
+		<![CDATA[SELECT max(region_code) region_code,max(region) region,max(ZONE) ZONE,max(DISTRICT) DISTRICT, max(office) OFFICE, max(office_code) office_code,max(MASTER_SUB_TEAM_CODE) MASTER_SUB_TEAM_CODE,SERVICE_TYPE_ID,(case  SERVICE_TYPE_ID when 1 then 'DATA' when 2 then 'VOICE' when 3 then 'NTTV' end ) service_desc,
+             SUM (CASE WHEN VTDDS.REG_DT>= NVL($P{pm_frm_dt}, SYSDATE - 30) AND VTDDS.REG_DT<= NVL ($P{pm_to_dt}, SYSDATE) THEN 1 ELSE 0 END) NEW,
+            
+             SUM (CASE WHEN  VTDDS.REG_DT>= NVL($P{pm_frm_dt}, SYSDATE - 30) AND VTDDS.REG_DT<= NVL ($P{pm_to_dt}, SYSDATE) and VTDDS.SOLVE_DT> NVL ($P{pm_to_dt}, SYSDATE)  THEN 1 ELSE 0 END) PENDING,
+             
+             SUM (CASE WHEN VTMO.MASTER_SOLVE_FLAG in ('Y','C') AND VTDDS.SOLVE_DT>= NVL($P{pm_frm_dt}, SYSDATE - 30) AND VTDDS.SOLVE_DT<= NVL ($P{pm_to_dt}, SYSDATE) THEN 1 ELSE 0 END)
+             Solved,
+         
+         SUM (CASE WHEN VTMO.MASTER_SOLVE_FLAG = 'C' AND VTDDS.CLOSE_DT>= NVL($P{pm_frm_dt}, SYSDATE - 30) AND VTDDS.CLOSE_DT<= NVL ($P{pm_to_dt}, SYSDATE) AND VTDDS.CLOSE_DT>= NVL($P{pm_frm_dt}, SYSDATE - 30) AND VTDDS.CLOSE_DT<= NVL ($P{pm_to_dt}, SYSDATE) THEN 1 ELSE 0 END)
+             Closed
+             
+             
+             
+   FROM VW_TOKEN_MASTER_ONLY VTMO,VW_TOKEN_DETAIL_DATE_STATUS VTDDS
+    where VTMO.SUB_TOKEN_ID=VTDDS.SUB_TOKEN_ID
+    
+and VTMO.SERVICE_TYPE_ID=nvl($P{pm_servicetype}  ,SERVICE_TYPE_ID)
+     and REGION_CODE=nvl($P{pm_region},REGION_CODE)
+and ZONE_CODE=nvl($P{pm_zone},ZONE_CODE)
+and DISTRICT_CODE=nvl($P{pm_district},DISTRICT_CODE)
+and OFFICE_CODE=nvl($P{pm_office},OFFICE_CODE)
 
-AND master_sub_team_code=a.master_sub_team_code
-AND service_type_id=a.service_type_id
-and MASTER_SOLVE_FLAG='Y'
-AND trunc(MASTER_CREATE_DT) BETWEEN NVL($P{pm_frm_dt}, SYSDATE - 30)  and NVL ($P{pm_to_dt}, SYSDATE)
-) solved,
-(select count(*) from vw_token_master_only
-WHERE region_code=a.region_code AND office_code=a.office_code
-and
-zone_code=a.zone_code and
-district_code=a.district_code
-AND master_sub_team_code=a.master_sub_team_code
-
-AND service_type_id=a.service_type_id
-and MASTER_SOLVE_FLAG='C'
-AND trunc(MASTER_CREATE_DT) BETWEEN NVL($P{pm_frm_dt}, SYSDATE - 30)  and NVL ($P{pm_to_dt}, SYSDATE)
-) Closed
-from vw_token_all a  where  a.REGION_CODE=nvl($P{pm_region},a.REGION_CODE)
-and a.ZONE_CODE=nvl($P{pm_zone},a.ZONE_CODE)
-and a.DISTRICT_CODE=nvl($P{pm_district},a.DISTRICT_CODE)
-and a.OFFICE_CODE=nvl($P{pm_office},a.OFFICE_CODE)
-and a.SERVICE_TYPE_ID=nvl($P{pm_servicetype},a.SERVICE_TYPE_ID)
-and a.MASTER_SUB_TEAM_CODE=nvl($P{pm_sub_team_code},a.MASTER_SUB_TEAM_CODE)
-AND trunc(a.MASTER_CREATE_DT) BETWEEN NVL($P{pm_frm_dt}, SYSDATE - 30)  and NVL ($P{pm_to_dt}, SYSDATE)  order by region, office_code,SERVICE_TYPE_ID) z]]>
+GROUP BY SERVICE_TYPE_ID,team_id,office_code
+order by region,district,office_code,team_id,service_type_id]]>
 	</queryString>
-	<field name="REGION_CODE" class="java.lang.String"/>
-	<field name="REGION" class="java.lang.String"/>
-	<field name="OFFICE_CODE" class="java.math.BigDecimal"/>
-	<field name="OFFICE" class="java.lang.String"/>
-	<field name="MASTER_SUB_TEAM_CODE" class="java.lang.String"/>
-	<field name="SERVICE_DESC" class="java.lang.String"/>
-	<field name="NEW" class="java.math.BigDecimal"/>
-	<field name="PENDING" class="java.math.BigDecimal"/>
-	<field name="CLOSED" class="java.math.BigDecimal"/>
-	<field name="SOLVED" class="java.math.BigDecimal"/>
+	<field name="REGION_CODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="REGION_CODE"/>
+		<property name="com.jaspersoft.studio.field.label" value="REGION_CODE"/>
+	</field>
+	<field name="REGION" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="REGION"/>
+		<property name="com.jaspersoft.studio.field.label" value="REGION"/>
+	</field>
+	<field name="ZONE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ZONE"/>
+		<property name="com.jaspersoft.studio.field.label" value="ZONE"/>
+	</field>
+	<field name="DISTRICT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DISTRICT"/>
+		<property name="com.jaspersoft.studio.field.label" value="DISTRICT"/>
+	</field>
+	<field name="OFFICE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OFFICE"/>
+		<property name="com.jaspersoft.studio.field.label" value="OFFICE"/>
+	</field>
+	<field name="OFFICE_CODE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="OFFICE_CODE"/>
+		<property name="com.jaspersoft.studio.field.label" value="OFFICE_CODE"/>
+	</field>
+	<field name="MASTER_SUB_TEAM_CODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MASTER_SUB_TEAM_CODE"/>
+		<property name="com.jaspersoft.studio.field.label" value="MASTER_SUB_TEAM_CODE"/>
+	</field>
+	<field name="SERVICE_TYPE_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SERVICE_TYPE_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="SERVICE_TYPE_ID"/>
+	</field>
+	<field name="SERVICE_DESC" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SERVICE_DESC"/>
+		<property name="com.jaspersoft.studio.field.label" value="SERVICE_DESC"/>
+	</field>
+	<field name="NEW" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="NEW"/>
+		<property name="com.jaspersoft.studio.field.label" value="NEW"/>
+	</field>
+	<field name="PENDING" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PENDING"/>
+		<property name="com.jaspersoft.studio.field.label" value="PENDING"/>
+	</field>
+	<field name="SOLVED" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SOLVED"/>
+		<property name="com.jaspersoft.studio.field.label" value="SOLVED"/>
+	</field>
+	<field name="CLOSED" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CLOSED"/>
+		<property name="com.jaspersoft.studio.field.label" value="CLOSED"/>
+	</field>
 	<variable name="tot_new" class="java.math.BigDecimal" resetType="Group" resetGroup="region" calculation="Sum">
 		<variableExpression><![CDATA[$F{NEW}]]></variableExpression>
 	</variable>
@@ -316,7 +331,7 @@ AND trunc(a.MASTER_CREATE_DT) BETWEEN NVL($P{pm_frm_dt}, SYSDATE - 30)  and NVL 
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
-			<textField textAdjust="StretchHeight">
+			<textField isStretchWithOverflow="true">
 				<reportElement x="2" y="54" width="797" height="15" uuid="62e3d312-b722-4e82-8729-7eb006a147d4"/>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
@@ -383,7 +398,7 @@ AND trunc(a.MASTER_CREATE_DT) BETWEEN NVL($P{pm_frm_dt}, SYSDATE - 30)  and NVL 
 	</columnHeader>
 	<detail>
 		<band height="19" splitType="Stretch">
-			<textField textAdjust="StretchHeight" pattern="">
+			<textField isStretchWithOverflow="true" pattern="">
 				<reportElement x="1" y="2" width="75" height="17" uuid="2c2627c9-f147-4514-b875-d6e5dd86e176"/>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>

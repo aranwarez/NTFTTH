@@ -22,17 +22,15 @@
 			<jsp:include page="${request.contextPath}/topmenu"></jsp:include>
 		</header>
 		<!-- Left side column. contains the logo and sidebar -->
-		<aside class="main-sidebar">
-
-			<jsp:include page="${request.contextPath}/leftmenu"></jsp:include>
-
+		<aside class="main-sidebar">			
+					<jsp:include page="${request.contextPath}/leftmenu"></jsp:include>			
 		</aside>
 
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
-				<h1>${fx}</h1>
+				<h1>FTTH Remarks Entry</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 					<li><a href="#">Tables</a></li>
@@ -56,24 +54,24 @@
 							</div>
 
 							<%
-							if (request.getParameter("sucess") != null) {
-							%>
+								if (request.getParameter("sucess") != null) {
+							%>>
 							<div class="alert alert-success">
 								<strong> <%=request.getParameter("sucess")%>
 								</strong>
 							</div>
 							<%
-							}
+								}
 							%>
 							<%
-							if (request.getParameter("error") != null) {
+								if (request.getParameter("error") != null) {
 							%>>
 							<div class="alert alert-danger">
 								<strong> <%=request.getParameter("error")%>
 								</strong>
 							</div>
 							<%
-							}
+								}
 							%>
 
 							<!-- /.box-header -->
@@ -82,17 +80,11 @@
 									<thead>
 										<tr>
 											<th>ID</th>
-											<th>OFFICE_NAME</th>
-											<th>AREA_NAME</th>
-
-											<th>Department</th>
-											<th>Contact</th>
-											<th>Name</th>
-											<th>LANDLINE_NO</th>
-											<th>MOBILE_NO</th>
-											<th>REMARKS1</th>
-											<th>REMARKS2</th>
-
+											
+											<th>Remarks</th>
+											<th>Problem Type</th>
+											<th>Service Type</th>
+											<th>ACTIVE_STATUS</th>
 											<th>Edit</th>
 											<th>Delete</th>
 
@@ -102,26 +94,17 @@
 										<c:forEach var="user" items="${data_list}">
 
 											<tr>
-												<td>${user.DEPARTMENT_ID}</td>
-												<td>${user.OFFICE_NAME}</td>
-												<td>${user.AREA_NAME}</td>
+											<td>${user.REMARKS_ID}</td>
 												<td>${user.DESCRIPTION}</td>
-												<td>${user.CONTACT_NO}</td>
-													<td>${user.SECTION}</td>
-												<td>${user.LANDLINE_NO}</td>
-												<td>${user.MOBILE_NO}</td>
-												<td>${user.REMARKS1}</td>
-												<td>${user.REMARKS2}</td>
-												
-  
-  
-
+												<td>${user.PROBLEM_DESC}</td>
+												<td>${user.SERVICE_DESC}</td>	
+												<td>${user.ACTIVE_STATUS}</td>
 												<td>
 													<div class="btn-group">
 														<a href="#" class="btn btn-info" data-toggle="modal"
 															data-target="#editModal"
-															onclick="return editTeam('${user.DEPARTMENT_ID}')"> <i
-															class="fa fa-edit"></i> Edit
+															onclick="editProblem('${user.REMARKS_ID}','${user.SERVICE_TYPE_ID}','${user.PROBLEM_ID}')">
+															<i class="fa fa-edit"></i> Edit
 														</a>
 													</div>
 												</td>
@@ -129,7 +112,7 @@
 													<div>
 														<a href="" class="btn btn-default" data-toggle="modal"
 															data-target="#deleteModal"
-															onclick="return deleteTeam('${user.DEPARTMENT_ID}')">
+															onclick="return deleteProblem('${user.REMARKS_ID}')">
 															<i class="fa fa-trash"></i> Delete
 														</a>
 													</div>
@@ -172,19 +155,19 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<jsp:include page="${request.contextPath}/dialogdepartment"></jsp:include>
+	<jsp:include page="${request.contextPath}/dialogremarks"></jsp:include>
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 
 	<script>
-	$(function() {
+		$(function() {
+			
+			$('#example1').DataTable()
 
-	    $('#example1').DataTable()
+		})
+	</script>
+	<script src="<c:url value="/resources/function/remarks.js?a=132" />"></script>
 
-	})
-    </script>
-	<script src="<c:url value="/resources/function/department.js" />"></script>
-	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
-
+<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 
 </body>
 </html>

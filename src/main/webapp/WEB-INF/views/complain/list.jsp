@@ -592,6 +592,16 @@
 									data-target="#WifiModal">
 									<i class="fa fa-wifi"></i>Change Wifi Setting
 								</button>
+								
+								<button type="button" onclick="portBindReset()" class="btn bg-yellow submitbutton">
+									<i class="fa fa-refresh"></i>Port Bind Reset
+								</button>
+								
+								<button type="button" onclick="CPEReboot()" class="btn bg-red submitbutton">
+									<i class="fa fa-power-off"></i>CPE Reset
+								</button>
+								
+								
 <!-- 								<a href="#" class="btn btn-primary pull-right" -->
 <!-- 									data-toggle="modal" data-target="#AAAstatusModal"> <i -->
 <!-- 									class="fa fa-plus"></i> View log -->
@@ -1004,7 +1014,7 @@
 	<jsp:include page="${request.contextPath}/complain/dialog"></jsp:include>
 	<jsp:include page="${request.contextPath}/footJS"></jsp:include>
 	<script
-		src="<c:url value="/resources/function/Complain/NewComplain.js?ver=1231" />"></script>
+		src="<c:url value="/resources/function/Complain/NewComplain.js?ver=190622" />"></script>
 	<script src="<c:url value="/resources/adminltd/js/commonajax.js" />"></script>
 	
 	<script src="<c:url value="/resources/adminltd/js/Chart.bundle.js" />"></script>

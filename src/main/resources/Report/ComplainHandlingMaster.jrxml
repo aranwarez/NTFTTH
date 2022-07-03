@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 5.5.2  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ComplainHandling" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fc565034-ab42-4130-b62c-636f311996c0">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="403"/>
 	<property name="ireport.y" value="0"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FTTH"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FTTH LIVE NEW SERVER (PROD)"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="pm_frm_dt" class="java.util.Date">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -53,62 +53,206 @@
 	</parameter>
 	<queryString>
 		<![CDATA[select a.*,
-decode(a.MASTER_SOLVE_FLAG,'N','New','F','Forwarded','Y', 'Solved','C','Closed', a.MASTER_SOLVE_FLAG) query_status,common.to_bs(a.MASTER_CREATE_DT)||to_char(a.MASTER_CREATE_DT,'HH24MISS') as entry_dt,
-common.to_bs(a.MASTER_CREATE_DT)||to_char(a.MASTER_CREATE_DT,'HH24MISS') as problem_dt,
+decode(a.MASTER_SOLVE_FLAG,'N','New','F','Forwarded','Y', 'Solved','C','Closed', a.MASTER_SOLVE_FLAG) query_status,common.to_bs(a.MASTER_CREATE_DT)||'.'||to_char(a.MASTER_CREATE_DT,'HH24:MI') as entry_dt,
+common.to_bs(VTDDS.SOLVE_DT)||'.'||to_char(VTDDS.SOLVE_DT,'HH24:MI')||'-'||common.to_bs(VTDDS.CLOSE_DT)||'.'||to_char(VTDDS.CLOSE_DT,'HH24:MI') as problem_dt,
 (select description from m_service_type where service_type_id=a.SERVICE_TYPE_ID) config_type,
 a.PROBLEM_DESC
- from vw_token_master_only a
-where  a.region_code=nvl($P{pm_region},a.region_code)
+ from vw_token_master_only a, VW_TOKEN_DETAIL_DATE_STATUS VTDDS
+    where a.SUB_TOKEN_ID=VTDDS.SUB_TOKEN_ID
+and a.region_code=nvl($P{pm_region},a.region_code)
 and a.zone_code=nvl($P{pm_zone},a.zone_code)
 and a.district_code=nvl($P{pm_district},a.district_code)
 and a.office_code=nvl($P{pm_office},a.office_code)
 and a.MASTER_SOLVE_FLAG=nvl($P{pm_solve_flag},a.MASTER_SOLVE_FLAG)
-and a.MASTER_CREATE_DT BETWEEN NVL (common.TO_AD ($P{pm_frm_dt}), SYSDATE - 30)
-	 AND NVL (common.TO_AD ($P{pm_to_dt}), SYSDATE)
+and a.SERVICE_TYPE_ID=nvl($P{pm_servicetype}  ,SERVICE_TYPE_ID)
+
+and (a.MASTER_CREATE_DT BETWEEN  NVL ($P{pm_frm_dt}, SYSDATE - 30)
+	 AND NVL ($P{pm_to_dt}, SYSDATE)
+	 or VTDDS.SOLVE_DT BETWEEN   NVL ($P{pm_frm_dt}, SYSDATE - 30)
+	 AND NVL ($P{pm_to_dt}, SYSDATE) or VTDDS.CLOSE_DT between   NVL ($P{pm_frm_dt}, SYSDATE - 30)  AND NVL ($P{pm_to_dt}, SYSDATE)  )
 order by
- a.region_code, a.zone_code, a.district_code,a.office_code,a.MASTER_SOLVE_FLAG]]>
+ a.region_code, a.zone_code, a.district_code,a.office_code,MASTER_CREATE_DT asc]]>
 	</queryString>
-	<field name="TOKEN_ID" class="java.math.BigDecimal"/>
-	<field name="REGION_CODE" class="java.lang.String"/>
-	<field name="REGION" class="java.lang.String"/>
-	<field name="ZONE_CODE" class="java.math.BigDecimal"/>
-	<field name="ZONE" class="java.lang.String"/>
-	<field name="DISTRICT_CODE" class="java.math.BigDecimal"/>
-	<field name="DISTRICT" class="java.lang.String"/>
-	<field name="OFFICE_CODE" class="java.math.BigDecimal"/>
-	<field name="OFFICE" class="java.lang.String"/>
-	<field name="OLT_CODE" class="java.math.BigDecimal"/>
-	<field name="OLT" class="java.lang.String"/>
-	<field name="FDC_CODE" class="java.math.BigDecimal"/>
-	<field name="FDC" class="java.lang.String"/>
-	<field name="FDC_LOCATION" class="java.lang.String"/>
-	<field name="SERVICE_ID" class="java.math.BigDecimal"/>
-	<field name="SRV_NO" class="java.lang.String"/>
-	<field name="COMPLAIN_NO" class="java.lang.String"/>
-	<field name="CONTACT_NAME" class="java.lang.String"/>
-	<field name="MAIN_SRV_NO" class="java.lang.String"/>
-	<field name="TEAM_ID" class="java.math.BigDecimal"/>
-	<field name="TEAMNAME" class="java.lang.String"/>
-	<field name="SUB_TOKEN_ID" class="java.math.BigDecimal"/>
-	<field name="MAIN_SOLVE_FLAG" class="java.lang.String"/>
-	<field name="MASTER_SOLVE_FLAG" class="java.lang.String"/>
-	<field name="SERVICE_TYPE_ID" class="java.math.BigDecimal"/>
-	<field name="MASTER_PROBLEM_ID" class="java.math.BigDecimal"/>
-	<field name="PROBLEM_DESC" class="java.lang.String"/>
-	<field name="MASTER_REMARKS" class="java.lang.String"/>
-	<field name="MASTER_SUB_TEAM_CODE" class="java.lang.String"/>
-	<field name="MASTER_SERVICE_NO" class="java.lang.String"/>
-	<field name="MASTER_CREATE_DT" class="java.sql.Timestamp"/>
-	<field name="MAIN_CREATE_BY" class="java.lang.String"/>
-	<field name="MAIN_CREATE_DT" class="java.sql.Timestamp"/>
-	<field name="OLT_PORT" class="java.lang.String"/>
-	<field name="FAP_LOCATION" class="java.lang.String"/>
-	<field name="FAP_PORT" class="java.lang.String"/>
-	<field name="CPE_RX_LVL" class="java.math.BigDecimal"/>
-	<field name="QUERY_STATUS" class="java.lang.String"/>
-	<field name="ENTRY_DT" class="java.lang.String"/>
-	<field name="PROBLEM_DT" class="java.lang.String"/>
-	<field name="CONFIG_TYPE" class="java.lang.String"/>
+	<field name="TOKEN_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TOKEN_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOKEN_ID"/>
+	</field>
+	<field name="REGION_CODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="REGION_CODE"/>
+		<property name="com.jaspersoft.studio.field.label" value="REGION_CODE"/>
+	</field>
+	<field name="REGION" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="REGION"/>
+		<property name="com.jaspersoft.studio.field.label" value="REGION"/>
+	</field>
+	<field name="ZONE_CODE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="ZONE_CODE"/>
+		<property name="com.jaspersoft.studio.field.label" value="ZONE_CODE"/>
+	</field>
+	<field name="ZONE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ZONE"/>
+		<property name="com.jaspersoft.studio.field.label" value="ZONE"/>
+	</field>
+	<field name="DISTRICT_CODE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="DISTRICT_CODE"/>
+		<property name="com.jaspersoft.studio.field.label" value="DISTRICT_CODE"/>
+	</field>
+	<field name="DISTRICT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DISTRICT"/>
+		<property name="com.jaspersoft.studio.field.label" value="DISTRICT"/>
+	</field>
+	<field name="OFFICE_CODE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="OFFICE_CODE"/>
+		<property name="com.jaspersoft.studio.field.label" value="OFFICE_CODE"/>
+	</field>
+	<field name="OFFICE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OFFICE"/>
+		<property name="com.jaspersoft.studio.field.label" value="OFFICE"/>
+	</field>
+	<field name="OLT_CODE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="OLT_CODE"/>
+		<property name="com.jaspersoft.studio.field.label" value="OLT_CODE"/>
+	</field>
+	<field name="OLT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OLT"/>
+		<property name="com.jaspersoft.studio.field.label" value="OLT"/>
+	</field>
+	<field name="FDC_CODE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="FDC_CODE"/>
+		<property name="com.jaspersoft.studio.field.label" value="FDC_CODE"/>
+	</field>
+	<field name="FDC" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FDC"/>
+		<property name="com.jaspersoft.studio.field.label" value="FDC"/>
+	</field>
+	<field name="FDC_LOCATION" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FDC_LOCATION"/>
+		<property name="com.jaspersoft.studio.field.label" value="FDC_LOCATION"/>
+	</field>
+	<field name="SERVICE_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SERVICE_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="SERVICE_ID"/>
+	</field>
+	<field name="SRV_NO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SRV_NO"/>
+		<property name="com.jaspersoft.studio.field.label" value="SRV_NO"/>
+	</field>
+	<field name="COMPLAIN_NO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="COMPLAIN_NO"/>
+		<property name="com.jaspersoft.studio.field.label" value="COMPLAIN_NO"/>
+	</field>
+	<field name="CONTACT_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CONTACT_NAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="CONTACT_NAME"/>
+	</field>
+	<field name="MAIN_SRV_NO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MAIN_SRV_NO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MAIN_SRV_NO"/>
+	</field>
+	<field name="TEAM_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TEAM_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="TEAM_ID"/>
+	</field>
+	<field name="TEAMNAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TEAMNAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="TEAMNAME"/>
+	</field>
+	<field name="SUB_TOKEN_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SUB_TOKEN_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="SUB_TOKEN_ID"/>
+	</field>
+	<field name="MAIN_SOLVE_FLAG" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MAIN_SOLVE_FLAG"/>
+		<property name="com.jaspersoft.studio.field.label" value="MAIN_SOLVE_FLAG"/>
+	</field>
+	<field name="MASTER_SOLVE_FLAG" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MASTER_SOLVE_FLAG"/>
+		<property name="com.jaspersoft.studio.field.label" value="MASTER_SOLVE_FLAG"/>
+	</field>
+	<field name="SERVICE_TYPE_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SERVICE_TYPE_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="SERVICE_TYPE_ID"/>
+	</field>
+	<field name="MASTER_PROBLEM_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MASTER_PROBLEM_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="MASTER_PROBLEM_ID"/>
+	</field>
+	<field name="PROBLEM_DESC" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PROBLEM_DESC"/>
+		<property name="com.jaspersoft.studio.field.label" value="PROBLEM_DESC"/>
+	</field>
+	<field name="MASTER_REMARKS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MASTER_REMARKS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MASTER_REMARKS"/>
+	</field>
+	<field name="MASTER_SUB_TEAM_CODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MASTER_SUB_TEAM_CODE"/>
+		<property name="com.jaspersoft.studio.field.label" value="MASTER_SUB_TEAM_CODE"/>
+	</field>
+	<field name="MASTER_SERVICE_NO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MASTER_SERVICE_NO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MASTER_SERVICE_NO"/>
+	</field>
+	<field name="MASTER_CREATE_DT" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="MASTER_CREATE_DT"/>
+		<property name="com.jaspersoft.studio.field.label" value="MASTER_CREATE_DT"/>
+	</field>
+	<field name="MASTER_CREATE_BY" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MASTER_CREATE_BY"/>
+		<property name="com.jaspersoft.studio.field.label" value="MASTER_CREATE_BY"/>
+	</field>
+	<field name="MAIN_CREATE_BY" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MAIN_CREATE_BY"/>
+		<property name="com.jaspersoft.studio.field.label" value="MAIN_CREATE_BY"/>
+	</field>
+	<field name="MAIN_CREATE_DT" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="MAIN_CREATE_DT"/>
+		<property name="com.jaspersoft.studio.field.label" value="MAIN_CREATE_DT"/>
+	</field>
+	<field name="OLT_PORT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OLT_PORT"/>
+		<property name="com.jaspersoft.studio.field.label" value="OLT_PORT"/>
+	</field>
+	<field name="FAP_LOCATION" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FAP_LOCATION"/>
+		<property name="com.jaspersoft.studio.field.label" value="FAP_LOCATION"/>
+	</field>
+	<field name="FAP_PORT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FAP_PORT"/>
+		<property name="com.jaspersoft.studio.field.label" value="FAP_PORT"/>
+	</field>
+	<field name="CPE_RX_LVL" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CPE_RX_LVL"/>
+		<property name="com.jaspersoft.studio.field.label" value="CPE_RX_LVL"/>
+	</field>
+	<field name="ODF_PORT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ODF_PORT"/>
+		<property name="com.jaspersoft.studio.field.label" value="ODF_PORT"/>
+	</field>
+	<field name="CUSTOMER_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CUSTOMER_NAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="CUSTOMER_NAME"/>
+	</field>
+	<field name="QUERY_STATUS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="QUERY_STATUS"/>
+		<property name="com.jaspersoft.studio.field.label" value="QUERY_STATUS"/>
+	</field>
+	<field name="ENTRY_DT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ENTRY_DT"/>
+		<property name="com.jaspersoft.studio.field.label" value="ENTRY_DT"/>
+	</field>
+	<field name="PROBLEM_DT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PROBLEM_DT"/>
+		<property name="com.jaspersoft.studio.field.label" value="PROBLEM_DT"/>
+	</field>
+	<field name="CONFIG_TYPE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CONFIG_TYPE"/>
+		<property name="com.jaspersoft.studio.field.label" value="CONFIG_TYPE"/>
+	</field>
+	<field name="COLUMN_45" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PROBLEM_DESC"/>
+		<property name="com.jaspersoft.studio.field.label" value="PROBLEM_DESC"/>
+	</field>
 	<group name="region">
 		<groupExpression><![CDATA[$F{REGION}]]></groupExpression>
 		<groupHeader>
@@ -193,14 +337,14 @@ order by
 				<textFieldExpression><![CDATA[$P{pm_address}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="555" y="22" width="243" height="15" uuid="1edc6341-ab10-4cb4-94f4-074e51d26b7e"/>
+				<reportElement x="717" y="22" width="81" height="15" uuid="1edc6341-ab10-4cb4-94f4-074e51d26b7e"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Print By:"+$P{pm_user}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy h.mm a">
-				<reportElement x="557" y="37" width="208" height="15" uuid="cc2ab8c8-e24a-403a-9593-61b95f882f4c"/>
+				<reportElement x="680" y="37" width="118" height="15" uuid="cc2ab8c8-e24a-403a-9593-61b95f882f4c"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="8" isBold="true"/>
 				</textElement>
@@ -228,7 +372,9 @@ order by
 				<text><![CDATA[Customer Information]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="571" y="2" width="72" height="17" uuid="c90a5224-923c-4a12-b2e2-738b217584af"/>
+				<reportElement x="513" y="2" width="72" height="17" uuid="c90a5224-923c-4a12-b2e2-738b217584af">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
 				</textElement>
@@ -242,21 +388,23 @@ order by
 				<text><![CDATA[FAP Location]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="397" y="2" width="129" height="17" uuid="5f167a1a-d19a-4913-ac3c-30b4b5e0c0a9"/>
+				<reportElement x="397" y="2" width="73" height="17" uuid="5f167a1a-d19a-4913-ac3c-30b4b5e0c0a9"/>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
 				</textElement>
 				<text><![CDATA[Configure Type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="526" y="2" width="44" height="17" uuid="b2ceee12-14be-48fe-afdb-623cc59aab90"/>
+				<reportElement x="470" y="2" width="43" height="17" uuid="b2ceee12-14be-48fe-afdb-623cc59aab90"/>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
 				</textElement>
-				<text><![CDATA[Status]]></text>
+				<text><![CDATA[Problem]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="717" y="1" width="85" height="17" uuid="2640fcb6-b710-4142-ad3c-878a65f49575"/>
+				<reportElement x="717" y="2" width="85" height="17" uuid="2640fcb6-b710-4142-ad3c-878a65f49575">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
 				</textElement>
@@ -270,11 +418,13 @@ order by
 				<text><![CDATA[OLT PORT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="645" y="1" width="72" height="17" uuid="7c04d14e-8fed-422d-ab3a-681c6894597d"/>
+				<reportElement x="585" y="2" width="132" height="17" uuid="7c04d14e-8fed-422d-ab3a-681c6894597d">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
 				</textElement>
-				<text><![CDATA[Current Dt]]></text>
+				<text><![CDATA[Solve-Close Dt]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -285,17 +435,19 @@ order by
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{SRV_NO}+"-"+$F{COMPLAIN_NO}+"-"+$F{FDC}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{SRV_NO}+"-"+$F{TOKEN_ID}+"-"+$F{COMPLAIN_NO}+"-"+$F{FDC}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="571" y="2" width="72" height="17" uuid="139d8f50-3b07-4f7a-a08d-5d964f897428"/>
+				<reportElement x="513" y="2" width="72" height="17" uuid="139d8f50-3b07-4f7a-a08d-5d964f897428">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ENTRY_DT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="645" y="2" width="72" height="17" uuid="d751c026-f29e-4f1d-80c0-88c48eba1be1"/>
+				<reportElement x="585" y="2" width="132" height="17" uuid="d751c026-f29e-4f1d-80c0-88c48eba1be1"/>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
 				</textElement>
@@ -316,7 +468,9 @@ order by
 				<textFieldExpression><![CDATA[$F{FAP_LOCATION}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="398" y="2" width="128" height="17" uuid="0040baa2-5a62-4239-bebd-af3c57a0dccd"/>
+				<reportElement x="397" y="2" width="73" height="17" uuid="0040baa2-5a62-4239-bebd-af3c57a0dccd">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
 				</textElement>
@@ -330,7 +484,7 @@ order by
 				<textFieldExpression><![CDATA[$F{MASTER_SUB_TEAM_CODE}+'-'+$F{MASTER_REMARKS}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="526" y="2" width="44" height="17" uuid="46e3b105-9757-45c0-af8f-3f1d828b2a1e"/>
+				<reportElement x="470" y="2" width="43" height="17" uuid="46e3b105-9757-45c0-af8f-3f1d828b2a1e"/>
 				<textElement>
 					<font fontName="Times New Roman" size="8" isBold="false"/>
 				</textElement>

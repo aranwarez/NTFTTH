@@ -549,7 +549,51 @@ public class ComplainController {
 			}
 
 		}
-	
+		
+		// Port Bind Reset
+		@ResponseBody
+		@RequestMapping(value = "/complain/portbindreset", method = RequestMethod.POST)
+		public String portbindreset(String Datanum, Locale locale, Model model, HttpSession session)
+				throws SQLException {
+			UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 
+			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+			if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+			}
+			CRMSBalanceDao obj = new CRMSBalanceDao();
 
-}
+			try {
+				return obj.portBindReset(Datanum);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return e.getLocalizedMessage();
+			}
+
+		}
+		
+		// CPE Reset Reboot
+		@ResponseBody
+		@RequestMapping(value = "/complain/cpereset", method = RequestMethod.POST)
+		public String cpereset(String CPESNO, Locale locale, Model model, HttpSession session)
+				throws SQLException {
+			UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
+
+			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
+			if (menuaccess == null || menuaccess.getLIST_FLAG().equals("N")) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+			}
+			CRMSBalanceDao obj = new CRMSBalanceDao();
+
+			try {
+				return obj.ResetRouter(CPESNO);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return e.getLocalizedMessage();
+			}
+
+		}
+
+	}
