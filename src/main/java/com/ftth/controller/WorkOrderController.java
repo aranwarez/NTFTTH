@@ -232,7 +232,7 @@ public class WorkOrderController {
 	public String saveJSService(String type, String value, String starttime, String active_flag, String remarks,
 			HttpSession session, Model model, Locale locale, String fdc, String olt) throws SQLException {
 
-		logger.info("Save Work Order {}.", locale);
+		logger.info("Save Work Order {}."+type+":"+value , locale);
 
 		// ADD_FLAG
 		UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
@@ -251,17 +251,19 @@ public class WorkOrderController {
 		String smsmsg = "Dear Customer,\nWe are having maintenance work at your area. Your service might be interrupted for few hours. Sorry for the inconvenience caused.\nNepal Telecom";
 		try {
 			msg = dao.saveWorkOrder(type, value, remarks, starttime, active_flag, USER, olt, fdc);
-			if (active_flag.equals("Y")) {
+			//Before we check if condition if active_flag Y to send SMS but now we hardcoded to true
+			if (true) {
+				logger.info("Preparing to send SMS for "+type+":"+value , locale);
 				try {
-					List<String> MDN = APIdao.getFTTHNumberInfo(type, value);
+					List<String> MDN = APIdao.getFTTHNumberInfoNew(type, value);
 					for (String mdn : MDN) {
 						// send sms to these number regarding work order
 						// System.out.println(APIdao.getContactNumber(mdn));
 
-						String contactno = APIdao.getContactNumber(mdn);
+						//String contactno = APIdao.getContactNumber(mdn);
 						// send sms to only nt mobile number.. taking 10 digit no for now.
-						if (contactno.length() == 10) {
-							smsdao.sendsms(contactno, smsmsg, "WORKORDER", USER, msg);
+						if (mdn.length() == 10) {
+							smsdao.sendsms(mdn, smsmsg, "WORKORDER", USER, msg);
 						}
 					}
 				} catch (Exception e) {

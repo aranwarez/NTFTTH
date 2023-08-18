@@ -250,7 +250,7 @@ function getfdcteam() {
 
 		$.each(data, function(index, value) {
 			if (value.OFFICE_CODE == OFFICE_CODE || OFFICE_CODE == "") {
-				$('<option>').val(value.OLT_CODE).text(
+				$('<option>').val(value.TEAM_ID).text(
 					value.DESCRIPTION + "-" + value.TEAMNAME).appendTo(
 						select);
 			}

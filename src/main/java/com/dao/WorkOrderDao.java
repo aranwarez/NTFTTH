@@ -190,6 +190,15 @@ public class WorkOrderDao {
 		Connection con = DbCon.getConnection();
 		con.setAutoCommit(false);
 		try {
+			//Checking if WorkOrder Already Exist and throw Exception if work order already exist
+			PreparedStatement chkWO=con.prepareStatement("select * from WORKORDER where ELEMENT_VALUE=? and ACTIVE_FLAG='Y'");
+			chkWO.setString(1, value);
+			ResultSet rchkWO=chkWO.executeQuery();
+			if(rchkWO.next()) {
+				throw new SQLException("Work Order element already exist for element "+value);
+			}
+			
+			
 			String getseq = "select WO_ID.NEXTVAL from dual";
 			ResultSet seqrs = con.createStatement().executeQuery(getseq);
 			String seq = null;
@@ -315,19 +324,19 @@ public class WorkOrderDao {
 				// sending sms to all customer
 				WorkOrderAPI APIdao = new WorkOrderAPI();
 				SendSMS smsdao = new SendSMS();
-				String smsmsg = "Dear Customer,\nWe are pleased to inform about the restoration of your FTTH services. Please dail 198(and choose 4) incase of further problems. \nNepal Telecom";
-				List<String> MDN = APIdao.getFTTHNumberInfo(rs.getString("ELEMENT_TYPE"),
+				String smsmsg = "Dear Customer,\nWe are pleased to inform about the restoration of your FTTH services. Please dail 198(and choose 1) incase of further problems. \nNepal Telecom";
+				List<String> MDN = APIdao.getFTTHNumberInfoNew(rs.getString("ELEMENT_TYPE"),
 						rs.getString("ELEMENT_VALUE"));
 				for (String mdn : MDN) {
 					try {
 
 						// send sms to these number regarding work order
 						// System.out.println(APIdao.getContactNumber(mdn));
-						String contactno = APIdao.getContactNumber(mdn);
+						//String contactno = APIdao.getContactNumber(mdn);
 						
 						//send sms to only nt mobile number.. taking 10 digit no for now.
-						if (contactno.length() == 10) {
-							smsdao.sendsms(contactno, smsmsg, "WORKORDER", USER, ID);
+						if (mdn.length() == 10) {
+							smsdao.sendsms(mdn, smsmsg, "WORKORDER", USER, ID);
 						}
 
 					} catch (Exception e) {

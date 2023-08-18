@@ -65,6 +65,7 @@ and a.district_code=nvl($P{pm_district},a.district_code)
 and a.office_code=nvl($P{pm_office},a.office_code)
 and a.MASTER_SOLVE_FLAG=nvl($P{pm_solve_flag},a.MASTER_SOLVE_FLAG)
 and a.SERVICE_TYPE_ID=nvl($P{pm_servicetype}  ,SERVICE_TYPE_ID)
+and a.TEAM_ID=nvl($P{pm_team_id}  ,TEAM_ID)
 
 and (a.MASTER_CREATE_DT BETWEEN  NVL ($P{pm_frm_dt}, SYSDATE - 30)
 	 AND NVL ($P{pm_to_dt}, SYSDATE)

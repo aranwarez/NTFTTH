@@ -45,10 +45,11 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT max(region_code) region_code,max(region) region,max(ZONE) ZONE,max(DISTRICT) DISTRICT, max(office) OFFICE, max(office_code) office_code,max(MASTER_SUB_TEAM_CODE) MASTER_SUB_TEAM_CODE,SERVICE_TYPE_ID,(case  SERVICE_TYPE_ID when 1 then 'DATA' when 2 then 'VOICE' when 3 then 'NTTV' end ) service_desc,
+		<![CDATA[SELECT max(region_code) region_code,max(region) region,max(ZONE) ZONE,max(DISTRICT) DISTRICT, max(office) OFFICE, max(office_code) office_code,max(TEAMNAME) TEAMNAME,max(MASTER_SUB_TEAM_CODE) MASTER_SUB_TEAM_CODE,SERVICE_TYPE_ID,(case  SERVICE_TYPE_ID when 1 then 'DATA' when 2 then 'VOICE' when 3 then 'NTTV' end ) service_desc,
              SUM (CASE WHEN VTDDS.REG_DT>= NVL($P{pm_frm_dt}, SYSDATE - 30) AND VTDDS.REG_DT<= NVL ($P{pm_to_dt}, SYSDATE) THEN 1 ELSE 0 END) NEW,
             
-             SUM (CASE WHEN  VTDDS.REG_DT>= NVL($P{pm_frm_dt}, SYSDATE - 30) AND VTDDS.REG_DT<= NVL ($P{pm_to_dt}, SYSDATE) and VTDDS.SOLVE_DT> NVL ($P{pm_to_dt}, SYSDATE)  THEN 1 ELSE 0 END) PENDING,
+             SUM (CASE WHEN  VTDDS.REG_DT>= NVL($P{pm_frm_dt}, SYSDATE - 30) AND VTDDS.REG_DT<= NVL ($P{pm_to_dt}, SYSDATE) and VTDDS.SOLVE_DT> NVL ($P{pm_to_dt}, SYSDATE)  THEN 1 ELSE 0 END)+
+             SUM (CASE WHEN  VTDDS.REG_DT<= NVL ($P{pm_to_dt}, SYSDATE) and VTMO.MASTER_SOLVE_FLAG in ('N','F')  THEN 1 ELSE 0 END) PENDING,
              
              SUM (CASE WHEN VTMO.MASTER_SOLVE_FLAG in ('Y','C') AND VTDDS.SOLVE_DT>= NVL($P{pm_frm_dt}, SYSDATE - 30) AND VTDDS.SOLVE_DT<= NVL ($P{pm_to_dt}, SYSDATE) THEN 1 ELSE 0 END)
              Solved,
@@ -93,6 +94,10 @@ order by region,district,office_code,team_id,service_type_id]]>
 	<field name="OFFICE_CODE" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="OFFICE_CODE"/>
 		<property name="com.jaspersoft.studio.field.label" value="OFFICE_CODE"/>
+	</field>
+	<field name="TEAMNAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TEAMNAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="TEAMNAME"/>
 	</field>
 	<field name="MASTER_SUB_TEAM_CODE" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="MASTER_SUB_TEAM_CODE"/>
@@ -398,6 +403,8 @@ order by region,district,office_code,team_id,service_type_id]]>
 	</columnHeader>
 	<detail>
 		<band height="19" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{NEW}.doubleValue() !=0 || $F{PENDING}.doubleValue() !=0 || $F{SOLVED}.doubleValue() !=0 || $F{CLOSED}.doubleValue() !=0
+?(true):false]]></printWhenExpression>
 			<textField isStretchWithOverflow="true" pattern="">
 				<reportElement x="1" y="2" width="75" height="17" uuid="2c2627c9-f147-4514-b875-d6e5dd86e176"/>
 				<textElement>
@@ -417,7 +424,7 @@ order by region,district,office_code,team_id,service_type_id]]>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{MASTER_SUB_TEAM_CODE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{TEAMNAME}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="262" y="2" width="70" height="17" uuid="70ec89df-02e3-438a-b080-6e31609dd876"/>

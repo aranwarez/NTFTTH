@@ -303,6 +303,8 @@ order by office_code]]>
 	<detail>
 		<band height="30" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<printWhenExpression><![CDATA[$F{TOTAL}.doubleValue() !=0 || $F{SOLVED}.doubleValue() !=0 || $F{CLOSED}.doubleValue() !=0 
+?(true):false]]></printWhenExpression>
 			<textField>
 				<reportElement x="0" y="0" width="52" height="30" uuid="79995659-3105-4b7d-83bb-094c70efdcee">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6291b844-8e45-421c-a588-77fdfbf48cf1"/>
