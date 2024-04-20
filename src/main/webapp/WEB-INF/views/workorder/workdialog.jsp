@@ -99,9 +99,9 @@
 					<label for="DESCRIPTION">Start Time</label> <input
 						type="datetime-local" id="starttime">
 				</div>
-				<div class="form-group">
+				<div class="form-group" style="display: none;">
 					<label for="DESCRIPTION">Enable Flag</label> <input type="checkbox"
-						id="active_flag">
+						id="active_flag" Checked>
 				</div>
 
 
@@ -151,7 +151,7 @@
 						<label for="DESCRIPTION">Start Time</label> <input
 							type="datetime-local" id="estarttime">
 					</div>
-					<div class="form-group">
+					<div class="form-group" style="display: none;">
 						<label for="DESCRIPTION">Enable Flag</label> <input
 							type="checkbox" id="eactive_flag">
 					</div>

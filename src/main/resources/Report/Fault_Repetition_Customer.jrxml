@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 5.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Fault Repetition CustomoerReport" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="90613804-eb55-4a7b-9708-fe0d1e7689fb">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FTTHTEST NEW SERVER"/>
+	<parameter name="pm_to_dt" class="java.util.Date"/>
+	<parameter name="pm_frm_dt" class="java.util.Date"/>
+	<parameter name="pm_servicetype" class="java.lang.String"/>
+	<parameter name="pm_within_days" class="java.lang.String"/>
+	<parameter name="pm_region" class="java.lang.String"/>
+	<parameter name="pm_zone" class="java.lang.String"/>
+	<parameter name="pm_district" class="java.lang.String"/>
+	<parameter name="pm_office" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[/* Formatted on 6/17/2022 2:02:56 AM (QP5 v5.381) */
+SELECT *
+  FROM (  SELECT MAX (region)                         REGION,
+                 MAX (ZONE)                           ZONE,
+                 MAX (DISTRICT)                       DISTRICT,
+                 MAX (OFFICE)                         office,
+                 MAX (teamname)                       TEAM,
+                 MAX (CUSTOMER_NAME)                  CUSTOMER_NAME,
+                 SRV_NO CPE_SN,
+                 (SELECT COUNT (1)     DATA
+                    FROM (SELECT TM.*,
+                                 (SELECT MAX (solve_dt)
+                                    FROM TOKEN_MASTER
+                                   WHERE     sub_token_id < tm.sub_token_id
+                                         AND SERVICE_NO = TM.MASTER_SERVICE_NO)    PREVSOLVEDT
+                            FROM VW_TOKEN_MASTER_ONLY TM)
+                   WHERE     MASTER_CREATE_DT BETWEEN NVL ($P{pm_frm_dt}, SYSDATE - 30) AND NVL ($P{pm_to_dt}, SYSDATE)
+ and REGION_CODE=nvl($P{pm_region},REGION_CODE)
+and ZONE_CODE=nvl($P{pm_zone},ZONE_CODE)
+and DISTRICT_CODE=nvl($P{pm_district},DISTRICT_CODE)
+and OFFICE_CODE=nvl($P{pm_office},OFFICE_CODE)
+                         AND MASTER_CREATE_DT - PREVSOLVEDT <= 1
+                         AND SERVICE_TYPE_ID = 1
+                         AND SRV_NO = VTMO.SRV_NO)    DATA,
+                 (SELECT COUNT (1)     DATA
+                    FROM (SELECT TM.*,
+                                 (SELECT MAX (solve_dt)
+                                    FROM TOKEN_MASTER
+                                   WHERE     sub_token_id < tm.sub_token_id
+                                         AND SERVICE_NO = TM.MASTER_SERVICE_NO)    PREVSOLVEDT
+                            FROM VW_TOKEN_MASTER_ONLY TM)
+                   WHERE     MASTER_CREATE_DT BETWEEN NVL ($P{pm_frm_dt}, SYSDATE - 30) AND NVL ($P{pm_to_dt}, SYSDATE)
+ and REGION_CODE=nvl($P{pm_region},REGION_CODE)
+and ZONE_CODE=nvl($P{pm_zone},ZONE_CODE)
+and DISTRICT_CODE=nvl($P{pm_district},DISTRICT_CODE)
+and OFFICE_CODE=nvl($P{pm_office},OFFICE_CODE)
+                         AND MASTER_CREATE_DT - PREVSOLVEDT <= 1
+                         AND SERVICE_TYPE_ID = 2
+                         AND SRV_NO = VTMO.SRV_NO)    VOICE,
+                 (SELECT COUNT (1)     DATA
+                    FROM (SELECT TM.*,
+                                 (SELECT MAX (solve_dt)
+                                    FROM TOKEN_MASTER
+                                   WHERE     sub_token_id < tm.sub_token_id
+                                         AND SERVICE_NO = TM.MASTER_SERVICE_NO)    PREVSOLVEDT
+                            FROM VW_TOKEN_MASTER_ONLY TM)
+                   WHERE     MASTER_CREATE_DT BETWEEN NVL ($P{pm_frm_dt}, SYSDATE - 30) AND NVL ($P{pm_to_dt}, SYSDATE)
+ and REGION_CODE=nvl($P{pm_region},REGION_CODE)
+and ZONE_CODE=nvl($P{pm_zone},ZONE_CODE)
+and DISTRICT_CODE=nvl($P{pm_district},DISTRICT_CODE)
+and OFFICE_CODE=nvl($P{pm_office},OFFICE_CODE)
+                         AND MASTER_CREATE_DT - PREVSOLVEDT <= 1
+                         AND SERVICE_TYPE_ID = 3
+                         AND SRV_NO = VTMO.SRV_NO)    NTTV
+            FROM VW_TOKEN_MASTER_ONLY VTMO
+           WHERE VTMO.MASTER_CREATE_DT BETWEEN SYSDATE - 29 AND SYSDATE
+        GROUP BY SRV_NO)
+ WHERE DATA <> 0 OR VOICE <> 0 OR NTTV <> 0
+ ORDER BY region,zone,district,office, TEAM]]>
+	</queryString>
+	<field name="REGION" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="REGION"/>
+		<property name="com.jaspersoft.studio.field.label" value="REGION"/>
+	</field>
+	<field name="ZONE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ZONE"/>
+		<property name="com.jaspersoft.studio.field.label" value="ZONE"/>
+	</field>
+	<field name="DISTRICT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DISTRICT"/>
+		<property name="com.jaspersoft.studio.field.label" value="DISTRICT"/>
+	</field>
+	<field name="OFFICE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OFFICE"/>
+		<property name="com.jaspersoft.studio.field.label" value="OFFICE"/>
+	</field>
+	<field name="TEAM" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TEAM"/>
+		<property name="com.jaspersoft.studio.field.label" value="TEAM"/>
+	</field>
+	<field name="CUSTOMER_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CUSTOMER_NAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="CUSTOMER_NAME"/>
+	</field>
+	<field name="CPE_SN" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CPE_SN"/>
+		<property name="com.jaspersoft.studio.field.label" value="CPE_SN"/>
+	</field>
+	<field name="DATA" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="DATA"/>
+		<property name="com.jaspersoft.studio.field.label" value="DATA"/>
+	</field>
+	<field name="VOICE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VOICE"/>
+		<property name="com.jaspersoft.studio.field.label" value="VOICE"/>
+	</field>
+	<field name="NTTV" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="NTTV"/>
+		<property name="com.jaspersoft.studio.field.label" value="NTTV"/>
+	</field>
+	<title>
+		<band height="52">
+			<staticText>
+				<reportElement x="320" y="0" width="260" height="30" uuid="a4522490-220d-41a6-8034-be744babfdc2"/>
+				<textElement>
+					<font size="19"/>
+				</textElement>
+				<text><![CDATA[Fault Repetition Customer Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="0" y="0" width="82" height="30" uuid="4f1114ee-6f3c-447b-a070-288d48b93b36">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="90a1ba85-4c69-47bc-93cd-dc18b6b314cc"/>
+				</reportElement>
+				<text><![CDATA[REGION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="82" y="0" width="80" height="30" uuid="e041854f-8268-42db-8bdc-433e00a45623">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6f5fefcc-d107-4b2a-9adc-cf90384c716b"/>
+				</reportElement>
+				<text><![CDATA[ZONE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="0" width="80" height="30" uuid="277d8d00-a2ed-41f0-ba58-90ed60be5b0f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5cb7eaea-2bb2-4aee-a8b5-7e0ec7a8afa8"/>
+				</reportElement>
+				<text><![CDATA[DISTRICT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="242" y="0" width="80" height="30" uuid="9e341c94-addd-41fd-b84f-1b7a0a7c666f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bf3cbebd-c2df-4830-be84-09be37a5445e"/>
+				</reportElement>
+				<text><![CDATA[OFFICE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="322" y="0" width="80" height="30" uuid="f8b7e60e-2e13-4569-b374-6caf72a7e639">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="59d53706-1572-4025-a6aa-69a65e3d2060"/>
+				</reportElement>
+				<text><![CDATA[TEAM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="402" y="0" width="80" height="30" uuid="cf71ff95-efd9-436c-90b7-4b9652407297">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="992aaf8b-9d9f-4001-9ae1-9a559d0e9768"/>
+				</reportElement>
+				<text><![CDATA[CUSTOMER_NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="482" y="0" width="80" height="30" uuid="2ca73931-6d98-41dc-9f7d-874dcd6235aa">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9fe4c582-7c97-400f-902c-f06b21efdd7b"/>
+				</reportElement>
+				<text><![CDATA[CPE_SN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="562" y="0" width="80" height="30" uuid="79b0e8c0-6e84-403e-a04a-dbb83e24812a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="83ce8607-630f-483c-9c84-46d75af85109"/>
+				</reportElement>
+				<text><![CDATA[DATA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="642" y="0" width="80" height="30" uuid="4661b01a-cf4c-4b14-ab41-0187f590c0a6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6d6fc860-c263-4e7c-a49c-7156445835d7"/>
+				</reportElement>
+				<text><![CDATA[VOICE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="722" y="0" width="80" height="30" uuid="a7d26ab7-496c-4124-b99c-15dc560c5742">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="89bfdb04-45ca-451f-aeae-adc890808142"/>
+				</reportElement>
+				<text><![CDATA[NTTV]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="0" y="0" width="82" height="30" uuid="3cf26aa1-1fe0-4c5b-bd31-ac3c38457db5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="90a1ba85-4c69-47bc-93cd-dc18b6b314cc"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{REGION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="0" width="80" height="30" uuid="e043866c-1880-444b-a3ac-c657048a70a5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6f5fefcc-d107-4b2a-9adc-cf90384c716b"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{ZONE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="162" y="0" width="80" height="30" uuid="3ba9b572-9b90-434c-892b-becf1341522f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5cb7eaea-2bb2-4aee-a8b5-7e0ec7a8afa8"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{DISTRICT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="242" y="0" width="80" height="30" uuid="091817fc-33ab-4c58-b8b6-824f566cb627">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bf3cbebd-c2df-4830-be84-09be37a5445e"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{OFFICE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="322" y="0" width="80" height="30" uuid="d3f3560b-e1fd-4135-8b64-75eacc8f51ca">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="59d53706-1572-4025-a6aa-69a65e3d2060"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{TEAM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="402" y="0" width="80" height="30" uuid="9e9674dd-ce04-44fe-bb9f-2e8e4fe3e3b8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="992aaf8b-9d9f-4001-9ae1-9a559d0e9768"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{CUSTOMER_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="482" y="0" width="80" height="30" uuid="976904ff-8a37-4718-9136-f4e94d3de85a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9fe4c582-7c97-400f-902c-f06b21efdd7b"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{CPE_SN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="562" y="0" width="80" height="30" uuid="70bf17e1-79df-4f54-a012-f70b97c7b0d8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="83ce8607-630f-483c-9c84-46d75af85109"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{DATA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="642" y="0" width="80" height="30" uuid="75c62c77-7b39-4d4d-ade9-2629756af806">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6d6fc860-c263-4e7c-a49c-7156445835d7"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{VOICE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="722" y="0" width="80" height="30" uuid="36ca525b-99f2-43e9-8513-b4bc3c99f5bd">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="89bfdb04-45ca-451f-aeae-adc890808142"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{NTTV}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

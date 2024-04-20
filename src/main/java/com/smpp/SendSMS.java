@@ -44,6 +44,7 @@ public class SendSMS {
 	public static void sendsms(String Number, String message, String REMARKS, String USER, String REF_TOKEN) {
 		// bind(connect)
 		SMPPSession session = SmsSession.getSession();
+		session.setTransactionTimer(5000);
 		// send Message
 
 		String msglogid = null;

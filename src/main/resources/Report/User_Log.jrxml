@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 5.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="User Log" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="90613804-eb55-4a7b-9708-fe0d1e7689fb">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FTTHTEST NEW SERVER"/>
+	<parameter name="pm_to_dt" class="java.util.Date"/>
+	<parameter name="pm_frm_dt" class="java.util.Date"/>
+	<parameter name="pm_servicetype" class="java.lang.String"/>
+	<parameter name="pm_within_days" class="java.lang.String"/>
+	<parameter name="pm_region" class="java.lang.String"/>
+	<parameter name="pm_zone" class="java.lang.String"/>
+	<parameter name="pm_district" class="java.lang.String"/>
+	<parameter name="pm_office" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[/* Formatted on 6/19/2022 12:55:23 AM (QP5 v5.381) */
+SELECT result.*, ROUND (new / (new + forward + solved + closed) * 100, 2) NEWPER,
+ROUND (forward / (new + forward + solved + closed) * 100, 2) FORWARDPER,
+ROUND (solved / (new + forward + solved + closed) * 100, 2) SOLVEDPER,
+ROUND (closed / (new + forward + solved + closed) * 100, 2) CLOSEPER
+  FROM (  SELECT create_by
+                     USERID,
+                 (SUM (CASE WHEN solve_flag = 'N' THEN 1 ELSE 0 END))
+                     NEW,
+                 (SUM (CASE WHEN solve_flag = 'F' THEN 1 ELSE 0 END))
+                     FORWARD,
+                 (SUM (CASE WHEN solve_flag = 'Y' THEN 1 ELSE 0 END))
+                     SOLVED,
+                 (SUM (CASE WHEN solve_flag = 'C' THEN 1 ELSE 0 END))
+                     CLOSED
+            FROM VW_TOKEN_ALL where
+    MASTER_CREATE_DT BETWEEN NVL ($P{pm_frm_dt}, SYSDATE - 30) AND NVL ($P{pm_to_dt}, SYSDATE)
+ and REGION_CODE=nvl($P{pm_region},REGION_CODE)
+and ZONE_CODE=nvl($P{pm_zone},ZONE_CODE)
+and DISTRICT_CODE=nvl($P{pm_district},DISTRICT_CODE)
+and OFFICE_CODE=nvl($P{pm_office},OFFICE_CODE)
+        GROUP BY create_by
+        ORDER BY userid) result]]>
+	</queryString>
+	<field name="USERID" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="USERID"/>
+		<property name="com.jaspersoft.studio.field.label" value="USERID"/>
+	</field>
+	<field name="NEW" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="NEW"/>
+		<property name="com.jaspersoft.studio.field.label" value="NEW"/>
+	</field>
+	<field name="FORWARD" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="FORWARD"/>
+		<property name="com.jaspersoft.studio.field.label" value="FORWARD"/>
+	</field>
+	<field name="SOLVED" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SOLVED"/>
+		<property name="com.jaspersoft.studio.field.label" value="SOLVED"/>
+	</field>
+	<field name="CLOSED" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CLOSED"/>
+		<property name="com.jaspersoft.studio.field.label" value="CLOSED"/>
+	</field>
+	<field name="NEWPER" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="NEWPER"/>
+		<property name="com.jaspersoft.studio.field.label" value="NEWPER"/>
+	</field>
+	<field name="FORWARDPER" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="FORWARDPER"/>
+		<property name="com.jaspersoft.studio.field.label" value="FORWARDPER"/>
+	</field>
+	<field name="SOLVEDPER" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SOLVEDPER"/>
+		<property name="com.jaspersoft.studio.field.label" value="SOLVEDPER"/>
+	</field>
+	<field name="CLOSEPER" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CLOSEPER"/>
+		<property name="com.jaspersoft.studio.field.label" value="CLOSEPER"/>
+	</field>
+	<title>
+		<band height="52">
+			<staticText>
+				<reportElement x="320" y="0" width="260" height="30" uuid="a4522490-220d-41a6-8034-be744babfdc2"/>
+				<textElement>
+					<font size="19"/>
+				</textElement>
+				<text><![CDATA[User Log Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="0" y="0" width="90" height="30" uuid="09389d09-81ca-4ffa-a5ae-7a87bbd2cad3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ef9a555a-fc29-4008-a3e0-0768ca416b68"/>
+				</reportElement>
+				<text><![CDATA[USERID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="90" y="0" width="89" height="30" uuid="5c871b8f-69ee-422c-b4d3-b887596fdba5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fdf167fe-2eeb-40db-a6cc-aedabb6aeefc"/>
+				</reportElement>
+				<text><![CDATA[Total Reg Complain]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="0" width="89" height="30" uuid="5d4b1f07-bd5d-425b-82f0-dcb882caf410">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1b51f75b-a1c6-4975-9150-636192f24d71"/>
+				</reportElement>
+				<text><![CDATA[Forward]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="268" y="0" width="89" height="30" uuid="69000bb8-fe48-4b78-ab4a-09e4c114d0d2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c4260d25-9431-4519-ab2e-7f396a817c68"/>
+				</reportElement>
+				<text><![CDATA[SOLVED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="357" y="0" width="89" height="30" uuid="85c0deb4-a244-4d3a-94ba-73f8282df601">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ada2a86e-e7fa-405a-acab-3fdec780d61c"/>
+				</reportElement>
+				<text><![CDATA[CLOSED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="446" y="0" width="89" height="30" uuid="deca6e03-2ddc-4c86-80ff-7bb44e9093d8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="944ff802-d89f-4530-96b1-290d7b6c7607"/>
+				</reportElement>
+				<text><![CDATA[%New]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="535" y="0" width="89" height="30" uuid="6c09bab6-cf74-450f-862c-c96223dbb929">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="db40f565-ca37-4e00-b6e2-26695bb358fa"/>
+				</reportElement>
+				<text><![CDATA[%Closed]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="624" y="0" width="89" height="30" uuid="c1f8f7c8-8203-4742-a480-21ee1bc0b9f2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8bb5f7ef-a6e0-4574-98da-00a9910ebc0f"/>
+				</reportElement>
+				<text><![CDATA[%Solved]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="713" y="0" width="89" height="30" uuid="4dd7fa1d-252a-441d-a46c-f11a9161051b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="49c02ad3-36d7-4226-a37f-ed7f67d2d7dc"/>
+				</reportElement>
+				<text><![CDATA[%Closed]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="0" y="0" width="90" height="30" uuid="2c84c185-1cae-4c8a-820d-1b2d221ea4e5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ef9a555a-fc29-4008-a3e0-0768ca416b68"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{USERID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="0" width="89" height="30" uuid="af300341-021d-4f2e-895e-689e18c15be7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fdf167fe-2eeb-40db-a6cc-aedabb6aeefc"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{NEW}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="179" y="0" width="89" height="30" uuid="fd24c4d1-fb07-4845-a161-7943331d1e49">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1b51f75b-a1c6-4975-9150-636192f24d71"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{FORWARD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="268" y="0" width="89" height="30" uuid="223a6138-d680-45e8-9b6b-2e31e60d7d52">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c4260d25-9431-4519-ab2e-7f396a817c68"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{SOLVED}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="357" y="0" width="89" height="30" uuid="924a9b3c-446c-49b6-918e-c6bcad02cd29">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ada2a86e-e7fa-405a-acab-3fdec780d61c"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{CLOSED}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="446" y="0" width="89" height="30" uuid="b666a7ea-5d5d-4d06-b2e5-895c7a3ce416">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="944ff802-d89f-4530-96b1-290d7b6c7607"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{NEWPER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="535" y="0" width="89" height="30" uuid="64b5dfe4-859d-4f8d-b32c-1ffac61fcc53">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="db40f565-ca37-4e00-b6e2-26695bb358fa"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{FORWARDPER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="624" y="0" width="89" height="30" uuid="46312589-3414-45a0-bd4f-a5e5b640bb9c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8bb5f7ef-a6e0-4574-98da-00a9910ebc0f"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{SOLVEDPER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="713" y="0" width="89" height="30" uuid="55fc339d-36ea-4b02-af62-174f25fd9bac">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="49c02ad3-36d7-4226-a37f-ed7f67d2d7dc"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{CLOSEPER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -236,7 +236,7 @@
 											<c:choose>
 												<c:when test="${USER_LEVEL=='5'}">
 
-													<select id="OFFICE_CODE" name="OFFICE_CODE"
+													<select id="OFFICE_CODE"  onchange="getfdcteam()" name="OFFICE_CODE"
 														class="form-control">
 
 
@@ -252,7 +252,8 @@
 
 												</c:when>
 												<c:otherwise>
-													<select id="OFFICE_CODE" name="OFFICE_CODE"
+													<select id="OFFICE_CODE" onchange="getfdcteam()"
+													 name="OFFICE_CODE"
 														class="form-control">
 														<option value="">Select Office</option>
 

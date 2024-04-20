@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 5.5.2  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FTTHDispatch" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoPages" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="13a36392-f148-43c4-8b24-e189d16e7ff9">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="147"/>
 	<property name="com.jaspersoft.studio.report.description" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FTTH PROD"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FTTHTEST NEW SERVER"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="pm_to_dt" class="java.util.Date">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -40,7 +40,8 @@
        Result.TEAMLEADERNAME,
        Result.TEAMNAME,
        Result.TEAMSUPERVISORCONTACTNUMBER,
-       Result.TEAMSUPERVISORNAME
+       Result.TEAMSUPERVISORNAME,
+       REG_DATE
        
   FROM (SELECT (GET_SNO_CONCAT (MTM.TOKEN_ID, 2))     VOICE,
                (GET_SNO_CONCAT (MTM.TOKEN_ID, 1))     NTDATA,
@@ -48,6 +49,7 @@
                WT.*,
                CI.*,
                MTM.*,
+               MTM.CREATE_DT REG_DATE,
                vfaf.*,
                WT.team_id teamid
           FROM MAIN_TOKEN_MASTER  MTM,
@@ -70,64 +72,88 @@
               ) Result
  WHERE    Result.voice IS NOT NULL
        OR Result.NTDATA IS NOT NULL
-       OR Result.NTTV IS NOT NULL]]>
+       OR Result.NTTV IS NOT NULL
+       order by TEAM_ID,REG_DATE]]>
 	</queryString>
 	<field name="VOICE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VOICE"/>
 		<property name="com.jaspersoft.studio.field.label" value="VOICE"/>
 	</field>
 	<field name="NTDATA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NTDATA"/>
 		<property name="com.jaspersoft.studio.field.label" value="NTDATA"/>
 	</field>
 	<field name="NTTV" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NTTV"/>
 		<property name="com.jaspersoft.studio.field.label" value="NTTV"/>
 	</field>
 	<field name="COMPLAIN_NO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="COMPLAIN_NO"/>
 		<property name="com.jaspersoft.studio.field.label" value="COMPLAIN_NO"/>
 	</field>
 	<field name="CONTACT_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CONTACT_NAME"/>
 		<property name="com.jaspersoft.studio.field.label" value="CONTACT_NAME"/>
 	</field>
 	<field name="CONTACT_NO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CONTACT_NO"/>
 		<property name="com.jaspersoft.studio.field.label" value="CONTACT_NO"/>
 	</field>
 	<field name="CPE_RX_LVL" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CPE_RX_LVL"/>
 		<property name="com.jaspersoft.studio.field.label" value="CPE_RX_LVL"/>
 	</field>
 	<field name="CUSTOMER_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CUSTOMER_NAME"/>
 		<property name="com.jaspersoft.studio.field.label" value="CUSTOMER_NAME"/>
 	</field>
 	<field name="FAP_LOCATION" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FAP_LOCATION"/>
 		<property name="com.jaspersoft.studio.field.label" value="FAP_LOCATION"/>
 	</field>
 	<field name="FAP_PORT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FAP_PORT"/>
 		<property name="com.jaspersoft.studio.field.label" value="FAP_PORT"/>
 	</field>
 	<field name="OLT_PORT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OLT_PORT"/>
 		<property name="com.jaspersoft.studio.field.label" value="OLT_PORT"/>
 	</field>
 	<field name="REMARKS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="REMARKS"/>
 		<property name="com.jaspersoft.studio.field.label" value="REMARKS"/>
 	</field>
 	<field name="SRV_NO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SRV_NO"/>
 		<property name="com.jaspersoft.studio.field.label" value="SRV_NO"/>
 	</field>
 	<field name="TEAM_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TEAM_ID"/>
 		<property name="com.jaspersoft.studio.field.label" value="TEAM_ID"/>
 	</field>
 	<field name="TEAMLEADERCONTACTNUMBER" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TEAMLEADERCONTACTNUMBER"/>
 		<property name="com.jaspersoft.studio.field.label" value="TEAMLEADERCONTACTNUMBER"/>
 	</field>
 	<field name="TEAMLEADERNAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TEAMLEADERNAME"/>
 		<property name="com.jaspersoft.studio.field.label" value="TEAMLEADERNAME"/>
 	</field>
 	<field name="TEAMNAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TEAMNAME"/>
 		<property name="com.jaspersoft.studio.field.label" value="TEAMNAME"/>
 	</field>
 	<field name="TEAMSUPERVISORCONTACTNUMBER" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TEAMSUPERVISORCONTACTNUMBER"/>
 		<property name="com.jaspersoft.studio.field.label" value="TEAMSUPERVISORCONTACTNUMBER"/>
 	</field>
 	<field name="TEAMSUPERVISORNAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TEAMSUPERVISORNAME"/>
 		<property name="com.jaspersoft.studio.field.label" value="TEAMSUPERVISORNAME"/>
+	</field>
+	<field name="REG_DATE" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="REG_DATE"/>
+		<property name="com.jaspersoft.studio.field.label" value="REG_DATE"/>
 	</field>
 	<group name="Group1">
 		<groupExpression><![CDATA[$F{TEAM_ID}]]></groupExpression>
@@ -285,7 +311,7 @@
 					<textElement>
 						<font fontName="Times New Roman" size="8"/>
 					</textElement>
-					<text><![CDATA[FAP Location]]></text>
+					<text><![CDATA[Reg Date]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="0" y="30" width="67" height="15" uuid="4ccbc809-9a37-4e5d-b8a7-7aae6ba40246">
@@ -396,7 +422,7 @@
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 			</line>
-			<textField textAdjust="StretchHeight">
+			<textField isStretchWithOverflow="true">
 				<reportElement x="0" y="3" width="553" height="15" uuid="d8d3cd16-518c-4a7d-97b1-f166f171d2b2"/>
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
@@ -474,7 +500,7 @@
 				<textElement>
 					<font fontName="Times New Roman" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{FAP_LOCATION}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{REG_DATE}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="553" y="0" width="156" height="15" uuid="3465a5fb-920d-437c-b5ac-39ae8eefa276">

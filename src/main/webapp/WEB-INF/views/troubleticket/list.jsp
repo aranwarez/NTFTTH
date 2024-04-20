@@ -346,7 +346,7 @@
 
 					<div class="col-md-1">
 						<div class="align-middle">
-							<button type="submit" class="btn btn-primary"
+							<button type="submit" class="btn btn-primary submitbutton"
 								onclick="return fetchView()">View</button>
 						</div>
 					</div>

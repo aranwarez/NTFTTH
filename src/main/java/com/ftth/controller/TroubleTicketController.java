@@ -112,16 +112,28 @@ public class TroubleTicketController {
 		
 //		String REGION_CODE = request.getParameter("REGION_CODE");
 		
+		//getting english date from nepali date
+		List<String> engdate=null;
+		CommonController getengdate=new CommonController();
+		try {
+			engdate=	getengdate.Englishdate(FRM_DT, TO_DT, null, session);
+					} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		
 		
 		List<Map<String, Object>> list = null;
 		ComplainDao dao=new ComplainDao();
 		
 		try {
 			if(user.getUSER_LEVEL().equals("6")) {
-			list = dao.getComplainListlowlvl(user.getUSER_ID(), REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE, Sub_Team, Service_Type, FRM_DT, TO_DT,Statusflag,Teamid);
+			list = dao.getComplainListlowlvl(user.getUSER_ID(), REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE, Sub_Team, Service_Type, engdate.get(0), engdate.get(1),Statusflag,Teamid);
 			}
 			else {
-				list = dao.getComplainList(user.getUSER_ID(), REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE, Sub_Team, Service_Type, FRM_DT, TO_DT,Statusflag,Teamid);
+				list = dao.getComplainList(user.getUSER_ID(), REGION_CODE, ZONE_CODE, DISTRICT_CODE, OFFICE_CODE, OLT_CODE, Sub_Team, Service_Type, engdate.get(0), engdate.get(1),Statusflag,Teamid);
 					
 				
 			}
@@ -234,7 +246,7 @@ public class TroubleTicketController {
 
 	 @RequestMapping(value = "/troubleticket/Resolved", method = RequestMethod.POST)
 	    @ResponseBody
-	    public String Resolved(String Remarks,String token,Locale locale,HttpSession session) throws SQLException {
+	    public String Resolved(String Remarks,String token,String solution_id,Locale locale,HttpSession session) throws SQLException {
 	        logger.info("Resolved Ticket", locale);
 	        UserInformationModel user = (UserInformationModel) session.getAttribute("UserList");
 			MenuAccess menuaccess = CommonMenuDao.checkAccess(user.getROLE_CODE(), classname);
@@ -246,7 +258,7 @@ public class TroubleTicketController {
 	    	
 	        String msg = null;
 	        try {
-	        msg=	dao.Resolved(token, user.getUSER_ID(), Remarks);
+	        msg=	dao.Resolved(token, user.getUSER_ID(), Remarks,solution_id);
 	         } catch (Exception e) {
 	            // TODO Auto-generated catch block
 	            e.printStackTrace();

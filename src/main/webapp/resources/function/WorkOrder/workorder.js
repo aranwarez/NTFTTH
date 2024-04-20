@@ -473,7 +473,7 @@ function fetchView() {
 																	STARTTIME,
 																	ENDTIME,
 																	value.ACTIVE_FLAG,
-																	edit,
+															//		edit,
 																	solveflag
 
 															]);

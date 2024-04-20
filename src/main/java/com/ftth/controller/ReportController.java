@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.dao.CommonDateDao;
 import com.dao.ReportCountDao;
 import com.model.UserInformationModel;
+
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import net.sf.jasperreports.engine.JRException;
@@ -46,8 +48,10 @@ public class ReportController {
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "Report", method = RequestMethod.POST)
 	@ResponseBody
-	public void getRpt(HttpServletResponse response, HttpServletRequest request) throws JRException, IOException {
+	public void getRpt(HttpServletResponse response, HttpServletRequest request) throws JRException, IOException, SQLException {
 		logger.info("Preparing for report download");
+		Connection con = DbCon.getConnection();
+
 		try {
 			InputStream jasperStream = this.getClass()
 					.getResourceAsStream("/Report/" + request.getParameter("reportname") + ".jasper");
@@ -62,7 +66,7 @@ public class ReportController {
 			// parameters.put("pm_user", user.getUSER_ID());
 
 			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, DbCon.getConnection());
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, con);
 			String reporttype = request.getParameter("reporttype");
 
 			if (reporttype.equalsIgnoreCase("pdf")) {
@@ -99,10 +103,14 @@ public class ReportController {
 			e.printStackTrace();
 			logger.warn(e.getMessage());
 		}
+		finally {
+			con.close();
+		}
 	}
 
 	@RequestMapping(value = "ReportView", method = RequestMethod.POST)
-	public ResponseEntity<byte[]> getRpt(HttpServletRequest request, HttpServletResponse response) {
+	public ResponseEntity<byte[]> getRpt(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+		Connection con = DbCon.getConnection();
 		try {
 			logger.info("Generating RPt" + request.getParameter("reportname"));
 
@@ -116,7 +124,7 @@ public class ReportController {
 			Map<String, Object> parameters = getMapParameters(request);
 
 			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, DbCon.getConnection());
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, con);
 
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_PDF);
@@ -147,6 +155,7 @@ public class ReportController {
 				}
 			}
 
+		con.close();
 		}
 		return null;
 	}
@@ -216,6 +225,10 @@ public class ReportController {
 		if (request.getParameter("TO_MONTH") != null) {
 			filterparam = filterparam + "TO_MONTH : " + request.getParameter("TO_MONTH").toString();
 			parameters.put("pm_to_month", request.getParameter("TO_MONTH"));
+		}
+		if (request.getParameter("pm_within_days") != null) {
+			filterparam = filterparam + "Within days : " + request.getParameter("pm_within_days").toString();
+			parameters.put("pm_within_days", request.getParameter("pm_within_days"));
 		}
 
 		if (request.getParameter("QFROM_DT") != null && !request.getParameter("QFROM_DT").isEmpty()) {

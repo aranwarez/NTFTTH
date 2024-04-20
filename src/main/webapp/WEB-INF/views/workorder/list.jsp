@@ -359,7 +359,6 @@
 											<th>EndTime</th>
 											<th>Active</th>
 
-											<th>Edit</th>
 											<th>Complete</th>
 
 										</tr>
